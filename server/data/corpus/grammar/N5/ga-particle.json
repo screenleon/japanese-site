@@ -1,0 +1,11 @@
+{
+  "slug": "ga-particle",
+  "title_ja": "が（主格助詞）",
+  "title_zh": "が（主格助詞）",
+  "jlpt_level": "N5",
+  "explanation_zh": "「が」標示句子的主語（subject），尤其用在以下情境：\n- **新資訊 / 第一次提及**：誰がやった？→ 私がやりました\n- **對比 / 排他**：田中さんが行く（強調是田中而不是別人）\n- **疑問詞主語**：誰が来ますか / 何が好きですか\n- **存在句**：机の上に本があります\n\n與「は」最大的差別：\n- は = 已知主題（the X）\n- が = 主語焦點（it is X that）\n\nN3 之前你會反覆遇到這個區別，記住「が」傾向新訊息或強調。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0
+}

@@ -1,0 +1,36 @@
+# External datasets — restored via `make seed` from server/data/external.lock
+server/data/external/
+
+# Audio assets — Tatoeba MP3s downloaded by hash, regenerable
+server/data/audio/
+
+# Legacy scraped Tanos.cc material (licensing unclear, demoted to audit-only
+# in DECISIONS.md, never served). Do not commit to a public repo.
+server/data/tanos_raw/
+
+# Runtime SQLite — rebuilt from L1 + L2 + L3 corpus
+*.sqlite
+*.sqlite-journal
+*.sqlite-shm
+*.sqlite-wal
+*.db
+
+# Build artifacts
+server/bin/
+server/dist/
+web/dist/
+web/node_modules/
+web/tsconfig.tsbuildinfo
+node_modules/
+dist/
+
+# Local environment
+.env
+.env.local
+prompt-budget.local.yml
+
+# Editor
+.vscode/
+.idea/
+*.swp
+.DS_Store

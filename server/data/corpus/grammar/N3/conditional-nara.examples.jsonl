@@ -1,0 +1,5 @@
+{"text_ja":"東京に___、スカイツリーを見てください。","text_zh":"如果你要去東京，請看晴空塔。","blank":"行くなら","is_correct":1,"hint":"行く＋なら（接話題）","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"日本語を勉強する___、辞書を買ったほうがいい。","text_zh":"如果要學日語，最好買字典。","blank":"なら","is_correct":1,"hint":"接於辭書形之後","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"あの人___、きっと成功する。","text_zh":"如果是那個人一定會成功。","blank":"なら","is_correct":1,"hint":"名詞直接接なら","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"暇___、手伝ってください。","text_zh":"如果你有空，請幫忙。","blank":"なら","is_correct":1,"hint":"な形容詞直接接","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"高い___、買わないほうがいい。","text_zh":"如果太貴就不要買比較好。","blank":"なら","is_correct":1,"hint":"い形容詞接なら","source":"curated","license":"CC-BY-SA-4.0"}

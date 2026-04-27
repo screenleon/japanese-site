@@ -1,0 +1,5 @@
+{"text_ja":"雨が___、行きます。","text_zh":"即使下雨也要去。","blank":"降っても","is_correct":1,"hint":"降る的ても形","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"いくら___、買いたいです。","text_zh":"不管多貴都想買。","blank":"高くても","is_correct":1,"hint":"い形容詞ても形","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"誰が___、ドアを開けないでください。","text_zh":"無論誰來都不要開門。","blank":"来ても","is_correct":1,"hint":"来る的ても形（疑問詞＋ても）","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"練習し___、上手にならない。","text_zh":"即使不練習也不會變好。(雙重否定→不練習就不會進步)","blank":"なくても","is_correct":1,"hint":"練習する的否定ても形","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"日本人___、敬語が苦手な人がいる。","text_zh":"即使是日本人也有不擅長敬語的。","blank":"でも","is_correct":1,"hint":"名詞接でも","source":"curated","license":"CC-BY-SA-4.0"}

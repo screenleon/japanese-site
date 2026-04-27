@@ -1,0 +1,5 @@
+{"text_ja":"毎日コーヒーを___。","text_zh":"每天喝咖啡。","blank":"飲みます","is_correct":1,"hint":"飲む的ます形","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"日本語を___。","text_zh":"學日語。","blank":"勉強します","is_correct":1,"hint":"勉強する的ます形","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"明日学校へ___。","text_zh":"明天去學校。","blank":"行きます","is_correct":1,"hint":"行く的ます形","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"昨日映画を___。","text_zh":"昨天看了電影。","blank":"見ました","is_correct":1,"hint":"見る的ます過去形","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"今朝ご飯を___。","text_zh":"今早沒吃飯。","blank":"食べませんでした","is_correct":1,"hint":"食べる的ます過去否定形","source":"curated","license":"CC-BY-SA-4.0"}

@@ -1,0 +1,13 @@
+# Domain Rules — japanese-site
+
+Domain rules apply per the `Workspace boundaries` table in
+`project/project-manifest.md`. Each file follows the standard rule entry
+format from `agent-playbook-template/rules/domain/backend-api.md`.
+
+| File | Domain | Applies to |
+|---|---|---|
+| `content-source.md` | content-source | every persisted learning-content row |
+| `jlpt-content-accuracy.md` | jlpt-content-accuracy | rows with a JLPT level + question generation |
+| `grading-feedback.md` | grading-feedback | grading endpoint responses |
+| `connector-credential.md` | connector-credential | server/connector credential handling (slated for extraction at M4) |
+| `corpus-storage.md` | corpus-storage | three-tier storage (L1 curated / L2 LLM cache / L3 external) and cache promotion |

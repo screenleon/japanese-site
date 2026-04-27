@@ -1,0 +1,5 @@
+{"text_ja":"パンを___、お茶を飲みます。","text_zh":"吃了麵包，然後喝茶。","blank":"食べて","is_correct":1,"hint":"食べる的て形","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"本を___、寝ました。","text_zh":"看了書然後睡覺了。","blank":"読んで","is_correct":1,"hint":"読む的て形","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"ちょっと___ください。","text_zh":"請等一下。","blank":"待って","is_correct":1,"hint":"待つ的て形","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"日本語で___ください。","text_zh":"請用日語說。","blank":"話して","is_correct":1,"hint":"話す的て形","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"学校に___、勉強します。","text_zh":"去學校讀書。","blank":"行って","is_correct":1,"hint":"行く的て形（不規則）","source":"curated","license":"CC-BY-SA-4.0"}

@@ -1,0 +1,79 @@
+# prompt-budget.yml — japanese-site
+#
+# See ../agent-playbook-template/prompt-budget.yml for the full schema and
+# field-by-field documentation. This file declares execution mode, budget
+# profile, enabled roles/skills, and decision-log policy for this project.
+
+execution_mode: semi-auto  # supervised | semi-auto | autonomous
+
+autonomous_mode:
+  auto_proceed_on_plan: true
+  auto_proceed_on_scope_expansion: true
+  halt_on_destructive_actions: true
+  halt_on_stuck_escalation: true
+  skip_critic_role: false
+  halt_on_high_severity_risk: true
+
+model_routing:
+  enabled: false
+  tiers:
+    fast:
+      intent: Low-latency, structured, reversible work.
+    balanced:
+      intent: Default tier for most work that needs solid reasoning and responsiveness.
+    deep:
+      intent: Slower, higher-cost analysis for ambiguous, high-risk, or root-cause work.
+  policy:
+    default_tier: balanced
+    escalation_tier: deep
+    max_attempts_at_current_tier: 2
+    direct_deep_triggers:
+      - root_cause_unknown
+      - repeated_failed_fix_loop
+      - security_sensitive
+      - public_contract_change
+      - high_blast_radius_change
+    never_escalate_for:
+      - formatting_only
+      - docs_sync_only
+      - deterministic_transform
+      - narrow_known_fix
+      - simple_copy_edit
+
+budget:
+  profile: standard
+  layer1_target_tokens: 4000
+  layer2_max_tokens: 8000
+  layer3_max_tokens: 3000
+
+roles:
+  enabled:
+    - feature-planner
+    - backend-architect
+    - application-implementer
+    - integration-engineer
+    - documentation-architect
+    - risk-reviewer
+    - critic
+    - content-validator   # project-local: validates LLM-generated JLPT content
+  disabled:
+    - ui-image-implementer  # no design-led UI workflow yet
+
+skills:
+  always_load:
+    - demand-triage
+    - repo-exploration
+    - test-and-fix-loop
+    - error-recovery
+    - memory-and-state
+  on_demand:
+    - prompt-cache-optimization
+  disabled: []
+
+trimming:
+  decisions_archive_threshold_kb: 30
+  decisions_archive_threshold_entries: 50
+  session_memory_max_files: 10
+
+decision_log:
+  policy: normal  # normal | example_only

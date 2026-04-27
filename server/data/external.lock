@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "datasets": [
+    {
+      "name": "jmdict-simplified-eng-common",
+      "version": "3.6.2+20260420131912",
+      "url": "https://github.com/scriptin/jmdict-simplified/releases/download/3.6.2%2B20260420131912/jmdict-eng-common-3.6.2%2B20260420131912.json.tgz",
+      "sha256": "50d41aa5ea26fedc2dd117d32f5d50ad43c7d28fb63b1fb2dd1cab1d77aea410",
+      "license": "CC-BY-SA-4.0",
+      "source_id": "jmdict",
+      "_note": "Common subset (~30k entries). Loaded into vocab table."
+    },
+    {
+      "name": "kanjidic2-simplified-en",
+      "version": "3.6.2+20260420131912",
+      "url": "https://github.com/scriptin/jmdict-simplified/releases/download/3.6.2%2B20260420131912/kanjidic2-en-3.6.2%2B20260420131912.json.tgz",
+      "sha256": "9bdea6b4e3341ba6092e09d80affec486d7eb8784ea0be05c83ba6c08c5ce023",
+      "license": "CC-BY-SA-4.0",
+      "source_id": "kanjidic2",
+      "_note": "Kanji dictionary with old-JLPT levels, grade, stroke count."
+    },
+    {
+      "name": "jlpt-overlay-n5",
+      "version": "main",
+      "url": "https://raw.githubusercontent.com/jamsinclair/open-anki-jlpt-decks/main/src/n5.csv",
+      "sha256": "f89abc86b391c4f2b551bbf8910b0de6cd600973b3a9f8d98347513921929ebe",
+      "license": "MIT",
+      "source_id": "jlpt-overlay",
+      "level": "N5",
+      "_note": "JLPT N5 vocab list (jamsinclair). Updates vocab.jlpt_level only."
+    },
+    {
+      "name": "jlpt-overlay-n4",
+      "version": "main",
+      "url": "https://raw.githubusercontent.com/jamsinclair/open-anki-jlpt-decks/main/src/n4.csv",
+      "sha256": "0e835f40a8d2a1f191d7aa499076002756fa099b95634758376f43c73793e9f6",
+      "license": "MIT",
+      "source_id": "jlpt-overlay",
+      "level": "N4"
+    },
+    {
+      "name": "jlpt-overlay-n3",
+      "version": "main",
+      "url": "https://raw.githubusercontent.com/jamsinclair/open-anki-jlpt-decks/main/src/n3.csv",
+      "sha256": "ba071571d344e60b0e1fd11cd2e98a6aaa04515361653ca45147129460531297",
+      "license": "MIT",
+      "source_id": "jlpt-overlay",
+      "level": "N3"
+    },
+    {
+      "name": "jlpt-overlay-n2",
+      "version": "main",
+      "url": "https://raw.githubusercontent.com/jamsinclair/open-anki-jlpt-decks/main/src/n2.csv",
+      "sha256": "2d0f1ddd6222881cd9fc2ca701db74300af99b3f1f84d5ac3c18411c20f0c055",
+      "license": "MIT",
+      "source_id": "jlpt-overlay",
+      "level": "N2"
+    },
+    {
+      "name": "jlpt-overlay-n1",
+      "version": "main",
+      "url": "https://raw.githubusercontent.com/jamsinclair/open-anki-jlpt-decks/main/src/n1.csv",
+      "sha256": "120911636c019899552aa6d7bd64b036ecef4bedfe272a744f75735c46aae5cd",
+      "license": "MIT",
+      "source_id": "jlpt-overlay",
+      "level": "N1"
+    },
+    {
+      "name": "tatoeba-jpn-sentences",
+      "version": "rolling",
+      "url": "https://downloads.tatoeba.org/exports/per_language/jpn/jpn_sentences.tsv.bz2",
+      "sha256": "5afb975e88c1ab4e2d97aecdfea55d70b2454c2ce6eb94bf7ba05056cd6c2325",
+      "license": "CC-BY-2.0-FR",
+      "source_id": "tatoeba",
+      "_note": "Japanese sentences only. v1 imports text without translation; jpn-eng pair join is a later milestone."
+    }
+  ]
+}

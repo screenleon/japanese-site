@@ -1,0 +1,11 @@
+{
+  "slug": "wa-particle",
+  "title_ja": "は（主題助詞）",
+  "title_zh": "は（主題助詞）",
+  "jlpt_level": "N5",
+  "explanation_zh": "「は」(發音 wa) 是日語最重要的助詞，標示句子的主題（topic）——「我們現在要談的東西」。\n- A は B です：A 是 B（A 為主題）\n- 私は学生です：（談我的話）我是學生\n\n常見錯誤：\n- 跟「が」搞混：「が」標示主格（subject），用於「新資訊」或對比；「は」標示已知主題。\n  - 雨が降っている（強調是「雨」在下，不是別的）\n  - 雨は降っていない（談到雨，沒在下）\n- 寫 hiragana 時是 は，不是 わ。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0
+}

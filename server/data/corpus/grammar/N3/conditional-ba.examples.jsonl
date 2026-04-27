@@ -1,0 +1,5 @@
+{"text_ja":"このボタンを___、ドアが開きます。","text_zh":"按這個鈕，門就會開。","blank":"押せば","is_correct":1,"hint":"押す的ば形（邏輯條件）","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"高___高いほどいい。","text_zh":"越貴越好。","blank":"ければ","is_correct":1,"hint":"い形容詞高い的ば形","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"時間が___、行きたいです。","text_zh":"如果有時間想去。","blank":"あれば","is_correct":1,"hint":"ある的ば形（A是狀態，B可含意志）","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"急がな___、間に合わない。","text_zh":"不快點就趕不上。","blank":"ければ","is_correct":1,"hint":"急ぐ的否定ば形","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"もう少し早く___よかった。","text_zh":"早一點來就好了。","blank":"来れば","is_correct":1,"hint":"来る的ば形（反事實後悔）","source":"curated","license":"CC-BY-SA-4.0"}

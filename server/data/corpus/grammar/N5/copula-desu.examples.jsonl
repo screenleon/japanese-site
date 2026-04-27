@@ -1,0 +1,4 @@
+{"text_ja":"私は学生___。","text_zh":"我是學生。","blank":"です","is_correct":1,"hint":"名詞 + です","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"これは本___ありません。","text_zh":"這不是書。","blank":"では","is_correct":1,"hint":"否定形「ではありません」","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"昨日は休み___。","text_zh":"昨天放假。","blank":"でした","is_correct":1,"hint":"名詞 + でした（過去）","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"彼は先生じゃ___です。","text_zh":"他不是老師。","blank":"ない","is_correct":1,"hint":"口語否定「じゃないです」","source":"curated","license":"CC-BY-SA-4.0"}

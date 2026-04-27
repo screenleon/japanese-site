@@ -1,0 +1,3 @@
+{"text_ja":"机の上に本___あります。","text_zh":"桌上有書。","blank":"が","is_correct":1,"hint":"存在句的主語","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"誰___来ましたか。","text_zh":"誰來了？","blank":"が","is_correct":1,"hint":"疑問詞作主語","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"私___寿司を食べたい。","text_zh":"是我想吃壽司（強調主語）。","blank":"が","is_correct":1,"hint":"強調主語的が","source":"curated","license":"CC-BY-SA-4.0"}
