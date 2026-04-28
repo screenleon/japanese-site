@@ -25,7 +25,7 @@ export function QuizTab() {
     api.listGrammar().then((r) => setGrammars(r.points || []));
   }, []);
 
-  async function pickNext(seenIDs: number[]) {
+  async function pickNext(seenIDs: string[]) {
     setErr("");
     setResult(null);
     setAnswer("");

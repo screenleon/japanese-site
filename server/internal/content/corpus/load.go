@@ -101,14 +101,23 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 
 	insertQ, err := tx.PrepareContext(ctx, `
 		INSERT INTO question (
-			kind, jlpt_level, grammar_point, prompt, expected, hint,
+			id, kind, jlpt_level, grammar_point, prompt, expected, hint,
 			source, license, validated_by, validator_score, validated_at
-		) VALUES ('cloze', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-		ON CONFLICT(kind, prompt, expected) DO NOTHING`)
+		) VALUES (?, 'cloze', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		ON CONFLICT(id) DO UPDATE SET
+			jlpt_level=excluded.jlpt_level,
+			grammar_point=excluded.grammar_point,
+			hint=excluded.hint,
+			validated_at=excluded.validated_at`)
 	if err != nil {
 		return stats, fmt.Errorf("prepare q: %w", err)
 	}
 	defer insertQ.Close()
+
+	// Track curated question ids inserted in this run for the orphan
+	// sweep below. In-process Go set scales to the M3 corpus (~450
+	// questions) without breaking SQLite's IN-clause variable cap.
+	seenIDs := map[string]struct{}{}
 
 	err = filepath.WalkDir(grammarRoot, func(path string, d fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
@@ -167,11 +176,13 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 			}
 			stats.GrammarExamples++
 			if ex.IsCorrect == 1 && ex.Blank != "" && strings.Contains(ex.TextJA, "___") {
+				qid := QuestionID(gp.Slug, ex.TextJA, ex.Blank)
 				if _, err := insertQ.ExecContext(ctx,
-					gp.JLPTLevel, gp.Slug, ex.TextJA, ex.Blank, nullStr(ex.Hint),
+					qid, gp.JLPTLevel, gp.Slug, ex.TextJA, ex.Blank, nullStr(ex.Hint),
 					GrammarSourceID, ex.License, GrammarValidatorID, 1.0, now); err != nil {
 					return fmt.Errorf("insert question: %w", err)
 				}
+				seenIDs[qid] = struct{}{}
 				stats.Questions++
 			}
 		}
@@ -181,7 +192,50 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 	if err != nil {
 		return stats, err
 	}
+
+	// Orphan sweep: any curated question whose id isn't in seenIDs must
+	// come from a previous corpus iteration whose prompt or expected has
+	// since been edited (deterministic id changed). Delete it now —
+	// ON DELETE CASCADE drops its attempts. Deferring to a separate pass
+	// would leak attempts referencing stale prompts into stats.
+	//
+	// SAFETY: filter is `source = 'curated'` (GrammarSourceID). Do NOT
+	// loosen this — M4's L2 cache promotion writes `source =
+	// 'llm-generated'` rows which must survive a curated-corpus reload.
+	if n, err := sweepOrphanQuestions(ctx, tx, seenIDs); err != nil {
+		return stats, fmt.Errorf("orphan sweep: %w", err)
+	} else if n > 0 {
+		slog.Info("swept orphan questions", "count", n)
+	}
+
 	return stats, tx.Commit()
+}
+
+// sweepOrphanQuestions deletes curated question rows whose id is not in
+// the seen set. Returns the number of rows deleted.
+func sweepOrphanQuestions(ctx context.Context, tx *sql.Tx, seenIDs map[string]struct{}) (int64, error) {
+	if len(seenIDs) == 0 {
+		// Nothing seen → corpus is empty / not-walked. Don't sweep; that
+		// would wipe a healthy DB on a misconfigured root path.
+		return 0, nil
+	}
+	args := make([]any, 0, 1+len(seenIDs))
+	args = append(args, GrammarSourceID)
+	placeholders := make([]byte, 0, 2*len(seenIDs))
+	for id := range seenIDs {
+		if len(placeholders) > 0 {
+			placeholders = append(placeholders, ',')
+		}
+		placeholders = append(placeholders, '?')
+		args = append(args, id)
+	}
+	q := `DELETE FROM question WHERE source = ? AND id NOT IN (` + string(placeholders) + `)`
+	res, err := tx.ExecContext(ctx, q, args...)
+	if err != nil {
+		return 0, err
+	}
+	n, _ := res.RowsAffected()
+	return n, nil
 }
 
 func readGrammarPoint(path string) (GrammarPoint, error) {

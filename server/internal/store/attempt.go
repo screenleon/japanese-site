@@ -6,7 +6,7 @@ import (
 
 type Attempt struct {
 	ID         int64  `json:"id"`
-	QuestionID int64  `json:"question_id"`
+	QuestionID string `json:"question_id"`
 	UserAnswer string `json:"user_answer"`
 	Correct    bool   `json:"correct"`
 	ErrorClass string `json:"error_class,omitempty"`
@@ -52,7 +52,7 @@ type ErrorClassStat struct {
 }
 
 type RecentWrongEntry struct {
-	QuestionID   int64  `json:"question_id"`
+	QuestionID   string `json:"question_id"`
 	GrammarPoint string `json:"grammar_point"`
 	Prompt       string `json:"prompt"`
 	UserAnswer   string `json:"user_answer"`
