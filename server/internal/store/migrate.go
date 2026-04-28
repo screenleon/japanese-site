@@ -153,6 +153,11 @@ func applyOrVerify(db *DB, name string, body []byte, want string) error {
 	if err := tx.Commit(); err != nil {
 		return fmt.Errorf("commit %s: %w", name, err)
 	}
+	// Audit point: every migration application is logged so destructive
+	// migrations (e.g. 0007_question_text_id.sql, which DROPs question +
+	// attempt) are visible in the operator's startup log without parsing
+	// .sql comments.
+	slog.Info("applied migration", "version", name, "checksum", want)
 	return nil
 }
 

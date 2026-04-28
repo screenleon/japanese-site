@@ -51,11 +51,11 @@ export interface GrammarPoint {
   explanation_zh: string;
 }
 
-// Question.id is intentionally `number` for the M3 schema. Phase C1 will
-// switch it (and `question_id` on related types) to `string` once the
-// deterministic-id migration lands; tabs will be updated in lockstep.
+// Question.id is the deterministic id derived server-side from
+// (slug | prompt | expected) — a 16-char hex string. See
+// `server/internal/content/corpus/load.go`'s `QuestionID`.
 export interface Question {
-  id: number;
+  id: string;
   kind: string;
   jlpt_level: string;
   grammar_point: string;
@@ -87,7 +87,7 @@ export interface ErrorClassStat {
 }
 
 export interface RecentWrongAttempt {
-  question_id: number;
+  question_id: string;
   grammar_point: string;
   prompt: string;
   user_answer: string;
@@ -108,7 +108,7 @@ export interface Stats {
 export interface NextQuestionOpts {
   jlpt?: string;
   grammar?: string;
-  exclude?: number[];
+  exclude?: string[];
 }
 
 /** Contract for any API client implementation. The default `httpApi` makes
@@ -120,6 +120,6 @@ export interface Api {
   listGrammar(jlpt?: string): Promise<{ points: GrammarPoint[]; count: number }>;
   getGrammar(slug: string): Promise<GrammarPoint>;
   nextQuestion(opts?: NextQuestionOpts): Promise<Question>;
-  answer(question_id: number, answer: string): Promise<GradeResult>;
+  answer(question_id: string, answer: string): Promise<GradeResult>;
   stats(days?: number): Promise<Stats>;
 }

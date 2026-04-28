@@ -85,6 +85,12 @@ value per hour.
 - [ ] **Frontend router**: today the tab state lives in React state, so F5
       always lands on "練習題". A hash router (or React Router) would let
       learners deep-link to specific grammar points.
+- [ ] **Mid-attempt 404 graceful handling**: after PR #2's orphan sweep,
+      a learner mid-question whose corpus text just changed (re-seed
+      during a session) sees a raw `Error: 404` from
+      `POST /api/quiz/answer` instead of "this question was just
+      refreshed; pulling next…". Detect `404` + `question_not_found` in
+      `QuizTab.tsx` and call `pickNext` automatically.
 
 ## Content quality
 
@@ -141,14 +147,17 @@ in the same pass before the initial commit; deferred items live below.
 - Dropped `seedFunc/timeSeed` indirection, deleted `seed_helper.go`.
 - Dropped `_ = manifest` no-ops in seed runners.
 - Dropped `fmt.Println("bye")` in favour of structured slog.
-- `/api/version` reports `M3-end`.
+- `/api/version` reports `M3-end` (bumped to `M3-C1` in the PR #2 deterministic-ids PR).
+
+**Resolved in Phase C**:
+
+- **Re-seeding orphans attempt history** (Risk H1) — RESOLVED in PR #2
+  (Phase C step C1). `question.id` is now deterministic
+  `hex(sha256(slug | prompt | expected)[:8])` and `corpus.Load` sweeps
+  orphan rows whose id is no longer produced by the corpus. See
+  `DECISIONS.md` "deterministic question ids" (2026-04-28).
 
 **Deferred (logged here, not blocking the public push)**:
-
-- **Re-seeding orphans attempt history** (Risk H1). When a curated example's
-  text changes, the old `question` row stays with its id and `attempt`s
-  point at it; the picker no longer surfaces it. Need either deterministic
-  IDs (slug+hash) or an attempt-rewrite step in `corpus.Load`.
 - **Seed-pipeline transactional integrity** (Risk H2). `seed all` is six
   independent steps; partial failures leave the DB in inconsistent state
   with no resume marker.

@@ -83,23 +83,39 @@ func quizNext(db *store.DB) http.HandlerFunc {
 	}
 }
 
-func parseIDList(s string) []int64 {
+// maxExcludeIDs caps the size of the `?exclude=` list. Realistic frontend
+// session size is well under 50; 100 leaves slack while bounding the
+// allocation + SQL placeholder list a malicious client can force.
+const maxExcludeIDs = 100
+
+// parseIDList splits a comma-separated id list. Empty / whitespace-only
+// entries are dropped. IDs are opaque strings (deterministic question IDs
+// are hex; we don't validate format here — the lookup will 404 on unknown).
+// Lookups are parameterised; the non-strict accept here is intentional and
+// must stay parameterised in every call site.
+//
+// Capped at maxExcludeIDs entries; surplus is silently dropped (rather
+// than 400'd) so a long-running session with many seen ids degrades
+// gracefully.
+func parseIDList(s string) []string {
 	if s == "" {
 		return nil
 	}
 	parts := strings.Split(s, ",")
-	out := make([]int64, 0, len(parts))
+	if len(parts) > maxExcludeIDs {
+		parts = parts[:maxExcludeIDs]
+	}
+	out := make([]string, 0, len(parts))
 	for _, p := range parts {
-		n, err := strconv.ParseInt(strings.TrimSpace(p), 10, 64)
-		if err == nil && n > 0 {
-			out = append(out, n)
+		if t := strings.TrimSpace(p); t != "" {
+			out = append(out, t)
 		}
 	}
 	return out
 }
 
 type answerRequest struct {
-	QuestionID int64  `json:"question_id"`
+	QuestionID string `json:"question_id"`
 	Answer     string `json:"answer"`
 }
 
@@ -111,7 +127,7 @@ func quizAnswer(db *store.DB) http.HandlerFunc {
 			writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid_body"})
 			return
 		}
-		if req.QuestionID == 0 || req.Answer == "" {
+		if req.QuestionID == "" || req.Answer == "" {
 			writeJSON(w, http.StatusBadRequest, map[string]string{"error": "question_id_and_answer_required"})
 			return
 		}
@@ -220,7 +236,7 @@ func health(w http.ResponseWriter, _ *http.Request) {
 func version(w http.ResponseWriter, _ *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]string{
 		"name":      "japanese-site",
-		"milestone": "M3-end",
+		"milestone": "M3-C1",
 	})
 }
 

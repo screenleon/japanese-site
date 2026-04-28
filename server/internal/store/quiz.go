@@ -5,26 +5,10 @@ import (
 	"database/sql"
 	"errors"
 	"math/rand/v2"
-	"sync"
-	"time"
 )
-
-// rng is the package-global PRNG used by NextQuestion's weighted picker.
-// math/rand/v2 *Rand is NOT safe for concurrent use, so every call site goes
-// through pickWeighted which holds rngMu.
-var (
-	rngMu sync.Mutex
-	rng   = rand.New(rand.NewPCG(uint64(time.Now().UnixNano()), 0xdeadbeefcafef00d))
-)
-
-func nextFloat() float64 {
-	rngMu.Lock()
-	defer rngMu.Unlock()
-	return rng.Float64()
-}
 
 type Question struct {
-	ID           int64  `json:"id"`
+	ID           string `json:"id"`
 	Kind         string `json:"kind"`
 	JLPTLevel    string `json:"jlpt_level"`
 	GrammarPoint string `json:"grammar_point"`
@@ -44,10 +28,18 @@ type GrammarPoint struct {
 var ErrQuestionNotFound = errors.New("question not found")
 
 // NextQuestionOpts controls which question gets picked.
+//
+// Rand is the source for the weighted-random pick. If nil, NextQuestion
+// uses math/rand/v2's package-default RNG (which IS safe for concurrent
+// use). Tests should pass a deterministic *rand.Rand to make picks
+// reproducible. Callers that pass a custom *rand.Rand are responsible for
+// thread-safety (math/rand/v2.Rand instances are not safe for concurrent
+// use).
 type NextQuestionOpts struct {
 	JLPTLevel    string
 	GrammarPoint string
-	ExcludeIDs   []int64 // already-seen question IDs to skip
+	ExcludeIDs   []string // already-seen question IDs to skip
+	Rand         *rand.Rand
 }
 
 // NextQuestion picks one question matching the filters, weighted by attempt
@@ -117,7 +109,14 @@ func NextQuestion(ctx context.Context, db *DB, opts NextQuestionOpts) (Question,
 		return Question{}, ErrQuestionNotFound
 	}
 
-	pick := nextFloat() * totalWeight
+	// math/rand/v2's package-level Float64() is goroutine-safe; only the
+	// per-instance *Rand is not. Tests pass a seeded opts.Rand for
+	// reproducible picks.
+	pickRaw := rand.Float64()
+	if opts.Rand != nil {
+		pickRaw = opts.Rand.Float64()
+	}
+	pick := pickRaw * totalWeight
 	cum := 0.0
 	for _, c := range candidates {
 		cum += c.weight
@@ -142,7 +141,7 @@ func placeholders(n int) string {
 	return string(out)
 }
 
-func GetQuestion(ctx context.Context, db *DB, id int64) (Question, error) {
+func GetQuestion(ctx context.Context, db *DB, id string) (Question, error) {
 	row := db.QueryRowContext(ctx, `
 		SELECT id, kind, jlpt_level, grammar_point, prompt, expected, COALESCE(hint, '')
 		FROM question WHERE id = ?`, id)
