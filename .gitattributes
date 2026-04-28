@@ -1,0 +1,7 @@
+# Force LF for files whose byte content is hashed or pinned. CRLF on a
+# Windows checkout would silently change SHA-256 outputs (e.g.
+# `schema_migrations.checksum`, `external.lock` entries).
+*.sql       text eol=lf
+*.jsonl     text eol=lf
+*.json      text eol=lf
+external.lock text eol=lf
