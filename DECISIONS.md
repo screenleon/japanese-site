@@ -65,3 +65,17 @@ Agents must read it before planning or implementation tasks.
   - Until M4, `japanese-site` may copy connector code from `agent-native-pm` for prototyping, but must mark those files with a `// EXTRACTING-AT-M4` comment so the migration is mechanical.
   - The new `agent-connector` repo inherits this project's layered-rule conventions (rules/global, rules/domain) and ships its own AGENTS.md.
   - Subscription credentials never leave the user's machine; the server-sdk stores only API keys (encrypted at rest with `APP_SETTINGS_MASTER_KEY`) and connector pairing tokens.
+
+## 2026-04-28: First-boot disk body is canonical for migration checksum backfill
+
+- **Context**: Phase C0 introduces a SHA-256 checksum column on `schema_migrations` so that edits to applied migration bodies are detected at startup. DBs created before this PR have rows with no checksum stored; on first run after upgrading we have to decide what value to write into those rows.
+- **Decision**: On a row with NULL/empty checksum, hash the live embedded migration body and store that hash as canonical. A `slog.Warn("backfilled migration checksum from disk body", ...)` line is emitted per backfilled migration so an operator auditing the first-boot can see the event.
+- **Alternatives considered**:
+  - **Ship a `checksums.json` baked into the binary at build time** — rejected for personal-use scope. Adds a build-time generation step and a separate audit surface for marginal hardening; the threat model (an attacker who can edit migration files between an upstream tag and the user's first restart) is not realistic for a single-developer single-machine setup.
+  - **Refuse to start until the operator opts in to backfill** — rejected. The first run after upgrading is silent and routine; gating it on a CLI flag inflates the upgrade burden.
+  - **Skip checksum backfill; only enforce on rows inserted post-upgrade** — rejected. Half-protection invites surprises later when an old migration *is* edited and goes undetected because it was applied before checksums existed.
+- **Constraints introduced**:
+  - Backfill triggers ONLY on rows where `schema_migrations.checksum IS NULL OR ''`. New rows MUST always be inserted with a non-empty checksum.
+  - The structural race (two processes both adding the `checksum` column or both inserting the same migration row) is closed by `INSERT OR IGNORE` on the schema_migrations claim and a re-check after `ALTER TABLE`. Race-safety verification is by code review; a dedicated multi-process test would require spawning subprocesses and is not yet worth the cost.
+  - CRLF/LF drift on the embedded `.sql` files would silently change every checksum. Prevented by `.gitattributes` (`*.sql text eol=lf`). If a future contributor's checkout is configured to ignore .gitattributes, they will hit the mismatch error and learn about it.
+  - When this project ships multi-user (post-M4), revisit: the threat model widens, and a build-time `checksums.json` may become worth its cost.

@@ -1,68 +1,25 @@
-// API client. Uses Vite dev proxy so /api → :8080 in development.
+// Concrete HTTP client implementing the `Api` interface from `apiTypes.ts`.
+// Uses Vite dev proxy so /api → :8080 in development.
+//
+// UI-003 (rules/domain/frontend-components.md): tabs and shared components
+// MUST depend on the `Api` interface. Do NOT import `httpApi` outside this
+// file or future top-level wiring; the `api` value alias is preserved only
+// so existing tab imports keep working until they're switched to inject the
+// Api interface via context.
 
-export interface VocabRow {
-  id: number;
-  headword: string;
-  reading: string;
-  pos: string;
-  gloss_en?: string;
-  gloss_zh?: string;
-  jlpt_level?: string;
-  frequency_rank?: number;
-  source: string;
-  license: string;
-  validated_by?: string;
-}
+import type {
+  Api,
+  GrammarPoint,
+  Kanji,
+  NextQuestionOpts,
+  Question,
+  Sentence,
+  Stats,
+  GradeResult,
+  VocabRow,
+} from "./apiTypes";
 
-export interface Kanji {
-  id: number;
-  character: string;
-  onyomi?: string;
-  kunyomi?: string;
-  meaning_en?: string;
-  jlpt_level?: string;
-  grade?: number;
-  stroke_count?: number;
-  source: string;
-  license: string;
-}
-
-export interface Sentence {
-  id: number;
-  text_ja: string;
-  text_en?: string;
-  text_zh?: string;
-  jlpt_level?: string;
-  source: string;
-  license: string;
-}
-
-export interface GrammarPoint {
-  slug: string;
-  title_ja: string;
-  title_zh: string;
-  jlpt_level: string;
-  explanation_zh: string;
-}
-
-export interface Question {
-  id: number;
-  kind: string;
-  jlpt_level: string;
-  grammar_point: string;
-  prompt: string;
-  hint?: string;
-}
-
-export interface GradeResult {
-  correct: boolean;
-  user_answer: string;
-  expected: string;
-  explanation_zh: string;
-  grammar_point: string;
-  error_class?: string;
-  suggested_next: string[];
-}
+export type * from "./apiTypes";
 
 async function getJSON<T>(path: string): Promise<T> {
   const r = await fetch(path);
@@ -80,20 +37,20 @@ async function postJSON<T>(path: string, body: unknown): Promise<T> {
   return r.json();
 }
 
-export const api = {
-  searchVocab: (q: string, jlpt?: string) =>
+export const httpApi: Api = {
+  searchVocab: (q, jlpt) =>
     getJSON<{ results: VocabRow[]; count: number }>(
       `/api/vocab/search?q=${encodeURIComponent(q)}${jlpt ? `&jlpt=${jlpt}` : ""}`
     ),
-  getKanji: (ch: string) => getJSON<Kanji>(`/api/kanji/${encodeURIComponent(ch)}`),
-  randomSentence: (jlpt?: string) =>
+  getKanji: (ch) => getJSON<Kanji>(`/api/kanji/${encodeURIComponent(ch)}`),
+  randomSentence: (jlpt) =>
     getJSON<Sentence>(`/api/sentence/random${jlpt ? `?jlpt=${jlpt}` : ""}`),
-  listGrammar: (jlpt?: string) =>
+  listGrammar: (jlpt) =>
     getJSON<{ points: GrammarPoint[]; count: number }>(
       `/api/grammar${jlpt ? `?jlpt=${jlpt}` : ""}`
     ),
-  getGrammar: (slug: string) => getJSON<GrammarPoint>(`/api/grammar/${slug}`),
-  nextQuestion: (opts: { jlpt?: string; grammar?: string; exclude?: number[] } = {}) => {
+  getGrammar: (slug) => getJSON<GrammarPoint>(`/api/grammar/${slug}`),
+  nextQuestion: (opts: NextQuestionOpts = {}) => {
     const q = new URLSearchParams();
     if (opts.jlpt) q.set("jlpt", opts.jlpt);
     if (opts.grammar) q.set("grammar", opts.grammar);
@@ -101,25 +58,11 @@ export const api = {
     const qs = q.toString();
     return getJSON<Question>(`/api/quiz/next${qs ? `?${qs}` : ""}`);
   },
-  answer: (question_id: number, answer: string) =>
+  answer: (question_id, answer) =>
     postJSON<GradeResult>(`/api/quiz/answer`, { question_id, answer }),
-  stats: (days?: number) =>
+  stats: (days) =>
     getJSON<Stats>(`/api/quiz/stats${days ? `?days=${days}` : ""}`),
 };
 
-export interface Stats {
-  total_attempts: number;
-  correct: number;
-  wrong: number;
-  accuracy: number;
-  by_grammar: { grammar_point: string; total: number; correct: number; accuracy: number }[];
-  by_error_class: { grammar_point: string; error_class: string; count: number }[];
-  recent_wrong: {
-    question_id: number;
-    grammar_point: string;
-    prompt: string;
-    user_answer: string;
-    expected: string;
-    created_at: string;
-  }[];
-}
+/** @deprecated import the `Api` interface and inject `httpApi` instead. */
+export const api: Api = httpApi;
