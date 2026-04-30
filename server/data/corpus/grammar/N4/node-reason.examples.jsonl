@@ -1,0 +1,5 @@
+{"text_ja":"雨が降っている___、出かけません。","text_zh":"因為正在下雨，所以不出門。","blank":"ので","is_correct":1,"hint":"理由","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"明日試験な___、勉強します。","text_zh":"因為明天考試，所以讀書。","blank":"ので","is_correct":1,"hint":"名詞 + なので","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この店は便利な___、よく行きます。","text_zh":"因為這家店很方便，所以常去。","blank":"ので","is_correct":1,"hint":"な形容詞 + ので","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"時間がない___、急ぎましょう。","text_zh":"因為沒有時間，快一點吧。","blank":"ので","is_correct":1,"hint":"原因を説明","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"頭が痛い___、早く帰ります。","text_zh":"因為頭痛，所以早點回去。","blank":"ので","is_correct":1,"hint":"い形容詞 + ので","source":"curated","license":"CC-BY-SA-4.0"}

@@ -1,0 +1,15 @@
+{
+  "slug": "te-iru",
+  "title_ja": "ている（進行・状態）",
+  "title_zh": "ている（正在／狀態）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「動詞て形 + いる」は、今続いている動作や、動作の結果として残っている状態を表します。\n\n- 今、本を読んでいます\n- 窓が開いています\n\n進行の意味か状態の意味かは、動詞と文脈で決まります。",
+  "explanation_zh": "「動詞て形 + いる」可表示正在進行的動作，也可表示動作結果留下的狀態。例如「読んでいます」是正在讀，「開いています」是開著。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_dictionary_form": true, "error_class": "dictionary-form"}
+  ]
+}

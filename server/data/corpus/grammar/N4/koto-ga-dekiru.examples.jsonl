@@ -1,0 +1,5 @@
+{"text_ja":"私は日本語を話す___ができます。","text_zh":"我會說日文。","blank":"こと","is_correct":1,"hint":"辞書形 + こと","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"このプールで泳ぐ___ができます。","text_zh":"可以在這個游泳池游泳。","blank":"こと","is_correct":1,"hint":"可能","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"図書館で本を借りる___ができます。","text_zh":"可以在圖書館借書。","blank":"こと","is_correct":1,"hint":"借りる + こと","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"ここでチケットを買う___ができます。","text_zh":"可以在這裡買票。","blank":"こと","is_correct":1,"hint":"買う + こと","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"インターネットで予約する___ができます。","text_zh":"可以在網路上預約。","blank":"こと","is_correct":1,"hint":"する + こと","source":"curated","license":"CC-BY-SA-4.0"}

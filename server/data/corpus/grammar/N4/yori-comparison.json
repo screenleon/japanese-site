@@ -1,0 +1,15 @@
+{
+  "slug": "yori-comparison",
+  "title_ja": "より（比較）",
+  "title_zh": "より（比較）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「AよりBのほうが〜」は、AとBを比べて、Bの程度が高いことを表します。\n\n- バスより電車のほうが速いです\n- 昨日より今日のほうが寒いです\n\n「より」は比べる基準を示します。",
+  "explanation_zh": "「AよりBのほうが〜」表示和 A 相比，B 比較怎樣。「より」標示比較基準，例如「バスより電車のほうが速いです」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["から"], "error_class": "wrong-particle"}
+  ]
+}

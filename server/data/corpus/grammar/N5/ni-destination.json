@@ -1,0 +1,15 @@
+{
+  "slug": "ni-destination",
+  "title_ja": "に（到着点・存在場所）",
+  "title_zh": "に（到達點／存在位置）",
+  "jlpt_level": "N5",
+  "explanation_ja": "「に」は、行く先、入る場所、物や人が存在する場所を表します。\n\n- 学校に行きます\n- 部屋に入ります\n- 机の上に本があります\n\n動作をする場所を表す「で」と区別します。「図書館で勉強します」は勉強する場所、「図書館に行きます」は向かう場所です。",
+  "explanation_zh": "「に」可表示到達點或存在位置，例如「学校に行きます」「部屋に入ります」「机の上にあります」。和表示動作場所的「で」不同。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["で", "を"], "error_class": "wrong-particle"}
+  ]
+}
