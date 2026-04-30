@@ -45,7 +45,7 @@ export function SentenceTab() {
         <div className="bg-white border border-slate-200 rounded-md p-6">
           <p className="text-2xl leading-relaxed">{s.text_ja}</p>
           <div className="text-xs text-slate-400 mt-4 space-x-2">
-            <span>id={s.id}</span>
+            <span>番号 {s.id}</span>
             {s.jlpt_level && (
               <span className="inline-block px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded">
                 {s.jlpt_level}

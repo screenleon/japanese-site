@@ -26,6 +26,7 @@ export interface Kanji {
   onyomi?: string;
   kunyomi?: string;
   meaning_en?: string;
+  meaning_zh?: string;
   jlpt_level?: string;
   grade?: number;
   stroke_count?: number;

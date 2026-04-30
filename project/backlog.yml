@@ -213,6 +213,22 @@ items:
       - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
       - "Validated: npm run build"
 
+  - id: JS-015
+    title: Remove English fallback from learner-facing study UI
+    status: done
+    priority: P0
+    milestone: content
+    area: product
+    source: user-feedback-2026-04-30
+    completed_at: "2026-04-30"
+    notes:
+      - Learner-facing content should show Japanese first and Traditional Chinese as support.
+      - Vocabulary and kanji tabs no longer display English gloss/meaning fallbacks.
+      - Kanji API now exposes meaning_zh so Chinese meanings can be displayed when available.
+      - Remaining missing Chinese entries show a Traditional Chinese pending message instead of English.
+      - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
+      - "Validated: npm run build"
+
 done:
   - id: JS-D001
     title: Bootstrap layered agent rules and project manifest

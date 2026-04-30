@@ -49,6 +49,10 @@ export function VocabTab() {
     await loadLevel(selectedLevel, query);
   }
 
+  function supportGloss(row: VocabRow) {
+    return row.gloss_zh?.trim() || "繁中釋義待補";
+  }
+
   return (
     <section className="space-y-6">
       <div className="grid gap-3 sm:grid-cols-5">
@@ -95,10 +99,7 @@ export function VocabTab() {
               <div className="mt-1 text-base text-slate-500">{randomRow.reading}</div>
             </div>
             <div className="text-sm leading-relaxed">
-              <div>{randomRow.gloss_zh || randomRow.gloss_en || "（暫無釋義）"}</div>
-              {randomRow.gloss_en && randomRow.gloss_zh && (
-                <div className="mt-1 text-slate-500">{randomRow.gloss_en}</div>
-              )}
+              <div>{supportGloss(randomRow)}</div>
               <div className="mt-2 text-xs text-slate-400">
                 {randomRow.pos}
                 {randomRow.jlpt_level && <span className="ml-2">{randomRow.jlpt_level}</span>}
@@ -117,7 +118,7 @@ export function VocabTab() {
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder={`${selectedLevel} 內搜尋：食べ / おはよう / arigato`}
+            placeholder={`${selectedLevel} 內搜尋：食べる / おはよう / ありがとう`}
             className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-base"
           />
           <button
@@ -148,8 +149,7 @@ export function VocabTab() {
                 <div className="text-sm text-slate-500">{r.reading}</div>
               </div>
               <div className="min-w-0 flex-1">
-                <div className="text-sm">{r.gloss_zh || r.gloss_en}</div>
-                {r.gloss_en && r.gloss_zh && <div className="mt-1 text-xs text-slate-500">{r.gloss_en}</div>}
+                <div className="text-sm">{supportGloss(r)}</div>
                 <div className="mt-1 text-xs text-slate-400">
                   {r.pos}
                   {r.jlpt_level && (

@@ -391,8 +391,8 @@ func seedHandlerTestDB(t *testing.T, db *store.DB) {
 	statements := []string{
 		`INSERT INTO vocab (headword, reading, pos, gloss_en, jlpt_level, frequency_rank, source, license, validated_by)
 		 VALUES ('食べる', 'たべる', 'v1', 'eat', 'N5', 1, 'test', 'CC0', 'test-validator')`,
-		`INSERT INTO kanji (character, onyomi, kunyomi, meaning_en, jlpt_level, grade, stroke_count, source, license, validated_by)
-		 VALUES ('食', 'ショク', 'た.べる', 'eat', 'N5', 2, 9, 'test', 'CC0', 'test-validator')`,
+		`INSERT INTO kanji (character, onyomi, kunyomi, meaning_en, meaning_zh, jlpt_level, grade, stroke_count, source, license, validated_by)
+		 VALUES ('食', 'ショク', 'た.べる', 'eat', '吃／食物', 'N5', 2, 9, 'test', 'CC0', 'test-validator')`,
 		`INSERT INTO sentence (text_ja, text_en, jlpt_level, source, license, validated_by)
 		 VALUES ('ご飯を食べます。', 'I eat rice.', 'N5', 'test', 'CC0', 'test-validator')`,
 		`INSERT INTO grammar_point (slug, title_ja, title_zh, jlpt_level, explanation_zh, source, license, validated_by)

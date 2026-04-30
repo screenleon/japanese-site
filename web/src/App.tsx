@@ -25,7 +25,7 @@ export function App() {
           <h1 className="text-xl font-semibold tracking-tight">
             日本語学習 <span className="text-slate-400 text-sm">— japanese-site</span>
           </h1>
-          <span className="text-xs text-slate-500">M3 dev preview</span>
+          <span className="text-xs text-slate-500">M3 開發預覽</span>
         </div>
         <nav className="max-w-4xl mx-auto px-4 flex gap-1 -mb-px">
           {tabs.map((t) => (
@@ -52,7 +52,7 @@ export function App() {
         {active === "sentence" && <SentenceTab />}
       </main>
       <footer className="text-center text-xs text-slate-400 py-6">
-        資料來源 JMdict / KANJIDIC2 / Tatoeba (CC-BY-SA / CC-BY) ・ JLPT overlay (MIT)
+        資料來源 JMdict / KANJIDIC2 / Tatoeba (CC-BY-SA / CC-BY) ・ JLPT 標註 (MIT)
       </footer>
     </div>
   );

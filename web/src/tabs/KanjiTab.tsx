@@ -38,7 +38,7 @@ export function KanjiTab() {
         <div className="bg-white border border-slate-200 rounded-md p-6 grid grid-cols-[auto_1fr] gap-4 items-start">
           <div className="text-7xl font-serif">{data.character}</div>
           <dl className="space-y-2 text-sm">
-            <Row label="意義" value={data.meaning_en} />
+            <Row label="意義" value={data.meaning_zh || "繁中意義待補"} />
             <Row label="音讀" value={data.onyomi} />
             <Row label="訓讀" value={data.kunyomi} />
             <Row label="JLPT" value={data.jlpt_level} />
