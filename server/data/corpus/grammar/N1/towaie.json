@@ -1,0 +1,16 @@
+{
+  "slug": "towaie",
+  "title_ja": "〜とはいえ",
+  "title_zh": "〜とはいえ（雖說…但是）",
+  "jlpt_level": "N1",
+  "explanation_ja": "「〜とはいえ」は、「Aは事実だが、それでもBだ」と言う表現です。前の内容を認めたうえで、後ろで制限・反対・補足を述べます。\n\n形：普通形＋とはいえ。名詞やな形容詞にも使えます。\n- 春とはいえ、まだ寒い\n- 安いとはいえ、品質は悪くない\n- 専門家とはいえ、すべてを知っているわけではない\n\n「〜けれども」より硬く、文章や改まった会話で使われます。",
+  "explanation_zh": "「〜とはいえ」表示「雖說 A，但是 B」。先承認 A，再補充限制、反向事實或提醒不要過度推論。\n\n**形態**：普通形＋とはいえ；名詞、な形容詞也可直接接。\n\n**用法**：\n- 春とはいえ、まだ寒い。\n- 安いとはいえ、品質は悪くない。\n- 専門家とはいえ、すべてを知っているわけではない。\n\n**比較**：比「けれども」正式，常用於文章或較正式的說明。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_contains_any": ["けど", "けれど"], "error_class": "used-kedo"},
+    {"if_answer_not_contains_any": ["とは"], "error_class": "missing-towa"}
+  ]
+}

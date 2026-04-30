@@ -51,11 +51,13 @@ value per hour.
       Correct answers are due tomorrow, wrong answers stay due immediately,
       and `/api/quiz/next` only selects due or unseen questions.
 - [ ] **More grammar points**: target 30 N3, 30 N2, 20 N1 within next pass.
-      Current state: 5 N5, 5 N3, 5 N2, 0 N1. N5/N4 are review-tier so 5
+      Current state: 5 N5, 5 N3, 5 N2, 5 N1. N5/N4 are review-tier so 5
       each is sufficient floor. New and revised rows must carry both
       `explanation_ja` and `explanation_zh`.
-- [ ] **N1 corpus**: zero entries today. Five anchor points to start
-      (〜ずにはいられない, 〜にもかかわらず, 〜きらいがある, 〜ばこそ, 〜とはいえ).
+- [x] **N1 corpus anchor start**: first five N1 grammar points are in L1
+      corpus with Japanese-first explanations, Chinese support, cloze
+      examples, and generic feedback templates: 〜ずにはいられない,
+      〜にもかかわらず, 〜きらいがある, 〜ばこそ, 〜とはいえ.
 - [ ] **More question kinds**: ordering (語順), multiple-choice, listening
       (using Tatoeba audio when wired up). Cloze-only is a narrow slice of
       JLPT-style testing.

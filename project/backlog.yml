@@ -128,7 +128,7 @@ items:
 
   - id: JS-009
     title: Expand grammar corpus depth
-    status: todo
+    status: doing
     priority: P2
     milestone: content
     area: content
@@ -137,6 +137,10 @@ items:
       - Target 30 N3, 30 N2, and 20 N1 points over the next corpus pass.
       - New or revised grammar JSON must include explanation_ja and explanation_zh.
       - Preserve source, license, and validated_by metadata.
+      - "2026-04-30: Added first 5 N1 anchor points with Japanese-first explanations, Chinese support, 25 cloze examples, and generic feedback templates."
+      - "Validated: env GOCACHE=/tmp/go-build-cache make seed-corpus"
+      - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
+      - "Validated: npm run build"
 
   - id: JS-010
     title: Start M4 connector extraction and LLM grading
