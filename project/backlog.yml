@@ -135,7 +135,7 @@ items:
     source: ROADMAP.md#quiz--content-depth
     notes:
       - Scale floor is at least 1000 JLPT-tagged learner-usable vocab rows and 100 grammar points.
-      - Current seeded state after make seed-corpus: 22552 vocab rows, 6524 JLPT-tagged vocab rows, 46 grammar points, 224 cloze questions.
+      - Current seeded state after make seed-corpus: 22552 vocab rows, 6524 JLPT-tagged vocab rows, 46 grammar points, 224 cloze questions, 334 vocab support overlays.
       - Vocabulary volume already clears the row-count floor through JMdict + JLPT overlay; Japanese/Traditional Chinese learner support is being filled through L1 overlays.
       - Next content implementation should add grammar in larger level-balanced batches, not 5-point micro-passes.
       - New or revised grammar JSON must include explanation_ja and explanation_zh.
@@ -145,6 +145,7 @@ items:
       - "2026-04-30: Added make corpus-scale to report scale floors and current gaps."
       - "2026-04-30: Added 12 N5 grammar points, 9 N4 grammar points, and 105 cloze examples; grammar total is now 46 points / 224 cloze questions."
       - "2026-04-30: Expanded N5 vocab Japanese/Traditional Chinese support overlay to 220 rows from existing JMdict-derived vocabulary."
+      - "2026-04-30: Added first N4 vocab Japanese/Traditional Chinese support overlay batch; vocab support overlays now seed 334 rows."
       - "Validated: make lint-rules"
       - "Validated: make corpus-scale"
       - "Validated: env GOCACHE=/tmp/go-build-cache make seed-corpus"
