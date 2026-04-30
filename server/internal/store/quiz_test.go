@@ -80,6 +80,59 @@ func TestNextQuestion_NilRandUsesGlobalAndDoesNotPanic(t *testing.T) {
 	}
 }
 
+func TestGetGrammarPointIncludesJapaneseExplanation(t *testing.T) {
+	db := newMemoryDB(t)
+	defer db.Close()
+	if err := Migrate(db); err != nil {
+		t.Fatalf("migrate: %v", err)
+	}
+
+	if _, err := db.Exec(`INSERT INTO grammar_point
+		(slug, title_ja, title_zh, jlpt_level, explanation_ja, explanation_zh, source, license)
+		VALUES ('test-gp', 'テスト', '測試', 'N3', '日本語の説明', '中文說明', 'test', 'CC0')`); err != nil {
+		t.Fatalf("seed gp: %v", err)
+	}
+
+	got, err := GetGrammarPoint(context.Background(), db, "test-gp")
+	if err != nil {
+		t.Fatalf("GetGrammarPoint: %v", err)
+	}
+	if got.ExplanationJA != "日本語の説明" {
+		t.Fatalf("ExplanationJA = %q, want Japanese explanation", got.ExplanationJA)
+	}
+	if got.ExplanationZH != "中文說明" {
+		t.Fatalf("ExplanationZH = %q, want Chinese explanation", got.ExplanationZH)
+	}
+}
+
+func TestListGrammarPointsHandlesMissingJapaneseExplanation(t *testing.T) {
+	db := newMemoryDB(t)
+	defer db.Close()
+	if err := Migrate(db); err != nil {
+		t.Fatalf("migrate: %v", err)
+	}
+
+	if _, err := db.Exec(`INSERT INTO grammar_point
+		(slug, title_ja, title_zh, jlpt_level, explanation_zh, source, license)
+		VALUES ('legacy-gp', 'レガシー', '舊資料', 'N3', '中文 fallback', 'test', 'CC0')`); err != nil {
+		t.Fatalf("seed gp: %v", err)
+	}
+
+	got, err := ListGrammarPoints(context.Background(), db, "N3")
+	if err != nil {
+		t.Fatalf("ListGrammarPoints: %v", err)
+	}
+	if len(got) != 1 {
+		t.Fatalf("got %d grammar points, want 1", len(got))
+	}
+	if got[0].ExplanationJA != "" {
+		t.Fatalf("ExplanationJA = %q, want empty fallback marker", got[0].ExplanationJA)
+	}
+	if got[0].ExplanationZH != "中文 fallback" {
+		t.Fatalf("ExplanationZH = %q, want Chinese fallback", got[0].ExplanationZH)
+	}
+}
+
 func TestNextQuestion_SkipsCorrectAnswerUntilDue(t *testing.T) {
 	db := newMemoryDB(t)
 	defer db.Close()

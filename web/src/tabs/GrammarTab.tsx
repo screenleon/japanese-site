@@ -4,6 +4,7 @@ import { api, type GrammarPoint } from "../api";
 export function GrammarTab() {
   const [points, setPoints] = useState<GrammarPoint[]>([]);
   const [active, setActive] = useState<GrammarPoint | null>(null);
+  const [showTranslation, setShowTranslation] = useState(false);
 
   useEffect(() => {
     api.listGrammar().then((r) => {
@@ -11,6 +12,13 @@ export function GrammarTab() {
       if (r.points && r.points[0]) setActive(r.points[0]);
     });
   }, []);
+
+  useEffect(() => {
+    setShowTranslation(false);
+  }, [active?.slug]);
+
+  const primaryExplanation = active?.explanation_ja || active?.explanation_zh || "";
+  const hasJapaneseExplanation = Boolean(active?.explanation_ja?.trim());
 
   return (
     <section className="grid grid-cols-[200px_1fr] gap-6">
@@ -38,7 +46,23 @@ export function GrammarTab() {
             <h2 className="text-2xl font-medium">{active.title_ja}</h2>
             <p className="text-sm text-slate-500">{active.jlpt_level} · {active.title_zh}</p>
           </header>
-          <pre className="text-sm whitespace-pre-wrap font-sans leading-relaxed">{active.explanation_zh}</pre>
+          <pre className="text-sm whitespace-pre-wrap font-sans leading-relaxed">{primaryExplanation}</pre>
+          {hasJapaneseExplanation && (
+            <div className="mt-5 border-t border-slate-200 pt-4">
+              <button
+                type="button"
+                onClick={() => setShowTranslation((current) => !current)}
+                className="rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+              >
+                {showTranslation ? "隱藏中文說明" : "顯示中文說明"}
+              </button>
+              {showTranslation && (
+                <pre className="mt-4 text-sm whitespace-pre-wrap font-sans leading-relaxed text-slate-700">
+                  {active.explanation_zh}
+                </pre>
+              )}
+            </div>
+          )}
         </article>
       )}
     </section>

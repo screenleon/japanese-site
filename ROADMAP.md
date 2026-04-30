@@ -43,12 +43,17 @@ need an LLM.
 Active recall is the user's stated core need; depth here returns the most
 value per hour.
 
+- [x] **Japanese-first grammar explanations**: grammar lessons now show
+      `explanation_ja` first and reveal Traditional Chinese only when the
+      learner asks for help. The existing 15 grammar points now carry
+      Japanese explanations, with fallback still supported for legacy rows.
 - [x] **Spaced-repetition lite**: attempts now record `next_due_at`.
       Correct answers are due tomorrow, wrong answers stay due immediately,
       and `/api/quiz/next` only selects due or unseen questions.
 - [ ] **More grammar points**: target 30 N3, 30 N2, 20 N1 within next pass.
       Current state: 5 N5, 5 N3, 5 N2, 0 N1. N5/N4 are review-tier so 5
-      each is sufficient floor.
+      each is sufficient floor. New and revised rows must carry both
+      `explanation_ja` and `explanation_zh`.
 - [ ] **N1 corpus**: zero entries today. Five anchor points to start
       (〜ずにはいられない, 〜にもかかわらず, 〜きらいがある, 〜ばこそ, 〜とはいえ).
 - [ ] **More question kinds**: ordering (語順), multiple-choice, listening
@@ -111,6 +116,10 @@ value per hour.
       M2 lean. Wire up `jpn-eng_links.tsv.bz2` and join into `sentence.text_en`.
       Same for jpn-zh if available. Without translations, the sentence pool
       is decorative-only.
+- [ ] **Vocabulary Japanese-first study**: prefer Japanese definitions,
+      example-context clues, and Japanese collocation notes before showing
+      Chinese glosses. This follows the same progressive-disclosure rule as
+      grammar explanations, but needs a separate vocab content contract.
 - [ ] **Audio**: `tatoeba sentences_with_audio.csv` exists; building an
       audio_hash → mp3 download + serve path enables listening drills.
 - [ ] **Furigana**: kanji in served sentences below N3 should carry furigana

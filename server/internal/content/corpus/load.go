@@ -37,6 +37,7 @@ type GrammarPoint struct {
 	TitleJA         string          `json:"title_ja"`
 	TitleZH         string          `json:"title_zh"`
 	JLPTLevel       string          `json:"jlpt_level"`
+	ExplanationJA   string          `json:"explanation_ja,omitempty"`
 	ExplanationZH   string          `json:"explanation_zh"`
 	Source          string          `json:"source"`
 	License         string          `json:"license"`
@@ -79,14 +80,15 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 
 	upsertGP, err := tx.PrepareContext(ctx, `
 		INSERT INTO grammar_point (
-			slug, title_ja, title_zh, jlpt_level, explanation_zh,
+			slug, title_ja, title_zh, jlpt_level, explanation_ja, explanation_zh,
 			source, license, validated_by, validator_score, validated_at,
 			classifier_rules
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON CONFLICT(slug) DO UPDATE SET
 			title_ja=excluded.title_ja,
 			title_zh=excluded.title_zh,
 			jlpt_level=excluded.jlpt_level,
+			explanation_ja=excluded.explanation_ja,
 			explanation_zh=excluded.explanation_zh,
 			validated_at=excluded.validated_at,
 			classifier_rules=excluded.classifier_rules`)
@@ -148,7 +150,7 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 			return fmt.Errorf("classifier rules %s: %w", gp.Slug, err)
 		}
 		if _, err := upsertGP.ExecContext(ctx,
-			gp.Slug, gp.TitleJA, gp.TitleZH, gp.JLPTLevel, gp.ExplanationZH,
+			gp.Slug, gp.TitleJA, gp.TitleZH, gp.JLPTLevel, nullStr(gp.ExplanationJA), gp.ExplanationZH,
 			gp.Source, gp.License, gp.ValidatedBy, gp.ValidatorScore, now, classifierRules); err != nil {
 			return fmt.Errorf("upsert gp %s: %w", gp.Slug, err)
 		}

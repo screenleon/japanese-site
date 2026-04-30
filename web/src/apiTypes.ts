@@ -48,6 +48,7 @@ export interface GrammarPoint {
   title_ja: string;
   title_zh: string;
   jlpt_level: string;
+  explanation_ja?: string;
   explanation_zh: string;
 }
 
