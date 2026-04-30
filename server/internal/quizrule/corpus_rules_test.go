@@ -41,6 +41,13 @@ func TestCorpusClassifierRules(t *testing.T) {
 		{"N2", "nikanshite", "にとって", "used-nitotte"},
 		{"N2", "tsutsu", "聞きながら", "used-nagara"},
 		{"N2", "tsutsu", "聞いている", "used-teiru"},
+		// N1
+		{"N1", "aru-majiki", "あるべき", "used-beki"},
+		{"N1", "aru-majiki", "ない", "missing-majiki"},
+		{"N1", "gotoki", "ように", "used-you"},
+		{"N1", "taru-mono", "として", "used-toshite"},
+		{"N1", "toittemo-kagonai", "大げさ", "used-oogesa"},
+		{"N1", "yogi-naku-sareru", "ざるを得ない", "used-zaruwoenai"},
 		// Unknown/unmatched falls through.
 		{"N2", "wakeda", "neither hazu nor koto", "generic"},
 	}
