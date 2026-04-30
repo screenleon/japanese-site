@@ -297,6 +297,9 @@ func classifierRulesJSON(rules []quizrule.Rule) (any, error) {
 	if len(rules) == 0 {
 		return nil, nil
 	}
+	if err := quizrule.ValidateRules(rules); err != nil {
+		return nil, err
+	}
 	body, err := json.Marshal(rules)
 	if err != nil {
 		return nil, err

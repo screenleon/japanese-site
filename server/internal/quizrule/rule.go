@@ -1,6 +1,9 @@
 package quizrule
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 // Rule is one ordered classifier rule loaded from grammar corpus JSON.
 // The first matching rule wins. A rule with Default=true always matches.
@@ -28,6 +31,18 @@ func Classify(rules []Rule, _, answer string) string {
 	return "generic"
 }
 
+func ValidateRules(rules []Rule) error {
+	for i, rule := range rules {
+		if rule.ErrorClass == "" {
+			return fmt.Errorf("rule %d missing error_class", i)
+		}
+		if !hasPredicate(rule) {
+			return fmt.Errorf("rule %d (%s) has no predicate", i, rule.ErrorClass)
+		}
+	}
+	return nil
+}
+
 func matches(rule Rule, answer string) bool {
 	if rule.Default {
 		return true
@@ -48,6 +63,15 @@ func matches(rule Rule, answer string) bool {
 		return false
 	}
 	return true
+}
+
+func hasPredicate(rule Rule) bool {
+	return rule.Default ||
+		len(rule.IfAnswerEqualsAny) > 0 ||
+		len(rule.IfAnswerSuffixAny) > 0 ||
+		len(rule.IfAnswerContainsAny) > 0 ||
+		len(rule.IfAnswerNotContainsAny) > 0 ||
+		rule.IfAnswerDictionaryForm
 }
 
 func equalsAny(s string, values []string) bool {

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -158,6 +159,188 @@ func TestQuizAnswerUnknownQuestionReturnsStableCode(t *testing.T) {
 	}
 	if body.Error != "question_not_found" {
 		t.Fatalf("error = %q, want question_not_found", body.Error)
+	}
+}
+
+func TestAPINegativeCases(t *testing.T) {
+	db := newHandlerTestDB(t)
+	mux := http.NewServeMux()
+	Register(mux, db)
+
+	tests := []struct {
+		name       string
+		method     string
+		path       string
+		body       string
+		wantStatus int
+		wantError  string
+	}{
+		{
+			name:       "vocab missing query",
+			method:     http.MethodGet,
+			path:       "/api/vocab/search",
+			wantStatus: http.StatusBadRequest,
+			wantError:  "q_required",
+		},
+		{
+			name:       "unknown kanji",
+			method:     http.MethodGet,
+			path:       "/api/kanji/無",
+			wantStatus: http.StatusNotFound,
+			wantError:  "not_found",
+		},
+		{
+			name:       "no sentence for filter",
+			method:     http.MethodGet,
+			path:       "/api/sentence/random?jlpt=N1",
+			wantStatus: http.StatusNotFound,
+			wantError:  "no_sentences",
+		},
+		{
+			name:       "no question for filter",
+			method:     http.MethodGet,
+			path:       "/api/quiz/next?grammar=missing",
+			wantStatus: http.StatusNotFound,
+			wantError:  "no_questions_match",
+		},
+		{
+			name:       "invalid answer body",
+			method:     http.MethodPost,
+			path:       "/api/quiz/answer",
+			body:       `{`,
+			wantStatus: http.StatusBadRequest,
+			wantError:  "invalid_body",
+		},
+		{
+			name:       "missing answer fields",
+			method:     http.MethodPost,
+			path:       "/api/quiz/answer",
+			body:       `{"question_id":"testquestion0001"}`,
+			wantStatus: http.StatusBadRequest,
+			wantError:  "question_id_and_answer_required",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			req := httptest.NewRequest(tt.method, tt.path, strings.NewReader(tt.body))
+			rec := httptest.NewRecorder()
+			mux.ServeHTTP(rec, req)
+
+			if rec.Code != tt.wantStatus {
+				t.Fatalf("status = %d, want %d; body=%s", rec.Code, tt.wantStatus, rec.Body.String())
+			}
+			var body struct {
+				Error string `json:"error"`
+			}
+			if err := json.NewDecoder(rec.Body).Decode(&body); err != nil {
+				t.Fatalf("decode body: %v", err)
+			}
+			if body.Error != tt.wantError {
+				t.Fatalf("error = %q, want %q", body.Error, tt.wantError)
+			}
+		})
+	}
+}
+
+func TestQuizAnswerRejectsOversizedBody(t *testing.T) {
+	db := newHandlerTestDB(t)
+	mux := http.NewServeMux()
+	Register(mux, db)
+
+	req := httptest.NewRequest(
+		http.MethodPost,
+		"/api/quiz/answer",
+		strings.NewReader(strings.Repeat("x", maxAnswerBodyBytes+1)),
+	)
+	rec := httptest.NewRecorder()
+	mux.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusBadRequest {
+		t.Fatalf("status = %d, want 400; body=%s", rec.Code, rec.Body.String())
+	}
+	var body struct {
+		Error string `json:"error"`
+	}
+	if err := json.NewDecoder(rec.Body).Decode(&body); err != nil {
+		t.Fatalf("decode body: %v", err)
+	}
+	if body.Error != "invalid_body" {
+		t.Fatalf("error = %q, want invalid_body", body.Error)
+	}
+}
+
+func TestSecurityHeaders(t *testing.T) {
+	base := http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+	h := SecurityHeaders(base)
+
+	htmlReq := httptest.NewRequest(http.MethodGet, "/", nil)
+	htmlRec := httptest.NewRecorder()
+	h.ServeHTTP(htmlRec, htmlReq)
+	if got := htmlRec.Header().Get("X-Content-Type-Options"); got != "nosniff" {
+		t.Fatalf("X-Content-Type-Options = %q, want nosniff", got)
+	}
+	if got := htmlRec.Header().Get("X-Frame-Options"); got != "DENY" {
+		t.Fatalf("X-Frame-Options = %q, want DENY", got)
+	}
+	if got := htmlRec.Header().Get("Referrer-Policy"); got != "no-referrer" {
+		t.Fatalf("Referrer-Policy = %q, want no-referrer", got)
+	}
+	if got := htmlRec.Header().Get("Content-Security-Policy"); got == "" {
+		t.Fatal("expected CSP on HTML route")
+	}
+
+	apiReq := httptest.NewRequest(http.MethodGet, "/api/version", nil)
+	apiRec := httptest.NewRecorder()
+	h.ServeHTTP(apiRec, apiReq)
+	if got := apiRec.Header().Get("Content-Security-Policy"); got != "" {
+		t.Fatalf("API route CSP = %q, want empty", got)
+	}
+}
+
+func TestStaticHandler(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "index.html"), []byte("index"), 0o644); err != nil {
+		t.Fatalf("write index: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, "app.js"), []byte("console.log('ok')"), 0o644); err != nil {
+		t.Fatalf("write app: %v", err)
+	}
+
+	mux := http.NewServeMux()
+	if err := RegisterStatic(mux, dir); err != nil {
+		t.Fatalf("RegisterStatic: %v", err)
+	}
+
+	tests := []struct {
+		name       string
+		method     string
+		path       string
+		wantStatus int
+		wantBody   string
+	}{
+		{"root index", http.MethodGet, "/", http.StatusOK, "index"},
+		{"spa fallback", http.MethodGet, "/grammar/test", http.StatusOK, "index"},
+		{"asset file", http.MethodGet, "/app.js", http.StatusOK, "console.log"},
+		{"missing asset", http.MethodGet, "/missing.js", http.StatusNotFound, "404"},
+		{"method not allowed", http.MethodPost, "/", http.StatusMethodNotAllowed, "method not allowed"},
+		{"path traversal rejected", http.MethodGet, "/../secret", http.StatusMovedPermanently, "Moved Permanently"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			req := httptest.NewRequest(tt.method, tt.path, nil)
+			rec := httptest.NewRecorder()
+			mux.ServeHTTP(rec, req)
+			if rec.Code != tt.wantStatus {
+				t.Fatalf("status = %d, want %d; body=%s", rec.Code, tt.wantStatus, rec.Body.String())
+			}
+			if !strings.Contains(rec.Body.String(), tt.wantBody) {
+				t.Fatalf("body %q does not contain %q", rec.Body.String(), tt.wantBody)
+			}
+		})
 	}
 }
 

@@ -73,3 +73,33 @@ func TestClassify(t *testing.T) {
 		})
 	}
 }
+
+func TestValidateRulesRejectsMalformedRules(t *testing.T) {
+	cases := []struct {
+		name  string
+		rules []Rule
+	}{
+		{
+			name:  "missing error class",
+			rules: []Rule{{IfAnswerEqualsAny: []string{"が"}}},
+		},
+		{
+			name:  "missing predicate",
+			rules: []Rule{{ErrorClass: "used-ga"}},
+		},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			if err := ValidateRules(tc.rules); err == nil {
+				t.Fatal("expected validation error, got nil")
+			}
+		})
+	}
+}
+
+func TestValidateRulesAcceptsDefault(t *testing.T) {
+	err := ValidateRules([]Rule{{Default: true, ErrorClass: "generic"}})
+	if err != nil {
+		t.Fatalf("ValidateRules(default): %v", err)
+	}
+}

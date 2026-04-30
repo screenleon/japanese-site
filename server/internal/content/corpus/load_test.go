@@ -203,6 +203,48 @@ func TestLoad_StoresClassifierRules(t *testing.T) {
 	}
 }
 
+func TestLoad_RejectsMalformedClassifierRules(t *testing.T) {
+	tmpRoot := t.TempDir()
+	dbPath := filepath.Join(tmpRoot, "test.sqlite")
+	corpusRoot := filepath.Join(tmpRoot, "corpus")
+	grammarDir := filepath.Join(corpusRoot, "grammar", "N3")
+	if err := os.MkdirAll(grammarDir, 0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+	gp := `{
+		"slug": "test-gp",
+		"title_ja": "テスト",
+		"title_zh": "測試",
+		"jlpt_level": "N3",
+		"explanation_zh": "classifier rules test",
+		"source": "curated",
+		"license": "CC0-1.0",
+		"validated_by": "test",
+		"validator_score": 1.0,
+		"classifier_rules": [
+			{"error_class": "matches-everything-by-accident"}
+		]
+	}`
+	if err := os.WriteFile(filepath.Join(grammarDir, "test-gp.json"), []byte(gp), 0o644); err != nil {
+		t.Fatalf("write gp: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(grammarDir, "test-gp.examples.jsonl"), []byte(exampleA), 0o644); err != nil {
+		t.Fatalf("write ex: %v", err)
+	}
+
+	db, err := store.Open(dbPath)
+	if err != nil {
+		t.Fatalf("open: %v", err)
+	}
+	defer db.Close()
+	if err := store.Migrate(db); err != nil {
+		t.Fatalf("migrate: %v", err)
+	}
+	if _, err := Load(context.Background(), db.DB, corpusRoot); err == nil {
+		t.Fatal("expected malformed classifier_rules to fail load")
+	}
+}
+
 func singleQuestionID(t *testing.T, db *sql.DB) string {
 	t.Helper()
 	rows, err := db.Query(`SELECT id FROM question WHERE source = 'curated'`)
