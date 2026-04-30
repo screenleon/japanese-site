@@ -6,6 +6,8 @@
 //
 //	corpus/grammar/<level>/<slug>.json
 //	corpus/grammar/<level>/<slug>.examples.jsonl
+//	corpus/vocab/<level>.jsonl
+//	corpus/kanji/<level>.jsonl
 //
 // Each grammar example with `is_correct=1` and a non-empty `blank` field
 // becomes one cloze question.
@@ -56,19 +58,47 @@ type GrammarExample struct {
 	License   string `json:"license"`
 }
 
+type VocabSupport struct {
+	Headword string `json:"headword"`
+	Reading  string `json:"reading"`
+	GlossJA  string `json:"gloss_ja"`
+	GlossZH  string `json:"gloss_zh"`
+	Source   string `json:"source"`
+	License  string `json:"license"`
+}
+
+type KanjiSupport struct {
+	Character string `json:"character"`
+	MeaningJA string `json:"meaning_ja"`
+	MeaningZH string `json:"meaning_zh"`
+	Source    string `json:"source"`
+	License   string `json:"license"`
+}
+
+type JLPTOverride struct {
+	Kind      string `json:"kind"`
+	Headword  string `json:"headword,omitempty"`
+	Reading   string `json:"reading,omitempty"`
+	Character string `json:"character,omitempty"`
+	JLPTLevel string `json:"jlpt_level"`
+	Source    string `json:"source"`
+	License   string `json:"license"`
+	Reason    string `json:"reason"`
+}
+
 type LoadStats struct {
 	GrammarPoints   int
 	GrammarExamples int
 	Questions       int
+	VocabSupport    int
+	KanjiSupport    int
+	JLPTOverrides   int
 }
 
 // Load walks corpus/grammar/<level>/*.json under root and upserts the data.
 func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 	stats := LoadStats{}
 	grammarRoot := filepath.Join(root, "grammar")
-	if _, err := os.Stat(grammarRoot); os.IsNotExist(err) {
-		return stats, nil
-	}
 
 	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
@@ -130,82 +160,102 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 	// questions) without breaking SQLite's IN-clause variable cap.
 	seenIDs := map[string]struct{}{}
 
-	err = filepath.WalkDir(grammarRoot, func(path string, d fs.DirEntry, walkErr error) error {
-		if walkErr != nil {
-			return walkErr
-		}
-		if d.IsDir() {
-			return nil
-		}
-		if !strings.HasSuffix(path, ".json") || strings.HasSuffix(path, ".examples.jsonl") {
-			return nil
-		}
-
-		gp, err := readGrammarPoint(path)
-		if err != nil {
-			return fmt.Errorf("read %s: %w", path, err)
-		}
-		classifierRules, err := classifierRulesJSON(gp.ClassifierRules)
-		if err != nil {
-			return fmt.Errorf("classifier rules %s: %w", gp.Slug, err)
-		}
-		if _, err := upsertGP.ExecContext(ctx,
-			gp.Slug, gp.TitleJA, gp.TitleZH, gp.JLPTLevel, nullStr(gp.ExplanationJA), gp.ExplanationZH,
-			gp.Source, gp.License, gp.ValidatedBy, gp.ValidatorScore, now, classifierRules); err != nil {
-			return fmt.Errorf("upsert gp %s: %w", gp.Slug, err)
-		}
-		stats.GrammarPoints++
-
-		var gpID int64
-		if err := tx.QueryRowContext(ctx, `SELECT id FROM grammar_point WHERE slug = ?`, gp.Slug).Scan(&gpID); err != nil {
-			return err
-		}
-
-		// Replace examples atomically per grammar point.
-		if _, err := tx.ExecContext(ctx, `DELETE FROM grammar_example WHERE grammar_point_id = ?`, gpID); err != nil {
-			return err
-		}
-
-		examplesPath := strings.TrimSuffix(path, ".json") + ".examples.jsonl"
-		examples, err := readExamples(examplesPath)
-		if err != nil && !os.IsNotExist(err) {
-			return fmt.Errorf("read %s: %w", examplesPath, err)
-		}
-		for _, ex := range examples {
-			// The cloze frontend renders one input per `___` marker but
-			// only one `answer` state, so multi-blank prompts collapse to
-			// a single shared input. Reject at load time so authoring
-			// errors fail fast instead of silently corrupting the quiz.
-			if blanks := strings.Count(ex.TextJA, "___"); blanks > 1 {
-				return fmt.Errorf("example for %s has %d blanks; cloze format supports exactly one: %q",
-					gp.Slug, blanks, ex.TextJA)
+	if _, err := os.Stat(grammarRoot); err == nil {
+		err = filepath.WalkDir(grammarRoot, func(path string, d fs.DirEntry, walkErr error) error {
+			if walkErr != nil {
+				return walkErr
 			}
-			if strings.Contains(ex.Blank, "___") {
-				return fmt.Errorf("example for %s has '___' inside its expected answer: %q",
-					gp.Slug, ex.Blank)
+			if d.IsDir() {
+				return nil
 			}
-			if _, err := insertEx.ExecContext(ctx,
-				gpID, ex.TextJA, ex.TextZH, ex.IsCorrect,
-				ex.Source, ex.License, GrammarValidatorID, 1.0, now); err != nil {
-				return fmt.Errorf("insert example %s: %w", gp.Slug, err)
+			if !strings.HasSuffix(path, ".json") || strings.HasSuffix(path, ".examples.jsonl") {
+				return nil
 			}
-			stats.GrammarExamples++
-			if ex.IsCorrect == 1 && ex.Blank != "" && strings.Contains(ex.TextJA, "___") {
-				qid := QuestionID(gp.Slug, ex.TextJA, ex.Blank)
-				if _, err := insertQ.ExecContext(ctx,
-					qid, gp.JLPTLevel, gp.Slug, ex.TextJA, ex.Blank, nullStr(ex.Hint),
-					GrammarSourceID, ex.License, GrammarValidatorID, 1.0, now); err != nil {
-					return fmt.Errorf("insert question: %w", err)
+
+			gp, err := readGrammarPoint(path)
+			if err != nil {
+				return fmt.Errorf("read %s: %w", path, err)
+			}
+			classifierRules, err := classifierRulesJSON(gp.ClassifierRules)
+			if err != nil {
+				return fmt.Errorf("classifier rules %s: %w", gp.Slug, err)
+			}
+			if _, err := upsertGP.ExecContext(ctx,
+				gp.Slug, gp.TitleJA, gp.TitleZH, gp.JLPTLevel, nullStr(gp.ExplanationJA), gp.ExplanationZH,
+				gp.Source, gp.License, gp.ValidatedBy, gp.ValidatorScore, now, classifierRules); err != nil {
+				return fmt.Errorf("upsert gp %s: %w", gp.Slug, err)
+			}
+			stats.GrammarPoints++
+
+			var gpID int64
+			if err := tx.QueryRowContext(ctx, `SELECT id FROM grammar_point WHERE slug = ?`, gp.Slug).Scan(&gpID); err != nil {
+				return err
+			}
+
+			// Replace examples atomically per grammar point.
+			if _, err := tx.ExecContext(ctx, `DELETE FROM grammar_example WHERE grammar_point_id = ?`, gpID); err != nil {
+				return err
+			}
+
+			examplesPath := strings.TrimSuffix(path, ".json") + ".examples.jsonl"
+			examples, err := readExamples(examplesPath)
+			if err != nil && !os.IsNotExist(err) {
+				return fmt.Errorf("read %s: %w", examplesPath, err)
+			}
+			for _, ex := range examples {
+				// The cloze frontend renders one input per `___` marker but
+				// only one `answer` state, so multi-blank prompts collapse to
+				// a single shared input. Reject at load time so authoring
+				// errors fail fast instead of silently corrupting the quiz.
+				if blanks := strings.Count(ex.TextJA, "___"); blanks > 1 {
+					return fmt.Errorf("example for %s has %d blanks; cloze format supports exactly one: %q",
+						gp.Slug, blanks, ex.TextJA)
 				}
-				seenIDs[qid] = struct{}{}
-				stats.Questions++
+				if strings.Contains(ex.Blank, "___") {
+					return fmt.Errorf("example for %s has '___' inside its expected answer: %q",
+						gp.Slug, ex.Blank)
+				}
+				if _, err := insertEx.ExecContext(ctx,
+					gpID, ex.TextJA, ex.TextZH, ex.IsCorrect,
+					ex.Source, ex.License, GrammarValidatorID, 1.0, now); err != nil {
+					return fmt.Errorf("insert example %s: %w", gp.Slug, err)
+				}
+				stats.GrammarExamples++
+				if ex.IsCorrect == 1 && ex.Blank != "" && strings.Contains(ex.TextJA, "___") {
+					qid := QuestionID(gp.Slug, ex.TextJA, ex.Blank)
+					if _, err := insertQ.ExecContext(ctx,
+						qid, gp.JLPTLevel, gp.Slug, ex.TextJA, ex.Blank, nullStr(ex.Hint),
+						GrammarSourceID, ex.License, GrammarValidatorID, 1.0, now); err != nil {
+						return fmt.Errorf("insert question: %w", err)
+					}
+					seenIDs[qid] = struct{}{}
+					stats.Questions++
+				}
 			}
+			slog.Info("loaded grammar", "slug", gp.Slug, "level", gp.JLPTLevel, "examples", len(examples))
+			return nil
+		})
+		if err != nil {
+			return stats, err
 		}
-		slog.Info("loaded grammar", "slug", gp.Slug, "level", gp.JLPTLevel, "examples", len(examples))
-		return nil
-	})
-	if err != nil {
+	} else if !os.IsNotExist(err) {
 		return stats, err
+	}
+
+	if n, err := loadVocabSupport(ctx, tx, root); err != nil {
+		return stats, err
+	} else {
+		stats.VocabSupport = n
+	}
+	if n, err := loadKanjiSupport(ctx, tx, root); err != nil {
+		return stats, err
+	} else {
+		stats.KanjiSupport = n
+	}
+	if n, err := loadJLPTOverrides(ctx, tx, root); err != nil {
+		return stats, err
+	} else {
+		stats.JLPTOverrides = n
 	}
 
 	// Orphan sweep: any curated question whose id isn't in seenIDs must
@@ -217,13 +267,153 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 	// SAFETY: filter is `source = 'curated'` (GrammarSourceID). Do NOT
 	// loosen this — M4's L2 cache promotion writes `source =
 	// 'llm-generated'` rows which must survive a curated-corpus reload.
-	if n, err := sweepOrphanQuestions(ctx, tx, seenIDs); err != nil {
-		return stats, fmt.Errorf("orphan sweep: %w", err)
-	} else if n > 0 {
-		slog.Info("swept orphan questions", "count", n)
+	if len(seenIDs) > 0 {
+		if n, err := sweepOrphanQuestions(ctx, tx, seenIDs); err != nil {
+			return stats, fmt.Errorf("orphan sweep: %w", err)
+		} else if n > 0 {
+			slog.Info("swept orphan questions", "count", n)
+		}
 	}
 
 	return stats, tx.Commit()
+}
+
+func loadVocabSupport(ctx context.Context, tx *sql.Tx, root string) (int, error) {
+	rows, err := readJSONL[VocabSupport](filepath.Join(root, "vocab"))
+	if err != nil {
+		return 0, err
+	}
+	if len(rows) == 0 {
+		return 0, nil
+	}
+	stmt, err := tx.PrepareContext(ctx, `
+		UPDATE vocab
+		   SET gloss_ja = ?,
+		       gloss_zh = ?,
+		       validated_by = COALESCE(validated_by, ?),
+		       validated_at = COALESCE(validated_at, ?)
+		 WHERE headword = ? AND reading = ?`)
+	if err != nil {
+		return 0, fmt.Errorf("prepare vocab support: %w", err)
+	}
+	defer stmt.Close()
+
+	now := time.Now().UTC().Format(time.RFC3339)
+	updated := 0
+	for _, row := range rows {
+		if row.Headword == "" || row.Reading == "" || row.GlossJA == "" || row.GlossZH == "" || row.Source == "" || row.License == "" {
+			return updated, fmt.Errorf("vocab support row missing required fields: %+v", row)
+		}
+		res, err := stmt.ExecContext(ctx, row.GlossJA, row.GlossZH, GrammarValidatorID, now, row.Headword, row.Reading)
+		if err != nil {
+			return updated, fmt.Errorf("update vocab support %s/%s: %w", row.Headword, row.Reading, err)
+		}
+		n, _ := res.RowsAffected()
+		updated += int(n)
+	}
+	return updated, nil
+}
+
+func loadKanjiSupport(ctx context.Context, tx *sql.Tx, root string) (int, error) {
+	rows, err := readJSONL[KanjiSupport](filepath.Join(root, "kanji"))
+	if err != nil {
+		return 0, err
+	}
+	if len(rows) == 0 {
+		return 0, nil
+	}
+	stmt, err := tx.PrepareContext(ctx, `
+		UPDATE kanji
+		   SET meaning_ja = ?,
+		       meaning_zh = ?,
+		       validated_by = COALESCE(validated_by, ?),
+		       validated_at = COALESCE(validated_at, ?)
+		 WHERE character = ?`)
+	if err != nil {
+		return 0, fmt.Errorf("prepare kanji support: %w", err)
+	}
+	defer stmt.Close()
+
+	now := time.Now().UTC().Format(time.RFC3339)
+	updated := 0
+	for _, row := range rows {
+		if row.Character == "" || row.MeaningJA == "" || row.MeaningZH == "" || row.Source == "" || row.License == "" {
+			return updated, fmt.Errorf("kanji support row missing required fields: %+v", row)
+		}
+		res, err := stmt.ExecContext(ctx, row.MeaningJA, row.MeaningZH, GrammarValidatorID, now, row.Character)
+		if err != nil {
+			return updated, fmt.Errorf("update kanji support %s: %w", row.Character, err)
+		}
+		n, _ := res.RowsAffected()
+		updated += int(n)
+	}
+	return updated, nil
+}
+
+func loadJLPTOverrides(ctx context.Context, tx *sql.Tx, root string) (int, error) {
+	rows, err := readJSONLFile[JLPTOverride](filepath.Join(root, "jlpt-overrides.jsonl"))
+	if err != nil {
+		return 0, err
+	}
+	if len(rows) == 0 {
+		return 0, nil
+	}
+	updateVocab, err := tx.PrepareContext(ctx, `
+		UPDATE vocab
+		   SET jlpt_level = ?,
+		       validated_by = COALESCE(validated_by, ?),
+		       validated_at = COALESCE(validated_at, ?)
+		 WHERE headword = ? AND reading = ?`)
+	if err != nil {
+		return 0, fmt.Errorf("prepare vocab jlpt override: %w", err)
+	}
+	defer updateVocab.Close()
+
+	updateKanji, err := tx.PrepareContext(ctx, `
+		UPDATE kanji
+		   SET jlpt_level = ?,
+		       validated_by = COALESCE(validated_by, ?),
+		       validated_at = COALESCE(validated_at, ?)
+		 WHERE character = ?`)
+	if err != nil {
+		return 0, fmt.Errorf("prepare kanji jlpt override: %w", err)
+	}
+	defer updateKanji.Close()
+
+	now := time.Now().UTC().Format(time.RFC3339)
+	updated := 0
+	for _, row := range rows {
+		if row.Kind == "" || row.JLPTLevel == "" || row.Source == "" || row.License == "" || row.Reason == "" {
+			return updated, fmt.Errorf("jlpt override row missing required fields: %+v", row)
+		}
+		if !validJLPTLevel(row.JLPTLevel) {
+			return updated, fmt.Errorf("jlpt override row has invalid level: %+v", row)
+		}
+		var (
+			res sql.Result
+			err error
+		)
+		switch row.Kind {
+		case "vocab":
+			if row.Headword == "" || row.Reading == "" {
+				return updated, fmt.Errorf("vocab jlpt override missing natural key: %+v", row)
+			}
+			res, err = updateVocab.ExecContext(ctx, row.JLPTLevel, GrammarValidatorID, now, row.Headword, row.Reading)
+		case "kanji":
+			if row.Character == "" {
+				return updated, fmt.Errorf("kanji jlpt override missing natural key: %+v", row)
+			}
+			res, err = updateKanji.ExecContext(ctx, row.JLPTLevel, GrammarValidatorID, now, row.Character)
+		default:
+			return updated, fmt.Errorf("jlpt override row has unsupported kind: %+v", row)
+		}
+		if err != nil {
+			return updated, fmt.Errorf("apply jlpt override %+v: %w", row, err)
+		}
+		n, _ := res.RowsAffected()
+		updated += int(n)
+	}
+	return updated, nil
 }
 
 // sweepOrphanQuestions deletes curated question rows whose id is not in
@@ -288,11 +478,81 @@ func readExamples(path string) ([]GrammarExample, error) {
 	return out, scanner.Err()
 }
 
+func readJSONL[T any](dir string) ([]T, error) {
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		return nil, nil
+	}
+	var out []T
+	err := filepath.WalkDir(dir, func(path string, d fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if d.IsDir() || !strings.HasSuffix(path, ".jsonl") {
+			return nil
+		}
+		f, err := os.Open(path)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+		scanner := bufio.NewScanner(f)
+		scanner.Buffer(make([]byte, 64*1024), 1024*1024)
+		for scanner.Scan() {
+			line := strings.TrimSpace(scanner.Text())
+			if line == "" {
+				continue
+			}
+			var row T
+			if err := json.Unmarshal([]byte(line), &row); err != nil {
+				return fmt.Errorf("decode %s: %w", path, err)
+			}
+			out = append(out, row)
+		}
+		return scanner.Err()
+	})
+	return out, err
+}
+
+func readJSONLFile[T any](path string) ([]T, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	defer f.Close()
+	scanner := bufio.NewScanner(f)
+	scanner.Buffer(make([]byte, 64*1024), 1024*1024)
+	var out []T
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" {
+			continue
+		}
+		var row T
+		if err := json.Unmarshal([]byte(line), &row); err != nil {
+			return nil, fmt.Errorf("decode %s: %w", path, err)
+		}
+		out = append(out, row)
+	}
+	return out, scanner.Err()
+}
+
 func nullStr(s string) any {
 	if s == "" {
 		return nil
 	}
 	return s
+}
+
+func validJLPTLevel(level string) bool {
+	switch level {
+	case "N1", "N2", "N3", "N4", "N5":
+		return true
+	default:
+		return false
+	}
 }
 
 func classifierRulesJSON(rules []quizrule.Rule) (any, error) {

@@ -1,0 +1,5 @@
+{"text_ja":"今、新聞を読ん___います。","text_zh":"現在正在看報紙。","blank":"で","is_correct":1,"hint":"読む → 読んで","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"母は台所で料理し___います。","text_zh":"媽媽正在廚房做菜。","blank":"て","is_correct":1,"hint":"する → して","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"窓が開い___います。","text_zh":"窗戶開著。","blank":"て","is_correct":1,"hint":"状態が続く","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"弟はまだ寝___います。","text_zh":"弟弟還在睡。","blank":"て","is_correct":1,"hint":"寝る → 寝て","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"駅の前に人が並ん___います。","text_zh":"車站前有人排著隊。","blank":"で","is_correct":1,"hint":"並ぶ → 並んで","source":"curated","license":"CC-BY-SA-4.0"}

@@ -1,0 +1,5 @@
+{"text_ja":"これは新し___本です。","text_zh":"這是新書。","blank":"い","is_correct":1,"hint":"い形容詞の終わり","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この部屋は広___です。","text_zh":"這個房間很寬。","blank":"い","is_correct":1,"hint":"広い","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"今日は寒___です。","text_zh":"今天很冷。","blank":"い","is_correct":1,"hint":"寒い","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"昨日は暑___かったです。","text_zh":"昨天很熱。","blank":"い","is_correct":1,"hint":"暑い + 過去","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この料理は辛___くないです。","text_zh":"這道菜不辣。","blank":"い","is_correct":1,"hint":"辛い + 否定","source":"curated","license":"CC-BY-SA-4.0"}

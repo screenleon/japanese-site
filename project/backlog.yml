@@ -135,14 +135,21 @@ items:
     source: ROADMAP.md#quiz--content-depth
     notes:
       - Scale floor is at least 1000 JLPT-tagged learner-usable vocab rows and 100 grammar points.
-      - Current seeded state after make seed-all: 22552 vocab rows, 6524 JLPT-tagged vocab rows, 25 grammar points, 119 cloze questions.
-      - Vocabulary volume already clears the floor through JMdict + JLPT overlay; grammar remains the blocker.
+      - Current seeded state after make seed-corpus: 22552 vocab rows, 6524 JLPT-tagged vocab rows, 66 grammar points, 324 cloze questions, 470 vocab support overlays.
+      - Vocabulary volume already clears the row-count floor through JMdict + JLPT overlay; Japanese/Traditional Chinese learner support is being filled through L1 overlays.
       - Next content implementation should add grammar in larger level-balanced batches, not 5-point micro-passes.
       - New or revised grammar JSON must include explanation_ja and explanation_zh.
       - Preserve source, license, and validated_by metadata.
       - "2026-04-30: Added first 5 N1 anchor points with Japanese-first explanations, Chinese support, 25 cloze examples, and generic feedback templates."
       - "2026-04-30: Added 5 more N1 grammar points (あるまじき, ごとき/ごとく/ごとし, たるもの, といっても過言ではない, を余儀なくされる), 25 cloze examples, generic feedback templates, and classifier-rule regression cases."
       - "2026-04-30: Added make corpus-scale to report scale floors and current gaps."
+      - "2026-04-30: Added 12 N5 grammar points, 9 N4 grammar points, and 105 cloze examples; grammar total is now 46 points / 224 cloze questions."
+      - "2026-04-30: Expanded N5 vocab Japanese/Traditional Chinese support overlay to 220 rows from existing JMdict-derived vocabulary."
+      - "2026-04-30: Added first N4 vocab Japanese/Traditional Chinese support overlay batch; vocab support overlays now seed 334 rows."
+      - "2026-04-30: Added first N2 vocabulary support overlay plus 10 N2 grammar points and 50 cloze examples; grammar total is now 56 points / 274 cloze questions, vocab support overlays seed 410 rows."
+      - "2026-04-30: Added curated JLPT overrides after review found basic greetings misclassified as N2; お休み/お帰り/お願いします/お邪魔します are now N5 and related daily phrases are N4."
+      - "2026-04-30: Reviewed existing generated vocab overlays for obvious level issues; moved 9 basic N4 entries to N5 and documented remaining uncertain items in server/data/corpus/LEVEL_REVIEW.md."
+      - "2026-04-30: Added first N3 vocab support overlay batch plus 10 N3 grammar points and 50 cloze examples; grammar total is now 66 points / 324 cloze questions, vocab support overlays seed 470 rows."
       - "Validated: make lint-rules"
       - "Validated: make corpus-scale"
       - "Validated: env GOCACHE=/tmp/go-build-cache make seed-corpus"
@@ -210,6 +217,24 @@ items:
       - Vocabulary tab supports level browse plus random single-word study draws.
       - Added GET /api/vocab/random and allowed /api/vocab/search?jlpt=N without q for level browsing.
       - Added GET /api/grammar/random for level-scoped random grammar study.
+      - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
+      - "Validated: npm run build"
+
+  - id: JS-015
+    title: Remove English fallback from learner-facing study UI
+    status: done
+    priority: P0
+    milestone: content
+    area: product
+    source: user-feedback-2026-04-30
+    completed_at: "2026-04-30"
+    notes:
+      - Learner-facing content should show Japanese first and Traditional Chinese as support.
+      - Vocabulary and kanji tabs no longer display English gloss/meaning fallbacks.
+      - Kanji API now exposes meaning_zh so Chinese meanings can be displayed when available.
+      - Added gloss_ja and meaning_ja so vocabulary and kanji can show Japanese explanations first.
+      - Added L1 curated vocab/kanji support overlays and first N5 batches translated from the existing English source fields.
+      - Remaining missing Japanese/Chinese entries show pending messages instead of English.
       - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
       - "Validated: npm run build"
 

@@ -1,0 +1,5 @@
+{"text_ja":"ここで写真を撮らない___ください。","text_zh":"請不要在這裡拍照。","blank":"で","is_correct":1,"hint":"ない形 + でください","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この部屋で食べない___ください。","text_zh":"請不要在這個房間吃東西。","blank":"で","is_correct":1,"hint":"禁止・お願い","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"名前を忘れない___ください。","text_zh":"請不要忘記名字。","blank":"で","is_correct":1,"hint":"忘れない + で","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"大きな声で話さない___ください。","text_zh":"請不要大聲說話。","blank":"で","is_correct":1,"hint":"話さない + で","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"まだ帰らない___ください。","text_zh":"請還不要回去。","blank":"で","is_correct":1,"hint":"帰らない + で","source":"curated","license":"CC-BY-SA-4.0"}

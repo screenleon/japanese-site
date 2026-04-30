@@ -1,0 +1,15 @@
+{
+  "slug": "ka-question",
+  "title_ja": "か（疑問）",
+  "title_zh": "か（疑問句）",
+  "jlpt_level": "N5",
+  "explanation_ja": "「か」は、文の最後につけて質問を作る助詞です。丁寧な文では「ですか」「ますか」の形がよく使われます。\n\n- 学生ですか\n- 行きますか\n\n日本語の疑問文では、文末を上げて読むことが多いです。",
+  "explanation_zh": "「か」放在句尾形成疑問句，常見形式是「ですか」「ますか」。例如「学生ですか」是「是學生嗎？」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["ね", "よ"], "error_class": "sentence-ending-particle"}
+  ]
+}

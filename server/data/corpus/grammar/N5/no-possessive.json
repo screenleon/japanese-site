@@ -1,0 +1,15 @@
+{
+  "slug": "no-possessive",
+  "title_ja": "の（所有・所属）",
+  "title_zh": "の（所有／所屬）",
+  "jlpt_level": "N5",
+  "explanation_ja": "「の」は、名詞と名詞をつないで、所有、所属、内容、関係を表します。\n\n「A の B」は「Aに関係するB」という意味です。\n- 私の本\n- 日本語の先生\n- 机の上\n\n日本語では「の」を使う関係が多いので、名詞を説明するときの基本になります。",
+  "explanation_zh": "「の」連接兩個名詞，表示所有、所屬、內容或位置關係。「私の本」是我的書，「日本語の先生」是日文老師，「机の上」是桌子上面。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["は", "が", "を"], "error_class": "wrong-particle"}
+  ]
+}

@@ -1,0 +1,5 @@
+{"text_ja":"田中さんは先生です___。","text_zh":"田中先生是老師嗎？","blank":"か","is_correct":1,"hint":"疑問の文末","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"明日学校へ行きます___。","text_zh":"明天去學校嗎？","blank":"か","is_correct":1,"hint":"質問","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"これはあなたの本です___。","text_zh":"這是你的書嗎？","blank":"か","is_correct":1,"hint":"です + 疑問","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"コーヒーを飲みます___。","text_zh":"要喝咖啡嗎？","blank":"か","is_correct":1,"hint":"ます + 疑問","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"日本語は難しいです___。","text_zh":"日文很難嗎？","blank":"か","is_correct":1,"hint":"形容詞文の質問","source":"curated","license":"CC-BY-SA-4.0"}

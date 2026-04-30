@@ -1,0 +1,5 @@
+{"text_ja":"これは私___本です。","text_zh":"這是我的書。","blank":"の","is_correct":1,"hint":"所有","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"日本語___先生はやさしいです。","text_zh":"日文老師很親切。","blank":"の","is_correct":1,"hint":"所屬・種類","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"机___上にかばんがあります。","text_zh":"桌子上有包包。","blank":"の","is_correct":1,"hint":"位置関係","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"友達___家へ行きます。","text_zh":"去朋友家。","blank":"の","is_correct":1,"hint":"関係する名詞をつなぐ","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"これは日本___車です。","text_zh":"這是日本的車。","blank":"の","is_correct":1,"hint":"国と物の関係","source":"curated","license":"CC-BY-SA-4.0"}

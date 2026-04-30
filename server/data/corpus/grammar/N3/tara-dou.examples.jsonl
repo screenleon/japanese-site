@@ -1,0 +1,5 @@
+{"text_ja":"先生に相談したら___ですか。","text_zh":"和老師商量看看怎麼樣？","blank":"どう","is_correct":1,"hint":"提案","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"少し休んだら___ですか。","text_zh":"休息一下怎麼樣？","blank":"どう","is_correct":1,"hint":"助言","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"病院へ行ったら___ですか。","text_zh":"去醫院看看怎麼樣？","blank":"どう","is_correct":1,"hint":"すすめる","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"もう一度確認したら___ですか。","text_zh":"再確認一次怎麼樣？","blank":"どう","is_correct":1,"hint":"提案の形","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"早めに予約したら___ですか。","text_zh":"早點預約怎麼樣？","blank":"どう","is_correct":1,"hint":"相手への助言","source":"curated","license":"CC-BY-SA-4.0"}

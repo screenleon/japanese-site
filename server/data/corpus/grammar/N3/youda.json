@@ -1,0 +1,15 @@
+{
+  "slug": "youda",
+  "title_ja": "ようだ",
+  "title_zh": "ようだ（似乎／像）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「ようだ」は、状況から判断した推量や、何かに似ていることを表します。\n\n- 誰か来たようです\n- 夢のようです\n\n少し書き言葉寄りで、「みたいだ」より丁寧・硬めです。",
+  "explanation_zh": "「ようだ」表示根據情況推測「似乎」，也可表示比喻「像」。比「みたいだ」稍正式。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["そう"], "error_class": "appearance-pattern"}
+  ]
+}

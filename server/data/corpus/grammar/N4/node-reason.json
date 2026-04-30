@@ -1,0 +1,15 @@
+{
+  "slug": "node-reason",
+  "title_ja": "ので（理由）",
+  "title_zh": "ので（原因理由）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「ので」は、理由や原因を表します。「から」よりも少しやわらかく、説明する感じがあります。\n\n- 雨が降っているので、行きません\n- 明日試験なので、勉強します\n\n名詞とな形容詞の前では「なので」になります。",
+  "explanation_zh": "「ので」表示理由或原因，語氣比「から」稍微柔和，有說明原因的感覺。名詞與な形容詞接續時用「なので」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["から"], "error_class": "used-kara"}
+  ]
+}

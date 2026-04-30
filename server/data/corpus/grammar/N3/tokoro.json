@@ -1,0 +1,15 @@
+{
+  "slug": "tokoro",
+  "title_ja": "ところ",
+  "title_zh": "ところ（正要／正在／剛剛）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「ところ」は、動作の段階を表します。\n\n- 今から出かけるところです\n- 今食べているところです\n- 今帰ったところです\n\n前につく形で、直前・進行中・直後が変わります。",
+  "explanation_zh": "「ところ」表示動作階段：辞書形ところ是正要，ているところ是正在，たところ是剛剛。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["ばかり"], "error_class": "recent-completion"}
+  ]
+}

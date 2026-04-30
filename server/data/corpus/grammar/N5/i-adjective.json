@@ -1,0 +1,15 @@
+{
+  "slug": "i-adjective",
+  "title_ja": "い形容詞",
+  "title_zh": "い形容詞",
+  "jlpt_level": "N5",
+  "explanation_ja": "い形容詞は、基本形が「い」で終わる形容詞です。名詞を説明するときは、そのまま名詞の前に置けます。\n\n- 新しい本\n- 高い山\n\n否定は「い」を取って「くない」にします。過去は「かった」です。",
+  "explanation_zh": "い形容詞基本形以「い」結尾，可直接修飾名詞，如「新しい本」。否定形把最後的「い」換成「くない」，過去形為「かった」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_suffix_any": ["な"], "error_class": "na-adjective-pattern"}
+  ]
+}

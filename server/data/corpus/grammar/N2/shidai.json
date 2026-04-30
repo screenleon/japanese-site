@@ -1,0 +1,15 @@
+{
+  "slug": "shidai",
+  "title_ja": "次第",
+  "title_zh": "次第（一...就）",
+  "jlpt_level": "N2",
+  "explanation_ja": "「動詞ます形 + 次第」は、「〜したらすぐに」という意味です。連絡や案内でよく使う硬めの表現です。\n\n- 分かり次第、連絡します\n- 準備ができ次第、出発します\n\n「すぐに行う」という意味が含まれます。",
+  "explanation_zh": "「動詞ます形 + 次第」表示「一...就立刻...」。常用於通知、商務與正式說明。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_suffix_any": ["たら"], "error_class": "casual-condition"}
+  ]
+}

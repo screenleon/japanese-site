@@ -1,0 +1,5 @@
+{"text_ja":"授業は九時___始まります。","text_zh":"課從九點開始。","blank":"から","is_correct":1,"hint":"始まり","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"学校は三時___です。","text_zh":"學校到三點。","blank":"まで","is_correct":1,"hint":"終わり","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"駅___家まで歩きます。","text_zh":"從車站走到家。","blank":"から","is_correct":1,"hint":"出発点","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"月曜日から金曜日___働きます。","text_zh":"從星期一工作到星期五。","blank":"まで","is_correct":1,"hint":"最後の日","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"ここ___図書館まで近いです。","text_zh":"從這裡到圖書館很近。","blank":"から","is_correct":1,"hint":"場所の始点","source":"curated","license":"CC-BY-SA-4.0"}

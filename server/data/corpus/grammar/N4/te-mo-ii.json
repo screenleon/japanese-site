@@ -1,0 +1,15 @@
+{
+  "slug": "te-mo-ii",
+  "title_ja": "てもいい",
+  "title_zh": "てもいい（可以）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「動詞て形 + もいい」は、許可を表します。「〜してもいいですか」は、相手に許可を求める表現です。\n\n- 入ってもいいです\n- 写真を撮ってもいいですか\n\n「いい」の代わりに「かまいません」を使うと、より丁寧になります。",
+  "explanation_zh": "「動詞て形 + もいい」表示可以做某事；「〜てもいいですか」用來請求許可。例如「入ってもいいですか」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["は"], "error_class": "used-wa"}
+  ]
+}

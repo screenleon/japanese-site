@@ -1,0 +1,15 @@
+{
+  "slug": "kara-made",
+  "title_ja": "から・まで",
+  "title_zh": "から・まで（從／到）",
+  "jlpt_level": "N5",
+  "explanation_ja": "「から」は始まり、「まで」は終わりを表します。時間にも場所にも使えます。\n\n- 9時から5時まで働きます\n- 駅から学校まで歩きます\n\nどちらか一つだけでも使えます。",
+  "explanation_zh": "「から」表示起點，「まで」表示終點，可以用於時間或場所。例如「9時から5時まで」「駅から学校まで」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["に", "で"], "error_class": "wrong-particle"}
+  ]
+}

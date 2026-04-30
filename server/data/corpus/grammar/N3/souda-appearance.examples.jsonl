@@ -1,0 +1,5 @@
+{"text_ja":"雨が降り___です。","text_zh":"看起來要下雨。","blank":"そう","is_correct":1,"hint":"ます形語幹 + そう","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"このケーキはおいし___です。","text_zh":"這個蛋糕看起來很好吃。","blank":"そう","is_correct":1,"hint":"形容詞語幹 + そう","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"彼は忙し___ですね。","text_zh":"他看起來很忙呢。","blank":"そう","is_correct":1,"hint":"忙しい → 忙しそう","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この問題は難し___です。","text_zh":"這題看起來很難。","blank":"そう","is_correct":1,"hint":"難しい → 難しそう","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"その服は高くなさ___です。","text_zh":"那件衣服看起來不貴。","blank":"そう","is_correct":1,"hint":"ない → なさそう","source":"curated","license":"CC-BY-SA-4.0"}

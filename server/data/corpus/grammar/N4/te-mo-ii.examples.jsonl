@@ -1,0 +1,5 @@
+{"text_ja":"ここに座って___いいですか。","text_zh":"可以坐這裡嗎？","blank":"も","is_correct":1,"hint":"許可を聞く","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"写真を撮って___いいです。","text_zh":"可以拍照。","blank":"も","is_correct":1,"hint":"許可","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"窓を開けて___いいですか。","text_zh":"可以開窗嗎？","blank":"も","is_correct":1,"hint":"開けてもいい","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"鉛筆で書いて___いいです。","text_zh":"可以用鉛筆寫。","blank":"も","is_correct":1,"hint":"書いてもいい","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"先に帰って___かまいません。","text_zh":"可以先回去。","blank":"も","is_correct":1,"hint":"かまいません = いいです","source":"curated","license":"CC-BY-SA-4.0"}

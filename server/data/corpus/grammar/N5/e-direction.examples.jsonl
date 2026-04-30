@@ -1,0 +1,5 @@
+{"text_ja":"日本___行きます。","text_zh":"去日本。","blank":"へ","is_correct":1,"hint":"方向","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"こちら___来てください。","text_zh":"請到這邊來。","blank":"へ","is_correct":1,"hint":"来る方向","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"駅___歩きます。","text_zh":"往車站走。","blank":"へ","is_correct":1,"hint":"向かう方向","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"友達の家___行きました。","text_zh":"去了朋友家。","blank":"へ","is_correct":1,"hint":"移動の方向","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"教室___戻ります。","text_zh":"回教室。","blank":"へ","is_correct":1,"hint":"戻る方向","source":"curated","license":"CC-BY-SA-4.0"}

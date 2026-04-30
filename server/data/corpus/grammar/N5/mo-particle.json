@@ -1,0 +1,15 @@
+{
+  "slug": "mo-particle",
+  "title_ja": "も（同類・追加）",
+  "title_zh": "も（也／也都）",
+  "jlpt_level": "N5",
+  "explanation_ja": "「も」は、同じ種類の情報を追加するときに使います。「〜も」は「〜も同じように」という意味です。\n\n- 私も学生です\n- コーヒーも飲みます\n\n否定文では「誰も」「何も」のように使い、「一人もいない」「何も食べない」という意味になります。",
+  "explanation_zh": "「も」表示「也、也都」，用來追加同類資訊。例如「私も学生です」是我也是學生。否定句中也常和疑問詞搭配，如「何も食べません」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["は", "が"], "error_class": "wrong-particle"}
+  ]
+}

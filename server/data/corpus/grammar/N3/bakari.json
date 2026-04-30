@@ -1,0 +1,15 @@
+{
+  "slug": "bakari",
+  "title_ja": "ばかり",
+  "title_zh": "ばかり（光是／剛剛）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「ばかり」は、同じものや動作が多すぎることを表します。また「Vたばかり」で、動作が終わってすぐの意味になります。\n\n- 甘いものばかり食べています\n- 今帰ったばかりです",
+  "explanation_zh": "「ばかり」可表示總是、光是某事，也可在「たばかり」中表示剛剛做完。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["だけ"], "error_class": "only-pattern"}
+  ]
+}

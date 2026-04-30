@@ -1,0 +1,15 @@
+{
+  "slug": "koto-ga-dekiru",
+  "title_ja": "ことができる",
+  "title_zh": "ことができる（能夠）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「動詞辞書形 + ことができる」は、能力や可能性を表します。\n\n- 日本語を話すことができます\n- ここで泳ぐことができます\n\n会話では可能形もよく使いますが、「ことができる」は説明や案内で使いやすい形です。",
+  "explanation_zh": "「動詞辞書形 + ことができる」表示能力或可能性，相當於「能夠」。例如「日本語を話すことができます」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_suffix_any": ["ます"], "error_class": "masu-form"}
+  ]
+}

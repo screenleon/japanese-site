@@ -1,0 +1,5 @@
+{"text_ja":"私___学生です。","text_zh":"我也是學生。","blank":"も","is_correct":1,"hint":"同じ情報を追加","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"弟___日本語を勉強しています。","text_zh":"弟弟也在學日文。","blank":"も","is_correct":1,"hint":"同類の追加","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"お茶___ください。","text_zh":"也請給我茶。","blank":"も","is_correct":1,"hint":"追加して頼む","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"日曜日___働きます。","text_zh":"星期日也工作。","blank":"も","is_correct":1,"hint":"その日も同じ","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"今日___暑いです。","text_zh":"今天也很熱。","blank":"も","is_correct":1,"hint":"前と同じ状態","source":"curated","license":"CC-BY-SA-4.0"}

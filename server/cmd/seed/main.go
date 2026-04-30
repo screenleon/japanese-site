@@ -323,7 +323,10 @@ func runCorpus(o opts) error {
 	slog.Info("corpus load done",
 		"grammar_points", stats.GrammarPoints,
 		"examples", stats.GrammarExamples,
-		"questions", stats.Questions)
+		"questions", stats.Questions,
+		"vocab_support", stats.VocabSupport,
+		"kanji_support", stats.KanjiSupport,
+		"jlpt_overrides", stats.JLPTOverrides)
 	return nil
 }
 

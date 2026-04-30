@@ -1,0 +1,15 @@
+{
+  "slug": "mitai",
+  "title_ja": "みたいだ",
+  "title_zh": "みたいだ（好像／像）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「みたいだ」は、見たことや聞いたことから判断した推量、または比喩を表します。会話でよく使います。\n\n- 雨が降ったみたいです\n- 子どもみたいです",
+  "explanation_zh": "「みたいだ」表示好像、像，常用於口語推測或比喻。意思接近「ようだ」，但較口語。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["よう"], "error_class": "formal-equivalent"}
+  ]
+}

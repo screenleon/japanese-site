@@ -1,0 +1,15 @@
+{
+  "slug": "ni-time",
+  "title_ja": "に（時間）",
+  "title_zh": "に（時間點）",
+  "jlpt_level": "N5",
+  "explanation_ja": "「に」は、動作が起こる時間を示します。数字を含むはっきりした時間によく使います。\n\n- 7時に起きます\n- 月曜日に行きます\n\n「今日」「明日」「毎日」のように、相対的な時間や習慣を表す言葉には普通「に」を付けません。",
+  "explanation_zh": "「に」可以標示動作發生的時間點，常接在明確時間後面，例如「7時に」「月曜日に」。但「今日」「明日」「毎日」這類相對時間通常不加「に」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["で", "を"], "error_class": "wrong-particle"}
+  ]
+}

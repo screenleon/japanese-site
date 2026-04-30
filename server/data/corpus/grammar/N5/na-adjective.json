@@ -1,0 +1,15 @@
+{
+  "slug": "na-adjective",
+  "title_ja": "な形容詞",
+  "title_zh": "な形容詞",
+  "jlpt_level": "N5",
+  "explanation_ja": "な形容詞は、名詞を説明するときに「な」を入れます。\n\n- 静かな町\n- 便利な店\n\n文の最後では「静かです」「便利です」のように言い、「な」は使いません。",
+  "explanation_zh": "な形容詞修飾名詞時要加「な」，如「静かな町」「便利な店」。放在句尾時說「静かです」「便利です」，不加「な」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["い"], "error_class": "i-adjective-pattern"}
+  ]
+}

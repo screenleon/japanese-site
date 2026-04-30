@@ -240,6 +240,123 @@ func TestLoad_StoresJapaneseExplanation(t *testing.T) {
 	}
 }
 
+func TestLoad_StoresVocabAndKanjiSupport(t *testing.T) {
+	tmpRoot := t.TempDir()
+	dbPath := filepath.Join(tmpRoot, "test.sqlite")
+	corpusRoot := filepath.Join(tmpRoot, "corpus")
+	grammarDir := filepath.Join(corpusRoot, "grammar", "N3")
+	vocabDir := filepath.Join(corpusRoot, "vocab")
+	kanjiDir := filepath.Join(corpusRoot, "kanji")
+	for _, dir := range []string{grammarDir, vocabDir, kanjiDir} {
+		if err := os.MkdirAll(dir, 0o755); err != nil {
+			t.Fatalf("mkdir %s: %v", dir, err)
+		}
+	}
+	if err := os.WriteFile(filepath.Join(grammarDir, "test-gp.json"), []byte(grammarPointJSON), 0o644); err != nil {
+		t.Fatalf("write gp: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(grammarDir, "test-gp.examples.jsonl"), []byte(exampleA), 0o644); err != nil {
+		t.Fatalf("write ex: %v", err)
+	}
+	vocabSupport := `{"headword":"食べる","reading":"たべる","gloss_ja":"食べ物を口に入れること。","gloss_zh":"吃","source":"curated","license":"CC-BY-SA-4.0"}` + "\n"
+	if err := os.WriteFile(filepath.Join(vocabDir, "N5.jsonl"), []byte(vocabSupport), 0o644); err != nil {
+		t.Fatalf("write vocab support: %v", err)
+	}
+	kanjiSupport := `{"character":"食","meaning_ja":"食べること。食べ物。","meaning_zh":"吃／食物","source":"curated","license":"CC-BY-SA-4.0"}` + "\n"
+	if err := os.WriteFile(filepath.Join(kanjiDir, "N5.jsonl"), []byte(kanjiSupport), 0o644); err != nil {
+		t.Fatalf("write kanji support: %v", err)
+	}
+
+	db, err := store.Open(dbPath)
+	if err != nil {
+		t.Fatalf("open: %v", err)
+	}
+	defer db.Close()
+	if err := store.Migrate(db); err != nil {
+		t.Fatalf("migrate: %v", err)
+	}
+	if _, err := db.Exec(`INSERT INTO vocab (headword, reading, pos, gloss_en, source, license)
+		VALUES ('食べる', 'たべる', 'v1', 'eat', 'jmdict', 'CC-BY-SA-4.0')`); err != nil {
+		t.Fatalf("seed vocab: %v", err)
+	}
+	if _, err := db.Exec(`INSERT INTO kanji (character, meaning_en, source, license)
+		VALUES ('食', 'eat', 'kanjidic2', 'CC-BY-SA-4.0')`); err != nil {
+		t.Fatalf("seed kanji: %v", err)
+	}
+
+	stats, err := Load(context.Background(), db.DB, corpusRoot)
+	if err != nil {
+		t.Fatalf("load: %v", err)
+	}
+	if stats.VocabSupport != 1 || stats.KanjiSupport != 1 {
+		t.Fatalf("support stats = vocab %d kanji %d, want 1/1", stats.VocabSupport, stats.KanjiSupport)
+	}
+
+	var glossJA, glossZH string
+	if err := db.QueryRow(`SELECT gloss_ja, gloss_zh FROM vocab WHERE headword = '食べる'`).Scan(&glossJA, &glossZH); err != nil {
+		t.Fatalf("select vocab support: %v", err)
+	}
+	if glossJA != "食べ物を口に入れること。" || glossZH != "吃" {
+		t.Fatalf("vocab support = %q / %q", glossJA, glossZH)
+	}
+
+	var meaningJA, meaningZH string
+	if err := db.QueryRow(`SELECT meaning_ja, meaning_zh FROM kanji WHERE character = '食'`).Scan(&meaningJA, &meaningZH); err != nil {
+		t.Fatalf("select kanji support: %v", err)
+	}
+	if meaningJA != "食べること。食べ物。" || meaningZH != "吃／食物" {
+		t.Fatalf("kanji support = %q / %q", meaningJA, meaningZH)
+	}
+}
+
+func TestLoad_AppliesJLPTOverrides(t *testing.T) {
+	tmpRoot := t.TempDir()
+	dbPath := filepath.Join(tmpRoot, "test.sqlite")
+	corpusRoot := filepath.Join(tmpRoot, "corpus")
+	grammarDir := filepath.Join(corpusRoot, "grammar", "N3")
+	if err := os.MkdirAll(grammarDir, 0o755); err != nil {
+		t.Fatalf("mkdir grammar: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(grammarDir, "test-gp.json"), []byte(grammarPointJSON), 0o644); err != nil {
+		t.Fatalf("write gp: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(grammarDir, "test-gp.examples.jsonl"), []byte(exampleA), 0o644); err != nil {
+		t.Fatalf("write ex: %v", err)
+	}
+	override := `{"kind":"vocab","headword":"お休み","reading":"おやすみ","jlpt_level":"N5","source":"curated","license":"CC-BY-SA-4.0","reason":"basic greeting; external overlay placed it too high"}` + "\n"
+	if err := os.WriteFile(filepath.Join(corpusRoot, "jlpt-overrides.jsonl"), []byte(override), 0o644); err != nil {
+		t.Fatalf("write override: %v", err)
+	}
+
+	db, err := store.Open(dbPath)
+	if err != nil {
+		t.Fatalf("open: %v", err)
+	}
+	defer db.Close()
+	if err := store.Migrate(db); err != nil {
+		t.Fatalf("migrate: %v", err)
+	}
+	if _, err := db.Exec(`INSERT INTO vocab (headword, reading, pos, gloss_en, jlpt_level, source, license)
+		VALUES ('お休み', 'おやすみ', 'n', 'good night', 'N2', 'jmdict', 'CC-BY-SA-4.0')`); err != nil {
+		t.Fatalf("seed vocab: %v", err)
+	}
+
+	stats, err := Load(context.Background(), db.DB, corpusRoot)
+	if err != nil {
+		t.Fatalf("load: %v", err)
+	}
+	if stats.JLPTOverrides != 1 {
+		t.Fatalf("JLPTOverrides = %d, want 1", stats.JLPTOverrides)
+	}
+	var level string
+	if err := db.QueryRow(`SELECT jlpt_level FROM vocab WHERE headword = 'お休み'`).Scan(&level); err != nil {
+		t.Fatalf("select level: %v", err)
+	}
+	if level != "N5" {
+		t.Fatalf("level = %q, want N5", level)
+	}
+}
+
 func TestLoad_RejectsMalformedClassifierRules(t *testing.T) {
 	tmpRoot := t.TempDir()
 	dbPath := filepath.Join(tmpRoot, "test.sqlite")
