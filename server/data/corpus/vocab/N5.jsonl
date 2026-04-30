@@ -19,6 +19,8 @@
 {"headword":"お願いします","reading":"おねがいします","gloss_ja":"相手に何かを頼むときの丁寧な言葉。","gloss_zh":"拜託您、麻煩您。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"こんな","reading":"こんな","gloss_ja":"このような、という意味。近くのものや今話している内容を指す。","gloss_zh":"這樣的、這種。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"さあ","reading":"さあ","gloss_ja":"行動を始めるとき、相手を促すとき、答えに迷うときに使う言葉。","gloss_zh":"來吧、那麼；也可表示不確定。","source":"curated","license":"CC-BY-SA-4.0"}
+{"headword":"うん","reading":"うん","gloss_ja":"親しい相手に「はい」と答えるくだけた言葉。","gloss_zh":"嗯、對。","source":"curated","license":"CC-BY-SA-4.0"}
+{"headword":"そう","reading":"そう","gloss_ja":"見た感じや聞いた内容がそのようであること。","gloss_zh":"那樣；看起來。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"では","reading":"では","gloss_ja":"話を進めたり終えたりするときの言葉。「それでは」の短い形。","gloss_zh":"那麼、那就；也可表示再見。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"でも","reading":"でも","gloss_ja":"前の内容と違うことを言うときに使う。例を軽く出すときにも使う。","gloss_zh":"但是、可是；也可表示「之類的」。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"どうぞ","reading":"どうぞ","gloss_ja":"相手に何かを勧めたり、許可したりするときの丁寧な言葉。","gloss_zh":"請、請用、請便。","source":"curated","license":"CC-BY-SA-4.0"}
@@ -34,11 +36,14 @@
 {"headword":"カップ","reading":"カップ","gloss_ja":"飲み物を入れる小さな器。量をはかる器にも使う。","gloss_zh":"杯子；量杯。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"カメラ","reading":"カメラ","gloss_ja":"写真や映像を撮る機械。","gloss_zh":"相機、攝影機。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"カレンダー","reading":"カレンダー","gloss_ja":"日付や曜日を確認する表。","gloss_zh":"日曆、月曆。","source":"curated","license":"CC-BY-SA-4.0"}
+{"headword":"ケーキ","reading":"ケーキ","gloss_ja":"甘く焼いたり冷やしたりして作る菓子。","gloss_zh":"蛋糕。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"ギター","reading":"ギター","gloss_ja":"弦を弾いて音を出す楽器。","gloss_zh":"吉他。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"クラス","reading":"クラス","gloss_ja":"学校の組や授業のまとまり。","gloss_zh":"班級、課堂。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"コート","reading":"コート","gloss_ja":"寒いときなどに上から着る服。","gloss_zh":"外套、大衣。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"シャツ","reading":"シャツ","gloss_ja":"上半身に着る衣服。","gloss_zh":"襯衫、上衣。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"シャワー","reading":"シャワー","gloss_ja":"水や湯を細かく出して体を洗う設備。","gloss_zh":"淋浴。","source":"curated","license":"CC-BY-SA-4.0"}
+{"headword":"サラダ","reading":"サラダ","gloss_ja":"野菜などを混ぜて食べる料理。","gloss_zh":"沙拉。","source":"curated","license":"CC-BY-SA-4.0"}
+{"headword":"サンドイッチ","reading":"サンドイッチ","gloss_ja":"パンの間に具をはさんだ食べ物。","gloss_zh":"三明治。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"スカート","reading":"スカート","gloss_ja":"腰から下に着る、筒形や広がった形の衣服。","gloss_zh":"裙子。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"ストーブ","reading":"ストーブ","gloss_ja":"部屋を暖めるための器具。","gloss_zh":"暖爐、取暖器。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"スプーン","reading":"スプーン","gloss_ja":"食べ物をすくうための道具。","gloss_zh":"湯匙。","source":"curated","license":"CC-BY-SA-4.0"}
@@ -49,6 +54,7 @@
 {"headword":"テレビ","reading":"テレビ","gloss_ja":"映像や音声を受け取って見る機械。または番組。","gloss_zh":"電視；電視節目。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"テーブル","reading":"テーブル","gloss_ja":"物を置いたり食事をしたりする台。","gloss_zh":"桌子。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"テープ","reading":"テープ","gloss_ja":"細長い帯状のもの。貼ったり録音したりするもの。","gloss_zh":"膠帶；錄音帶。","source":"curated","license":"CC-BY-SA-4.0"}
+{"headword":"テニス","reading":"テニス","gloss_ja":"ラケットでボールを打ち合うスポーツ。","gloss_zh":"網球。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"デパート","reading":"デパート","gloss_ja":"いろいろな商品を売る大きな店。","gloss_zh":"百貨公司。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"トイレ","reading":"トイレ","gloss_ja":"排せつをするための場所。","gloss_zh":"廁所、洗手間。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"ドア","reading":"ドア","gloss_ja":"部屋や建物の出入り口にある開け閉めするもの。","gloss_zh":"門。","source":"curated","license":"CC-BY-SA-4.0"}
@@ -61,6 +67,7 @@
 {"headword":"バター","reading":"バター","gloss_ja":"牛乳から作る黄色い脂肪の食品。","gloss_zh":"奶油、牛油。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"パン","reading":"パン","gloss_ja":"小麦粉などを焼いて作る食べ物。","gloss_zh":"麵包。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"パーティー","reading":"パーティー","gloss_ja":"人が集まって食事や会話を楽しむ会。","gloss_zh":"派對、聚會。","source":"curated","license":"CC-BY-SA-4.0"}
+{"headword":"ピアノ","reading":"ピアノ","gloss_ja":"鍵盤を押して音を出す楽器。","gloss_zh":"鋼琴。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"フィルム","reading":"フィルム","gloss_ja":"写真や映像を記録する薄い材料。","gloss_zh":"底片、膠片。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"フォーク","reading":"フォーク","gloss_ja":"食べ物を刺して食べるための道具。","gloss_zh":"叉子。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"プール","reading":"プール","gloss_ja":"水泳をするために水をためた場所。","gloss_zh":"游泳池。","source":"curated","license":"CC-BY-SA-4.0"}
@@ -71,6 +78,8 @@
 {"headword":"ボールペン","reading":"ボールペン","gloss_ja":"先に小さな玉があり、インクで書くペン。","gloss_zh":"原子筆。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"ポケット","reading":"ポケット","gloss_ja":"服やかばんについている、小物を入れる部分。","gloss_zh":"口袋。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"ポスト","reading":"ポスト","gloss_ja":"手紙やはがきを入れる箱。","gloss_zh":"郵筒、信箱。","source":"curated","license":"CC-BY-SA-4.0"}
+{"headword":"プレゼント","reading":"プレゼント","gloss_ja":"人に贈る物。","gloss_zh":"禮物。","source":"curated","license":"CC-BY-SA-4.0"}
+{"headword":"ベル","reading":"ベル","gloss_ja":"音を鳴らして知らせる道具。","gloss_zh":"鈴、電鈴。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"ラジオ","reading":"ラジオ","gloss_ja":"音声の番組を電波で聞く機械や放送。","gloss_zh":"收音機、廣播。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"レコード","reading":"レコード","gloss_ja":"音楽などを記録した円い板。記録という意味もある。","gloss_zh":"唱片；紀錄。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"レストラン","reading":"レストラン","gloss_ja":"料理を注文して食べる店。","gloss_zh":"餐廳。","source":"curated","license":"CC-BY-SA-4.0"}
