@@ -1,0 +1,15 @@
+{
+  "slug": "tameni-purpose",
+  "title_ja": "ために（目的）",
+  "title_zh": "ために（為了）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「V辞書形 + ために」「Nのために」は、目的を表します。意志を持って行う行動によく使います。\n\n- 日本語を勉強するために日本へ来ました\n- 家族のために働いています",
+  "explanation_zh": "「ために」表示目的，意思是「為了」。常接意志性動作或名詞。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["ように"], "error_class": "goal-pattern"}
+  ]
+}

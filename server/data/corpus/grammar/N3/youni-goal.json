@@ -1,0 +1,15 @@
+{
+  "slug": "youni-goal",
+  "title_ja": "ように（目標・変化）",
+  "title_zh": "ように（為了能夠／變得）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「V辞書形/ない形 + ように」は、できる状態を目標にする表現です。意志で直接コントロールしにくい動詞とよく使います。\n\n- 聞こえるように大きな声で話します\n- 忘れないようにメモします",
+  "explanation_zh": "「ように」表示為了達到某種狀態，常接可能、無意志或ない形動詞，如「聞こえるように」「忘れないように」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["ために"], "error_class": "purpose-pattern"}
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "slug": "tara-dou",
+  "title_ja": "たらどうですか",
+  "title_zh": "たらどうですか（建議）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「Vたらどうですか」は、相手に提案や助言をする表現です。\n\n- 先生に相談したらどうですか\n- 少し休んだらどうですか\n\n直接命令するよりやわらかい言い方です。",
+  "explanation_zh": "「たらどうですか」表示建議，意思是「...怎麼樣？」比命令柔和。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["ほう"], "error_class": "advice-related"}
+  ]
+}

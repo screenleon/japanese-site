@@ -1,0 +1,15 @@
+{
+  "slug": "rashii",
+  "title_ja": "らしい",
+  "title_zh": "らしい（聽說／像樣）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「らしい」は、聞いた情報に基づく推量や、そのものらしい性質を表します。\n\n- 明日は雨らしいです\n- 今日は春らしい天気です\n\n伝聞の意味では「そうだ」に近いですが、話し手の判断も少し入ります。",
+  "explanation_zh": "「らしい」可表示根據聽到的資訊推測，也可表示具有某物典型特徵。「春らしい天気」是像春天的天氣。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["そう"], "error_class": "hearsay-related"}
+  ]
+}

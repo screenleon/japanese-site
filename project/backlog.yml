@@ -135,7 +135,7 @@ items:
     source: ROADMAP.md#quiz--content-depth
     notes:
       - Scale floor is at least 1000 JLPT-tagged learner-usable vocab rows and 100 grammar points.
-      - Current seeded state after make seed-corpus: 22552 vocab rows, 6524 JLPT-tagged vocab rows, 56 grammar points, 274 cloze questions, 410 vocab support overlays.
+      - Current seeded state after make seed-corpus: 22552 vocab rows, 6524 JLPT-tagged vocab rows, 66 grammar points, 324 cloze questions, 470 vocab support overlays.
       - Vocabulary volume already clears the row-count floor through JMdict + JLPT overlay; Japanese/Traditional Chinese learner support is being filled through L1 overlays.
       - Next content implementation should add grammar in larger level-balanced batches, not 5-point micro-passes.
       - New or revised grammar JSON must include explanation_ja and explanation_zh.
@@ -149,6 +149,7 @@ items:
       - "2026-04-30: Added first N2 vocabulary support overlay plus 10 N2 grammar points and 50 cloze examples; grammar total is now 56 points / 274 cloze questions, vocab support overlays seed 410 rows."
       - "2026-04-30: Added curated JLPT overrides after review found basic greetings misclassified as N2; お休み/お帰り/お願いします/お邪魔します are now N5 and related daily phrases are N4."
       - "2026-04-30: Reviewed existing generated vocab overlays for obvious level issues; moved 9 basic N4 entries to N5 and documented remaining uncertain items in server/data/corpus/LEVEL_REVIEW.md."
+      - "2026-04-30: Added first N3 vocab support overlay batch plus 10 N3 grammar points and 50 cloze examples; grammar total is now 66 points / 324 cloze questions, vocab support overlays seed 470 rows."
       - "Validated: make lint-rules"
       - "Validated: make corpus-scale"
       - "Validated: env GOCACHE=/tmp/go-build-cache make seed-corpus"

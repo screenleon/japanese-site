@@ -1,0 +1,5 @@
+{"text_ja":"雨が降った___です。","text_zh":"好像下過雨。","blank":"みたい","is_correct":1,"hint":"会話の推量","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"彼はもう帰った___です。","text_zh":"他好像已經回去了。","blank":"みたい","is_correct":1,"hint":"見た状況から","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この部屋はホテル___ですね。","text_zh":"這個房間像飯店一樣呢。","blank":"みたい","is_correct":1,"hint":"比喩","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"外は静か___です。","text_zh":"外面好像很安靜。","blank":"みたい","is_correct":1,"hint":"様子から判断","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"彼女は子ども___に笑いました。","text_zh":"她像孩子一樣笑了。","blank":"みたい","is_correct":1,"hint":"名詞 + みたいに","source":"curated","license":"CC-BY-SA-4.0"}

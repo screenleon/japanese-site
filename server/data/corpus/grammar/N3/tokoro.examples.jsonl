@@ -1,0 +1,5 @@
+{"text_ja":"今から出かける___です。","text_zh":"我正要出門。","blank":"ところ","is_correct":1,"hint":"直前","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"今、資料を読んでいる___です。","text_zh":"現在正在讀資料。","blank":"ところ","is_correct":1,"hint":"進行中","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"今、会議が終わった___です。","text_zh":"會議剛剛結束。","blank":"ところ","is_correct":1,"hint":"直後","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"これから説明する___です。","text_zh":"接下來正要說明。","blank":"ところ","is_correct":1,"hint":"これから","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"ちょうど電話しようとしていた___です。","text_zh":"我正好正要打電話。","blank":"ところ","is_correct":1,"hint":"しようとしていた段階","source":"curated","license":"CC-BY-SA-4.0"}
