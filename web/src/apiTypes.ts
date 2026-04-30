@@ -122,9 +122,11 @@ export interface NextQuestionOpts {
  *  fetch() calls; tests can substitute a mock that satisfies this shape. */
 export interface Api {
   searchVocab(q: string, jlpt?: string): Promise<{ results: VocabRow[]; count: number }>;
+  randomVocab(jlpt?: string): Promise<VocabRow>;
   getKanji(ch: string): Promise<Kanji>;
   randomSentence(jlpt?: string): Promise<Sentence>;
   listGrammar(jlpt?: string): Promise<{ points: GrammarPoint[]; count: number }>;
+  randomGrammar(jlpt?: string): Promise<GrammarPoint>;
   getGrammar(slug: string): Promise<GrammarPoint>;
   nextQuestion(opts?: NextQuestionOpts): Promise<Question>;
   answer(question_id: string, answer: string): Promise<GradeResult>;

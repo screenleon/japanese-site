@@ -28,9 +28,11 @@ func Register(mux *http.ServeMux, db *store.DB) {
 	mux.HandleFunc("GET /healthz", health)
 	mux.HandleFunc("GET /api/version", version)
 	mux.HandleFunc("GET /api/vocab/search", vocabSearch(db))
+	mux.HandleFunc("GET /api/vocab/random", vocabRandom(db))
 	mux.HandleFunc("GET /api/kanji/{char}", kanjiLookup(db))
 	mux.HandleFunc("GET /api/sentence/random", sentenceRandom(db))
 	mux.HandleFunc("GET /api/grammar", grammarList(db))
+	mux.HandleFunc("GET /api/grammar/random", grammarRandom(db))
 	mux.HandleFunc("GET /api/grammar/{slug}", grammarGet(db))
 	mux.HandleFunc("GET /api/quiz/next", quizNext(db))
 	mux.HandleFunc("POST /api/quiz/answer", quizAnswer(db, grader))
@@ -64,6 +66,21 @@ func grammarGet(db *store.DB) http.HandlerFunc {
 			// Distinct sql.ErrNoRows vs other DB error — both treated 404 to
 			// avoid revealing which slugs map to broken rows.
 			httpError(w, r, http.StatusNotFound, "not_found", err)
+			return
+		}
+		writeJSON(w, http.StatusOK, gp)
+	}
+}
+
+func grammarRandom(db *store.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		gp, err := store.RandomGrammarPoint(r.Context(), db, r.URL.Query().Get("jlpt"))
+		if errors.Is(err, store.ErrGrammarPointNotFound) {
+			writeJSON(w, http.StatusNotFound, map[string]string{"error": "no_grammar"})
+			return
+		}
+		if err != nil {
+			httpError(w, r, http.StatusInternalServerError, "internal", err)
 			return
 		}
 		writeJSON(w, http.StatusOK, gp)
@@ -220,12 +237,8 @@ func sentenceRandom(db *store.DB) http.HandlerFunc {
 func vocabSearch(db *store.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		q := r.URL.Query().Get("q")
-		if q == "" {
-			writeJSON(w, http.StatusBadRequest, map[string]string{"error": "q_required"})
-			return
-		}
 		results, err := store.SearchVocab(r.Context(), db, store.VocabSearchOpts{
-			Query:     q,
+			Query:     strings.TrimSpace(q),
 			JLPTLevel: r.URL.Query().Get("jlpt"),
 		})
 		if err != nil {
@@ -237,6 +250,21 @@ func vocabSearch(db *store.DB) http.HandlerFunc {
 			"results": results,
 			"count":   len(results),
 		})
+	}
+}
+
+func vocabRandom(db *store.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		v, err := store.RandomVocab(r.Context(), db, r.URL.Query().Get("jlpt"))
+		if errors.Is(err, store.ErrVocabNotFound) {
+			writeJSON(w, http.StatusNotFound, map[string]string{"error": "no_vocab"})
+			return
+		}
+		if err != nil {
+			httpError(w, r, http.StatusInternalServerError, "internal", err)
+			return
+		}
+		writeJSON(w, http.StatusOK, v)
 	}
 }
 

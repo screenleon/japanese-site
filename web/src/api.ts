@@ -71,6 +71,8 @@ export const httpApi: Api = {
     getJSON<{ results: VocabRow[]; count: number }>(
       `/api/vocab/search?q=${encodeURIComponent(q)}${jlpt ? `&jlpt=${jlpt}` : ""}`
     ),
+  randomVocab: (jlpt) =>
+    getJSON<VocabRow>(`/api/vocab/random${jlpt ? `?jlpt=${jlpt}` : ""}`),
   getKanji: (ch) => getJSON<Kanji>(`/api/kanji/${encodeURIComponent(ch)}`),
   randomSentence: (jlpt) =>
     getJSON<Sentence>(`/api/sentence/random${jlpt ? `?jlpt=${jlpt}` : ""}`),
@@ -78,6 +80,8 @@ export const httpApi: Api = {
     getJSON<{ points: GrammarPoint[]; count: number }>(
       `/api/grammar${jlpt ? `?jlpt=${jlpt}` : ""}`
     ),
+  randomGrammar: (jlpt) =>
+    getJSON<GrammarPoint>(`/api/grammar/random${jlpt ? `?jlpt=${jlpt}` : ""}`),
   getGrammar: (slug) => getJSON<GrammarPoint>(`/api/grammar/${slug}`),
   nextQuestion: (opts: NextQuestionOpts = {}) => {
     const q = new URLSearchParams();

@@ -48,6 +48,20 @@ func TestAPISmoke(t *testing.T) {
 			wantBody:   `"headword":"食べる"`,
 		},
 		{
+			name:       "vocab level browse",
+			method:     http.MethodGet,
+			path:       "/api/vocab/search?jlpt=N5",
+			wantStatus: http.StatusOK,
+			wantBody:   `"headword":"食べる"`,
+		},
+		{
+			name:       "vocab random",
+			method:     http.MethodGet,
+			path:       "/api/vocab/random?jlpt=N5",
+			wantStatus: http.StatusOK,
+			wantBody:   `"headword":"食べる"`,
+		},
+		{
 			name:       "kanji lookup",
 			method:     http.MethodGet,
 			path:       "/api/kanji/食",
@@ -65,6 +79,13 @@ func TestAPISmoke(t *testing.T) {
 			name:       "grammar list",
 			method:     http.MethodGet,
 			path:       "/api/grammar?jlpt=N5",
+			wantStatus: http.StatusOK,
+			wantBody:   `"slug":"test-gp"`,
+		},
+		{
+			name:       "grammar random",
+			method:     http.MethodGet,
+			path:       "/api/grammar/random?jlpt=N5",
 			wantStatus: http.StatusOK,
 			wantBody:   `"slug":"test-gp"`,
 		},
@@ -176,11 +197,11 @@ func TestAPINegativeCases(t *testing.T) {
 		wantError  string
 	}{
 		{
-			name:       "vocab missing query",
+			name:       "no vocab for filter",
 			method:     http.MethodGet,
-			path:       "/api/vocab/search",
-			wantStatus: http.StatusBadRequest,
-			wantError:  "q_required",
+			path:       "/api/vocab/random?jlpt=N1",
+			wantStatus: http.StatusNotFound,
+			wantError:  "no_vocab",
 		},
 		{
 			name:       "unknown kanji",
@@ -202,6 +223,13 @@ func TestAPINegativeCases(t *testing.T) {
 			path:       "/api/quiz/next?grammar=missing",
 			wantStatus: http.StatusNotFound,
 			wantError:  "no_questions_match",
+		},
+		{
+			name:       "no grammar for filter",
+			method:     http.MethodGet,
+			path:       "/api/grammar/random?jlpt=N1",
+			wantStatus: http.StatusNotFound,
+			wantError:  "no_grammar",
 		},
 		{
 			name:       "invalid answer body",

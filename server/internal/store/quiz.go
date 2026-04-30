@@ -33,6 +33,7 @@ type GrammarPoint struct {
 }
 
 var ErrQuestionNotFound = errors.New("question not found")
+var ErrGrammarPointNotFound = errors.New("grammar point not found")
 
 // NextQuestionOpts controls which question gets picked.
 //
@@ -184,6 +185,30 @@ func GetGrammarPoint(ctx context.Context, db *DB, slug string) (GrammarPoint, er
 		FROM grammar_point WHERE slug = ?`, slug)
 	var gp GrammarPoint
 	if err := row.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return GrammarPoint{}, ErrGrammarPointNotFound
+		}
+		return GrammarPoint{}, err
+	}
+	return gp, nil
+}
+
+func RandomGrammarPoint(ctx context.Context, db *DB, jlpt string) (GrammarPoint, error) {
+	q := `SELECT slug, title_ja, title_zh, jlpt_level, COALESCE(explanation_ja, ''), explanation_zh
+	      FROM grammar_point WHERE 1 = 1`
+	args := []any{}
+	if jlpt != "" {
+		q += ` AND jlpt_level = ?`
+		args = append(args, jlpt)
+	}
+	q += ` ORDER BY RANDOM() LIMIT 1`
+
+	row := db.QueryRowContext(ctx, q, args...)
+	var gp GrammarPoint
+	if err := row.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return GrammarPoint{}, ErrGrammarPointNotFound
+		}
 		return GrammarPoint{}, err
 	}
 	return gp, nil
