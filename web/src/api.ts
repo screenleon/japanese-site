@@ -21,9 +21,25 @@ import type {
 
 export type * from "./apiTypes";
 
+export class ApiError extends Error {
+  readonly status: number;
+  readonly code: string;
+
+  constructor(status: number, statusText: string, code: string) {
+    super(`${status} ${statusText}${code ? `: ${code}` : ""}`);
+    this.name = "ApiError";
+    this.status = status;
+    this.code = code;
+  }
+}
+
+export function isApiError(error: unknown, code?: string): error is ApiError {
+  return error instanceof ApiError && (!code || error.code === code);
+}
+
 async function getJSON<T>(path: string): Promise<T> {
   const r = await fetch(path);
-  if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
+  if (!r.ok) throw await apiError(r);
   return r.json();
 }
 
@@ -33,8 +49,21 @@ async function postJSON<T>(path: string, body: unknown): Promise<T> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
+  if (!r.ok) throw await apiError(r);
   return r.json();
+}
+
+async function apiError(response: Response) {
+  let code = "";
+  try {
+    const body = await response.json();
+    if (body && typeof body.error === "string") {
+      code = body.error;
+    }
+  } catch {
+    // Non-JSON errors still carry HTTP status and status text.
+  }
+  return new ApiError(response.status, response.statusText, code);
 }
 
 export const httpApi: Api = {

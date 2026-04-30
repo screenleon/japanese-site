@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
-import { api, type Question, type GradeResult, type GrammarPoint } from "../api";
+import {
+  api,
+  isApiError,
+  type Question,
+  type GradeResult,
+  type GrammarPoint,
+  type Stats,
+} from "../api";
 
 type Mode = "single" | "session" | "summary";
+type StatsRange = 7 | 30 | 0;
 
 interface SessionTurn {
   question: Question;
@@ -12,6 +20,10 @@ export function QuizTab() {
   const [grammar, setGrammar] = useState<string>("");
   const [jlpt, setJlpt] = useState<string>("");
   const [grammars, setGrammars] = useState<GrammarPoint[]>([]);
+  const [statsRange, setStatsRange] = useState<StatsRange>(7);
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [statsLoading, setStatsLoading] = useState(true);
+  const [statsErr, setStatsErr] = useState("");
   const [mode, setMode] = useState<Mode>("single");
   const [target, setTarget] = useState(10);
 
@@ -20,13 +32,28 @@ export function QuizTab() {
   const [answer, setAnswer] = useState("");
   const [result, setResult] = useState<GradeResult | null>(null);
   const [err, setErr] = useState("");
+  const [notice, setNotice] = useState("");
 
   useEffect(() => {
     api.listGrammar().then((r) => setGrammars(r.points || []));
   }, []);
 
+  async function loadStats(range: StatsRange = statsRange) {
+    setStatsLoading(true);
+    setStatsErr("");
+    try {
+      const s = await api.stats(range === 0 ? undefined : range);
+      setStats(s);
+    } catch (e) {
+      setStatsErr(String(e));
+    } finally {
+      setStatsLoading(false);
+    }
+  }
+
   async function pickNext(seenIDs: string[]) {
     setErr("");
+    setNotice("");
     setResult(null);
     setAnswer("");
     try {
@@ -41,14 +68,13 @@ export function QuizTab() {
       // out of candidates. In session mode, gracefully end the session
       // early with whatever's been answered. In single mode, surface the
       // empty state so the user knows to relax the filter.
-      const msg = String(e);
-      const exhausted = msg.includes("404");
+      const exhausted = isApiError(e) && e.status === 404;
       setCurrent(null);
       if (exhausted && mode === "session" && turns.length > 0) {
         setMode("summary");
         return;
       }
-      setErr(exhausted ? "目前的條件下沒有更多題目了，換個文法點或等級試試。" : msg);
+      setErr(exhausted ? "目前的條件下沒有更多題目了，換個文法點或等級試試。" : String(e));
     }
   }
 
@@ -71,6 +97,7 @@ export function QuizTab() {
     try {
       const r = await api.answer(current.id, answer.trim());
       setResult(r);
+      loadStats();
 
       if (mode === "session") {
         const newTurns = [...turns, { question: current, result: r }];
@@ -80,6 +107,14 @@ export function QuizTab() {
         }
       }
     } catch (e) {
+      if (isApiError(e, "question_not_found")) {
+        const seen = mode === "session"
+          ? [...turns.map((t) => t.question.id), current.id]
+          : [current.id];
+        await pickNext(seen);
+        setNotice("這題剛被更新，已替你換下一題。");
+        return;
+      }
       setErr(String(e));
     }
   }
@@ -99,6 +134,11 @@ export function QuizTab() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    loadStats(statsRange);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statsRange]);
+
   // refetch on filter change while not mid-session
   useEffect(() => {
     if (mode === "summary") return;
@@ -109,6 +149,15 @@ export function QuizTab() {
 
   return (
     <section>
+      <StatsPanel
+        stats={stats}
+        loading={statsLoading}
+        error={statsErr}
+        range={statsRange}
+        onRangeChange={setStatsRange}
+        onRefresh={() => loadStats()}
+      />
+
       <Toolbar
         mode={mode}
         target={target}
@@ -127,6 +176,7 @@ export function QuizTab() {
       )}
 
       {err && <p className="text-red-600 text-sm mb-4">{err}</p>}
+      {notice && <p className="text-blue-700 text-sm mb-4">{notice}</p>}
 
       {mode === "summary" ? (
         <Summary turns={turns} onRestart={startSession} />
@@ -141,9 +191,140 @@ export function QuizTab() {
       ) : null}
 
       {result && mode !== "summary" && (
-        <ResultBox result={result} onNext={next} sessionMode={mode === "session"} />
+        <ResultBox
+          result={result}
+          hint={current?.hint}
+          onNext={next}
+          sessionMode={mode === "session"}
+        />
       )}
     </section>
+  );
+}
+
+function StatsPanel({
+  stats,
+  loading,
+  error,
+  range,
+  onRangeChange,
+  onRefresh,
+}: {
+  stats: Stats | null;
+  loading: boolean;
+  error: string;
+  range: StatsRange;
+  onRangeChange: (range: StatsRange) => void;
+  onRefresh: () => void;
+}) {
+  const weakGrammar = (stats?.by_grammar ?? [])
+    .filter((g) => g.total > 0)
+    .sort((a, b) => a.accuracy - b.accuracy || b.total - a.total)
+    .slice(0, 3);
+  const topErrors = (stats?.by_error_class ?? []).slice(0, 3);
+  const recentWrong = (stats?.recent_wrong ?? []).slice(0, 3);
+
+  return (
+    <div className="bg-white border border-slate-200 rounded-md p-5 mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <div>
+          <h2 className="text-base font-medium">練習狀態</h2>
+          <p className="text-xs text-slate-500 mt-1">根據已作答紀錄找出需要複習的文法點。</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <select
+            value={range}
+            onChange={(e) => onRangeChange(Number(e.target.value) as StatsRange)}
+            className="px-2 py-1.5 border border-slate-300 rounded-md text-xs bg-white"
+            aria-label="成績範圍"
+          >
+            <option value={7}>最近 7 天</option>
+            <option value={30}>最近 30 天</option>
+            <option value={0}>全部</option>
+          </select>
+          <button
+            onClick={onRefresh}
+            className="px-2.5 py-1.5 border border-slate-300 rounded-md text-xs bg-white text-slate-700"
+          >
+            更新
+          </button>
+        </div>
+      </div>
+
+      {loading ? (
+        <p className="text-sm text-slate-500">讀取練習紀錄中...</p>
+      ) : error ? (
+        <p className="text-sm text-red-600">無法讀取練習狀態：{error}</p>
+      ) : !stats || stats.total_attempts === 0 ? (
+        <p className="text-sm text-slate-500">尚無作答紀錄。先完成幾題後，這裡會顯示弱點與最近錯題。</p>
+      ) : (
+        <div className="space-y-5">
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <Stat label="作答" value={stats.total_attempts} />
+            <Stat label="答錯" value={stats.wrong} accent="text-amber-600" />
+            <Stat label="正確率" value={formatPercent(stats.accuracy)} accent={stats.accuracy >= 0.8 ? "text-green-600" : ""} />
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            <StatsList title="優先複習" empty="目前沒有可排序的文法點。">
+              {weakGrammar.map((g) => (
+                <li key={g.grammar_point} className="space-y-1">
+                  <div className="flex justify-between gap-3">
+                    <span className="truncate">{g.grammar_point}</span>
+                    <span className="text-slate-500">{formatPercent(g.accuracy)}</span>
+                  </div>
+                  <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-amber-500" style={{ width: `${Math.round(g.accuracy * 100)}%` }} />
+                  </div>
+                </li>
+              ))}
+            </StatsList>
+
+            <StatsList title="常見錯誤" empty="目前沒有錯誤類型。">
+              {topErrors.map((e) => (
+                <li key={`${e.grammar_point}:${e.error_class}`} className="flex justify-between gap-3">
+                  <span className="truncate">{e.grammar_point}</span>
+                  <span className="text-slate-500 whitespace-nowrap">{e.error_class} · {e.count}</span>
+                </li>
+              ))}
+            </StatsList>
+
+            <StatsList title="最近錯題" empty="最近沒有答錯紀錄。">
+              {recentWrong.map((w) => (
+                <li key={`${w.question_id}:${w.created_at}`} className="space-y-1">
+                  <p className="truncate">{w.prompt.replace("___", `[${w.expected}]`)}</p>
+                  <p className="text-slate-500 truncate">
+                    {w.grammar_point} · 你的答案 {w.user_answer}
+                  </p>
+                </li>
+              ))}
+            </StatsList>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function StatsList({
+  title,
+  empty,
+  children,
+}: {
+  title: string;
+  empty: string;
+  children: React.ReactNode;
+}) {
+  const count = Array.isArray(children) ? children.length : 0;
+  return (
+    <div>
+      <h3 className="text-xs font-medium text-slate-500 mb-2">{title}</h3>
+      {count === 0 ? (
+        <p className="text-xs text-slate-400">{empty}</p>
+      ) : (
+        <ul className="space-y-2 text-xs">{children}</ul>
+      )}
+    </div>
   );
 }
 
@@ -254,7 +435,6 @@ function QuestionForm(props: {
     >
       <div className="text-xs text-slate-400">
         {props.q.jlpt_level} · {props.q.grammar_point}
-        {props.q.hint && <span className="ml-2">提示：{props.q.hint}</span>}
       </div>
       <p className="text-2xl leading-relaxed">
         {props.q.prompt.split("___").map((part, i, arr) => (
@@ -285,10 +465,12 @@ function QuestionForm(props: {
 
 function ResultBox({
   result,
+  hint,
   onNext,
   sessionMode,
 }: {
   result: GradeResult;
+  hint?: string;
   onNext: () => void;
   sessionMode: boolean;
 }) {
@@ -314,6 +496,7 @@ function ResultBox({
             )}
           </p>
           <p className="text-sm mt-3 leading-relaxed">{result.explanation_zh}</p>
+          {hint && <p className="text-xs mt-2 text-slate-600">提示：{hint}</p>}
         </>
       )}
       <button
@@ -403,4 +586,8 @@ function Stat({ label, value, accent }: { label: string; value: string | number;
       <div className="text-xs text-slate-500 mt-1">{label}</div>
     </div>
   );
+}
+
+function formatPercent(value: number) {
+  return `${Math.round(value * 100)}%`;
 }
