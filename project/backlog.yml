@@ -147,6 +147,7 @@ items:
       - "2026-04-30: Expanded N5 vocab Japanese/Traditional Chinese support overlay to 220 rows from existing JMdict-derived vocabulary."
       - "2026-04-30: Added first N4 vocab Japanese/Traditional Chinese support overlay batch; vocab support overlays now seed 334 rows."
       - "2026-04-30: Added first N2 vocabulary support overlay plus 10 N2 grammar points and 50 cloze examples; grammar total is now 56 points / 274 cloze questions, vocab support overlays seed 410 rows."
+      - "2026-04-30: Added curated JLPT overrides after review found basic greetings misclassified as N2; お休み/お帰り/お願いします/お邪魔します are now N5 and related daily phrases are N4."
       - "Validated: make lint-rules"
       - "Validated: make corpus-scale"
       - "Validated: env GOCACHE=/tmp/go-build-cache make seed-corpus"

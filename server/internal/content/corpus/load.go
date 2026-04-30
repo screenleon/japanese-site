@@ -75,12 +75,24 @@ type KanjiSupport struct {
 	License   string `json:"license"`
 }
 
+type JLPTOverride struct {
+	Kind      string `json:"kind"`
+	Headword  string `json:"headword,omitempty"`
+	Reading   string `json:"reading,omitempty"`
+	Character string `json:"character,omitempty"`
+	JLPTLevel string `json:"jlpt_level"`
+	Source    string `json:"source"`
+	License   string `json:"license"`
+	Reason    string `json:"reason"`
+}
+
 type LoadStats struct {
 	GrammarPoints   int
 	GrammarExamples int
 	Questions       int
 	VocabSupport    int
 	KanjiSupport    int
+	JLPTOverrides   int
 }
 
 // Load walks corpus/grammar/<level>/*.json under root and upserts the data.
@@ -240,6 +252,11 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 	} else {
 		stats.KanjiSupport = n
 	}
+	if n, err := loadJLPTOverrides(ctx, tx, root); err != nil {
+		return stats, err
+	} else {
+		stats.JLPTOverrides = n
+	}
 
 	// Orphan sweep: any curated question whose id isn't in seenIDs must
 	// come from a previous corpus iteration whose prompt or expected has
@@ -326,6 +343,72 @@ func loadKanjiSupport(ctx context.Context, tx *sql.Tx, root string) (int, error)
 		res, err := stmt.ExecContext(ctx, row.MeaningJA, row.MeaningZH, GrammarValidatorID, now, row.Character)
 		if err != nil {
 			return updated, fmt.Errorf("update kanji support %s: %w", row.Character, err)
+		}
+		n, _ := res.RowsAffected()
+		updated += int(n)
+	}
+	return updated, nil
+}
+
+func loadJLPTOverrides(ctx context.Context, tx *sql.Tx, root string) (int, error) {
+	rows, err := readJSONLFile[JLPTOverride](filepath.Join(root, "jlpt-overrides.jsonl"))
+	if err != nil {
+		return 0, err
+	}
+	if len(rows) == 0 {
+		return 0, nil
+	}
+	updateVocab, err := tx.PrepareContext(ctx, `
+		UPDATE vocab
+		   SET jlpt_level = ?,
+		       validated_by = COALESCE(validated_by, ?),
+		       validated_at = COALESCE(validated_at, ?)
+		 WHERE headword = ? AND reading = ?`)
+	if err != nil {
+		return 0, fmt.Errorf("prepare vocab jlpt override: %w", err)
+	}
+	defer updateVocab.Close()
+
+	updateKanji, err := tx.PrepareContext(ctx, `
+		UPDATE kanji
+		   SET jlpt_level = ?,
+		       validated_by = COALESCE(validated_by, ?),
+		       validated_at = COALESCE(validated_at, ?)
+		 WHERE character = ?`)
+	if err != nil {
+		return 0, fmt.Errorf("prepare kanji jlpt override: %w", err)
+	}
+	defer updateKanji.Close()
+
+	now := time.Now().UTC().Format(time.RFC3339)
+	updated := 0
+	for _, row := range rows {
+		if row.Kind == "" || row.JLPTLevel == "" || row.Source == "" || row.License == "" || row.Reason == "" {
+			return updated, fmt.Errorf("jlpt override row missing required fields: %+v", row)
+		}
+		if !validJLPTLevel(row.JLPTLevel) {
+			return updated, fmt.Errorf("jlpt override row has invalid level: %+v", row)
+		}
+		var (
+			res sql.Result
+			err error
+		)
+		switch row.Kind {
+		case "vocab":
+			if row.Headword == "" || row.Reading == "" {
+				return updated, fmt.Errorf("vocab jlpt override missing natural key: %+v", row)
+			}
+			res, err = updateVocab.ExecContext(ctx, row.JLPTLevel, GrammarValidatorID, now, row.Headword, row.Reading)
+		case "kanji":
+			if row.Character == "" {
+				return updated, fmt.Errorf("kanji jlpt override missing natural key: %+v", row)
+			}
+			res, err = updateKanji.ExecContext(ctx, row.JLPTLevel, GrammarValidatorID, now, row.Character)
+		default:
+			return updated, fmt.Errorf("jlpt override row has unsupported kind: %+v", row)
+		}
+		if err != nil {
+			return updated, fmt.Errorf("apply jlpt override %+v: %w", row, err)
 		}
 		n, _ := res.RowsAffected()
 		updated += int(n)
@@ -430,11 +513,46 @@ func readJSONL[T any](dir string) ([]T, error) {
 	return out, err
 }
 
+func readJSONLFile[T any](path string) ([]T, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	defer f.Close()
+	scanner := bufio.NewScanner(f)
+	scanner.Buffer(make([]byte, 64*1024), 1024*1024)
+	var out []T
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" {
+			continue
+		}
+		var row T
+		if err := json.Unmarshal([]byte(line), &row); err != nil {
+			return nil, fmt.Errorf("decode %s: %w", path, err)
+		}
+		out = append(out, row)
+	}
+	return out, scanner.Err()
+}
+
 func nullStr(s string) any {
 	if s == "" {
 		return nil
 	}
 	return s
+}
+
+func validJLPTLevel(level string) bool {
+	switch level {
+	case "N1", "N2", "N3", "N4", "N5":
+		return true
+	default:
+		return false
+	}
 }
 
 func classifierRulesJSON(rules []quizrule.Rule) (any, error) {

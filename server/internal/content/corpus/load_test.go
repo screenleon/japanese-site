@@ -309,6 +309,54 @@ func TestLoad_StoresVocabAndKanjiSupport(t *testing.T) {
 	}
 }
 
+func TestLoad_AppliesJLPTOverrides(t *testing.T) {
+	tmpRoot := t.TempDir()
+	dbPath := filepath.Join(tmpRoot, "test.sqlite")
+	corpusRoot := filepath.Join(tmpRoot, "corpus")
+	grammarDir := filepath.Join(corpusRoot, "grammar", "N3")
+	if err := os.MkdirAll(grammarDir, 0o755); err != nil {
+		t.Fatalf("mkdir grammar: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(grammarDir, "test-gp.json"), []byte(grammarPointJSON), 0o644); err != nil {
+		t.Fatalf("write gp: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(grammarDir, "test-gp.examples.jsonl"), []byte(exampleA), 0o644); err != nil {
+		t.Fatalf("write ex: %v", err)
+	}
+	override := `{"kind":"vocab","headword":"お休み","reading":"おやすみ","jlpt_level":"N5","source":"curated","license":"CC-BY-SA-4.0","reason":"basic greeting; external overlay placed it too high"}` + "\n"
+	if err := os.WriteFile(filepath.Join(corpusRoot, "jlpt-overrides.jsonl"), []byte(override), 0o644); err != nil {
+		t.Fatalf("write override: %v", err)
+	}
+
+	db, err := store.Open(dbPath)
+	if err != nil {
+		t.Fatalf("open: %v", err)
+	}
+	defer db.Close()
+	if err := store.Migrate(db); err != nil {
+		t.Fatalf("migrate: %v", err)
+	}
+	if _, err := db.Exec(`INSERT INTO vocab (headword, reading, pos, gloss_en, jlpt_level, source, license)
+		VALUES ('お休み', 'おやすみ', 'n', 'good night', 'N2', 'jmdict', 'CC-BY-SA-4.0')`); err != nil {
+		t.Fatalf("seed vocab: %v", err)
+	}
+
+	stats, err := Load(context.Background(), db.DB, corpusRoot)
+	if err != nil {
+		t.Fatalf("load: %v", err)
+	}
+	if stats.JLPTOverrides != 1 {
+		t.Fatalf("JLPTOverrides = %d, want 1", stats.JLPTOverrides)
+	}
+	var level string
+	if err := db.QueryRow(`SELECT jlpt_level FROM vocab WHERE headword = 'お休み'`).Scan(&level); err != nil {
+		t.Fatalf("select level: %v", err)
+	}
+	if level != "N5" {
+		t.Fatalf("level = %q, want N5", level)
+	}
+}
+
 func TestLoad_RejectsMalformedClassifierRules(t *testing.T) {
 	tmpRoot := t.TempDir()
 	dbPath := filepath.Join(tmpRoot, "test.sqlite")

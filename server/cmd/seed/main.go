@@ -325,7 +325,8 @@ func runCorpus(o opts) error {
 		"examples", stats.GrammarExamples,
 		"questions", stats.Questions,
 		"vocab_support", stats.VocabSupport,
-		"kanji_support", stats.KanjiSupport)
+		"kanji_support", stats.KanjiSupport,
+		"jlpt_overrides", stats.JLPTOverrides)
 	return nil
 }
 
