@@ -79,3 +79,59 @@ func TestNextQuestion_NilRandUsesGlobalAndDoesNotPanic(t *testing.T) {
 		t.Errorf("expected single-candidate pick, got %q", got.ID)
 	}
 }
+
+func TestNextQuestion_SkipsCorrectAnswerUntilDue(t *testing.T) {
+	db := newMemoryDB(t)
+	defer db.Close()
+	seedSingleQuestion(t, db, "dddddddddddddddd")
+
+	if _, err := LogAttempt(context.Background(), db, Attempt{
+		QuestionID: "dddddddddddddddd",
+		UserAnswer: "ア",
+		Correct:    true,
+	}); err != nil {
+		t.Fatalf("log attempt: %v", err)
+	}
+
+	_, err := NextQuestion(context.Background(), db, NextQuestionOpts{})
+	if err != ErrQuestionNotFound {
+		t.Fatalf("NextQuestion err = %v, want ErrQuestionNotFound", err)
+	}
+}
+
+func TestNextQuestion_WrongAnswerRemainsDue(t *testing.T) {
+	db := newMemoryDB(t)
+	defer db.Close()
+	seedSingleQuestion(t, db, "eeeeeeeeeeeeeeee")
+
+	if _, err := LogAttempt(context.Background(), db, Attempt{
+		QuestionID: "eeeeeeeeeeeeeeee",
+		UserAnswer: "wrong",
+		Correct:    false,
+	}); err != nil {
+		t.Fatalf("log attempt: %v", err)
+	}
+
+	got, err := NextQuestion(context.Background(), db, NextQuestionOpts{})
+	if err != nil {
+		t.Fatalf("NextQuestion: %v", err)
+	}
+	if got.ID != "eeeeeeeeeeeeeeee" {
+		t.Fatalf("question id = %q, want eeeeeeeeeeeeeeee", got.ID)
+	}
+}
+
+func seedSingleQuestion(t *testing.T, db *DB, id string) {
+	t.Helper()
+	if err := Migrate(db); err != nil {
+		t.Fatalf("migrate: %v", err)
+	}
+	if _, err := db.Exec(`INSERT INTO grammar_point (slug, title_ja, title_zh, jlpt_level, explanation_zh, source, license)
+	                      VALUES ('test-gp', 'テスト', '測試', 'N3', '測試用', 'test', 'CC0')`); err != nil {
+		t.Fatalf("seed gp: %v", err)
+	}
+	if _, err := db.Exec(`INSERT INTO question (id, kind, jlpt_level, grammar_point, prompt, expected, source, license)
+	                      VALUES (?, 'cloze', 'N3', 'test-gp', 'Q ___', 'ア', 'test', 'CC0')`, id); err != nil {
+		t.Fatalf("seed q: %v", err)
+	}
+}

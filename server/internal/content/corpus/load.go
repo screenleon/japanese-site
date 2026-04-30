@@ -3,8 +3,9 @@
 // rebuilable index.
 //
 // Layout:
-//   corpus/grammar/<level>/<slug>.json
-//   corpus/grammar/<level>/<slug>.examples.jsonl
+//
+//	corpus/grammar/<level>/<slug>.json
+//	corpus/grammar/<level>/<slug>.examples.jsonl
 //
 // Each grammar example with `is_correct=1` and a non-empty `blank` field
 // becomes one cloze question.
@@ -22,6 +23,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/screenleon/japanese-site/server/internal/quizrule"
 )
 
 const (
@@ -30,15 +33,16 @@ const (
 )
 
 type GrammarPoint struct {
-	Slug           string  `json:"slug"`
-	TitleJA        string  `json:"title_ja"`
-	TitleZH        string  `json:"title_zh"`
-	JLPTLevel      string  `json:"jlpt_level"`
-	ExplanationZH  string  `json:"explanation_zh"`
-	Source         string  `json:"source"`
-	License        string  `json:"license"`
-	ValidatedBy    string  `json:"validated_by"`
-	ValidatorScore float64 `json:"validator_score"`
+	Slug            string          `json:"slug"`
+	TitleJA         string          `json:"title_ja"`
+	TitleZH         string          `json:"title_zh"`
+	JLPTLevel       string          `json:"jlpt_level"`
+	ExplanationZH   string          `json:"explanation_zh"`
+	Source          string          `json:"source"`
+	License         string          `json:"license"`
+	ValidatedBy     string          `json:"validated_by"`
+	ValidatorScore  float64         `json:"validator_score"`
+	ClassifierRules []quizrule.Rule `json:"classifier_rules,omitempty"`
 }
 
 type GrammarExample struct {
@@ -76,14 +80,16 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 	upsertGP, err := tx.PrepareContext(ctx, `
 		INSERT INTO grammar_point (
 			slug, title_ja, title_zh, jlpt_level, explanation_zh,
-			source, license, validated_by, validator_score, validated_at
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			source, license, validated_by, validator_score, validated_at,
+			classifier_rules
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON CONFLICT(slug) DO UPDATE SET
 			title_ja=excluded.title_ja,
 			title_zh=excluded.title_zh,
 			jlpt_level=excluded.jlpt_level,
 			explanation_zh=excluded.explanation_zh,
-			validated_at=excluded.validated_at`)
+			validated_at=excluded.validated_at,
+			classifier_rules=excluded.classifier_rules`)
 	if err != nil {
 		return stats, fmt.Errorf("prepare gp: %w", err)
 	}
@@ -99,11 +105,14 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 	}
 	defer insertEx.Close()
 
+	// `payload` stays NULL for cloze questions. Migration 0008 added the
+	// column for non-cloze kinds (multiple-choice, ordering, listening) that
+	// land in later PRs; the loader writes NULL until those kinds exist.
 	insertQ, err := tx.PrepareContext(ctx, `
 		INSERT INTO question (
-			id, kind, jlpt_level, grammar_point, prompt, expected, hint,
+			id, kind, jlpt_level, grammar_point, prompt, expected, hint, payload,
 			source, license, validated_by, validator_score, validated_at
-		) VALUES (?, 'cloze', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		) VALUES (?, 'cloze', ?, ?, ?, ?, ?, NULL, ?, ?, ?, ?, ?)
 		ON CONFLICT(id) DO UPDATE SET
 			jlpt_level=excluded.jlpt_level,
 			grammar_point=excluded.grammar_point,
@@ -134,9 +143,13 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 		if err != nil {
 			return fmt.Errorf("read %s: %w", path, err)
 		}
+		classifierRules, err := classifierRulesJSON(gp.ClassifierRules)
+		if err != nil {
+			return fmt.Errorf("classifier rules %s: %w", gp.Slug, err)
+		}
 		if _, err := upsertGP.ExecContext(ctx,
 			gp.Slug, gp.TitleJA, gp.TitleZH, gp.JLPTLevel, gp.ExplanationZH,
-			gp.Source, gp.License, gp.ValidatedBy, gp.ValidatorScore, now); err != nil {
+			gp.Source, gp.License, gp.ValidatedBy, gp.ValidatorScore, now, classifierRules); err != nil {
 			return fmt.Errorf("upsert gp %s: %w", gp.Slug, err)
 		}
 		stats.GrammarPoints++
@@ -278,4 +291,18 @@ func nullStr(s string) any {
 		return nil
 	}
 	return s
+}
+
+func classifierRulesJSON(rules []quizrule.Rule) (any, error) {
+	if len(rules) == 0 {
+		return nil, nil
+	}
+	if err := quizrule.ValidateRules(rules); err != nil {
+		return nil, err
+	}
+	body, err := json.Marshal(rules)
+	if err != nil {
+		return nil, err
+	}
+	return string(body), nil
 }

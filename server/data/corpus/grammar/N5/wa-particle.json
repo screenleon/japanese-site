@@ -7,5 +7,9 @@
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["が"], "error_class": "used-ga"},
+    {"if_answer_equals_any": ["を"], "error_class": "used-wo"}
+  ]
 }

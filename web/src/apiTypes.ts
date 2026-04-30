@@ -54,6 +54,11 @@ export interface GrammarPoint {
 // Question.id is the deterministic id derived server-side from
 // (slug | prompt | expected) — a 16-char hex string. See
 // `server/internal/content/corpus/load.go`'s `QuestionID`.
+//
+// `payload` is reserved for non-cloze kinds (multiple-choice distractors,
+// ordering chunks, listening audio refs). Cloze questions omit it. The
+// shape is kind-specific and intentionally untyped at this layer; tabs
+// that consume non-cloze kinds will narrow it locally.
 export interface Question {
   id: string;
   kind: string;
@@ -61,6 +66,7 @@ export interface Question {
   grammar_point: string;
   prompt: string;
   hint?: string;
+  payload?: unknown;
 }
 
 export interface GradeResult {

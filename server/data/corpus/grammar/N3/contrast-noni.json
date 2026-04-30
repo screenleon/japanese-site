@@ -7,5 +7,10 @@
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_contains_any": ["ても", "でも"], "error_class": "used-temo"},
+    {"if_answer_contains_any": ["けど"], "error_class": "used-kedo"},
+    {"if_answer_equals_any": ["が"], "error_class": "used-kedo"}
+  ]
 }

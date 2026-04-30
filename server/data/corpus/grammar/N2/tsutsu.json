@@ -7,5 +7,10 @@
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_contains_any": ["ながら"], "error_class": "used-nagara"},
+    {"if_answer_contains_any": ["ている", "ています"], "error_class": "used-teiru"},
+    {"if_answer_not_contains_any": ["つつ"], "error_class": "wrong-conjugation"}
+  ]
 }

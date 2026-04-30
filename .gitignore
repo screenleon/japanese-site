@@ -34,3 +34,5 @@ prompt-budget.local.yml
 .idea/
 *.swp
 .DS_Store
+
+.codex

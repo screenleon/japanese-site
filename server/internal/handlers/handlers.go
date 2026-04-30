@@ -18,6 +18,13 @@ import (
 const maxAnswerBodyBytes = 4 << 10
 
 func Register(mux *http.ServeMux, db *store.DB) {
+	// Single ClozeGrader instance per process. It's stateless beyond the
+	// store-backed lookup ports, so all /api/quiz/answer calls share it.
+	grader := &quiz.ClozeGrader{
+		Feedback:        store.FeedbackStore{DB: db},
+		ClassifierRules: store.ClassifierRuleStore{DB: db},
+	}
+
 	mux.HandleFunc("GET /healthz", health)
 	mux.HandleFunc("GET /api/version", version)
 	mux.HandleFunc("GET /api/vocab/search", vocabSearch(db))
@@ -26,7 +33,7 @@ func Register(mux *http.ServeMux, db *store.DB) {
 	mux.HandleFunc("GET /api/grammar", grammarList(db))
 	mux.HandleFunc("GET /api/grammar/{slug}", grammarGet(db))
 	mux.HandleFunc("GET /api/quiz/next", quizNext(db))
-	mux.HandleFunc("POST /api/quiz/answer", quizAnswer(db))
+	mux.HandleFunc("POST /api/quiz/answer", quizAnswer(db, grader))
 	mux.HandleFunc("GET /api/quiz/stats", quizStats(db))
 	// Catch-all for /api/* — return JSON 404 instead of falling through
 	// to the SPA index.html.
@@ -119,7 +126,7 @@ type answerRequest struct {
 	Answer     string `json:"answer"`
 }
 
-func quizAnswer(db *store.DB) http.HandlerFunc {
+func quizAnswer(db *store.DB, grader *quiz.ClozeGrader) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		r.Body = http.MaxBytesReader(w, r.Body, maxAnswerBodyBytes)
 		var req answerRequest
@@ -136,7 +143,11 @@ func quizAnswer(db *store.DB) http.HandlerFunc {
 			writeJSON(w, http.StatusNotFound, map[string]string{"error": "question_not_found"})
 			return
 		}
-		result, err := quiz.Grade(r.Context(), db.DB, qu.GrammarPoint, qu.Expected, req.Answer)
+		result, err := grader.Grade(r.Context(), quiz.GradeInput{
+			GrammarPoint: qu.GrammarPoint,
+			Expected:     qu.Expected,
+			Answer:       req.Answer,
+		})
 		if err != nil {
 			httpError(w, r, http.StatusInternalServerError, "internal", err)
 			return
@@ -236,7 +247,7 @@ func health(w http.ResponseWriter, _ *http.Request) {
 func version(w http.ResponseWriter, _ *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]string{
 		"name":      "japanese-site",
-		"milestone": "M3-C1",
+		"milestone": "M3-C2",
 	})
 }
 

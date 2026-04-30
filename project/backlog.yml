@@ -1,0 +1,158 @@
+# Development backlog for japanese-site.
+#
+# Purpose:
+# - This is a developer planning artifact, not a learner-facing product feature.
+# - Keep japanese-site focused on Japanese learning. Do not add a backlog tab
+#   to the learner UI unless a future decision explicitly changes that boundary.
+# - ROADMAP.md remains the narrative context; this file is the working queue.
+#
+# Status values: todo, doing, blocked, done
+# Priority values: P0, P1, P2, P3
+
+items:
+  - id: JS-001
+    title: Finish PR #3 payload and grader port
+    status: done
+    priority: P0
+    milestone: M3
+    area: backend
+    source: DECISIONS.md#2026-04-28-pr-3-questionpayload-column--grader-port-refactor
+    completed_at: "2026-04-30"
+    notes:
+      - Validate the current dirty worktree as one coherent M3-C2 change.
+      - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
+      - "Validated: npm run build"
+
+  - id: JS-002
+    title: Add stats UI surface for quiz performance
+    status: done
+    priority: P1
+    milestone: M3
+    area: frontend
+    source: ROADMAP.md#quiz--content-depth
+    completed_at: "2026-04-30"
+    notes:
+      - Use the existing /api/quiz/stats endpoint.
+      - Keep this learner-facing because it improves study feedback.
+      - "Validated: npm run build"
+      - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
+
+  - id: JS-003
+    title: Gracefully recover from stale quiz question answers
+    status: done
+    priority: P1
+    milestone: M3
+    area: frontend
+    source: ROADMAP.md#operational--dx
+    completed_at: "2026-04-30"
+    notes:
+      - Detect 404 question_not_found from POST /api/quiz/answer.
+      - Fetch the next question instead of leaving a raw error.
+      - "Validated: npm run build"
+      - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
+
+  - id: JS-004
+    title: Add httptest coverage for API handlers
+    status: done
+    priority: P1
+    milestone: M3
+    area: backend
+    source: ROADMAP.md#architectural-improvements
+    completed_at: "2026-04-30"
+    notes:
+      - Cover one smoke path per endpoint with a temporary SQLite fixture.
+      - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
+      - "Validated: npm run build"
+
+  - id: JS-005
+    title: Add CI for lint, tests, and builds
+    status: done
+    priority: P1
+    milestone: DX
+    area: operations
+    source: ROADMAP.md#operational--dx
+    completed_at: "2026-04-30"
+    notes:
+      - Run lint-rules, Go tests, Go build, and frontend build on pull requests.
+      - Existing .github/workflows/ci.yml already runs make lint-rules, make vet, make test, and make build.
+      - "Validated: make lint-rules"
+      - "Validated: env GOCACHE=/tmp/go-build-cache make vet"
+      - "Validated: env GOCACHE=/tmp/go-build-cache make test"
+      - "Validated: env GOCACHE=/tmp/go-build-cache make build"
+
+  - id: JS-006
+    title: Convert classifier rules into grammar corpus data
+    status: done
+    priority: P2
+    milestone: M3
+    area: backend
+    source: ROADMAP.md#architectural-improvements
+    completed_at: "2026-04-30"
+    notes:
+      - Defer until N3 and N2 content stabilises enough to know rule shapes.
+      - Added grammar_point.classifier_rules via migration 0009.
+      - Moved existing deterministic classifier conditions into grammar JSON.
+      - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
+      - "Validated: env GOCACHE=/tmp/go-build-cache make seed-corpus"
+
+  - id: JS-007
+    title: Add spaced-repetition lite scheduling
+    status: done
+    priority: P2
+    milestone: M3
+    area: product
+    source: ROADMAP.md#quiz--content-depth
+    completed_at: "2026-04-30"
+    notes:
+      - Replace the simple seen/wrong/right weighting with next-due timestamps.
+      - Correct answers are due in one day; wrong answers stay due immediately.
+      - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
+      - "Validated: env GOCACHE=/tmp/go-build-cache make seed-corpus"
+
+  - id: JS-008
+    title: Expand grammar corpus depth
+    status: todo
+    priority: P2
+    milestone: content
+    area: content
+    source: ROADMAP.md#quiz--content-depth
+    notes:
+      - Target 30 N3, 30 N2, and 20 N1 points over the next corpus pass.
+      - Preserve source, license, and validated_by metadata.
+
+  - id: JS-009
+    title: Start M4 connector extraction and LLM grading
+    status: blocked
+    priority: P2
+    milestone: M4
+    area: connector
+    source: DECISIONS.md#2026-04-27-extract-connector-to-its-own-repository-at-m4
+    notes:
+      - Blocked until M3 deterministic quiz loop is fully shipped.
+      - Includes agent-connector extraction, server-provider path, local connector path, validator, and L2 cache promotion.
+
+  - id: JS-010
+    title: Wire sentence translations into Tatoeba import
+    status: todo
+    priority: P3
+    milestone: content
+    area: content
+    source: ROADMAP.md#content-quality
+    notes:
+      - Join sentence pairs into sentence.text_en and sentence.text_zh where available.
+
+done:
+  - id: JS-D001
+    title: Bootstrap layered agent rules and project manifest
+    milestone: M1
+    source: DECISIONS.md#2026-04-27-milestone-plan-m1m4
+
+  - id: JS-D002
+    title: Ship deterministic question ids for curated questions
+    milestone: M3
+    source: DECISIONS.md#2026-04-28-deterministic-question-ids-slug--prompt--expected-sha2568
+
+  - id: JS-D003
+    title: Add migration checksum backfill and mismatch detection
+    milestone: M3
+    source: DECISIONS.md#2026-04-28-first-boot-disk-body-is-canonical-for-migration-checksum-backfill
