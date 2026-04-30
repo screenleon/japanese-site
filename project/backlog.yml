@@ -127,17 +127,24 @@ items:
       - "Validated: env GOCACHE=/tmp/go-build-cache make seed-corpus"
 
   - id: JS-009
-    title: Expand grammar corpus depth
+    title: Scale learner corpus depth
     status: doing
-    priority: P2
+    priority: P1
     milestone: content
     area: content
     source: ROADMAP.md#quiz--content-depth
     notes:
-      - Target 30 N3, 30 N2, and 20 N1 points over the next corpus pass.
+      - Scale floor is at least 1000 JLPT-tagged learner-usable vocab rows and 100 grammar points.
+      - Current seeded state after make seed-all: 22552 vocab rows, 6524 JLPT-tagged vocab rows, 25 grammar points, 119 cloze questions.
+      - Vocabulary volume already clears the floor through JMdict + JLPT overlay; grammar remains the blocker.
+      - Next content implementation should add grammar in larger level-balanced batches, not 5-point micro-passes.
       - New or revised grammar JSON must include explanation_ja and explanation_zh.
       - Preserve source, license, and validated_by metadata.
       - "2026-04-30: Added first 5 N1 anchor points with Japanese-first explanations, Chinese support, 25 cloze examples, and generic feedback templates."
+      - "2026-04-30: Added 5 more N1 grammar points (あるまじき, ごとき/ごとく/ごとし, たるもの, といっても過言ではない, を余儀なくされる), 25 cloze examples, generic feedback templates, and classifier-rule regression cases."
+      - "2026-04-30: Added make corpus-scale to report scale floors and current gaps."
+      - "Validated: make lint-rules"
+      - "Validated: make corpus-scale"
       - "Validated: env GOCACHE=/tmp/go-build-cache make seed-corpus"
       - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
       - "Validated: npm run build"
@@ -182,12 +189,29 @@ items:
     area: architecture
     source: ROADMAP.md#content-storage--scale
     notes:
-      - Target scale is at least 2000+ vocabulary rows and 100+ grammar points.
+      - Target scale is at least 1000+ JLPT-tagged learner-usable vocabulary rows and 100+ grammar points.
       - Review whether JSON-per-grammar-point remains the right authoring format at that size.
       - Consider corpus manifest defaults to avoid repeating source/license/validated_by in every row.
       - Keep SQLite as runtime storage; separate human-reviewable source content from compiled runtime indexes.
       - Avoid committing large external datasets or binary SQLite snapshots to git.
       - Evaluate compression/rotation strategy for L2 LLM cache before it grows beyond reviewable JSONL shards.
+
+  - id: JS-014
+    title: Add level-first study navigation and random study draws
+    status: done
+    priority: P1
+    milestone: content
+    area: product
+    source: user-feedback-2026-04-30
+    completed_at: "2026-04-30"
+    notes:
+      - Grammar and vocabulary tabs now start from JLPT level selection before expanding level content.
+      - Grammar tab supports level browse plus random grammar-point study draws.
+      - Vocabulary tab supports level browse plus random single-word study draws.
+      - Added GET /api/vocab/random and allowed /api/vocab/search?jlpt=N without q for level browsing.
+      - Added GET /api/grammar/random for level-scoped random grammar study.
+      - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
+      - "Validated: npm run build"
 
 done:
   - id: JS-D001
