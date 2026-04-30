@@ -28,6 +28,7 @@ type GrammarPoint struct {
 	TitleJA       string `json:"title_ja"`
 	TitleZH       string `json:"title_zh"`
 	JLPTLevel     string `json:"jlpt_level"`
+	ExplanationJA string `json:"explanation_ja,omitempty"`
 	ExplanationZH string `json:"explanation_zh"`
 }
 
@@ -179,17 +180,17 @@ func GetQuestion(ctx context.Context, db *DB, id string) (Question, error) {
 
 func GetGrammarPoint(ctx context.Context, db *DB, slug string) (GrammarPoint, error) {
 	row := db.QueryRowContext(ctx, `
-		SELECT slug, title_ja, title_zh, jlpt_level, explanation_zh
+		SELECT slug, title_ja, title_zh, jlpt_level, COALESCE(explanation_ja, ''), explanation_zh
 		FROM grammar_point WHERE slug = ?`, slug)
 	var gp GrammarPoint
-	if err := row.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.ExplanationZH); err != nil {
+	if err := row.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
 		return GrammarPoint{}, err
 	}
 	return gp, nil
 }
 
 func ListGrammarPoints(ctx context.Context, db *DB, jlpt string) ([]GrammarPoint, error) {
-	q := `SELECT slug, title_ja, title_zh, jlpt_level, explanation_zh
+	q := `SELECT slug, title_ja, title_zh, jlpt_level, COALESCE(explanation_ja, ''), explanation_zh
 	      FROM grammar_point`
 	args := []any{}
 	if jlpt != "" {
@@ -205,7 +206,7 @@ func ListGrammarPoints(ctx context.Context, db *DB, jlpt string) ([]GrammarPoint
 	var out []GrammarPoint
 	for rows.Next() {
 		var gp GrammarPoint
-		if err := rows.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.ExplanationZH); err != nil {
+		if err := rows.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
 			return nil, err
 		}
 		out = append(out, gp)

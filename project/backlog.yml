@@ -110,17 +110,39 @@ items:
       - "Validated: env GOCACHE=/tmp/go-build-cache make seed-corpus"
 
   - id: JS-008
+    title: Add Japanese-first grammar explanation contract
+    status: done
+    priority: P1
+    milestone: content
+    area: product
+    source: DECISIONS.md#2026-04-30-japanese-first-explanations-with-chinese-reveal
+    completed_at: "2026-04-30"
+    notes:
+      - Add explanation_ja to grammar corpus, DB, API payload, and learner grammar UI.
+      - Show Japanese explanation first; reveal Traditional Chinese only on demand.
+      - Keep fallback for legacy rows whose Japanese explanation has not been authored yet.
+      - Added explanation_ja to the existing 15 grammar corpus rows.
+      - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
+      - "Validated: npm run build"
+      - "Validated: env GOCACHE=/tmp/go-build-cache make seed-corpus"
+
+  - id: JS-009
     title: Expand grammar corpus depth
-    status: todo
+    status: doing
     priority: P2
     milestone: content
     area: content
     source: ROADMAP.md#quiz--content-depth
     notes:
       - Target 30 N3, 30 N2, and 20 N1 points over the next corpus pass.
+      - New or revised grammar JSON must include explanation_ja and explanation_zh.
       - Preserve source, license, and validated_by metadata.
+      - "2026-04-30: Added first 5 N1 anchor points with Japanese-first explanations, Chinese support, 25 cloze examples, and generic feedback templates."
+      - "Validated: env GOCACHE=/tmp/go-build-cache make seed-corpus"
+      - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
+      - "Validated: npm run build"
 
-  - id: JS-009
+  - id: JS-010
     title: Start M4 connector extraction and LLM grading
     status: blocked
     priority: P2
@@ -131,7 +153,7 @@ items:
       - Blocked until M3 deterministic quiz loop is fully shipped.
       - Includes agent-connector extraction, server-provider path, local connector path, validator, and L2 cache promotion.
 
-  - id: JS-010
+  - id: JS-011
     title: Wire sentence translations into Tatoeba import
     status: todo
     priority: P3
@@ -140,6 +162,32 @@ items:
     source: ROADMAP.md#content-quality
     notes:
       - Join sentence pairs into sentence.text_en and sentence.text_zh where available.
+
+  - id: JS-012
+    title: Extend Japanese-first progressive disclosure to vocabulary study
+    status: todo
+    priority: P2
+    milestone: content
+    area: product
+    source: DECISIONS.md#2026-04-30-japanese-first-explanations-with-chinese-reveal
+    notes:
+      - Vocabulary detail should prefer Japanese definition or example context first.
+      - Chinese gloss stays available as learner support, not as the default first read.
+
+  - id: JS-013
+    title: Re-evaluate corpus storage format for large content scale
+    status: todo
+    priority: P1
+    milestone: content
+    area: architecture
+    source: ROADMAP.md#content-storage--scale
+    notes:
+      - Target scale is at least 2000+ vocabulary rows and 100+ grammar points.
+      - Review whether JSON-per-grammar-point remains the right authoring format at that size.
+      - Consider corpus manifest defaults to avoid repeating source/license/validated_by in every row.
+      - Keep SQLite as runtime storage; separate human-reviewable source content from compiled runtime indexes.
+      - Avoid committing large external datasets or binary SQLite snapshots to git.
+      - Evaluate compression/rotation strategy for L2 LLM cache before it grows beyond reviewable JSONL shards.
 
 done:
   - id: JS-D001

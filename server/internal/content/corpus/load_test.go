@@ -15,6 +15,7 @@ const grammarPointJSON = `{
 	"title_ja": "テスト",
 	"title_zh": "測試",
 	"jlpt_level": "N3",
+	"explanation_ja": "日本語の説明",
 	"explanation_zh": "for the orphan sweep test",
 	"source": "curated",
 	"license": "CC0-1.0",
@@ -200,6 +201,42 @@ func TestLoad_StoresClassifierRules(t *testing.T) {
 	}
 	if len(rules) != 1 || rules[0].ErrorClass != "used-ba" {
 		t.Fatalf("rules = %#v, want used-ba rule", rules)
+	}
+}
+
+func TestLoad_StoresJapaneseExplanation(t *testing.T) {
+	tmpRoot := t.TempDir()
+	dbPath := filepath.Join(tmpRoot, "test.sqlite")
+	corpusRoot := filepath.Join(tmpRoot, "corpus")
+	grammarDir := filepath.Join(corpusRoot, "grammar", "N3")
+	if err := os.MkdirAll(grammarDir, 0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(grammarDir, "test-gp.json"), []byte(grammarPointJSON), 0o644); err != nil {
+		t.Fatalf("write gp: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(grammarDir, "test-gp.examples.jsonl"), []byte(exampleA), 0o644); err != nil {
+		t.Fatalf("write ex: %v", err)
+	}
+
+	db, err := store.Open(dbPath)
+	if err != nil {
+		t.Fatalf("open: %v", err)
+	}
+	defer db.Close()
+	if err := store.Migrate(db); err != nil {
+		t.Fatalf("migrate: %v", err)
+	}
+	if _, err := Load(context.Background(), db.DB, corpusRoot); err != nil {
+		t.Fatalf("load: %v", err)
+	}
+
+	var got string
+	if err := db.QueryRow(`SELECT explanation_ja FROM grammar_point WHERE slug = 'test-gp'`).Scan(&got); err != nil {
+		t.Fatalf("select explanation_ja: %v", err)
+	}
+	if got != "日本語の説明" {
+		t.Fatalf("explanation_ja = %q, want Japanese explanation", got)
 	}
 }
 

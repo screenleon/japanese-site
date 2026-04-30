@@ -150,3 +150,17 @@ Agents must read it before planning or implementation tasks.
   - Legacy attempts with `next_due_at IS NULL` are treated as due now.
   - Correct interval is intentionally fixed at one day for M3; future spaced-repetition work can add ease/streak fields without changing the basic due filter.
   - `NextQuestion` may return `no_questions_match` when all matching questions are not due; the frontend already treats that as an empty/exhausted state.
+
+## 2026-04-30: Japanese-first explanations with Chinese reveal
+
+- **Context**: The learner-facing grammar page currently shows Traditional Chinese explanations first. For ordinary grammar and vocabulary study, the desired learning flow is Japanese-first comprehension, with Chinese available only when the learner still cannot understand.
+- **Decision**: Adopt progressive disclosure for learner explanations. Grammar content gains `explanation_ja` alongside the existing `explanation_zh`. The UI shows `explanation_ja` first and reveals the Chinese translation only on explicit learner action. Legacy rows may fall back to `explanation_zh` until their Japanese explanations are authored. JS-008 corpus expansion must include both fields for new or revised grammar points.
+- **Alternatives considered**:
+  - **Chinese-first explanations** — rejected because it trains translation-first reading and hides whether the learner can parse the Japanese explanation.
+  - **Japanese-only explanations** — rejected because the product still needs an escape hatch when the explanation itself becomes the blocker.
+  - **Machine-translate existing Chinese explanations at render time** — rejected because grammar explanation quality is part of the curated L1 content contract, not a runtime transformation.
+- **Constraints introduced**:
+  - Grammar API responses include optional `explanation_ja` and required `explanation_zh`.
+  - Learner UI must not remove access to Chinese support; it should hide it behind a deliberate reveal control when Japanese content exists.
+  - New grammar corpus files and substantial edits to existing grammar files SHOULD provide both `explanation_ja` and `explanation_zh`.
+  - Vocabulary study should follow the same Japanese-first principle, but vocabulary needs its own content contract because `gloss_zh` is currently a short gloss rather than a full explanation.
