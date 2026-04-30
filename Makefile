@@ -1,4 +1,4 @@
-.PHONY: help lint-rules vet test clean \
+.PHONY: help lint-rules corpus-scale vet test clean \
         bootstrap dev start build dist \
         run web-dev web-build \
         seed-jmdict seed-kanjidic2 seed-jlpt seed-tatoeba seed-derive seed-corpus seed-all
@@ -15,6 +15,7 @@ help:
 	@echo "  test          Go unit tests"
 	@echo "  vet           Go static analysis"
 	@echo "  lint-rules    Layered-rule lint"
+	@echo "  corpus-scale  Report corpus scale against current learning-content floors"
 	@echo "  clean         Remove build artifacts and dev SQLite"
 	@echo "  seed-all      Re-run full corpus pipeline"
 	@echo "  seed-corpus   Reload only the curated L1 corpus"
@@ -86,6 +87,9 @@ test:
 
 lint-rules:
 	bash scripts/lint-rules.sh
+
+corpus-scale:
+	bash scripts/check-corpus-scale.sh
 
 clean:
 	rm -rf server/bin web/dist dist

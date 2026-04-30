@@ -50,10 +50,14 @@ value per hour.
 - [x] **Spaced-repetition lite**: attempts now record `next_due_at`.
       Correct answers are due tomorrow, wrong answers stay due immediately,
       and `/api/quiz/next` only selects due or unseen questions.
-- [ ] **More grammar points**: target 30 N3, 30 N2, 20 N1 within next pass.
-      Current state: 5 N5, 5 N3, 5 N2, 5 N1. N5/N4 are review-tier so 5
-      each is sufficient floor. New and revised rows must carry both
-      `explanation_ja` and `explanation_zh`.
+- [ ] **Corpus scale floor**: learner-usable vocabulary must stay at
+      `>= 1000` JLPT-tagged rows, grammar must reach `>= 100` points, and
+      deterministic cloze questions should track at roughly `>= 500`.
+      Current seeded state after `make seed-all`: 22,552 vocab rows, 6,524
+      JLPT-tagged vocab rows, 25 grammar points, and 119 cloze questions.
+      Run `make corpus-scale` after content work to see the gap. New and
+      revised grammar rows must carry both `explanation_ja` and
+      `explanation_zh`.
 - [x] **N1 corpus anchor start**: first five N1 grammar points are in L1
       corpus with Japanese-first explanations, Chinese support, cloze
       examples, and generic feedback templates: 〜ずにはいられない,
@@ -132,8 +136,8 @@ value per hour.
 
 ## Content storage / scale
 
-- [ ] **Corpus storage format review**: before scaling to 2000+ vocabulary
-      rows and 100+ grammar points, re-evaluate whether JSON-per-topic is
+- [ ] **Corpus storage format review**: before scaling beyond 1000+
+      learner-usable vocabulary rows and 100+ grammar points, re-evaluate whether JSON-per-topic is
       still the right human-authored source format. Keep SQLite as runtime
       storage, but consider manifest defaults, denser source files, generated
       compiled indexes, and L2 cache compression/rotation so the repo remains

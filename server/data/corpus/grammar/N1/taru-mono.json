@@ -1,0 +1,16 @@
+{
+  "slug": "taru-mono",
+  "title_ja": "〜たるもの",
+  "title_zh": "〜たるもの（身為…者）",
+  "jlpt_level": "N1",
+  "explanation_ja": "「〜たるもの」は、「〜という立場にある人なら、当然こうあるべきだ」と述べる硬い表現です。\n\n形：名詞＋たるもの。\n- 教師たるもの、学び続けるべきだ\n- リーダーたるもの、責任から逃げてはならない\n\n多くの場合、後ろには義務・心構え・あるべき姿が続きます。少し古風で、演説・論説・強い主張に向いています。",
+  "explanation_zh": "「〜たるもの」表示「身為…者」，後面通常接應有的態度、責任或義務。語氣正式、偏書面或演說。\n\n**形態**：名詞＋たるもの\n- 教師たるもの、学び続けるべきだ。\n- リーダーたるもの、責任から逃げてはならない。\n\n重點是「既然具有這個身分，就理應如此」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_contains_any": ["として"], "error_class": "used-toshite"},
+    {"if_answer_not_contains_any": ["たる"], "error_class": "missing-taru"}
+  ]
+}
