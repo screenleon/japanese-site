@@ -1,0 +1,15 @@
+{
+  "slug": "ni-kagiri",
+  "title_ja": "に限り",
+  "title_zh": "に限り（僅限）",
+  "jlpt_level": "N2",
+  "explanation_ja": "「Nに限り」は、対象をその範囲だけに限定する表現です。案内や規則でよく使われます。\n\n- 本日に限り半額です\n- 会員に限り利用できます\n\n硬めの表現で、「だけ」に近い意味です。",
+  "explanation_zh": "「Nに限り」表示限定範圍，意思是「僅限」。常用於公告、規則或正式說明。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["だけ"], "error_class": "plain-equivalent"}
+  ]
+}

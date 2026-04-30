@@ -1,0 +1,15 @@
+{
+  "slug": "ue-de",
+  "title_ja": "上で",
+  "title_zh": "上で（在...之後／在...方面）",
+  "jlpt_level": "N2",
+  "explanation_ja": "「Vた上で」は、先に必要なことをしてから次のことをする意味です。「Nの上で」は、ある面や範囲を表すこともあります。\n\n- 内容を確認した上で、署名してください\n- 仕事の上で大切なこと",
+  "explanation_zh": "「Vた上で」表示先完成某動作後再做下一步；「Nの上で」也可表示在某方面、某範圍中。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["あとで"], "error_class": "plain-after"}
+  ]
+}
