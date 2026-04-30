@@ -7,5 +7,11 @@
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_suffix_any": ["ければ", "れば", "ば"], "error_class": "used-ba"},
+    {"if_answer_suffix_any": ["なら"], "error_class": "used-nara"},
+    {"if_answer_suffix_any": ["と"], "error_class": "used-to"},
+    {"if_answer_not_contains_any": ["たら", "だら"], "error_class": "wrong-conjugation"}
+  ]
 }

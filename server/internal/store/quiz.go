@@ -3,6 +3,7 @@ package store
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"math/rand/v2"
 )
@@ -15,6 +16,11 @@ type Question struct {
 	Prompt       string `json:"prompt"`
 	Expected     string `json:"-"` // never sent in the prompt response
 	Hint         string `json:"hint,omitempty"`
+	// Payload carries kind-specific metadata for non-cloze questions
+	// (e.g. multiple-choice distractor banks). NULL/empty for cloze. Stored
+	// as raw JSON pass-through; the server doesn't interpret its shape at
+	// the M3 stage. See migration 0008 and DECISIONS 2026-04-28 PR #3.
+	Payload json.RawMessage `json:"payload,omitempty"`
 }
 
 type GrammarPoint struct {
@@ -51,11 +57,17 @@ type NextQuestionOpts struct {
 // Selection is weighted random in-process across all candidates.
 func NextQuestion(ctx context.Context, db *DB, opts NextQuestionOpts) (Question, error) {
 	q := `
-		SELECT q.id, q.kind, q.jlpt_level, q.grammar_point, q.prompt, q.expected, COALESCE(q.hint, ''),
+		SELECT q.id, q.kind, q.jlpt_level, q.grammar_point, q.prompt, q.expected,
+		       COALESCE(q.hint, ''), COALESCE(q.payload, ''),
 		       (SELECT a.correct FROM attempt a WHERE a.question_id = q.id
 		         ORDER BY a.id DESC LIMIT 1) AS last_correct
 		FROM question q
-		WHERE 1=1`
+		WHERE (
+			(SELECT a.next_due_at FROM attempt a WHERE a.question_id = q.id
+			 ORDER BY a.id DESC LIMIT 1) IS NULL
+			OR (SELECT a.next_due_at FROM attempt a WHERE a.question_id = q.id
+			    ORDER BY a.id DESC LIMIT 1) <= datetime('now')
+		)`
 	args := []any{}
 	if opts.JLPTLevel != "" {
 		q += ` AND q.jlpt_level = ?`
@@ -87,9 +99,13 @@ func NextQuestion(ctx context.Context, db *DB, opts NextQuestionOpts) (Question,
 	for rows.Next() {
 		var c candidate
 		var lastCorrect sql.NullInt64
+		var payload string
 		if err := rows.Scan(&c.qu.ID, &c.qu.Kind, &c.qu.JLPTLevel, &c.qu.GrammarPoint,
-			&c.qu.Prompt, &c.qu.Expected, &c.qu.Hint, &lastCorrect); err != nil {
+			&c.qu.Prompt, &c.qu.Expected, &c.qu.Hint, &payload, &lastCorrect); err != nil {
 			return Question{}, err
+		}
+		if payload != "" {
+			c.qu.Payload = json.RawMessage(payload)
 		}
 		switch {
 		case !lastCorrect.Valid:
@@ -143,14 +159,20 @@ func placeholders(n int) string {
 
 func GetQuestion(ctx context.Context, db *DB, id string) (Question, error) {
 	row := db.QueryRowContext(ctx, `
-		SELECT id, kind, jlpt_level, grammar_point, prompt, expected, COALESCE(hint, '')
+		SELECT id, kind, jlpt_level, grammar_point, prompt, expected,
+		       COALESCE(hint, ''), COALESCE(payload, '')
 		FROM question WHERE id = ?`, id)
 	var qu Question
-	if err := row.Scan(&qu.ID, &qu.Kind, &qu.JLPTLevel, &qu.GrammarPoint, &qu.Prompt, &qu.Expected, &qu.Hint); err != nil {
+	var payload string
+	if err := row.Scan(&qu.ID, &qu.Kind, &qu.JLPTLevel, &qu.GrammarPoint,
+		&qu.Prompt, &qu.Expected, &qu.Hint, &payload); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return Question{}, ErrQuestionNotFound
 		}
 		return Question{}, err
+	}
+	if payload != "" {
+		qu.Payload = json.RawMessage(payload)
 	}
 	return qu, nil
 }

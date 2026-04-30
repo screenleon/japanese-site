@@ -11,6 +11,7 @@ type Attempt struct {
 	Correct    bool   `json:"correct"`
 	ErrorClass string `json:"error_class,omitempty"`
 	CreatedAt  string `json:"created_at"`
+	NextDueAt  string `json:"next_due_at,omitempty"`
 }
 
 func LogAttempt(ctx context.Context, db *DB, a Attempt) (int64, error) {
@@ -19,9 +20,9 @@ func LogAttempt(ctx context.Context, db *DB, a Attempt) (int64, error) {
 		correctI = 1
 	}
 	res, err := db.ExecContext(ctx, `
-		INSERT INTO attempt (question_id, user_answer, correct, error_class)
-		VALUES (?, ?, ?, ?)`,
-		a.QuestionID, a.UserAnswer, correctI, nullIfEmpty(a.ErrorClass))
+		INSERT INTO attempt (question_id, user_answer, correct, error_class, next_due_at)
+		VALUES (?, ?, ?, ?, CASE WHEN ? = 1 THEN datetime('now', '+1 day') ELSE datetime('now') END)`,
+		a.QuestionID, a.UserAnswer, correctI, nullIfEmpty(a.ErrorClass), correctI)
 	if err != nil {
 		return 0, err
 	}

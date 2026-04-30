@@ -7,5 +7,9 @@
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_contains_any": ["ばかり"], "error_class": "used-bakarika"},
+    {"if_answer_contains_any": ["くらい", "ぐらい"], "error_class": "used-kurai"}
+  ]
 }
