@@ -225,7 +225,9 @@ items:
       - Learner-facing content should show Japanese first and Traditional Chinese as support.
       - Vocabulary and kanji tabs no longer display English gloss/meaning fallbacks.
       - Kanji API now exposes meaning_zh so Chinese meanings can be displayed when available.
-      - Remaining missing Chinese entries show a Traditional Chinese pending message instead of English.
+      - Added gloss_ja and meaning_ja so vocabulary and kanji can show Japanese explanations first.
+      - Added L1 curated vocab/kanji support overlays and first N5 batches translated from the existing English source fields.
+      - Remaining missing Japanese/Chinese entries show pending messages instead of English.
       - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
       - "Validated: npm run build"
 

@@ -389,10 +389,10 @@ func newHandlerTestDB(t *testing.T) *store.DB {
 func seedHandlerTestDB(t *testing.T, db *store.DB) {
 	t.Helper()
 	statements := []string{
-		`INSERT INTO vocab (headword, reading, pos, gloss_en, jlpt_level, frequency_rank, source, license, validated_by)
-		 VALUES ('食べる', 'たべる', 'v1', 'eat', 'N5', 1, 'test', 'CC0', 'test-validator')`,
-		`INSERT INTO kanji (character, onyomi, kunyomi, meaning_en, meaning_zh, jlpt_level, grade, stroke_count, source, license, validated_by)
-		 VALUES ('食', 'ショク', 'た.べる', 'eat', '吃／食物', 'N5', 2, 9, 'test', 'CC0', 'test-validator')`,
+		`INSERT INTO vocab (headword, reading, pos, gloss_en, gloss_ja, gloss_zh, jlpt_level, frequency_rank, source, license, validated_by)
+		 VALUES ('食べる', 'たべる', 'v1', 'eat', '食べ物を口に入れること。', '吃', 'N5', 1, 'test', 'CC0', 'test-validator')`,
+		`INSERT INTO kanji (character, onyomi, kunyomi, meaning_en, meaning_ja, meaning_zh, jlpt_level, grade, stroke_count, source, license, validated_by)
+		 VALUES ('食', 'ショク', 'た.べる', 'eat', '食べること。食べ物。', '吃／食物', 'N5', 2, 9, 'test', 'CC0', 'test-validator')`,
 		`INSERT INTO sentence (text_ja, text_en, jlpt_level, source, license, validated_by)
 		 VALUES ('ご飯を食べます。', 'I eat rice.', 'N5', 'test', 'CC0', 'test-validator')`,
 		`INSERT INTO grammar_point (slug, title_ja, title_zh, jlpt_level, explanation_zh, source, license, validated_by)

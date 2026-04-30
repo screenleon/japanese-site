@@ -164,3 +164,16 @@ Agents must read it before planning or implementation tasks.
   - Learner UI must not remove access to Chinese support; it should hide it behind a deliberate reveal control when Japanese content exists.
   - New grammar corpus files and substantial edits to existing grammar files SHOULD provide both `explanation_ja` and `explanation_zh`.
   - Vocabulary study should follow the same Japanese-first principle, but vocabulary needs its own content contract because `gloss_zh` is currently a short gloss rather than a full explanation.
+
+## 2026-04-30: Vocabulary and kanji use Japanese/Traditional Chinese support overlays
+
+- **Context**: The external JMdict and KANJIDIC2 imports provide strong breadth, but their learner-facing meaning fields are English-first. The product needs Japanese-first study text with Traditional Chinese support while keeping the external datasets as the scalable source corpus.
+- **Decision**: Keep the English source fields (`gloss_en`, `meaning_en`) for provenance/debugging, and add curated support fields on the imported rows: `vocab.gloss_ja`, `vocab.gloss_zh`, `kanji.meaning_ja`, and `kanji.meaning_zh`. L1 JSONL overlays under `server/data/corpus/vocab/` and `server/data/corpus/kanji/` are applied by the corpus loader using natural keys (`headword + reading`, `character`). Learner UI uses Japanese first and Traditional Chinese as support; English fields are not fallback display content.
+- **Alternatives considered**:
+  - **Hide English and show placeholders only** — rejected because it fixes presentation but leaves the corpus unusable for actual study.
+  - **Translate at render time** — rejected because meaning quality is part of curated learning content and must be reviewable in git.
+  - **Replace JMdict/KANJIDIC2 with hand-authored rows** — rejected because it throws away coverage and licensing/provenance already solved by the external import path.
+- **Constraints introduced**:
+  - Support overlay rows must include `source` and `license`; until field-level provenance exists, the JSONL overlay is the reviewable provenance for the supplemental fields.
+  - Random and browse vocabulary flows should prefer rows that already have Japanese and Traditional Chinese support.
+  - Missing support data is a corpus coverage gap, not a UI language fallback; fill it in reviewable batches by level.

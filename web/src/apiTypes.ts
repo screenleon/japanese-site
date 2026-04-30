@@ -12,6 +12,7 @@ export interface VocabRow {
   reading: string;
   pos: string;
   gloss_en?: string;
+  gloss_ja?: string;
   gloss_zh?: string;
   jlpt_level?: string;
   frequency_rank?: number;
@@ -26,6 +27,7 @@ export interface Kanji {
   onyomi?: string;
   kunyomi?: string;
   meaning_en?: string;
+  meaning_ja?: string;
   meaning_zh?: string;
   jlpt_level?: string;
   grade?: number;

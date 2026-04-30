@@ -14,6 +14,7 @@ type Vocab struct {
 	Reading       string `json:"reading"`
 	POS           string `json:"pos"`
 	GlossEN       string `json:"gloss_en,omitempty"`
+	GlossJA       string `json:"gloss_ja,omitempty"`
 	GlossZH       string `json:"gloss_zh,omitempty"`
 	JLPTLevel     string `json:"jlpt_level,omitempty"`
 	FrequencyRank *int64 `json:"frequency_rank,omitempty"`
@@ -42,7 +43,7 @@ func SearchVocab(ctx context.Context, db *DB, opts VocabSearchOpts) ([]Vocab, er
 	args := []any{}
 	q := `
 		SELECT id, headword, reading, pos,
-		       COALESCE(gloss_en, ''), COALESCE(gloss_zh, ''),
+		       COALESCE(gloss_en, ''), COALESCE(gloss_ja, ''), COALESCE(gloss_zh, ''),
 		       COALESCE(jlpt_level, ''), frequency_rank,
 		       source, license, COALESCE(validated_by, '')
 		FROM vocab
@@ -58,7 +59,8 @@ func SearchVocab(ctx context.Context, db *DB, opts VocabSearchOpts) ([]Vocab, er
 		args = append(args, opts.JLPTLevel)
 	}
 	q += `
-		ORDER BY (frequency_rank IS NULL), frequency_rank, headword
+		ORDER BY (COALESCE(gloss_ja, '') = '' OR COALESCE(gloss_zh, '') = ''),
+		         (frequency_rank IS NULL), frequency_rank, headword
 		LIMIT ?`
 	args = append(args, limit)
 
@@ -73,7 +75,7 @@ func SearchVocab(ctx context.Context, db *DB, opts VocabSearchOpts) ([]Vocab, er
 		var v Vocab
 		var freq sql.NullInt64
 		if err := rows.Scan(&v.ID, &v.Headword, &v.Reading, &v.POS,
-			&v.GlossEN, &v.GlossZH, &v.JLPTLevel, &freq,
+			&v.GlossEN, &v.GlossJA, &v.GlossZH, &v.JLPTLevel, &freq,
 			&v.Source, &v.License, &v.ValidatedBy); err != nil {
 			return nil, err
 		}
@@ -90,7 +92,7 @@ func SearchVocab(ctx context.Context, db *DB, opts VocabSearchOpts) ([]Vocab, er
 func RandomVocab(ctx context.Context, db *DB, jlpt string) (Vocab, error) {
 	q := `
 		SELECT id, headword, reading, pos,
-		       COALESCE(gloss_en, ''), COALESCE(gloss_zh, ''),
+		       COALESCE(gloss_en, ''), COALESCE(gloss_ja, ''), COALESCE(gloss_zh, ''),
 		       COALESCE(jlpt_level, ''), frequency_rank,
 		       source, license, COALESCE(validated_by, '')
 		FROM vocab
@@ -100,12 +102,15 @@ func RandomVocab(ctx context.Context, db *DB, jlpt string) (Vocab, error) {
 		q += ` AND jlpt_level = ?`
 		args = append(args, jlpt)
 	}
-	q += ` ORDER BY RANDOM() LIMIT 1`
+	q += `
+		ORDER BY (COALESCE(gloss_ja, '') = '' OR COALESCE(gloss_zh, '') = ''),
+		         RANDOM()
+		LIMIT 1`
 
 	var v Vocab
 	var freq sql.NullInt64
 	err := db.QueryRowContext(ctx, q, args...).Scan(&v.ID, &v.Headword, &v.Reading, &v.POS,
-		&v.GlossEN, &v.GlossZH, &v.JLPTLevel, &freq,
+		&v.GlossEN, &v.GlossJA, &v.GlossZH, &v.JLPTLevel, &freq,
 		&v.Source, &v.License, &v.ValidatedBy)
 	if errors.Is(err, sql.ErrNoRows) {
 		return Vocab{}, ErrVocabNotFound

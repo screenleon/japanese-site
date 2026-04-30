@@ -53,6 +53,10 @@ export function VocabTab() {
     return row.gloss_zh?.trim() || "繁中釋義待補";
   }
 
+  function japaneseGloss(row: VocabRow) {
+    return row.gloss_ja?.trim() || "日本語の説明は準備中です。";
+  }
+
   return (
     <section className="space-y-6">
       <div className="grid gap-3 sm:grid-cols-5">
@@ -99,7 +103,8 @@ export function VocabTab() {
               <div className="mt-1 text-base text-slate-500">{randomRow.reading}</div>
             </div>
             <div className="text-sm leading-relaxed">
-              <div>{supportGloss(randomRow)}</div>
+              <div>{japaneseGloss(randomRow)}</div>
+              <div className="mt-2 text-slate-600">{supportGloss(randomRow)}</div>
               <div className="mt-2 text-xs text-slate-400">
                 {randomRow.pos}
                 {randomRow.jlpt_level && <span className="ml-2">{randomRow.jlpt_level}</span>}
@@ -149,7 +154,8 @@ export function VocabTab() {
                 <div className="text-sm text-slate-500">{r.reading}</div>
               </div>
               <div className="min-w-0 flex-1">
-                <div className="text-sm">{supportGloss(r)}</div>
+                <div className="text-sm">{japaneseGloss(r)}</div>
+                <div className="mt-1 text-xs text-slate-500">{supportGloss(r)}</div>
                 <div className="mt-1 text-xs text-slate-400">
                   {r.pos}
                   {r.jlpt_level && (
