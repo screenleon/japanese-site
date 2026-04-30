@@ -1,5 +1,17 @@
 # Roadmap
 
+ROADMAP.md is the narrative roadmap: milestone context, deferred rationale,
+and longer-form notes. The day-to-day development queue lives in
+`project/backlog.yml`.
+
+Backlog boundary:
+
+- `project/backlog.yml` is a developer planning artifact.
+- It is not part of the learner-facing japanese-site product UI.
+- If an item is selected for implementation, update its status in
+  `project/backlog.yml`; keep ROADMAP.md for context that should survive
+  beyond a single task.
+
 Things deliberately deferred from the current state. Critical fixes are
 applied immediately; everything else is logged here so we don't lose track.
 
@@ -31,9 +43,9 @@ need an LLM.
 Active recall is the user's stated core need; depth here returns the most
 value per hour.
 
-- [ ] **Spaced-repetition lite**: replace the 3-state weight (unseen / wrong /
-      right) with a per-question "next-due" timestamp. Easy lookup of "what
-      should I see today". SM-2-style would be enough.
+- [x] **Spaced-repetition lite**: attempts now record `next_due_at`.
+      Correct answers are due tomorrow, wrong answers stay due immediately,
+      and `/api/quiz/next` only selects due or unseen questions.
 - [ ] **More grammar points**: target 30 N3, 30 N2, 20 N1 within next pass.
       Current state: 5 N5, 5 N3, 5 N2, 0 N1. N5/N4 are review-tier so 5
       each is sufficient floor.
@@ -42,20 +54,20 @@ value per hour.
 - [ ] **More question kinds**: ordering (語順), multiple-choice, listening
       (using Tatoeba audio when wired up). Cloze-only is a narrow slice of
       JLPT-style testing.
-- [ ] **Stats UI tab**: `/api/quiz/stats` exists but no frontend surface for
-      it. User has no view into "where am I weakest".
+- [x] **Stats UI surface**: `/api/quiz/stats` is now visible inside the
+      quiz tab as a learner-facing practice status panel with range filters,
+      weak grammar points, common error classes, and recent wrong answers.
 
 ## Architectural improvements
 
-- [ ] **Classifier rules → JSON**: today's per-grammar Go function works,
-      but adding 100 grammar points means 100 functions. Move the rule shape
-      `{if_ends_with: [...], error_class: "..."}` into the grammar JSON
-      file under the same slug. The Go side becomes a small interpreter
-      (~50 lines) instead of 50+ classifier functions. Defer until N3+N2
-      content stabilises so we know what rule shapes we actually need.
-- [ ] **Tests for handlers package**: only parser tests + classifier tests
-      exist today. HTTP handlers are tested only via curl smoke tests in
-      this conversation; convert those into Go-level integration tests.
+- [x] **Classifier rules → JSON**: deterministic classifier rules now live
+      in grammar corpus JSON as ordered `classifier_rules` arrays. Migration
+      0009 stores those rules on `grammar_point`, and the Go side uses a
+      small `quizrule` interpreter instead of routing grading through
+      per-slug classifier functions.
+- [x] **Tests for handlers package**: HTTP handlers now have Go-level
+      `httptest` smoke coverage for the public API surface, including
+      stable JSON error codes for stale quiz questions.
 - [ ] **Static error message hygiene**: several handlers `writeJSON(... err.Error())`,
       which can leak SQL fragments or driver internals to clients. Wrap with
       a sanitiser or use generic 500 strings + slog the full error.
@@ -69,8 +81,9 @@ value per hour.
 
 ## Operational / DX
 
-- [ ] **CI**: GitHub Actions running `make lint-rules`, `make vet`, `make test`,
-      `make build` on every push. Without it, regressions land silently.
+- [x] **CI**: GitHub Actions runs `make lint-rules`, `make vet`,
+      `make test`, and `make build` on push, pull request, and manual
+      dispatch.
 - [ ] **Dockerfile + compose**: today we deploy by `make dist` + scp. A
       single-image build (Go binary + web/dist embedded) would be cleaner
       for any host that has Docker.
@@ -85,12 +98,12 @@ value per hour.
 - [ ] **Frontend router**: today the tab state lives in React state, so F5
       always lands on "練習題". A hash router (or React Router) would let
       learners deep-link to specific grammar points.
-- [ ] **Mid-attempt 404 graceful handling**: after PR #2's orphan sweep,
+- [x] **Mid-attempt 404 graceful handling**: after PR #2's orphan sweep,
       a learner mid-question whose corpus text just changed (re-seed
-      during a session) sees a raw `Error: 404` from
-      `POST /api/quiz/answer` instead of "this question was just
-      refreshed; pulling next…". Detect `404` + `question_not_found` in
-      `QuizTab.tsx` and call `pickNext` automatically.
+      during a session) no longer sees a raw `Error: 404` from
+      `POST /api/quiz/answer`. The API client preserves JSON error codes,
+      and `QuizTab.tsx` detects `question_not_found`, pulls the next
+      question, and shows a short notice.
 
 ## Content quality
 
@@ -147,7 +160,7 @@ in the same pass before the initial commit; deferred items live below.
 - Dropped `seedFunc/timeSeed` indirection, deleted `seed_helper.go`.
 - Dropped `_ = manifest` no-ops in seed runners.
 - Dropped `fmt.Println("bye")` in favour of structured slog.
-- `/api/version` reports `M3-end` (bumped to `M3-C1` in the PR #2 deterministic-ids PR).
+- `/api/version` reports `M3-end` (bumped to `M3-C1` in the PR #2 deterministic-ids PR; `M3-C2` in PR #3 payload + Grader port).
 
 **Resolved in Phase C**:
 
@@ -156,20 +169,22 @@ in the same pass before the initial commit; deferred items live below.
   `hex(sha256(slug | prompt | expected)[:8])` and `corpus.Load` sweeps
   orphan rows whose id is no longer produced by the corpus. See
   `DECISIONS.md` "deterministic question ids" (2026-04-28).
+- **`Question.Payload` for non-cloze kinds** (Architecture H1) — RESOLVED
+  in PR #3. Migration 0008 adds a nullable `payload TEXT` column;
+  `store.Question.Payload` is `json.RawMessage` pass-through. Cloze rows
+  store NULL. Validation per non-cloze kind lands when those kinds do.
+- **`Grader` port refactor** (Architecture H3b) — RESOLVED in PR #3.
+  `quiz.Grade(*sql.DB, ...)` is now `(*ClozeGrader).Grade(GradeInput)`
+  taking a `quiz.FeedbackLookup` interface; `store.FeedbackStore` is the
+  SQL impl. The M4 LLM grader plugs in at the same port. Kind-dispatch
+  interface deferred until the second concrete impl exists.
 
 **Deferred (logged here, not blocking the public push)**:
 - **Seed-pipeline transactional integrity** (Risk H2). `seed all` is six
   independent steps; partial failures leave the DB in inconsistent state
   with no resume marker.
-- **Handler tests** (Architecture M4). `httptest`-based smoke tests, one
-  per endpoint, with a tmp-DB fixture.
-- **`Question.Payload` for non-cloze kinds** (Architecture H1). Schema
-  today is cloze-shaped (`expected TEXT NOT NULL`). Before adding
-  `multiple-choice` / `translation` kinds, introduce `payload JSON` and
-  a `Grader` interface dispatched by `kind`.
-- **`Grader` port refactor** (Architecture H3b). `quiz.Grade` currently
-  takes `*sql.DB`; should take a narrow `FeedbackLookup` interface so
-  the M4 LLM grader can plug in without crossing layers.
+- **Handler tests** (Architecture M4) — RESOLVED. Added `httptest`-based
+  smoke coverage for the API handlers with a temporary SQLite fixture.
 - **Migration multi-statement verification** (Risk M1). Add a "migrate
   fresh DB → assert all tables exist" test.
 - **Migration checksums** (Risk M2). Filename-only matching means edits
@@ -187,8 +202,8 @@ in the same pass before the initial commit; deferred items live below.
   grammar JSON is renamed, the old `grammar_point` row stays.
 - **`runJMdict / runKanjidic2 / runTatoeba` near-duplicates** (Critic M4).
   Could be one generic `runDataset(name, parser, importer)` helper.
-- **No CI** (DX). GitHub Actions running `make lint-rules vet test build`
-  is the obvious first add after this push.
+- **No CI** (DX) — RESOLVED. `.github/workflows/ci.yml` runs lint, vet,
+  test, and build.
 
 A few findings turned out to be non-issues on inspection: SQL injection
 clean across the codebase, no committed secrets, supply-chain pins look

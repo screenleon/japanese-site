@@ -95,3 +95,58 @@ Agents must read it before planning or implementation tasks.
   - **`payload` is excluded from id input**: PR #3 will add `question.payload TEXT` for non-cloze kinds. Payload is post-id metadata (distractor banks, hint variants) that may evolve without breaking attempt history; including it in the id would force re-id on hint tweaks.
   - **Orphan sweep filter is `source = 'curated'`**: M4's L2-cache promotion will write `source = 'llm-generated'` rows. The filter must NOT be loosened — `corpus/load.go`'s `sweepOrphanQuestions` carries an inline SAFETY comment locking this in. A regression test (`TestLoad_PreservesNonCuratedQuestions`) covers the invariant.
   - **Migration 0007 is destructive**: drops both `question` and `attempt`. Acceptable for the pre-public single-user scope; ROADMAP "Backup of attempt history" still applies for the eventual prod-deploy story.
+
+## 2026-04-28: PR #3 — `question.payload` column + grader port refactor
+
+- **Context**: Two M4-blocking debts identified in the PR #2 wash-up. (a) `question` schema is cloze-shaped; the M4 plan needs `multiple-choice`, `ordering`, `translation`, and `listening` kinds, each carrying per-question metadata that doesn't fit `prompt`/`expected`. (b) `quiz.Grade` takes `*sql.DB` and runs SQL against `feedback_template` directly, which means the M4 LLM grader cannot plug in without crossing the store layer.
+- **Decision**:
+  1. Migration 0008 adds a single nullable `payload TEXT` column to `question`. Cloze rows leave it NULL. The column is **not** part of `corpus.QuestionID` — payload is post-id metadata that may evolve (hint variants, distractor banks) without breaking attempt history.
+  2. `quiz.Grade(ctx, *sql.DB, ...)` is replaced by `(*ClozeGrader).Grade(ctx, GradeInput)`. The grader holds a `quiz.FeedbackLookup` interface; `store.FeedbackStore` is the SQL impl. The handler constructs one `ClozeGrader` per process and calls it from `/api/quiz/answer`.
+- **Alternatives considered**:
+  - **Introduce a `Grader` interface with kind dispatch in PR #3** — rejected. Only one concrete grader (cloze) exists; abstracting now would shape the interface around a single example. The right time is when the LLM grader lands at M4 — same PR, two impls, real interface pressure.
+  - **Type `payload` as `JSON` (SQLite 3.45 JSON1 column)** — rejected. SQLite's `JSON` type is functionally `TEXT`; using `JSON` only adds a parser dependency at insert time and doesn't enforce schema. The Go side stores `json.RawMessage` and pass-through; M4 introduces shape validation per kind.
+  - **Keep `quiz.Grade` as a free function with a `db *sql.DB` arg** — rejected. The cross-layer concern isn't ergonomic; it's that the LLM grader at M4 must be substitutable. A free function with a DB handle hard-codes the SQL implementation choice into every caller.
+- **Constraints introduced**:
+  - `corpus.QuestionID` MUST NOT grow a `payload` parameter. A regression test (`TestQuestionID_PayloadExclusion` in `corpus/id_test.go`) is a compile-time guard: anyone adding a payload arg breaks the test signature. The doc comment on `QuestionID` carries the rationale.
+  - `quiz.FeedbackLookup` MUST return `("", nil)` when nothing matches. Implementations are responsible for falling back from a specific `error_class` to `'generic'` before giving up. The grader treats empty body as "no template" and substitutes a stock Chinese line, so user-visible explanation is never blank.
+  - `quiz.Grade` (free function) is gone. Anything still calling it must migrate to `ClozeGrader.Grade` or define its own grader against `FeedbackLookup`.
+  - The corpus loader writes `payload = NULL` for all cloze rows. A future PR introducing `multiple-choice` will add a `Payload json.RawMessage` field to `GrammarExample`, validate the JSON shape per-kind at load time, and update the INSERT.
+
+## 2026-04-30: Development backlog stays outside learner UI
+
+- **Context**: The project needs a clearer way for the developer to see what is planned, in progress, blocked, and already done. The first idea was a backlog page, but that could blur the product boundary: japanese-site should stay focused on Japanese learning, not project management.
+- **Decision**: Use `project/backlog.yml` as the repo-local source of truth for day-to-day development planning. `ROADMAP.md` remains the narrative roadmap and rationale log. Do not add a backlog tab or backlog page to the learner-facing React UI unless a future decision explicitly changes that boundary.
+- **Alternatives considered**:
+  - **Add a Backlog tab to the web app** — rejected because it makes a developer workflow visible inside a learner product.
+  - **Keep only ROADMAP.md** — rejected because the roadmap is useful for context but too prose-heavy for quick status scanning.
+  - **Adopt an external issue tracker immediately** — deferred. A local YAML queue is enough for current single-developer flow and keeps planning portable with the repo.
+- **Constraints introduced**:
+  - New development tasks SHOULD be recorded in `project/backlog.yml` with `id`, `title`, `status`, `priority`, `milestone`, `area`, `source`, and optional `notes`.
+  - Learner-facing product work must still map back to japanese-site goals: grammar, vocabulary, examples, quizzes, grading, corrective feedback, and later LLM-assisted study flows.
+  - If `project/backlog.yml` and `ROADMAP.md` conflict, treat `project/backlog.yml` as current execution status and `ROADMAP.md` as longer-lived context; reconcile both in the same task when practical.
+
+## 2026-04-30: Classifier rules live in L1 grammar corpus data
+
+- **Context**: Deterministic cloze grading originally used one Go classifier function per grammar slug. That worked for 15 grammar points, but it would not scale to a 100+ point corpus and made content authoring require backend code edits.
+- **Decision**: Add `grammar_point.classifier_rules TEXT` via migration 0009 and load ordered `classifier_rules` arrays from `server/data/corpus/grammar/**/<slug>.json`. The grader reads rules through a store-backed lookup port and uses a small interpreter (`quizrule`) to return the first matching `error_class`.
+- **Alternatives considered**:
+  - **Keep Go functions until the corpus is larger** — rejected because the cost compounds with every new grammar point and blocks content-only classifier updates.
+  - **Put rules in feedback_template rows** — rejected because templates explain an already-classified error; classifier conditions are a different concern.
+  - **Expose classifier rules through the learner API** — rejected. These are grading internals, not learner-facing content.
+- **Constraints introduced**:
+  - `classifier_rules` are ordered; first match wins. A rule with `default: true` should be last.
+  - Rule JSON is L1 curated content and must remain reviewable in git.
+  - Grader code must not add new per-slug classifier functions for ordinary string-match rules. Add new rule predicates to `quizrule` only when the current predicate set cannot express the grammar point cleanly.
+
+## 2026-04-30: Spaced-repetition lite uses attempt-level next due timestamps
+
+- **Context**: The quiz picker previously used a simple weight based on the latest answer state: unseen, wrong, or correct. That kept mistakes visible but could immediately repeat mastered questions and did not answer "what should I review today?"
+- **Decision**: Add `attempt.next_due_at` via migration 0010. `LogAttempt` sets correct answers due in one day and wrong answers due immediately. `NextQuestion` only selects questions whose latest attempt is due or questions with no attempt history.
+- **Alternatives considered**:
+  - **Full SM-2 scheduling now** — deferred. The corpus and stats UI are still small; a one-day correct interval plus immediate wrong retry is enough to establish the due-date contract.
+  - **Store schedule on question rows** — rejected because scheduling is learner-attempt state, not question content state. Attempt-level rows preserve history and make future per-user scheduling migration clearer.
+  - **Keep only weighted random** — rejected because it cannot express "not due until tomorrow."
+- **Constraints introduced**:
+  - Legacy attempts with `next_due_at IS NULL` are treated as due now.
+  - Correct interval is intentionally fixed at one day for M3; future spaced-repetition work can add ease/streak fields without changing the basic due filter.
+  - `NextQuestion` may return `no_questions_match` when all matching questions are not due; the frontend already treats that as an empty/exhausted state.
