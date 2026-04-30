@@ -130,6 +130,15 @@ value per hour.
       reference each other in prose; could become structured `related_to`
       links with UI navigation.
 
+## Content storage / scale
+
+- [ ] **Corpus storage format review**: before scaling to 2000+ vocabulary
+      rows and 100+ grammar points, re-evaluate whether JSON-per-topic is
+      still the right human-authored source format. Keep SQLite as runtime
+      storage, but consider manifest defaults, denser source files, generated
+      compiled indexes, and L2 cache compression/rotation so the repo remains
+      reviewable as content grows.
+
 ## Security / privacy
 
 - [ ] **Secret-pattern sanitiser**: defined in CONN-002 but no implementation
