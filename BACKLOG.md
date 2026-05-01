@@ -5,7 +5,7 @@
 
 | #  | Status | 主題 | 影響面 | 首次記錄 | Refs |
 |----|--------|------|--------|----------|------|
-| JS-001 | ✅ closed 2026-04-30 | 題目資料與評分 | backend | 2026-04-30 | decisions:#2026-04-28-pr-3-questionpayload-column--grader-port-refactor |
+| JS-001 | ✅ closed 2026-04-30 | 題目資料與評分 | backend | 2026-04-30 | decisions:#2026-04-28-pr-3--questionpayload-column--grader-port-refactor |
 | JS-002 | ✅ closed 2026-04-30 | 練習統計介面 | frontend | 2026-04-30 | roadmap:#quiz--content-depth |
 | JS-003 | ✅ closed 2026-04-30 | 失效題目復原 | frontend | 2026-04-30 | roadmap:#operational--dx |
 | JS-004 | ✅ closed 2026-04-30 | 介面測試覆蓋 | backend | 2026-04-30 | roadmap:#architectural-improvements |
@@ -26,7 +26,7 @@
 ## JS-001 — 題目資料與評分 ✅ 2026-04-30
 
 **Outcome**: 已完成題目資料擴充與評分邊界整理，讓後續更多題型與評分方式有一致入口。
-**See**: DECISIONS.md#2026-04-28-pr-3-questionpayload-column--grader-port-refactor
+**See**: DECISIONS.md#2026-04-28-pr-3--questionpayload-column--grader-port-refactor
 
 ## JS-002 — 練習統計介面 ✅ 2026-04-30
 
