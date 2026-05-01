@@ -150,6 +150,7 @@ items:
       - "2026-04-30: Added curated JLPT overrides after review found basic greetings misclassified as N2; お休み/お帰り/お願いします/お邪魔します are now N5 and related daily phrases are N4."
       - "2026-04-30: Reviewed existing generated vocab overlays for obvious level issues; moved 9 basic N4 entries to N5 and documented remaining uncertain items in server/data/corpus/LEVEL_REVIEW.md."
       - "2026-04-30: Added first N3 vocab support overlay batch plus 10 N3 grammar points and 50 cloze examples; grammar total is now 66 points / 324 cloze questions, vocab support overlays seed 470 rows."
+      - "2026-05-01: Added 10 N1 grammar points (batch 2, 50 cloze examples), N1 vocab overlay (60 rows), and N1 kanji overlay (40 rows)."
       - "Validated: make lint-rules"
       - "Validated: make corpus-scale"
       - "Validated: env GOCACHE=/tmp/go-build-cache make seed-corpus"
