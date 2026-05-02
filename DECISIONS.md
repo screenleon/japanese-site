@@ -3,6 +3,29 @@
 This file records active architectural and behavioral decisions for this repository.
 Agents must read it before planning or implementation tasks.
 
+## 2026-05-02: JS-018 GitHub Pages static deployment scope
+
+- **Context**: The site currently requires the Go backend + SQLite to run; the only way to view content is to clone and self-host. JS-017's cloud-mode design (NullProgressStore + random content, no persistence) maps cleanly onto static hosting, so a public deployment was opened as JS-018. GitHub Pages is the natural target — free, zero-ops, but limited to static assets (no Go server, no SQLite at runtime). Several scope dimensions were open: which features ship in the static build, how corpus reaches the browser, how the SPA decides which transport to use, and how routing handles project-page URL prefixes.
+- **Decision**: Lock the following scope for JS-018 implementation.
+  - **Audience**: portfolio showcase + the user's own read-only mirror across devices. Not framed as a public learning tool.
+  - **Feature tier**: **S — content browsing + random selection only.** No quiz prompts, no grading, no SRS, no read tracking on the static deployment. Quiz UI is hidden when `/api/capabilities` reports `{progress: false, quiz: false}` (via JS-017's already-landed capability flag, extended for `quiz`).
+  - **Corpus bake**: a new Makefile target `bake-static` copies `server/data/corpus/**` into `web/public/data/**`, and emits a per-directory `_index.json` listing the available slugs. Run as a prerequisite of `make build-web` when `VITE_DEPLOY_MODE=static`.
+  - **Transport switch**: build-time flag `VITE_DEPLOY_MODE` (`api` default | `static`). The SPA's API client (`web/src/api.ts`) gains a static-mode variant `web/src/staticApi.ts` that fetches from `/data/...`; the active implementation is wired at compile time. Runtime probing of `/api/capabilities` is reserved for capability-degradation within a deployment, not for selecting between API and static transports.
+  - **URL prefix**: accept `/japanese-site/` project-page prefix. Vite `base` set accordingly; SPA router prefix-aware.
+  - **CI**: a new GitHub Actions workflow on push to `main` builds the web app with `VITE_DEPLOY_MODE=static`, then publishes `web/dist/` to a `gh-pages` branch via `peaceiris/actions-gh-pages` (or equivalent). Local builds are unchanged.
+- **Alternatives considered**:
+  - **Tier L (full quiz + grading on static)** — rejected: porting the Go grader (`server/internal/quiz/grade.go` + classifier rules) to TypeScript is significant work for a feature whose value on the showcase is low. Deterministic grading already lives on the local app; users who want it can run the local app.
+  - **Single bundled corpus JSON** (one file with all entries) — rejected: per-entry files preserve cache granularity (a viewed page caches its own JSON, not a 500KB monolith) and keep the structure 1:1 with `server/data/corpus/`, so the bake step is `cp -r` plus index files rather than a transformation pipeline.
+  - **`sql.js` (SQLite in the browser via WASM)** — rejected: a ~1MB WASM bundle to query a content-only static site is the wrong tradeoff. Reconsider only if the static deployment ever needs cross-table queries that JSON file fetches can't serve.
+  - **Runtime transport probe** (frontend tries `/api/capabilities` and falls back to `/data/` on 404) — rejected: dual transport implementations in the same bundle bloat size and create a class of "which transport am I on?" bugs. Build-time flag is unambiguous.
+  - **Repo rename to `screenleon.github.io` for no URL prefix** — rejected: the prefix cost is small (one Vite config line + router awareness) and burns the only user-page slot the GitHub username has, which has higher option value held in reserve.
+- **Constraints introduced**:
+  - **Source-of-truth invariant**: `server/data/corpus/**` is the canonical source for both deployment modes. Local mode derives SQLite from it via `make seed`; static mode derives `web/public/data/**` from it via `make bake-static`. Neither derived artifact is the source of truth, and neither is committed.
+  - **Static deployment is feature-degraded by design**: quiz, grading, SRS, read tracking are local-only. The `/api/capabilities` response in static mode reports `{progress: false, quiz: false, history: false}`. UI components that depend on these features must check capabilities and degrade silently — no broken buttons, no 404 popups.
+  - **`web/public/data/` is gitignored**: it is a build artifact like `web/dist/`. Adding `web/public/data/` to `.gitignore` is part of the JS-018 implementation PR.
+  - **New corpus types must teach the bake step**: when a future content type lands (e.g., listening prompts, kana drills), `bake-static` must be updated to handle the new directory, AND the static API client must know the new path. Both deltas land in the same PR as the new content type to keep the static deployment honest.
+  - **No backend-derived data on the static deployment**: anything that depends on SQLite-only state (validated_by, classifier_rules execution, quiz attempt history, JS-017 progress) is not exposed in static mode. If a future feature wants to surface, e.g., "popular questions," that requires a backend or a build-time pre-computation, not a runtime SQLite proxy.
+
 ## 2026-04-27: Hybrid content sourcing strategy (Path C)
 
 - **Context**: The original `tanos_raw/` scrape only covers JLPT N2–N5, the source is fragile, and grammar coverage is shallow. Building the full corpus by hand is not realistic; relying purely on LLM generation produces a poor cold-start experience.
