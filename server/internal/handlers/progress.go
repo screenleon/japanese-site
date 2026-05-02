@@ -36,6 +36,10 @@ func progress(db *store.DB, ps store.ProgressStore) http.HandlerFunc {
 			return
 		}
 		level := r.URL.Query().Get("level")
+		if !validProgressLevel(level) {
+			writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid_level"})
+			return
+		}
 
 		var summary store.ProgressSummary
 		var err error
@@ -73,6 +77,15 @@ func capabilities(ps store.ProgressStore) http.HandlerFunc {
 func validProgressContentType(contentType string) bool {
 	switch contentType {
 	case "grammar", "vocab", "kanji":
+		return true
+	default:
+		return false
+	}
+}
+
+func validProgressLevel(level string) bool {
+	switch level {
+	case "", "N1", "N2", "N3", "N4", "N5":
 		return true
 	default:
 		return false

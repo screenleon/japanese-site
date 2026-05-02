@@ -9,10 +9,13 @@
 
 import type {
   Api,
+  Capabilities,
   GrammarPoint,
   Kanji,
   NextQuestionOpts,
+  ProgressSummary,
   Question,
+  ReadContentType,
   Sentence,
   Stats,
   GradeResult,
@@ -49,6 +52,12 @@ async function postJSON<T>(path: string, body: unknown): Promise<T> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
+  if (!r.ok) throw await apiError(r);
+  return r.json();
+}
+
+async function postEmpty<T>(path: string): Promise<T> {
+  const r = await fetch(path, { method: "POST" });
   if (!r.ok) throw await apiError(r);
   return r.json();
 }
@@ -95,6 +104,17 @@ export const httpApi: Api = {
     postJSON<GradeResult>(`/api/quiz/answer`, { question_id, answer }),
   stats: (days) =>
     getJSON<Stats>(`/api/quiz/stats${days ? `?days=${days}` : ""}`),
+  markRead: async (type: ReadContentType, slug: string) => {
+    await postEmpty<{ ok: boolean }>(
+      `/api/read/${encodeURIComponent(type)}/${encodeURIComponent(slug)}`
+    );
+  },
+  getProgress: (type: ReadContentType, level?: string) => {
+    const q = new URLSearchParams({ type });
+    if (level) q.set("level", level);
+    return getJSON<ProgressSummary>(`/api/progress?${q.toString()}`);
+  },
+  getCapabilities: () => getJSON<Capabilities>("/api/capabilities"),
 };
 
 /** @deprecated import the `Api` interface and inject `httpApi` instead. */

@@ -121,6 +121,21 @@ export interface NextQuestionOpts {
   exclude?: string[];
 }
 
+export type ReadContentType = "grammar" | "vocab" | "kanji";
+
+export interface Capabilities {
+  progress: boolean;
+  history: boolean;
+}
+
+export interface ProgressSummary {
+  level?: string;
+  content_type: ReadContentType;
+  read: number;
+  total: number;
+  percent: number;
+}
+
 /** Contract for any API client implementation. The default `httpApi` makes
  *  fetch() calls; tests can substitute a mock that satisfies this shape. */
 export interface Api {
@@ -134,4 +149,7 @@ export interface Api {
   nextQuestion(opts?: NextQuestionOpts): Promise<Question>;
   answer(question_id: string, answer: string): Promise<GradeResult>;
   stats(days?: number): Promise<Stats>;
+  markRead(type: ReadContentType, slug: string): Promise<void>;
+  getProgress(type: ReadContentType, level?: string): Promise<ProgressSummary>;
+  getCapabilities(): Promise<Capabilities>;
 }
