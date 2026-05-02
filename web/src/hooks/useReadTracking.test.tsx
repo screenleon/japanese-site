@@ -79,6 +79,35 @@ describe("useReadTracking", () => {
     expect(markRead).not.toHaveBeenCalled();
   });
 
+  it("does not fire when capabilities not yet loaded on mount", () => {
+    capabilitiesState.current = { progress: false, history: false, loaded: false };
+
+    renderHook(() => useReadTracking("grammar", "foo"));
+
+    expect(markRead).not.toHaveBeenCalled();
+  });
+
+  it("does not fire in null mode (loaded but progress=false)", () => {
+    capabilitiesState.current = { progress: false, history: false, loaded: true };
+
+    renderHook(() => useReadTracking("grammar", "foo"));
+
+    expect(markRead).not.toHaveBeenCalled();
+  });
+
+  it("fires after capabilities transition from loading to progress=true", () => {
+    capabilitiesState.current = { progress: false, history: false, loaded: false };
+
+    const { rerender } = renderHook(() => useReadTracking("grammar", "foo"));
+    expect(markRead).not.toHaveBeenCalled();
+
+    capabilitiesState.current = { progress: true, history: false, loaded: true };
+    rerender();
+
+    expect(markRead).toHaveBeenCalledTimes(1);
+    expect(markRead).toHaveBeenCalledWith("grammar", "foo");
+  });
+
   it("swallows api.markRead rejection without throwing or re-firing", async () => {
     markRead.mockRejectedValueOnce(new Error("network failed"));
 
