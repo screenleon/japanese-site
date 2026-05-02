@@ -15,6 +15,7 @@ import type {
   NextQuestionOpts,
   ProgressSummary,
   Question,
+  ReadKey,
   ReadContentType,
   Sentence,
   Stats,
@@ -75,6 +76,17 @@ async function apiError(response: Response) {
   return new ApiError(response.status, response.statusText, code);
 }
 
+function readKeyIdentifier(key: ReadKey) {
+  switch (key.type) {
+    case "grammar":
+      return key.slug;
+    case "vocab":
+      return key.headword;
+    case "kanji":
+      return key.character;
+  }
+}
+
 export const httpApi: Api = {
   searchVocab: (q, jlpt) =>
     getJSON<{ results: VocabRow[]; count: number }>(
@@ -104,9 +116,10 @@ export const httpApi: Api = {
     postJSON<GradeResult>(`/api/quiz/answer`, { question_id, answer }),
   stats: (days) =>
     getJSON<Stats>(`/api/quiz/stats${days ? `?days=${days}` : ""}`),
-  markRead: async (type: ReadContentType, slug: string) => {
+  markRead: async (key: ReadKey) => {
+    const identifier = readKeyIdentifier(key);
     await postEmpty<{ ok: boolean }>(
-      `/api/read/${encodeURIComponent(type)}/${encodeURIComponent(slug)}`
+      `/api/read/${encodeURIComponent(key.type)}/${encodeURIComponent(identifier)}`
     );
   },
   getProgress: (type: ReadContentType, level?: string) => {

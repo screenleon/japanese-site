@@ -66,11 +66,11 @@ export function App() {
 }
 
 function ProgressBadge() {
-  const capabilities = useCapabilities();
+  const { progress, progressRevision } = useCapabilities();
   const [summary, setSummary] = useState<ProgressSummary | null>(null);
 
   useEffect(() => {
-    if (!capabilities.progress) {
+    if (!progress) {
       setSummary(null);
       return;
     }
@@ -88,9 +88,9 @@ function ProgressBadge() {
     return () => {
       cancelled = true;
     };
-  }, [capabilities.progress]);
+  }, [progress, progressRevision]);
 
-  if (!capabilities.progress || !summary) return null;
+  if (!progress || !summary) return null;
 
   return (
     <span className="rounded-md border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs text-emerald-700">

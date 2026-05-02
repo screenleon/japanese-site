@@ -7,7 +7,9 @@ export function KanjiTab() {
   const [data, setData] = useState<Kanji | null>(null);
   const [err, setErr] = useState("");
 
-  useReadTracking("kanji", data?.character);
+  useReadTracking(
+    data?.character ? { type: "kanji", character: data.character } : null
+  );
 
   async function lookup(e: React.FormEvent) {
     e.preventDefault();

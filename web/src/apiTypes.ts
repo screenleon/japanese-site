@@ -123,6 +123,11 @@ export interface NextQuestionOpts {
 
 export type ReadContentType = "grammar" | "vocab" | "kanji";
 
+export type ReadKey =
+  | { type: "grammar"; slug: string }
+  | { type: "vocab"; headword: string }
+  | { type: "kanji"; character: string };
+
 export interface Capabilities {
   progress: boolean;
   history: boolean;
@@ -149,7 +154,7 @@ export interface Api {
   nextQuestion(opts?: NextQuestionOpts): Promise<Question>;
   answer(question_id: string, answer: string): Promise<GradeResult>;
   stats(days?: number): Promise<Stats>;
-  markRead(type: ReadContentType, slug: string): Promise<void>;
+  markRead(key: ReadKey): Promise<void>;
   getProgress(type: ReadContentType, level?: string): Promise<ProgressSummary>;
   getCapabilities(): Promise<Capabilities>;
 }

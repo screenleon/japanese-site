@@ -1,21 +1,46 @@
 import { useEffect, useRef } from "react";
-import { api, type ReadContentType } from "../api";
+import { api, type ReadKey } from "../api";
 import { useCapabilities } from "../capabilities";
 
-export function useReadTracking(contentType: ReadContentType, slug?: string | null) {
-  const { progress, loaded } = useCapabilities();
+function readKeyIdentifier(key: ReadKey) {
+  switch (key.type) {
+    case "grammar":
+      return key.slug;
+    case "vocab":
+      return key.headword;
+    case "kanji":
+      return key.character;
+  }
+}
+
+function normalizeReadKey(key: ReadKey, identifier: string): ReadKey {
+  switch (key.type) {
+    case "grammar":
+      return { type: "grammar", slug: identifier };
+    case "vocab":
+      return { type: "vocab", headword: identifier };
+    case "kanji":
+      return { type: "kanji", character: identifier };
+  }
+}
+
+export function useReadTracking(key: ReadKey | null | undefined) {
+  const { progress, loaded, bumpProgress } = useCapabilities();
   const lastTracked = useRef("");
-  const normalizedSlug = slug?.trim() || "";
+  const normalizedIdentifier = key ? readKeyIdentifier(key).trim() : "";
 
   useEffect(() => {
-    if (!loaded || !progress || !normalizedSlug) return;
+    if (!loaded || !progress || !key || !normalizedIdentifier) return;
 
-    const key = `${contentType}:${normalizedSlug}`;
-    if (lastTracked.current === key) return;
-    lastTracked.current = key;
+    const trackingKey = `${key.type}:${normalizedIdentifier}`;
+    if (lastTracked.current === trackingKey) return;
+    lastTracked.current = trackingKey;
 
-    void api.markRead(contentType, normalizedSlug).catch((error) => {
-      console.warn("failed to mark content as read", error);
-    });
-  }, [contentType, loaded, normalizedSlug, progress]);
+    void api
+      .markRead(normalizeReadKey(key, normalizedIdentifier))
+      .then(bumpProgress)
+      .catch((error) => {
+        console.warn("failed to mark content as read", error);
+      });
+  }, [bumpProgress, key, loaded, normalizedIdentifier, progress]);
 }
