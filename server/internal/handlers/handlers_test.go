@@ -16,7 +16,7 @@ import (
 func TestAPISmoke(t *testing.T) {
 	db := newHandlerTestDB(t)
 	mux := http.NewServeMux()
-	Register(mux, db)
+	Register(mux, db, store.NewSQLiteProgressStore(db))
 
 	tests := []struct {
 		name       string
@@ -159,7 +159,7 @@ func TestAPISmoke(t *testing.T) {
 func TestQuizAnswerUnknownQuestionReturnsStableCode(t *testing.T) {
 	db := newHandlerTestDB(t)
 	mux := http.NewServeMux()
-	Register(mux, db)
+	Register(mux, db, store.NewSQLiteProgressStore(db))
 
 	req := httptest.NewRequest(
 		http.MethodPost,
@@ -186,7 +186,7 @@ func TestQuizAnswerUnknownQuestionReturnsStableCode(t *testing.T) {
 func TestAPINegativeCases(t *testing.T) {
 	db := newHandlerTestDB(t)
 	mux := http.NewServeMux()
-	Register(mux, db)
+	Register(mux, db, store.NewSQLiteProgressStore(db))
 
 	tests := []struct {
 		name       string
@@ -274,7 +274,7 @@ func TestAPINegativeCases(t *testing.T) {
 func TestQuizAnswerRejectsOversizedBody(t *testing.T) {
 	db := newHandlerTestDB(t)
 	mux := http.NewServeMux()
-	Register(mux, db)
+	Register(mux, db, store.NewSQLiteProgressStore(db))
 
 	req := httptest.NewRequest(
 		http.MethodPost,
