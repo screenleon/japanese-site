@@ -117,16 +117,17 @@ function stableID(level: string, index: number): number {
   return levelOffset + index + 1;
 }
 
-async function grammarIndex(level: string): Promise<string[]> {
-  return fetchJSON<string[]>(`grammar/${level}/_index.json`);
+async function loadGrammarLevel(level: string): Promise<GrammarPoint[]> {
+  return fetchJSON<GrammarPoint[]>(`grammar/${level}.json`);
 }
 
-async function grammarLevelForSlug(slug: string): Promise<string> {
-  for (const level of levels) {
-    const slugs = await grammarIndex(level);
-    if (slugs.includes(slug)) return level;
-  }
-  throw new ApiError(404, "Not Found", "not_found");
+async function loadGrammarLevels(jlpt?: string): Promise<GrammarPoint[]> {
+  const groups = await Promise.all(
+    normalizeLevel(jlpt).map((level) =>
+      loadGrammarLevel(level).catch(() => [] as GrammarPoint[])
+    )
+  );
+  return groups.flat();
 }
 
 export const staticApi: Api = {
@@ -157,31 +158,19 @@ export const staticApi: Api = {
   },
 
   async listGrammar(jlpt?: string) {
-    const groups = await Promise.all(
-      normalizeLevel(jlpt).map(async (level) => {
-        const slugs = await grammarIndex(level);
-        return slugs.map((slug) => ({
-          slug,
-          title_ja: slug,
-          title_zh: slug,
-          jlpt_level: level,
-          explanation_zh: "",
-        }));
-      })
-    );
-    const points = groups.flat();
+    const points = await loadGrammarLevels(jlpt);
     return { points, count: points.length };
   },
 
   async randomGrammar(jlpt?: string) {
-    const level = jlpt ?? choose(levels);
-    const slug = choose(await grammarIndex(level));
-    return fetchJSON<GrammarPoint>(`grammar/${level}/${slug}.json`);
+    return choose(await loadGrammarLevels(jlpt));
   },
 
   async getGrammar(slug: string) {
-    const level = await grammarLevelForSlug(slug);
-    return fetchJSON<GrammarPoint>(`grammar/${level}/${slug}.json`);
+    const all = await loadGrammarLevels();
+    const found = all.find((p) => p.slug === slug);
+    if (!found) throw new ApiError(404, "Not Found", "not_found");
+    return found;
   },
 
   async nextQuestion(_opts?: NextQuestionOpts): Promise<Question> {

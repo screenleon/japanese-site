@@ -86,15 +86,15 @@ test:
 	cd server && go test ./...
 
 bake-static:
+	@command -v jq >/dev/null || { echo "bake-static: jq is required (install via apt/brew)"; exit 1; }
 	@rm -rf web/public/data
 	@mkdir -p web/public/data/grammar
 	@for level in N1 N2 N3 N4 N5; do \
 		src="server/data/corpus/grammar/$$level"; \
 		[ -d "$$src" ] || continue; \
-		dst="web/public/data/grammar/$$level"; \
-		mkdir -p "$$dst"; \
-		cp $$src/*.json $$src/*.examples.jsonl "$$dst/" 2>/dev/null || true; \
-		ls $$src/*.json 2>/dev/null | xargs -n1 basename | sed 's/\.json$$//' | jq -R . | jq -s . > "$$dst/_index.json"; \
+		count=$$(ls $$src/*.json 2>/dev/null | wc -l); \
+		[ "$$count" -gt 0 ] || { echo "bake-static: $$level has no .json files"; continue; }; \
+		jq -s . $$src/*.json > "web/public/data/grammar/$$level.json"; \
 	done
 	@cp -r server/data/corpus/vocab web/public/data/
 	@cp -r server/data/corpus/kanji web/public/data/

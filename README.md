@@ -23,10 +23,10 @@ For backend-only local API work:
 cd server && go run ./cmd/api
 ```
 
-Static build:
+Static build (requires `jq` for the corpus bake step):
 
 ```sh
 make build-static
 ```
 
-The static build writes `web/dist/`. Serve that directory with any static file server to preview the GitHub Pages build locally.
+The static build writes `web/dist/`. Serve that directory with any static file server to preview the GitHub Pages build locally. On Debian/Ubuntu install jq via `apt install jq`; on macOS via `brew install jq`.

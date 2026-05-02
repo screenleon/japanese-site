@@ -60,25 +60,51 @@ describe("staticApi", () => {
     });
   });
 
-  it("randomGrammar uses the level index then fetches detail", async () => {
-    responses.set("/data/grammar/N1/_index.json", JSON.stringify(["aru-majiki"]));
+  it("randomGrammar loads the level rollup and picks a record", async () => {
     responses.set(
-      "/data/grammar/N1/aru-majiki.json",
-      JSON.stringify({
-        slug: "aru-majiki",
-        title_ja: "〜まじき",
-        title_zh: "〜まじき",
-        jlpt_level: "N1",
-        explanation_zh: "不該有的",
-      })
+      "/data/grammar/N1.json",
+      JSON.stringify([
+        {
+          slug: "aru-majiki",
+          title_ja: "〜まじき",
+          title_zh: "〜まじき",
+          jlpt_level: "N1",
+          explanation_zh: "不該有的",
+        },
+      ])
     );
 
     await expect(staticApi.randomGrammar("N1")).resolves.toMatchObject({
       slug: "aru-majiki",
+      title_ja: "〜まじき",
       jlpt_level: "N1",
     });
-    expect(fetch).toHaveBeenNthCalledWith(1, "/data/grammar/N1/_index.json");
-    expect(fetch).toHaveBeenNthCalledWith(2, "/data/grammar/N1/aru-majiki.json");
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(fetch).toHaveBeenCalledWith("/data/grammar/N1.json");
+  });
+
+  it("listGrammar returns full GrammarPoint records (not slug stubs)", async () => {
+    responses.set(
+      "/data/grammar/N1.json",
+      JSON.stringify([
+        {
+          slug: "aru-majiki",
+          title_ja: "〜まじき",
+          title_zh: "〜まじき",
+          jlpt_level: "N1",
+          explanation_zh: "不該有的",
+        },
+      ])
+    );
+
+    const result = await staticApi.listGrammar("N1");
+    expect(result.count).toBe(1);
+    expect(result.points[0]).toMatchObject({
+      slug: "aru-majiki",
+      title_ja: "〜まじき",
+      title_zh: "〜まじき",
+      explanation_zh: "不該有的",
+    });
   });
 
   it("getKanji finds a character across levels", async () => {
