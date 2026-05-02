@@ -1,17 +1,7 @@
 import { useEffect, useRef } from "react";
-import { api, type ReadKey } from "../api";
+import { api } from "../api";
+import { readKeyIdentifier, type ReadKey } from "../apiTypes";
 import { useCapabilities } from "../capabilities";
-
-function readKeyIdentifier(key: ReadKey) {
-  switch (key.type) {
-    case "grammar":
-      return key.slug;
-    case "vocab":
-      return key.headword;
-    case "kanji":
-      return key.character;
-  }
-}
 
 function normalizeReadKey(key: ReadKey, identifier: string): ReadKey {
   switch (key.type) {
@@ -28,6 +18,7 @@ export function useReadTracking(key: ReadKey | null | undefined) {
   const { progress, loaded, bumpProgress } = useCapabilities();
   const lastTracked = useRef("");
   const normalizedIdentifier = key ? readKeyIdentifier(key).trim() : "";
+  const keyType = key?.type;
 
   useEffect(() => {
     if (!loaded || !progress || !key || !normalizedIdentifier) return;
@@ -38,9 +29,13 @@ export function useReadTracking(key: ReadKey | null | undefined) {
 
     void api
       .markRead(normalizeReadKey(key, normalizedIdentifier))
-      .then(bumpProgress)
+      .then(() => bumpProgress())
       .catch((error) => {
         console.warn("failed to mark content as read", error);
       });
-  }, [bumpProgress, key, loaded, normalizedIdentifier, progress]);
+    // Depend on primitive identifier+type rather than the object so call
+    // sites that pass freshly-allocated `{type, ...}` literals don't churn
+    // the effect on unrelated parent re-renders.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bumpProgress, keyType, loaded, normalizedIdentifier, progress]);
 }

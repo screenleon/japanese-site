@@ -115,9 +115,11 @@ describe("useReadTracking", () => {
     expect(markRead).not.toHaveBeenCalled();
   });
 
-  it("does not fire when capabilities not yet loaded on mount", () => {
+  it("does not fire while loaded=false even if progress=true", () => {
+    // Isolate the !loaded guard from the !progress guard so a mutation that
+    // drops the loaded check (keeping only progress) is detectable.
     capabilitiesState.current = {
-      progress: false,
+      progress: true,
       history: false,
       loaded: false,
       progressRevision: 0,
@@ -170,8 +172,16 @@ describe("useReadTracking", () => {
     expect(markRead).toHaveBeenCalledWith({ type: "grammar", slug: "foo" });
   });
 
-  it("swallows api.markRead rejection without throwing or re-firing", async () => {
+  it("swallows api.markRead rejection without throwing or re-firing or bumping", async () => {
     markRead.mockRejectedValueOnce(new Error("network failed"));
+    const bumpProgress = vi.fn();
+    capabilitiesState.current = {
+      progress: true,
+      history: false,
+      loaded: true,
+      progressRevision: 0,
+      bumpProgress,
+    };
 
     const { rerender } = renderHook(
       ({ slug }) => useReadTracking(slug ? { type: "grammar", slug } : null),
@@ -190,6 +200,7 @@ describe("useReadTracking", () => {
     rerender({ slug: "foo" });
 
     expect(markRead).toHaveBeenCalledTimes(1);
+    expect(bumpProgress).not.toHaveBeenCalled();
   });
 
   it("calls bumpProgress after successful markRead", async () => {
@@ -207,5 +218,21 @@ describe("useReadTracking", () => {
     await waitFor(() => {
       expect(bumpProgress).toHaveBeenCalledTimes(1);
     });
+  });
+
+  it.each([
+    {
+      label: "vocab headword",
+      key: { type: "vocab", headword: "食べる" } as const,
+    },
+    {
+      label: "kanji character",
+      key: { type: "kanji", character: "食" } as const,
+    },
+  ])("passes the discriminated key shape through to markRead ($label)", ({ key }) => {
+    renderHook(() => useReadTracking(key));
+
+    expect(markRead).toHaveBeenCalledTimes(1);
+    expect(markRead).toHaveBeenCalledWith(key);
   });
 });

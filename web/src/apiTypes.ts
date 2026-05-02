@@ -121,12 +121,24 @@ export interface NextQuestionOpts {
   exclude?: string[];
 }
 
-export type ReadContentType = "grammar" | "vocab" | "kanji";
-
 export type ReadKey =
   | { type: "grammar"; slug: string }
   | { type: "vocab"; headword: string }
   | { type: "kanji"; character: string };
+
+// Derived from ReadKey so a 4th content type only needs to extend the union.
+export type ReadContentType = ReadKey["type"];
+
+export function readKeyIdentifier(key: ReadKey): string {
+  switch (key.type) {
+    case "grammar":
+      return key.slug;
+    case "vocab":
+      return key.headword;
+    case "kanji":
+      return key.character;
+  }
+}
 
 export interface Capabilities {
   progress: boolean;

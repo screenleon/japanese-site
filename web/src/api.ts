@@ -7,6 +7,7 @@
 // so existing tab imports keep working until they're switched to inject the
 // Api interface via context.
 
+import { readKeyIdentifier } from "./apiTypes";
 import type {
   Api,
   Capabilities,
@@ -74,17 +75,6 @@ async function apiError(response: Response) {
     // Non-JSON errors still carry HTTP status and status text.
   }
   return new ApiError(response.status, response.statusText, code);
-}
-
-function readKeyIdentifier(key: ReadKey) {
-  switch (key.type) {
-    case "grammar":
-      return key.slug;
-    case "vocab":
-      return key.headword;
-    case "kanji":
-      return key.character;
-  }
 }
 
 export const httpApi: Api = {
