@@ -37,7 +37,7 @@ func Register(mux *http.ServeMux, db *store.DB, ps store.ProgressStore) {
 	mux.HandleFunc("GET /api/quiz/next", quizNext(db))
 	mux.HandleFunc("POST /api/quiz/answer", quizAnswer(db, grader))
 	mux.HandleFunc("GET /api/quiz/stats", quizStats(db))
-	mux.HandleFunc("POST /api/read/{type}/{slug...}", markRead(ps))
+	mux.HandleFunc("POST /api/read/{type}/{slug}", markRead(ps))
 	mux.HandleFunc("GET /api/progress", progress(db, ps))
 	mux.HandleFunc("GET /api/capabilities", capabilities(ps))
 	// Catch-all for /api/* — return JSON 404 instead of falling through

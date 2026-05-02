@@ -116,11 +116,14 @@ func TestProgressEndpointValidation(t *testing.T) {
 			wantError:  "invalid_content_type",
 		},
 		{
-			name:       "slug with slash",
+			// Multi-segment slugs are caught by the router (single-segment
+			// {slug} pattern), so this returns 404 from the catch-all,
+			// not 400 from validReadSlug.
+			name:       "slug with slash routes to 404",
 			method:     http.MethodPost,
 			path:       "/api/read/grammar/test/gp",
-			wantStatus: http.StatusBadRequest,
-			wantError:  "invalid_slug",
+			wantStatus: http.StatusNotFound,
+			wantError:  "no such api endpoint",
 		},
 		{
 			name:       "bad progress type",

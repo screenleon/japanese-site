@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"strings"
+	"unicode"
 
 	"github.com/screenleon/japanese-site/server/internal/store"
 )
@@ -79,5 +80,17 @@ func validProgressContentType(contentType string) bool {
 }
 
 func validReadSlug(slug string) bool {
-	return strings.TrimSpace(slug) != "" && !strings.Contains(slug, "/")
+	if strings.TrimSpace(slug) == "" {
+		return false
+	}
+	// Reject control chars (NUL, DEL, etc.) — multi-segment slugs are
+	// already rejected at the router layer by the single-segment {slug}
+	// pattern, so the only thing left to defend here is non-printable
+	// payloads that survive URL-decoding.
+	for _, r := range slug {
+		if unicode.IsControl(r) {
+			return false
+		}
+	}
+	return true
 }
