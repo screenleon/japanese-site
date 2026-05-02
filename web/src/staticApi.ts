@@ -1,0 +1,219 @@
+import { ApiError } from "./api";
+import type {
+  Api,
+  GradeResult,
+  GrammarPoint,
+  Kanji,
+  NextQuestionOpts,
+  ProgressSummary,
+  Question,
+  ReadContentType,
+  ReadKey,
+  Sentence,
+  Stats,
+  VocabRow,
+} from "./apiTypes";
+
+const levels = ["N1", "N2", "N3", "N4", "N5"];
+const jsonlCache = new Map<string, Promise<unknown[]>>();
+const jsonCache = new Map<string, Promise<unknown>>();
+
+function dataPath(path: string): string {
+  const base =
+    (import.meta as ImportMeta & { env: { BASE_URL?: string } }).env.BASE_URL || "/";
+  return `${base.replace(/\/$/, "")}/data/${path.replace(/^\//, "")}`;
+}
+
+async function fetchJSON<T>(path: string): Promise<T> {
+  const url = dataPath(path);
+  if (!jsonCache.has(url)) {
+    jsonCache.set(
+      url,
+      fetch(url).then(async (response) => {
+        if (!response.ok) throw staticFetchError(response, "not_found");
+        return response.json();
+      })
+    );
+  }
+  return jsonCache.get(url) as Promise<T>;
+}
+
+async function fetchJSONL<T>(path: string): Promise<T[]> {
+  const url = dataPath(path);
+  if (!jsonlCache.has(url)) {
+    jsonlCache.set(
+      url,
+      fetch(url).then(async (response) => {
+        if (!response.ok) throw staticFetchError(response, "not_found");
+        const text = await response.text();
+        return text
+          .split(/\r?\n/)
+          .map((line) => line.trim())
+          .filter(Boolean)
+          .map((line) => JSON.parse(line));
+      })
+    );
+  }
+  return jsonlCache.get(url) as Promise<T[]>;
+}
+
+function staticFetchError(response: Response, code: string): ApiError {
+  return new ApiError(response.status, response.statusText, code);
+}
+
+function unsupported(): ApiError {
+  return new ApiError(400, "Bad Request", "unsupported_in_static_mode");
+}
+
+function choose<T>(rows: T[]): T {
+  if (rows.length === 0) {
+    throw new ApiError(404, "Not Found", "not_found");
+  }
+  return rows[Math.floor(Math.random() * rows.length)];
+}
+
+function normalizeLevel(jlpt?: string): string[] {
+  return jlpt ? [jlpt] : levels;
+}
+
+async function loadVocabLevels(jlpt?: string): Promise<VocabRow[]> {
+  const groups = await Promise.all(
+    normalizeLevel(jlpt).map(async (level) => {
+      const rows = await fetchJSONL<Partial<VocabRow>>(`vocab/${level}.jsonl`);
+      return rows.map((row, index) => ({
+        id: row.id ?? stableID(level, index),
+        headword: row.headword ?? "",
+        reading: row.reading ?? "",
+        pos: row.pos ?? "",
+        jlpt_level: row.jlpt_level ?? level,
+        source: row.source ?? "curated",
+        license: row.license ?? "",
+        ...row,
+      })) as VocabRow[];
+    })
+  );
+  return groups.flat();
+}
+
+async function loadKanjiLevels(): Promise<Kanji[]> {
+  const groups = await Promise.all(
+    levels.map(async (level) => {
+      const rows = await fetchJSONL<Partial<Kanji>>(`kanji/${level}.jsonl`);
+      return rows.map((row, index) => ({
+        id: row.id ?? stableID(level, index),
+        character: row.character ?? "",
+        jlpt_level: row.jlpt_level ?? level,
+        source: row.source ?? "curated",
+        license: row.license ?? "",
+        ...row,
+      })) as Kanji[];
+    })
+  );
+  return groups.flat();
+}
+
+function stableID(level: string, index: number): number {
+  const levelOffset = Number(level.slice(1)) * 100000;
+  return levelOffset + index + 1;
+}
+
+async function grammarIndex(level: string): Promise<string[]> {
+  return fetchJSON<string[]>(`grammar/${level}/_index.json`);
+}
+
+async function grammarLevelForSlug(slug: string): Promise<string> {
+  for (const level of levels) {
+    const slugs = await grammarIndex(level);
+    if (slugs.includes(slug)) return level;
+  }
+  throw new ApiError(404, "Not Found", "not_found");
+}
+
+export const staticApi: Api = {
+  async searchVocab(q: string, jlpt?: string) {
+    const query = q.trim().toLocaleLowerCase();
+    const rows = await loadVocabLevels(jlpt);
+    const results = query
+      ? rows.filter((row) =>
+          `${row.headword} ${row.reading}`.toLocaleLowerCase().includes(query)
+        )
+      : rows;
+    return { results, count: results.length };
+  },
+
+  async randomVocab(jlpt?: string) {
+    return choose(await loadVocabLevels(jlpt));
+  },
+
+  async getKanji(ch: string) {
+    const rows = await loadKanjiLevels();
+    const found = rows.find((row) => row.character === ch);
+    if (!found) throw new ApiError(404, "Not Found", "not_found");
+    return found;
+  },
+
+  async randomSentence(_jlpt?: string): Promise<Sentence> {
+    throw unsupported();
+  },
+
+  async listGrammar(jlpt?: string) {
+    const groups = await Promise.all(
+      normalizeLevel(jlpt).map(async (level) => {
+        const slugs = await grammarIndex(level);
+        return slugs.map((slug) => ({
+          slug,
+          title_ja: slug,
+          title_zh: slug,
+          jlpt_level: level,
+          explanation_zh: "",
+        }));
+      })
+    );
+    const points = groups.flat();
+    return { points, count: points.length };
+  },
+
+  async randomGrammar(jlpt?: string) {
+    const level = jlpt ?? choose(levels);
+    const slug = choose(await grammarIndex(level));
+    return fetchJSON<GrammarPoint>(`grammar/${level}/${slug}.json`);
+  },
+
+  async getGrammar(slug: string) {
+    const level = await grammarLevelForSlug(slug);
+    return fetchJSON<GrammarPoint>(`grammar/${level}/${slug}.json`);
+  },
+
+  async nextQuestion(_opts?: NextQuestionOpts): Promise<Question> {
+    throw unsupported();
+  },
+
+  async answer(_question_id: string, _answer: string): Promise<GradeResult> {
+    throw unsupported();
+  },
+
+  async stats(_days?: number): Promise<Stats> {
+    throw unsupported();
+  },
+
+  async markRead(_key: ReadKey): Promise<void> {},
+
+  async getProgress(type: ReadContentType, level?: string): Promise<ProgressSummary> {
+    return {
+      level: level ?? "",
+      content_type: type,
+      read: 0,
+      total: 0,
+      percent: 0,
+    };
+  },
+
+  async getCapabilities() {
+    return {
+      progress: false,
+      history: false,
+      quiz: false,
+      sentence: false,
+    };
+  },
+};

@@ -70,6 +70,8 @@ func capabilities(ps store.ProgressStore) http.HandlerFunc {
 		writeJSON(w, http.StatusOK, map[string]bool{
 			"progress": ps.Enabled(),
 			"history":  false,
+			"quiz":     true,
+			"sentence": true,
 		})
 	}
 }

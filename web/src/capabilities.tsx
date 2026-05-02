@@ -18,6 +18,8 @@ type CapabilitiesState = Capabilities & {
 const defaultCapabilities: CapabilitiesState = {
   progress: false,
   history: false,
+  quiz: false,
+  sentence: false,
   loaded: false,
   progressRevision: 0,
   bumpProgress: () => {},
@@ -29,6 +31,8 @@ export function CapabilitiesProvider({ children }: { children: ReactNode }) {
   const [capabilities, setCapabilities] = useState<Capabilities>({
     progress: false,
     history: false,
+    quiz: false,
+    sentence: false,
   });
   const [loaded, setLoaded] = useState(false);
   const [progressRevision, setProgressRevision] = useState(0);
@@ -48,7 +52,12 @@ export function CapabilitiesProvider({ children }: { children: ReactNode }) {
       .catch((error) => {
         console.warn("failed to load capabilities", error);
         if (cancelled) return;
-        setCapabilities({ progress: false, history: false });
+        setCapabilities({
+          progress: false,
+          history: false,
+          quiz: false,
+          sentence: false,
+        });
         setLoaded(true);
       });
     return () => {

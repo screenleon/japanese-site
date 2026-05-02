@@ -8,6 +8,7 @@
 // Api interface via context.
 
 import { readKeyIdentifier } from "./apiTypes";
+import { staticApi } from "./staticApi";
 import type {
   Api,
   Capabilities,
@@ -121,4 +122,12 @@ export const httpApi: Api = {
 };
 
 /** @deprecated import the `Api` interface and inject `httpApi` instead. */
-export const api: Api = httpApi;
+const deployMode =
+  (import.meta as ImportMeta & { env: { VITE_DEPLOY_MODE?: string } }).env
+    .VITE_DEPLOY_MODE ??
+  (globalThis as { process?: { env?: { VITE_DEPLOY_MODE?: string } } }).process?.env
+    ?.VITE_DEPLOY_MODE;
+const useStatic = deployMode === "static";
+
+/** @deprecated import the `Api` interface and inject an Api implementation instead. */
+export const api: Api = useStatic ? staticApi : httpApi;
