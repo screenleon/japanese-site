@@ -22,6 +22,7 @@
 | JS-015 | ✅ closed 2026-04-30 | 移除英文備援 | product | 2026-04-30 | feedback:2026-04-30 |
 | JS-016 | 🔵 active | JLPT 等級來源切換 | content | 2026-05-02 | feedback:2026-05-02 |
 | JS-017 | 🔵 active | 已讀內容追蹤 | backend/frontend | 2026-05-02 | feedback:2026-05-02 |
+| JS-018 | 🔵 active | github.io 靜態部署 | frontend/ops | 2026-05-02 | feedback:2026-05-02 |
 
 ---
 
@@ -153,5 +154,16 @@
 **Requirement**: 在後端定義 `ProgressStore` 介面，雲端模式綁 `NullProgressStore`（API 契約一致、寫入 no-op、讀取空），本地模式綁 `SQLiteProgressStore`（讀寫 SQLite 的 `read_log` 表）。前端透過 `GET /api/capabilities` 取得當前部署是否支援 progress；若支援則顯示「優先複習已讀」filter 與閱讀進度面板，不支援則隱藏。「讀過」以路由觸發判定（grammar/vocab/kanji 詳情頁進入即記），追蹤粒度為 slug 級。
 
 **Tags**: P2
+<!-- 首次記錄: 2026-05-02 -->
+
+## JS-018 — github.io 靜態部署
+
+**Problem**: 目前要看到網站內容（語料、解說、例題）必須 clone repo 並啟動 Go backend；其他人沒有現成的瀏覽入口，作品也無法當公開展示。
+
+**Why**: GitHub Pages 是免費、零維運的靜態託管，且跟 JS-017 雙模式設計裡的 cloud mode（無 DB、隨機讀取、無持久化）契約自然對齊 — 把這個契約落地到一個實際部署，可以驗證雙模式設計、提供公開展示入口、並讓既有的 corpus 工作（grammar / vocab / kanji 條目）直接成為部署資產。但 Pages 不能跑 Go backend，前端假定 backend 存在的呼叫（grammar/random、quiz/answer 等）需要靜態替代路徑；功能範圍（純內容瀏覽、含答題、含評分）也尚未決定。
+
+**Requirement**: 決定靜態部署的功能範圍（最小：內容瀏覽 + 隨機抽取；中：含答題顯示正確答案不評分；大：完整答題評分前端化）。規劃 corpus pre-bake 機制（build-time 把 `server/data/corpus/*.jsonl` 複製到 `web/dist/data/`），前端透過 `GET /api/capabilities`（已落地）+ build-time flag 切換 transport（API vs 靜態檔案）。透過 GitHub Actions 在 main merge 後自動建置與部署到 `gh-pages` branch。先寫一份 DECISIONS 條目落地範圍與 transport 策略，再啟動實作。
+
+**Tags**: P3
 <!-- 首次記錄: 2026-05-02 -->
 
