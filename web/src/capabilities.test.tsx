@@ -43,7 +43,7 @@ describe("CapabilitiesProvider", () => {
         quiz: false,
         sentence: false,
         loaded: false,
-        progressRevision: 0,
+        progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
         bumpProgress: "function",
       })
     );
@@ -71,7 +71,7 @@ describe("CapabilitiesProvider", () => {
           quiz: true,
           sentence: true,
           loaded: true,
-          progressRevision: 0,
+          progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
           bumpProgress: "function",
         })
       );
@@ -95,7 +95,7 @@ describe("CapabilitiesProvider", () => {
           quiz: false,
           sentence: false,
           loaded: true,
-          progressRevision: 0,
+          progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
           bumpProgress: "function",
         })
       );

@@ -89,7 +89,7 @@ function AppShell() {
 }
 
 function ProgressBadge() {
-  const { progress, progressRevision } = useCapabilities();
+  const { progress, progressRevisions } = useCapabilities();
   const [summary, setSummary] = useState<ProgressSummary | null>(null);
 
   useEffect(() => {
@@ -111,7 +111,7 @@ function ProgressBadge() {
     return () => {
       cancelled = true;
     };
-  }, [progress, progressRevision]);
+  }, [progress, progressRevisions.grammar]);
 
   if (!progress || !summary) return null;
 

@@ -18,6 +18,11 @@ const levels = ["N1", "N2", "N3", "N4", "N5"];
 const jsonlCache = new Map<string, Promise<unknown[]>>();
 const jsonCache = new Map<string, Promise<unknown>>();
 
+export function resetStaticApiCachesForTest() {
+  jsonCache.clear();
+  jsonlCache.clear();
+}
+
 function dataPath(path: string): string {
   const base =
     (import.meta as ImportMeta & { env: { BASE_URL?: string } }).env.BASE_URL || "/";
@@ -27,13 +32,16 @@ function dataPath(path: string): string {
 async function fetchJSON<T>(path: string): Promise<T> {
   const url = dataPath(path);
   if (!jsonCache.has(url)) {
-    jsonCache.set(
-      url,
-      fetch(url).then(async (response) => {
+    const promise = fetch(url)
+      .then(async (response) => {
         if (!response.ok) throw staticFetchError(response, "not_found");
         return response.json();
       })
-    );
+      .catch((error) => {
+        jsonCache.delete(url);
+        throw error;
+      });
+    jsonCache.set(url, promise);
   }
   return jsonCache.get(url) as Promise<T>;
 }
@@ -41,9 +49,8 @@ async function fetchJSON<T>(path: string): Promise<T> {
 async function fetchJSONL<T>(path: string): Promise<T[]> {
   const url = dataPath(path);
   if (!jsonlCache.has(url)) {
-    jsonlCache.set(
-      url,
-      fetch(url).then(async (response) => {
+    const promise = fetch(url)
+      .then(async (response) => {
         if (!response.ok) throw staticFetchError(response, "not_found");
         const text = await response.text();
         return text
@@ -52,7 +59,11 @@ async function fetchJSONL<T>(path: string): Promise<T[]> {
           .filter(Boolean)
           .map((line) => JSON.parse(line));
       })
-    );
+      .catch((error) => {
+        jsonlCache.delete(url);
+        throw error;
+      });
+    jsonlCache.set(url, promise);
   }
   return jsonlCache.get(url) as Promise<T[]>;
 }

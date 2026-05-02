@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { isApiError } from "./api";
-import { staticApi } from "./staticApi";
+import { ApiError, isApiError } from "./api";
+import { resetStaticApiCachesForTest, staticApi } from "./staticApi";
 
 const responses = new Map<string, string>();
 
@@ -20,6 +20,7 @@ function textResponse(body: string) {
 
 describe("staticApi", () => {
   beforeEach(() => {
+    resetStaticApiCachesForTest();
     responses.clear();
     vi.stubGlobal(
       "fetch",
@@ -83,6 +84,36 @@ describe("staticApi", () => {
     expect(fetch).toHaveBeenCalledWith("/data/grammar/N1.json");
   });
 
+  it("retries fetch after a transient failure", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          new Response("", { status: 503, statusText: "Service Unavailable" })
+        )
+        .mockResolvedValueOnce(
+          jsonResponse([
+            {
+              slug: "aru-majiki",
+              title_ja: "〜まじき",
+              title_zh: "〜まじき",
+              jlpt_level: "N1",
+              explanation_zh: "不該有的",
+            },
+          ])
+        )
+    );
+
+    await expect(staticApi.randomGrammar("N1")).rejects.toSatisfy((error) =>
+      isApiError(error, "not_found")
+    );
+    await expect(staticApi.randomGrammar("N1")).resolves.toMatchObject({
+      slug: "aru-majiki",
+    });
+    expect(fetch).toHaveBeenCalledTimes(2);
+  });
+
   it("listGrammar returns full GrammarPoint records (not slug stubs)", async () => {
     responses.set(
       "/data/grammar/N1.json",
@@ -120,6 +151,58 @@ describe("staticApi", () => {
     await expect(staticApi.getKanji("会")).resolves.toMatchObject({
       character: "会",
       jlpt_level: "N4",
+    });
+  });
+
+  it("getKanji throws not_found when character is missing in every level", async () => {
+    responses.set("/data/kanji/N1.jsonl", "");
+    responses.set("/data/kanji/N2.jsonl", "");
+    responses.set(
+      "/data/kanji/N3.jsonl",
+      '{"character":"会","meaning_zh":"會","source":"curated","license":"CC-BY-SA-4.0"}'
+    );
+    responses.set("/data/kanji/N4.jsonl", "");
+    responses.set("/data/kanji/N5.jsonl", "");
+
+    await expect(staticApi.getKanji("食")).rejects.toSatisfy((error) =>
+      isApiError(error, "not_found")
+    );
+  });
+
+  it("getGrammar throws not_found when slug is missing in every level rollup", async () => {
+    responses.set("/data/grammar/N1.json", "[]");
+    responses.set("/data/grammar/N2.json", "[]");
+    responses.set("/data/grammar/N3.json", "[]");
+    responses.set("/data/grammar/N4.json", "[]");
+    responses.set("/data/grammar/N5.json", "[]");
+
+    await expect(staticApi.getGrammar("nonexistent-slug")).rejects.toSatisfy(
+      (error) => isApiError(error, "not_found")
+    );
+  });
+
+  it("choose throws when level rollup is empty", async () => {
+    responses.set("/data/grammar/N1.json", "[]");
+
+    await expect(staticApi.randomGrammar("N1")).rejects.toSatisfy((error) =>
+      isApiError(error, "not_found")
+    );
+  });
+
+  it("fetchJSON propagates HTTP error as ApiError", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        Promise.resolve(new Response("", { status: 404, statusText: "Not Found" }))
+      )
+    );
+
+    await expect(staticApi.randomGrammar("N1")).rejects.toSatisfy((error) => {
+      return (
+        error instanceof ApiError &&
+        error.status === 404 &&
+        error.code === "not_found"
+      );
     });
   });
 

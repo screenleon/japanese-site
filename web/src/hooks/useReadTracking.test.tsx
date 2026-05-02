@@ -8,7 +8,7 @@ const capabilitiesState = vi.hoisted(() => ({
     progress: true,
     history: false,
     loaded: true,
-    progressRevision: 0,
+    progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
     bumpProgress: vi.fn(),
   },
 }));
@@ -35,7 +35,7 @@ describe("useReadTracking", () => {
       progress: true,
       history: false,
       loaded: true,
-      progressRevision: 0,
+      progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
       bumpProgress: vi.fn(),
     };
     markRead.mockResolvedValue(undefined);
@@ -71,7 +71,7 @@ describe("useReadTracking", () => {
       progress: true,
       history: false,
       loaded: false,
-      progressRevision: 0,
+      progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
       bumpProgress: vi.fn(),
     };
     rerender({ slug: "foo" });
@@ -79,7 +79,7 @@ describe("useReadTracking", () => {
       progress: true,
       history: false,
       loaded: true,
-      progressRevision: 0,
+      progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
       bumpProgress: vi.fn(),
     };
     rerender({ slug: "foo" });
@@ -122,7 +122,7 @@ describe("useReadTracking", () => {
       progress: true,
       history: false,
       loaded: false,
-      progressRevision: 0,
+      progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
       bumpProgress: vi.fn(),
     };
 
@@ -136,7 +136,7 @@ describe("useReadTracking", () => {
       progress: false,
       history: false,
       loaded: true,
-      progressRevision: 0,
+      progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
       bumpProgress: vi.fn(),
     };
 
@@ -150,7 +150,7 @@ describe("useReadTracking", () => {
       progress: false,
       history: false,
       loaded: false,
-      progressRevision: 0,
+      progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
       bumpProgress: vi.fn(),
     };
 
@@ -163,7 +163,7 @@ describe("useReadTracking", () => {
       progress: true,
       history: false,
       loaded: true,
-      progressRevision: 0,
+      progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
       bumpProgress: vi.fn(),
     };
     rerender();
@@ -179,7 +179,7 @@ describe("useReadTracking", () => {
       progress: true,
       history: false,
       loaded: true,
-      progressRevision: 0,
+      progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
       bumpProgress,
     };
 
@@ -209,7 +209,7 @@ describe("useReadTracking", () => {
       progress: true,
       history: false,
       loaded: true,
-      progressRevision: 0,
+      progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
       bumpProgress,
     };
 
@@ -218,6 +218,7 @@ describe("useReadTracking", () => {
     await waitFor(() => {
       expect(bumpProgress).toHaveBeenCalledTimes(1);
     });
+    expect(bumpProgress).toHaveBeenCalledWith("grammar");
   });
 
   it.each([
@@ -229,10 +230,22 @@ describe("useReadTracking", () => {
       label: "kanji character",
       key: { type: "kanji", character: "食" } as const,
     },
-  ])("passes the discriminated key shape through to markRead ($label)", ({ key }) => {
+  ])("passes the discriminated key shape through to markRead ($label)", async ({ key }) => {
+    const bumpProgress = vi.fn();
+    capabilitiesState.current = {
+      progress: true,
+      history: false,
+      loaded: true,
+      progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
+      bumpProgress,
+    };
+
     renderHook(() => useReadTracking(key));
 
     expect(markRead).toHaveBeenCalledTimes(1);
     expect(markRead).toHaveBeenCalledWith(key);
+    await waitFor(() => {
+      expect(bumpProgress).toHaveBeenCalledWith(key.type);
+    });
   });
 });
