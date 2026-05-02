@@ -17,7 +17,7 @@ import (
 // exhaustion / slow-body attacks.
 const maxAnswerBodyBytes = 4 << 10
 
-func Register(mux *http.ServeMux, db *store.DB) {
+func Register(mux *http.ServeMux, db *store.DB, ps store.ProgressStore) {
 	// Single ClozeGrader instance per process. It's stateless beyond the
 	// store-backed lookup ports, so all /api/quiz/answer calls share it.
 	grader := &quiz.ClozeGrader{
@@ -37,6 +37,9 @@ func Register(mux *http.ServeMux, db *store.DB) {
 	mux.HandleFunc("GET /api/quiz/next", quizNext(db))
 	mux.HandleFunc("POST /api/quiz/answer", quizAnswer(db, grader))
 	mux.HandleFunc("GET /api/quiz/stats", quizStats(db))
+	mux.HandleFunc("POST /api/read/{type}/{slug...}", markRead(ps))
+	mux.HandleFunc("GET /api/progress", progress(db, ps))
+	mux.HandleFunc("GET /api/capabilities", capabilities(ps))
 	// Catch-all for /api/* — return JSON 404 instead of falling through
 	// to the SPA index.html.
 	mux.HandleFunc("/api/", func(w http.ResponseWriter, r *http.Request) {
