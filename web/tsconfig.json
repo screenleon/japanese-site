@@ -15,6 +15,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "verbatimModuleSyntax": false,
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
     "noEmit": true
   },
   "include": ["src"]

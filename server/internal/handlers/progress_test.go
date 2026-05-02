@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -96,10 +97,43 @@ func TestProgressEndpointsNullMode(t *testing.T) {
 	}
 }
 
-func TestProgressEndpointValidation(t *testing.T) {
+func TestProgressEndpointAllLevels(t *testing.T) {
 	db := newHandlerTestDB(t)
 	mux := http.NewServeMux()
 	Register(mux, db, store.NewSQLiteProgressStore(db))
+
+	tests := []struct {
+		level     string
+		wantRead  int
+		wantTotal int
+	}{
+		{level: "N1", wantRead: 0, wantTotal: 0},
+		{level: "N2", wantRead: 0, wantTotal: 0},
+		{level: "N3", wantRead: 0, wantTotal: 0},
+		{level: "N4", wantRead: 0, wantTotal: 0},
+		{level: "N5", wantRead: 0, wantTotal: 1},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.level, func(t *testing.T) {
+			req := httptest.NewRequest(http.MethodGet, "/api/progress?level="+tt.level+"&type=grammar", nil)
+			rec := httptest.NewRecorder()
+			mux.ServeHTTP(rec, req)
+			requireStatus(t, rec, http.StatusOK)
+			var progress store.ProgressSummary
+			decodeJSON(t, rec, &progress)
+			if progress.Level != tt.level || progress.ContentType != "grammar" || progress.Read != tt.wantRead || progress.Total != tt.wantTotal {
+				t.Fatalf("progress = %+v, want level=%s content_type=grammar read=%d total=%d", progress, tt.level, tt.wantRead, tt.wantTotal)
+			}
+		})
+	}
+}
+
+func TestProgressEndpointValidation(t *testing.T) {
+	db := newHandlerTestDB(t)
+	mux := http.NewServeMux()
+	ps := &recordingProgressStore{enabled: true}
+	Register(mux, db, ps)
 
 	tests := []struct {
 		name       string
@@ -124,6 +158,13 @@ func TestProgressEndpointValidation(t *testing.T) {
 			path:       "/api/read/grammar/test/gp",
 			wantStatus: http.StatusNotFound,
 			wantError:  "no such api endpoint",
+		},
+		{
+			name:       "blank read slug",
+			method:     http.MethodPost,
+			path:       "/api/read/grammar/%20%20%20",
+			wantStatus: http.StatusBadRequest,
+			wantError:  "invalid_slug",
 		},
 		{
 			name:       "bad progress type",
@@ -154,8 +195,35 @@ func TestProgressEndpointValidation(t *testing.T) {
 			if body.Error != tt.wantError {
 				t.Fatalf("error = %q, want %q", body.Error, tt.wantError)
 			}
+			if ps.markReadCalls != 0 || ps.progressCalls != 0 {
+				t.Fatalf("store calls after validation failure = markRead:%d progress:%d, want 0", ps.markReadCalls, ps.progressCalls)
+			}
 		})
 	}
+}
+
+type recordingProgressStore struct {
+	enabled       bool
+	markReadCalls int
+	progressCalls int
+}
+
+func (s *recordingProgressStore) MarkRead(ctx context.Context, contentType, slug string) error {
+	s.markReadCalls++
+	return nil
+}
+
+func (s *recordingProgressStore) ListRead(ctx context.Context, contentType string) ([]store.ReadEntry, error) {
+	return nil, nil
+}
+
+func (s *recordingProgressStore) Progress(ctx context.Context, level, contentType string) (store.ProgressSummary, error) {
+	s.progressCalls++
+	return store.ProgressSummary{}, nil
+}
+
+func (s *recordingProgressStore) Enabled() bool {
+	return s.enabled
 }
 
 func requireStatus(t *testing.T, rec *httptest.ResponseRecorder, want int) {
