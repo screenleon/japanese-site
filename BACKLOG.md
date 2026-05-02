@@ -13,7 +13,7 @@
 | JS-006 | ✅ closed 2026-04-30 | 分類規則語料化 | backend | 2026-04-30 | roadmap:#architectural-improvements |
 | JS-007 | ✅ closed 2026-04-30 | 複習排程輕量化 | product | 2026-04-30 | roadmap:#quiz--content-depth |
 | JS-008 | ✅ closed 2026-04-30 | 日文優先解說 | product | 2026-04-30 | decisions:#2026-04-30-japanese-first-explanations-with-chinese-reveal |
-| JS-009 | 🔵 active | 學習語料擴充 | content | 2026-04-30 | roadmap:#quiz--content-depth |
+| JS-009 | ✅ closed 2026-05-02 | 學習語料擴充 | content | 2026-04-30 | roadmap:#quiz--content-depth |
 | JS-010 | 🔵 active | 連接器抽取規劃 | connector | 2026-05-01 | decisions:#2026-04-27-extract-connector-to-its-own-repository-at-m4 |
 | JS-011 | 🔵 active | 例句翻譯匯入 | content | 2026-05-01 | roadmap:#content-quality |
 | JS-012 | 🔵 active | 單字日文優先 | product | 2026-05-01 | decisions:#2026-04-30-japanese-first-explanations-with-chinese-reveal |
@@ -21,8 +21,8 @@
 | JS-014 | ✅ closed 2026-04-30 | 等級導向學習 | product | 2026-04-30 | feedback:2026-04-30 |
 | JS-015 | ✅ closed 2026-04-30 | 移除英文備援 | product | 2026-04-30 | feedback:2026-04-30 |
 | JS-016 | 🔵 active | JLPT 等級來源切換 | content | 2026-05-02 | feedback:2026-05-02 |
-| JS-017 | 🔵 active | 已讀內容追蹤 | backend/frontend | 2026-05-02 | feedback:2026-05-02 |
-| JS-018 | 🔵 active | github.io 靜態部署 | frontend/ops | 2026-05-02 | decisions:#2026-05-02-js-018-github-pages-static-deployment-scope |
+| JS-017 | ✅ closed 2026-05-02 | 已讀內容追蹤 | backend/frontend | 2026-05-02 | feedback:2026-05-02 |
+| JS-018 | ✅ closed 2026-05-02 | github.io 靜態部署 | frontend/ops | 2026-05-02 | decisions:#2026-05-02-js-018-github-pages-static-deployment-scope |
 
 ---
 
@@ -66,18 +66,10 @@
 **Outcome**: 已採用日文優先、繁中按需揭示的解說流程，並更新既有文法內容支援此契約。
 **See**: DECISIONS.md#2026-04-30-japanese-first-explanations-with-chinese-reveal
 
-## JS-009 — 學習語料擴充
+## JS-009 — 學習語料擴充 ✅ 2026-05-02
 
-**Problem**: 可用於學習的單字與文法量已經增加，但文法點與題目厚度仍未達目標。
-
-**Why**: 單字量可以靠外部語料補足，但日文優先解說、繁中支援與例題仍需要以可審查的方式逐步補齊。
-
-**Requirement**: 按 JLPT 等級補齊平衡的文法點、例題與學習者可用單字支援，且規模檢查能清楚顯示距離目標的差距。
-
-**Tags**: P1
-**Status note (2026-04-30)**: 進行中。當前重點是用較大的等級平衡批次補文法與例題，而不是零散小批次。
-**Status note (2026-04-30)**: 已加入第一批 N3 單字支援與 N3 文法批次，目前文法與克漏字題量都有明顯成長。
-**Status note (2026-04-30)**: 已完成基礎寒暄詞的等級覆核，修正部分日常詞彙的 JLPT 分級。
+**Outcome**: 文法 floor 100 達標（N5=17 / N4=9 / N3=15 / N2=23 / N1=36），克漏字 494（接近 500 目標），N4–N2 kanji 中段從 0 補到 40 / 40 / 40，N1 vocab 從 60 擴到 120。後續內容擴充改以批次 PR（vocab/kanji/grammar 各等級）為單位，不再透過此項追蹤。
+**See**: PR #9（kanji 中段 batch 1）/ PR #12（grammar batch 3）/ PR #14（N1 vocab batch 2）
 
 ## JS-010 — 連接器抽取規劃
 
@@ -145,25 +137,13 @@
 **Tags**: P2
 <!-- 首次記錄: 2026-05-02 -->
 
-## JS-017 — 已讀內容追蹤
+## JS-017 — 已讀內容追蹤 ✅ 2026-05-02
 
-**Problem**: 出題目前完全隨機，無法依據使用者已讀過的內容偏向出題；學習者可能在尚未讀過解說前就被考到，也無法看到自己的閱讀進度。
+**Outcome**: 後端 `ProgressStore` 介面 + `SQLiteProgressStore` / `NullProgressStore` 雙實作落地，`/api/capabilities` 報告 `progress` flag。前端 `<CapabilitiesProvider>` + `useReadTracking` hook（capabilities-gated、 fire-and-forget、 idempotent via ref）+ `ProgressBadge` 隨 per-type `bumpProgress` 自動 refresh。Discriminated union `ReadKey` 強制 backend JOIN 語意。31 個 frontend tests + 完整 PR-gate（critic/architecture/security/risk/qa-tester）皆通過。
+**See**: PR #15（backend foundation）/ PR #17（frontend hookup）/ PR #18（discriminated union）/ PR #19（cache eviction + per-type bump 等 follow-up）
 
-**Why**: 此網站採雙模式部署 — 雲端公開模式無資料庫、刻意隨機；本地模式接 SQLite 才提供持久化功能。讀過的紀錄屬於「需持久化」的個人狀態，不適合塞 localStorage（換瀏覽器即失），但也不該強制雲端模式擁有。需要一個可在兩種模式間 graceful degrade 的設計。
+## JS-018 — github.io 靜態部署 ✅ 2026-05-02
 
-**Requirement**: 在後端定義 `ProgressStore` 介面，雲端模式綁 `NullProgressStore`（API 契約一致、寫入 no-op、讀取空），本地模式綁 `SQLiteProgressStore`（讀寫 SQLite 的 `read_log` 表）。前端透過 `GET /api/capabilities` 取得當前部署是否支援 progress；若支援則顯示「優先複習已讀」filter 與閱讀進度面板，不支援則隱藏。「讀過」以路由觸發判定（grammar/vocab/kanji 詳情頁進入即記），追蹤粒度為 slug 級。
-
-**Tags**: P2
-<!-- 首次記錄: 2026-05-02 -->
-
-## JS-018 — github.io 靜態部署
-
-**Problem**: 目前要看到網站內容（語料、解說、例題）必須 clone repo 並啟動 Go backend；其他人沒有現成的瀏覽入口，作品也無法當公開展示。
-
-**Why**: GitHub Pages 是免費、零維運的靜態託管，且跟 JS-017 雙模式設計裡的 cloud mode（無 DB、隨機讀取、無持久化）契約自然對齊 — 把這個契約落地到一個實際部署，可以驗證雙模式設計、提供公開展示入口、並讓既有的 corpus 工作（grammar / vocab / kanji 條目）直接成為部署資產。但 Pages 不能跑 Go backend，前端假定 backend 存在的呼叫（grammar/random、quiz/answer 等）需要靜態替代路徑；功能範圍（純內容瀏覽、含答題、含評分）也尚未決定。
-
-**Requirement**: 決定靜態部署的功能範圍（最小：內容瀏覽 + 隨機抽取；中：含答題顯示正確答案不評分；大：完整答題評分前端化）。規劃 corpus pre-bake 機制（build-time 把 `server/data/corpus/*.jsonl` 複製到 `web/dist/data/`），前端透過 `GET /api/capabilities`（已落地）+ build-time flag 切換 transport（API vs 靜態檔案）。透過 GitHub Actions 在 main merge 後自動建置與部署到 `gh-pages` branch。先寫一份 DECISIONS 條目落地範圍與 transport 策略，再啟動實作。
-
-**Tags**: P3
-<!-- 首次記錄: 2026-05-02 -->
+**Outcome**: 公開 URL `https://screenleon.github.io/japanese-site/` 上線（Tier S：純內容瀏覽，Quiz / Sentence tab 在 cloud mode 隱藏）。`make bake-static` 把 corpus 烘成 per-level rollup；`VITE_DEPLOY_MODE=static` 編譯期切換到 `staticApi`；GitHub Actions on main push → build-static → Pages artifact deploy。Source-of-truth 不變（`server/data/corpus/`），SQLite 與 `web/public/data/` 都是衍生物。Capabilities 加 `quiz` / `sentence` flags graceful degrade。
+**See**: DECISIONS.md#2026-05-02-js-018-github-pages-static-deployment-scope（範圍鎖定）/ PR #19（實作 + 跑通 deploy）
 
