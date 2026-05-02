@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api, type VocabRow } from "../api";
+import { useReadTracking } from "../hooks/useReadTracking";
 
 const levels = ["N5", "N4", "N3", "N2", "N1"];
 
@@ -11,6 +12,8 @@ export function VocabTab() {
   const [err, setErr] = useState("");
   const [loadingList, setLoadingList] = useState(false);
   const [loadingRandom, setLoadingRandom] = useState(false);
+
+  useReadTracking("vocab", randomRow?.headword);
 
   useEffect(() => {
     void loadLevel(selectedLevel);

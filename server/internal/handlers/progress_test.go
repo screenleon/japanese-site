@@ -132,6 +132,13 @@ func TestProgressEndpointValidation(t *testing.T) {
 			wantStatus: http.StatusBadRequest,
 			wantError:  "invalid_content_type",
 		},
+		{
+			name:       "bad progress level",
+			method:     http.MethodGet,
+			path:       "/api/progress?type=grammar&level=N6",
+			wantStatus: http.StatusBadRequest,
+			wantError:  "invalid_level",
+		},
 	}
 
 	for _, tt := range tests {

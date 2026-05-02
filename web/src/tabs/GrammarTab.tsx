@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { api, type GrammarPoint } from "../api";
+import { useReadTracking } from "../hooks/useReadTracking";
 
 const levels = ["N5", "N4", "N3", "N2", "N1"];
 
@@ -47,6 +48,7 @@ export function GrammarTab() {
   const active = levelPoints.find((p) => p.slug === activeSlug) || levelPoints[0] || null;
   const primaryExplanation = active?.explanation_ja || active?.explanation_zh || "";
   const hasJapaneseExplanation = Boolean(active?.explanation_ja?.trim());
+  useReadTracking("grammar", active?.slug);
 
   useEffect(() => {
     setActiveSlug("");

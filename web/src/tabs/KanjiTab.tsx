@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { api, type Kanji } from "../api";
+import { useReadTracking } from "../hooks/useReadTracking";
 
 export function KanjiTab() {
   const [ch, setCh] = useState("");
   const [data, setData] = useState<Kanji | null>(null);
   const [err, setErr] = useState("");
+
+  useReadTracking("kanji", data?.character);
 
   async function lookup(e: React.FormEvent) {
     e.preventDefault();
