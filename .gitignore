@@ -36,3 +36,4 @@ prompt-budget.local.yml
 .DS_Store
 
 .codex
+.agent-trace/
