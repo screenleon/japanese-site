@@ -22,7 +22,7 @@
 | JS-015 | ✅ closed 2026-04-30 | 移除英文備援 | product | 2026-04-30 | feedback:2026-04-30 |
 | JS-016 | 🔵 active | JLPT 等級來源切換 | content | 2026-05-02 | feedback:2026-05-02 |
 | JS-017 | 🔵 active | 已讀內容追蹤 | backend/frontend | 2026-05-02 | feedback:2026-05-02 |
-| JS-018 | 🔵 active | github.io 靜態部署 | frontend/ops | 2026-05-02 | feedback:2026-05-02 |
+| JS-018 | 🔵 active | github.io 靜態部署 | frontend/ops | 2026-05-02 | decisions:#2026-05-02-js-018-github-pages-static-deployment-scope |
 
 ---
 
