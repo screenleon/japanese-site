@@ -20,6 +20,7 @@
 | JS-013 | 🔵 active | 語料儲存重評 | arch | 2026-05-01 | roadmap:#content-storage--scale |
 | JS-014 | ✅ closed 2026-04-30 | 等級導向學習 | product | 2026-04-30 | feedback:2026-04-30 |
 | JS-015 | ✅ closed 2026-04-30 | 移除英文備援 | product | 2026-04-30 | feedback:2026-04-30 |
+| JS-016 | 🔵 active | JLPT 等級來源切換 | content | 2026-05-02 | feedback:2026-05-02 |
 
 ---
 
@@ -160,3 +161,21 @@
 
 **Outcome**: 已移除學習介面的英文備援顯示，改以日文優先與繁中支援呈現缺口與可用內容。
 **See**: DECISIONS.md#2026-04-30-vocabulary-and-kanji-use-japanesetraditional-chinese-support-overlays
+
+## JS-016 — JLPT 等級來源切換評估
+
+**Problem**:
+- JP: 現在 JLPT 等級判定は Tanos の旧 JLPT(2010 年改定前)を典拠にしているため、新 JLPT を採用する Jisho などの公開資源と等級が一致しない場合があります。
+- zh-TW: 目前 JLPT 等級判定以 Tanos 舊 JLPT（2010 改版前）為依據，可能與採用新 JLPT 的 Jisho 等公開資源出現等級不一致。
+
+**Why**:
+- JP: 学習者が他のサイトで参照する等級と本サイトの等級がずれると、混乱や信頼性低下が生じます。コーパスが小さい今のうちなら移行コストが小さいですが、規模が拡大した後では再分類コストが膨らみます。
+- zh-TW: 若學習者在其他網站看到的等級與本站不一致，會造成混淆與信任流失。在語料量還小時遷移成本較低，規模變大後重新分類的工作量會大幅膨脹。
+
+**Requirement**:
+- JP: Jisho の JLPT level tag を権威としたときの差分を抽出し、移行する／しないの意思決定を行う。移行する場合は grammar/vocab/kanji コーパスの再分類計画を立てる。
+- zh-TW: 評估改以 Jisho JLPT level tag 為權威時的差異，做出是否遷移的決策；若決定遷移，需規劃 grammar/vocab/kanji 語料的重新分類流程。
+
+**Tags**: P2
+<!-- 首次記錄: 2026-05-02 -->
+
