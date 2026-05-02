@@ -1,0 +1,24 @@
+{
+  "slug": "beku-mo-nai",
+  "title_ja": "〜べくもない",
+  "title_zh": "〜べくもない（不可能…）",
+  "jlpt_level": "N1",
+  "explanation_ja": "意味核：ある行為・判断が到底不可能であることを表す。推量・期待・比較などが成立しないほど隔たりが大きい。\n\n接続：動詞辞書形＋べくもない。するは「すべくもない」が多い。\n\n例：この短時間で全容を把握すべくもない。／資料がない以上、正確な判断を下すべくもない。／新人の努力は認めるが、熟練者には及ぶべくもない。\n\nレジスター／類義差別：非常に硬い書き言葉。「〜できるはずがない」「〜ようがない」より文語的である。",
+  "explanation_zh": "〜べくもない 表示「根本不可能…」「無從…」，常用於期待、推測、比較等無法成立。\n\n**形態**：\n- 動詞辞書形＋べくもない；する多為「すべくもない」。\n\n**例**：\n- この短時間で全容を把握すべくもない。\n- 資料がない以上、正確な判断を下すべくもない。\n\n**比較／差別**：\n- 比「〜はずがない」更書面，語氣較強。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {
+      "if_answer_not_contains_any": [
+        "べくもない"
+      ],
+      "error_class": "missing-target-pattern"
+    },
+    {
+      "default": true,
+      "error_class": "generic"
+    }
+  ]
+}

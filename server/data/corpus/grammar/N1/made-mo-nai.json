@@ -1,0 +1,24 @@
+{
+  "slug": "made-mo-nai",
+  "title_ja": "〜までもない／〜までもなく",
+  "title_zh": "〜までもない／〜までもなく（不必…）",
+  "jlpt_level": "N1",
+  "explanation_ja": "意味核：わざわざその行為をする必要がないことを表す。明白さ、程度の軽さ、確認不要の判断を示す。\n\n接続：動詞辞書形＋までもない。文中では動詞辞書形＋までもなく＋後件。\n\n例：担当者に確認するまでもなく、資料に明記されている。／軽い傷なので、病院へ行くまでもない。／説明するまでもなく、この結果は予想通りだ。\n\nレジスター／類義差別：書き言葉寄りだが標準的。「〜必要はない」より簡潔で硬い。",
+  "explanation_zh": "〜までもない／〜までもなく 表示沒有必要特地做 A，或 A 不到必要程度。\n\n**形態**：\n- 動詞辞書形＋までもない；文中可用「までもなく」。\n\n**例**：\n- 担当者に確認するまでもなく、資料に明記されている。\n- 軽い傷なので、病院へ行くまでもない。\n\n**比較／差別**：\n- 接近「〜必要はない」，但更書面，也可表示「不用說也明白」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {
+      "if_answer_not_contains_any": [
+        "までもなく"
+      ],
+      "error_class": "missing-target-pattern"
+    },
+    {
+      "default": true,
+      "error_class": "generic"
+    }
+  ]
+}

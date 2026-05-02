@@ -1,0 +1,5 @@
+{"text_ja":"ベルが鳴る___、学生たちは教室を出た。","text_zh":"鈴聲剛響，學生們就離開教室。","blank":"か鳴らないかのうちに","is_correct":1,"hint":"同じ動詞","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"座る___、呼び出しのアナウンスが流れた。","text_zh":"剛要坐下，廣播就響起。","blank":"か座らないかのうちに","is_correct":1,"hint":"近接","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"雨が降る___、人々は駅へ走り出した。","text_zh":"雨剛要下，人們就跑向車站。","blank":"か降らないかのうちに","is_correct":1,"hint":"直後","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"資料を読み終える___、次の依頼が届いた。","text_zh":"資料剛讀完，下一個委託就來了。","blank":"か読み終えないかのうちに","is_correct":1,"hint":"短時間","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"ドアを開ける___、犬が飛び出した。","text_zh":"門剛打開，狗就衝了出去。","blank":"か開けないかのうちに","is_correct":1,"hint":"瞬間","source":"curated","license":"CC-BY-SA-4.0"}

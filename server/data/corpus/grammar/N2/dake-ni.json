@@ -1,0 +1,24 @@
+{
+  "slug": "dake-ni",
+  "title_ja": "〜だけに",
+  "title_zh": "〜だけに（正因為…）",
+  "jlpt_level": "N2",
+  "explanation_ja": "意味核：前件の性質・事情があるからこそ、後件の結果・感情・評価が特に強くなることを表す。\n\n接続：動詞普通形＋だけに。い形容詞＋だけに。な形容詞＋な＋だけに。名詞＋だけに。\n\n例：期待していただけに、失敗した時の落胆は大きかった。／長く使うものだけに、品質にはこだわりたい。／責任者だけに、発言には慎重であるべきだ。\n\nレジスター／類義差別：標準的。よい結果にも悪い結果にも使える。「だけあって」より幅が広い。",
+  "explanation_zh": "〜だけに 表示正因為 A，B 才特別明顯或強烈。\n\n**形態**：\n- 普通形＋だけに；な形容詞＋な＋だけに；名詞＋だけに。\n\n**例**：\n- 期待していただけに、失敗した時の落胆は大きかった。\n- 長く使うものだけに、品質にはこだわりたい。\n\n**比較／差別**：\n- 「だけあって」常偏正面；「だけに」可正可負。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {
+      "if_answer_not_contains_any": [
+        "だけに"
+      ],
+      "error_class": "missing-target-pattern"
+    },
+    {
+      "default": true,
+      "error_class": "generic"
+    }
+  ]
+}

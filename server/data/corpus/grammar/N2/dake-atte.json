@@ -1,0 +1,24 @@
+{
+  "slug": "dake-atte",
+  "title_ja": "〜だけあって",
+  "title_zh": "〜だけあって（不愧是…）",
+  "jlpt_level": "N2",
+  "explanation_ja": "意味核：前件にふさわしい、期待どおりのよい結果や評価が後件に現れることを表す。\n\n接続：動詞普通形＋だけあって。い形容詞＋だけあって。な形容詞＋な＋だけあって。名詞＋だけあって。\n\n例：専門店だけあって、品ぞろえが豊富だ。／毎日練習しているだけあって、発音が安定している。／有名な先生だけあって、説明がわかりやすい。\n\nレジスター／類義差別：標準的。肯定的・評価的な文脈で使いやすく、否定的結果には使いにくい。",
+  "explanation_zh": "〜だけあって 表示正因為 A，B 果然符合期待，常有讚賞。\n\n**形態**：\n- 普通形＋だけあって；な形容詞＋な＋だけあって；名詞＋だけあって。\n\n**例**：\n- 専門店だけあって、品ぞろえが豊富だ。\n- 毎日練習しているだけあって、発音が安定している。\n\n**比較／差別**：\n- 比「だけに」更偏正面評價；常譯為「不愧是」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {
+      "if_answer_not_contains_any": [
+        "だけあって"
+      ],
+      "error_class": "missing-target-pattern"
+    },
+    {
+      "default": true,
+      "error_class": "generic"
+    }
+  ]
+}
