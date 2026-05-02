@@ -24,10 +24,12 @@ func TestProgressEndpointsSQLiteMode(t *testing.T) {
 	var caps struct {
 		Progress bool `json:"progress"`
 		History  bool `json:"history"`
+		Quiz     bool `json:"quiz"`
+		Sentence bool `json:"sentence"`
 	}
 	decodeJSON(t, rec, &caps)
-	if !caps.Progress || caps.History {
-		t.Fatalf("capabilities = %+v, want progress=true history=false", caps)
+	if !caps.Progress || caps.History || !caps.Quiz || !caps.Sentence {
+		t.Fatalf("capabilities = %+v, want progress=true history=false quiz=true sentence=true", caps)
 	}
 
 	req = httptest.NewRequest(http.MethodPost, "/api/read/grammar/test-gp", nil)
@@ -80,10 +82,12 @@ func TestProgressEndpointsNullMode(t *testing.T) {
 	var caps struct {
 		Progress bool `json:"progress"`
 		History  bool `json:"history"`
+		Quiz     bool `json:"quiz"`
+		Sentence bool `json:"sentence"`
 	}
 	decodeJSON(t, rec, &caps)
-	if caps.Progress || caps.History {
-		t.Fatalf("capabilities = %+v, want progress=false history=false", caps)
+	if caps.Progress || caps.History || !caps.Quiz || !caps.Sentence {
+		t.Fatalf("capabilities = %+v, want progress=false history=false quiz=true sentence=true", caps)
 	}
 
 	req = httptest.NewRequest(http.MethodGet, "/api/progress?level=N5&type=grammar", nil)

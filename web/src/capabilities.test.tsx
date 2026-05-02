@@ -40,15 +40,22 @@ describe("CapabilitiesProvider", () => {
       JSON.stringify({
         progress: false,
         history: false,
+        quiz: false,
+        sentence: false,
         loaded: false,
-        progressRevision: 0,
+        progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
         bumpProgress: "function",
       })
     );
   });
 
-  it("resolves to {progress, history, loaded:true} on successful fetch", async () => {
-    getCapabilities.mockResolvedValueOnce({ progress: true, history: false });
+  it("resolves to {progress, history, quiz, sentence, loaded:true} on successful fetch", async () => {
+    getCapabilities.mockResolvedValueOnce({
+      progress: true,
+      history: false,
+      quiz: true,
+      sentence: true,
+    });
 
     render(
       <CapabilitiesProvider>
@@ -61,8 +68,10 @@ describe("CapabilitiesProvider", () => {
         JSON.stringify({
           progress: true,
           history: false,
+          quiz: true,
+          sentence: true,
           loaded: true,
-          progressRevision: 0,
+          progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
           bumpProgress: "function",
         })
       );
@@ -83,8 +92,10 @@ describe("CapabilitiesProvider", () => {
         JSON.stringify({
           progress: false,
           history: false,
+          quiz: false,
+          sentence: false,
           loaded: true,
-          progressRevision: 0,
+          progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
           bumpProgress: "function",
         })
       );

@@ -143,6 +143,8 @@ export function readKeyIdentifier(key: ReadKey): string {
 export interface Capabilities {
   progress: boolean;
   history: boolean;
+  quiz: boolean;
+  sentence: boolean;
 }
 
 export interface ProgressSummary {

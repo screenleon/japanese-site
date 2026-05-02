@@ -1,4 +1,4 @@
-.PHONY: help lint-rules corpus-scale vet test clean \
+.PHONY: help lint-rules corpus-scale vet test clean bake-static build-static \
         bootstrap dev start build dist \
         run web-dev web-build \
         seed-jmdict seed-kanjidic2 seed-jlpt seed-tatoeba seed-derive seed-corpus seed-all
@@ -84,6 +84,24 @@ vet:
 
 test:
 	cd server && go test ./...
+
+bake-static:
+	@command -v jq >/dev/null || { echo "bake-static: jq is required (install via apt/brew)"; exit 1; }
+	@rm -rf web/public/data
+	@mkdir -p web/public/data/grammar
+	@for level in N1 N2 N3 N4 N5; do \
+		src="server/data/corpus/grammar/$$level"; \
+		[ -d "$$src" ] || continue; \
+		count=$$(ls $$src/*.json 2>/dev/null | wc -l); \
+		[ "$$count" -gt 0 ] || { echo "bake-static: $$level has no .json files"; continue; }; \
+		jq -s . $$src/*.json > "web/public/data/grammar/$$level.json"; \
+	done
+	@cp -r server/data/corpus/vocab web/public/data/
+	@cp -r server/data/corpus/kanji web/public/data/
+	@echo "bake-static: web/public/data populated"
+
+build-static: bake-static
+	cd web && VITE_DEPLOY_MODE=static VITE_DEPLOY_BASE=/japanese-site/ npm run build
 
 lint-rules:
 	bash scripts/lint-rules.sh

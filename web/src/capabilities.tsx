@@ -8,18 +8,27 @@ import {
   useState,
 } from "react";
 import { api, type Capabilities } from "./api";
+import type { ReadContentType } from "./apiTypes";
 
 type CapabilitiesState = Capabilities & {
   loaded: boolean;
-  progressRevision: number;
-  bumpProgress: () => void;
+  progressRevisions: Record<ReadContentType, number>;
+  bumpProgress: (type: ReadContentType) => void;
+};
+
+const initialProgressRevisions: Record<ReadContentType, number> = {
+  grammar: 0,
+  vocab: 0,
+  kanji: 0,
 };
 
 const defaultCapabilities: CapabilitiesState = {
   progress: false,
   history: false,
+  quiz: false,
+  sentence: false,
   loaded: false,
-  progressRevision: 0,
+  progressRevisions: initialProgressRevisions,
   bumpProgress: () => {},
 };
 
@@ -29,11 +38,17 @@ export function CapabilitiesProvider({ children }: { children: ReactNode }) {
   const [capabilities, setCapabilities] = useState<Capabilities>({
     progress: false,
     history: false,
+    quiz: false,
+    sentence: false,
   });
   const [loaded, setLoaded] = useState(false);
-  const [progressRevision, setProgressRevision] = useState(0);
-  const bumpProgress = useCallback(() => {
-    setProgressRevision((current) => current + 1);
+  const [progressRevisions, setProgressRevisions] =
+    useState<Record<ReadContentType, number>>(initialProgressRevisions);
+  const bumpProgress = useCallback((type: ReadContentType) => {
+    setProgressRevisions((current) => ({
+      ...current,
+      [type]: current[type] + 1,
+    }));
   }, []);
 
   useEffect(() => {
@@ -48,7 +63,12 @@ export function CapabilitiesProvider({ children }: { children: ReactNode }) {
       .catch((error) => {
         console.warn("failed to load capabilities", error);
         if (cancelled) return;
-        setCapabilities({ progress: false, history: false });
+        setCapabilities({
+          progress: false,
+          history: false,
+          quiz: false,
+          sentence: false,
+        });
         setLoaded(true);
       });
     return () => {
@@ -57,8 +77,8 @@ export function CapabilitiesProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ ...capabilities, loaded, progressRevision, bumpProgress }),
-    [bumpProgress, capabilities, loaded, progressRevision]
+    () => ({ ...capabilities, loaded, progressRevisions, bumpProgress }),
+    [bumpProgress, capabilities, loaded, progressRevisions]
   );
 
   return (

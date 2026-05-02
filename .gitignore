@@ -19,6 +19,7 @@ server/data/tanos_raw/
 server/bin/
 server/dist/
 web/dist/
+web/public/data/
 web/node_modules/
 web/tsconfig.tsbuildinfo
 node_modules/

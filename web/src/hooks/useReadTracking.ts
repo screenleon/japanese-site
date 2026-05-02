@@ -29,7 +29,7 @@ export function useReadTracking(key: ReadKey | null | undefined) {
 
     void api
       .markRead(normalizeReadKey(key, normalizedIdentifier))
-      .then(() => bumpProgress())
+      .then(() => bumpProgress(key.type))
       .catch((error) => {
         console.warn("failed to mark content as read", error);
       });
