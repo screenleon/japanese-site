@@ -13,7 +13,12 @@ const getCapabilities = vi.mocked(api.getCapabilities);
 
 function Consumer() {
   const capabilities = useCapabilities();
-  return <div data-testid="capabilities">{JSON.stringify(capabilities)}</div>;
+  const { bumpProgress, ...serializable } = capabilities;
+  return (
+    <div data-testid="capabilities">
+      {JSON.stringify({ ...serializable, bumpProgress: typeof bumpProgress })}
+    </div>
+  );
 }
 
 describe("CapabilitiesProvider", () => {
@@ -28,6 +33,20 @@ describe("CapabilitiesProvider", () => {
     warnSpy.mockRestore();
   });
 
+  it("provides default null-mode state outside a provider", () => {
+    render(<Consumer />);
+
+    expect(screen.getByTestId("capabilities")).toHaveTextContent(
+      JSON.stringify({
+        progress: false,
+        history: false,
+        loaded: false,
+        progressRevision: 0,
+        bumpProgress: "function",
+      })
+    );
+  });
+
   it("resolves to {progress, history, loaded:true} on successful fetch", async () => {
     getCapabilities.mockResolvedValueOnce({ progress: true, history: false });
 
@@ -39,7 +58,13 @@ describe("CapabilitiesProvider", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("capabilities")).toHaveTextContent(
-        JSON.stringify({ progress: true, history: false, loaded: true })
+        JSON.stringify({
+          progress: true,
+          history: false,
+          loaded: true,
+          progressRevision: 0,
+          bumpProgress: "function",
+        })
       );
     });
   });
@@ -55,7 +80,13 @@ describe("CapabilitiesProvider", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("capabilities")).toHaveTextContent(
-        JSON.stringify({ progress: false, history: false, loaded: true })
+        JSON.stringify({
+          progress: false,
+          history: false,
+          loaded: true,
+          progressRevision: 0,
+          bumpProgress: "function",
+        })
       );
     });
   });

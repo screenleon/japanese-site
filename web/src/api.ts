@@ -7,6 +7,7 @@
 // so existing tab imports keep working until they're switched to inject the
 // Api interface via context.
 
+import { readKeyIdentifier } from "./apiTypes";
 import type {
   Api,
   Capabilities,
@@ -15,6 +16,7 @@ import type {
   NextQuestionOpts,
   ProgressSummary,
   Question,
+  ReadKey,
   ReadContentType,
   Sentence,
   Stats,
@@ -104,9 +106,10 @@ export const httpApi: Api = {
     postJSON<GradeResult>(`/api/quiz/answer`, { question_id, answer }),
   stats: (days) =>
     getJSON<Stats>(`/api/quiz/stats${days ? `?days=${days}` : ""}`),
-  markRead: async (type: ReadContentType, slug: string) => {
+  markRead: async (key: ReadKey) => {
+    const identifier = readKeyIdentifier(key);
     await postEmpty<{ ok: boolean }>(
-      `/api/read/${encodeURIComponent(type)}/${encodeURIComponent(slug)}`
+      `/api/read/${encodeURIComponent(key.type)}/${encodeURIComponent(identifier)}`
     );
   },
   getProgress: (type: ReadContentType, level?: string) => {

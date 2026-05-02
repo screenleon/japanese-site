@@ -13,7 +13,9 @@ export function VocabTab() {
   const [loadingList, setLoadingList] = useState(false);
   const [loadingRandom, setLoadingRandom] = useState(false);
 
-  useReadTracking("vocab", randomRow?.headword);
+  useReadTracking(
+    randomRow?.headword ? { type: "vocab", headword: randomRow.headword } : null
+  );
 
   useEffect(() => {
     void loadLevel(selectedLevel);

@@ -48,7 +48,7 @@ export function GrammarTab() {
   const active = levelPoints.find((p) => p.slug === activeSlug) || levelPoints[0] || null;
   const primaryExplanation = active?.explanation_ja || active?.explanation_zh || "";
   const hasJapaneseExplanation = Boolean(active?.explanation_ja?.trim());
-  useReadTracking("grammar", active?.slug);
+  useReadTracking(active?.slug ? { type: "grammar", slug: active.slug } : null);
 
   useEffect(() => {
     setActiveSlug("");
