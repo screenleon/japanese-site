@@ -21,6 +21,7 @@
 | JS-014 | ✅ closed 2026-04-30 | 等級導向學習 | product | 2026-04-30 | feedback:2026-04-30 |
 | JS-015 | ✅ closed 2026-04-30 | 移除英文備援 | product | 2026-04-30 | feedback:2026-04-30 |
 | JS-016 | 🔵 active | JLPT 等級來源切換 | content | 2026-05-02 | feedback:2026-05-02 |
+| JS-017 | 🔵 active | 已讀內容追蹤 | backend/frontend | 2026-05-02 | feedback:2026-05-02 |
 
 ---
 
@@ -139,6 +140,17 @@
 **Why**: 若學習者在其他網站看到的等級與本站不一致，會造成混淆與信任流失。在語料量還小時遷移成本較低，規模變大後重新分類的工作量會大幅膨脹。
 
 **Requirement**: 評估改以 Jisho JLPT level tag 為權威時的差異，做出是否遷移的決策；若決定遷移，需規劃 grammar/vocab/kanji 語料的重新分類流程。
+
+**Tags**: P2
+<!-- 首次記錄: 2026-05-02 -->
+
+## JS-017 — 已讀內容追蹤
+
+**Problem**: 出題目前完全隨機，無法依據使用者已讀過的內容偏向出題；學習者可能在尚未讀過解說前就被考到，也無法看到自己的閱讀進度。
+
+**Why**: 此網站採雙模式部署 — 雲端公開模式無資料庫、刻意隨機；本地模式接 SQLite 才提供持久化功能。讀過的紀錄屬於「需持久化」的個人狀態，不適合塞 localStorage（換瀏覽器即失），但也不該強制雲端模式擁有。需要一個可在兩種模式間 graceful degrade 的設計。
+
+**Requirement**: 在後端定義 `ProgressStore` 介面，雲端模式綁 `NullProgressStore`（API 契約一致、寫入 no-op、讀取空），本地模式綁 `SQLiteProgressStore`（讀寫 SQLite 的 `read_log` 表）。前端透過 `GET /api/capabilities` 取得當前部署是否支援 progress；若支援則顯示「優先複習已讀」filter 與閱讀進度面板，不支援則隱藏。「讀過」以路由觸發判定（grammar/vocab/kanji 詳情頁進入即記），追蹤粒度為 slug 級。
 
 **Tags**: P2
 <!-- 首次記錄: 2026-05-02 -->
