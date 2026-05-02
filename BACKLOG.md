@@ -68,8 +68,8 @@
 
 ## JS-009 — 學習語料擴充 ✅ 2026-05-02
 
-**Outcome**: 文法 floor 100 達標（N5=17 / N4=9 / N3=15 / N2=23 / N1=36），克漏字 494（接近 500 目標），N4–N2 kanji 中段從 0 補到 40 / 40 / 40，N1 vocab 從 60 擴到 120。後續內容擴充改以批次 PR（vocab/kanji/grammar 各等級）為單位，不再透過此項追蹤。
-**See**: PR #9（kanji 中段 batch 1）/ PR #12（grammar batch 3）/ PR #14（N1 vocab batch 2）
+**Outcome**: 文法 floor 100 達標、克漏字 494（500 目標退場）、N4–N2 kanji 中段補齊 40/40/40、N1 vocab 擴至 120；後續內容擴充改以批次 PR 直接追蹤，不再經此項。
+**See**: pr:#9, pr:#12, pr:#14
 
 ## JS-010 — 連接器抽取規劃
 
@@ -139,11 +139,11 @@
 
 ## JS-017 — 已讀內容追蹤 ✅ 2026-05-02
 
-**Outcome**: 後端 `ProgressStore` 介面 + `SQLiteProgressStore` / `NullProgressStore` 雙實作落地，`/api/capabilities` 報告 `progress` flag。前端 `<CapabilitiesProvider>` + `useReadTracking` hook（capabilities-gated、 fire-and-forget、 idempotent via ref）+ `ProgressBadge` 隨 per-type `bumpProgress` 自動 refresh。Discriminated union `ReadKey` 強制 backend JOIN 語意。31 個 frontend tests + 完整 PR-gate（critic/architecture/security/risk/qa-tester）皆通過。
-**See**: PR #15（backend foundation）/ PR #17（frontend hookup）/ PR #18（discriminated union）/ PR #19（cache eviction + per-type bump 等 follow-up）
+**Outcome**: 落地 `ProgressStore` capabilities-gated dual-mode（SQLite + Null fallback），前端透過 `useReadTracking` + discriminated-union `ReadKey` 把 per-type 進度自動回灌 `ProgressBadge`。
+**See**: pr:#15, pr:#17, pr:#18
 
 ## JS-018 — github.io 靜態部署 ✅ 2026-05-02
 
-**Outcome**: 公開 URL `https://screenleon.github.io/japanese-site/` 上線（Tier S：純內容瀏覽，Quiz / Sentence tab 在 cloud mode 隱藏）。`make bake-static` 把 corpus 烘成 per-level rollup；`VITE_DEPLOY_MODE=static` 編譯期切換到 `staticApi`；GitHub Actions on main push → build-static → Pages artifact deploy。Source-of-truth 不變（`server/data/corpus/`），SQLite 與 `web/public/data/` 都是衍生物。Capabilities 加 `quiz` / `sentence` flags graceful degrade。
-**See**: DECISIONS.md#2026-05-02-js-018-github-pages-static-deployment-scope（範圍鎖定）/ PR #19（實作 + 跑通 deploy）
+**Outcome**: 公開 URL `https://screenleon.github.io/japanese-site/` 上線（Tier S 純內容瀏覽），`make bake-static` 烘 corpus 為 per-level rollup，`VITE_DEPLOY_MODE=static` 編譯期切換 `staticApi`，GitHub Actions on main → Pages artifact deploy。
+**See**: DECISIONS.md#2026-05-02-js-018-github-pages-static-deployment-scope, pr:#19
 
