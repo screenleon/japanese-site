@@ -3,14 +3,13 @@ import { VocabTab } from "./tabs/VocabTab";
 import { KanjiTab } from "./tabs/KanjiTab";
 import { SentenceTab } from "./tabs/SentenceTab";
 import { GrammarTab } from "./tabs/GrammarTab";
-import { QuizTab } from "./tabs/QuizTab";
+import { QuizTab, type QuizInitialMode } from "./tabs/QuizTab";
 import { HomePage } from "./HomePage";
 import { CapabilitiesProvider, useCapabilities } from "./capabilities";
 import { api, type ProgressSummary } from "./api";
 
 type Tab = "quiz" | "grammar" | "vocab" | "kanji" | "sentence";
-type InitialMode = "練習" | "測試";
-type ViewState = { view: "home" } | { view: "app"; initialMode: InitialMode };
+type ViewState = { view: "home" } | { view: "app"; initialMode: QuizInitialMode };
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "quiz", label: "練習題" },
@@ -38,7 +37,7 @@ export function App() {
   );
 }
 
-function AppShell({ initialMode }: { initialMode: InitialMode }) {
+function AppShell({ initialMode }: { initialMode: QuizInitialMode }) {
   const { loaded, quiz, sentence } = useCapabilities();
   const visibleTabs = useMemo(
     () =>

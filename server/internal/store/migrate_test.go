@@ -132,6 +132,50 @@ func TestMigrate_BackfillsLegacyNullChecksum(t *testing.T) {
 	}
 }
 
+func TestMigrate_0016_ContentTypeColumn(t *testing.T) {
+	db := newMemoryDB(t)
+	defer db.Close()
+
+	if err := Migrate(db); err != nil {
+		t.Fatalf("migrate: %v", err)
+	}
+
+	var count int
+	if err := db.QueryRow(`SELECT COUNT(*) FROM pragma_table_info('question') WHERE name='content_type'`).Scan(&count); err != nil {
+		t.Fatalf("query content_type column: %v", err)
+	}
+	if count != 1 {
+		t.Fatalf("content_type column count = %d, want 1", count)
+	}
+
+	if _, err := db.Exec(`INSERT INTO grammar_point (slug, title_ja, title_zh, jlpt_level, explanation_zh, source, license)
+	                      VALUES ('content-type-gp', 'テスト', '測試', 'N3', '測試用', 'test', 'CC0')`); err != nil {
+		t.Fatalf("seed gp: %v", err)
+	}
+	if _, err := db.Exec(`INSERT INTO question (id, kind, jlpt_level, grammar_point, prompt, expected, source, license)
+	                      VALUES ('default-ct-test', 'cloze', 'N3', 'content-type-gp', 'Q ___', 'ア', 'test', 'CC0')`); err != nil {
+		t.Fatalf("seed default question: %v", err)
+	}
+	var got string
+	if err := db.QueryRow(`SELECT content_type FROM question WHERE id='default-ct-test'`).Scan(&got); err != nil {
+		t.Fatalf("read default content_type: %v", err)
+	}
+	if got != "grammar" {
+		t.Fatalf("default content_type = %q, want grammar", got)
+	}
+
+	if _, err := db.Exec(`INSERT INTO question (id, kind, jlpt_level, grammar_point, prompt, expected, content_type, source, license)
+	                      VALUES ('vocab-ct-test', 'cloze', 'N3', 'content-type-gp', 'V ___', 'イ', 'vocab', 'test', 'CC0')`); err != nil {
+		t.Fatalf("seed vocab question: %v", err)
+	}
+	if err := db.QueryRow(`SELECT content_type FROM question WHERE id='vocab-ct-test'`).Scan(&got); err != nil {
+		t.Fatalf("read vocab content_type: %v", err)
+	}
+	if got != "vocab" {
+		t.Fatalf("vocab content_type = %q, want vocab", got)
+	}
+}
+
 func newMemoryDB(t *testing.T) *DB {
 	t.Helper()
 	db, err := Open(":memory:")

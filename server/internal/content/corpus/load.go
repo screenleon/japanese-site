@@ -282,7 +282,7 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 			slog.Info("swept orphan questions", "content_type", "grammar", "count", n)
 		}
 	}
-	if seenVocabIDs != nil {
+	if seenVocabIDs != nil && len(seenVocabIDs) > 0 {
 		if n, err := sweepOrphanQuestions(ctx, tx, "vocab", seenVocabIDs); err != nil {
 			return stats, fmt.Errorf("vocab orphan sweep: %w", err)
 		} else if n > 0 {

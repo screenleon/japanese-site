@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { api } from "./api";
-
-type InitialMode = "練習" | "測試";
+import type { QuizInitialMode } from "./tabs/QuizTab";
 
 interface HomePageProps {
-  onStart: (initialMode: InitialMode) => void;
+  onStart: (initialMode: QuizInitialMode) => void;
 }
 
 export function HomePage({ onStart }: HomePageProps) {

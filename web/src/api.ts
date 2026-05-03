@@ -95,7 +95,7 @@ export const httpApi: Api = {
     ),
   randomGrammar: (jlpt) =>
     getJSON<GrammarPoint>(`/api/grammar/random${jlpt ? `?jlpt=${jlpt}` : ""}`),
-  getGrammar: (slug) => getJSON<GrammarPoint>(`/api/grammar/${slug}`),
+  getGrammar: (slug) => getJSON<GrammarPoint>(`/api/grammar/${encodeURIComponent(slug)}`),
   getGrammarExamples: (slug) =>
     getJSON<{ examples: GrammarExample[]; count: number }>(
       `/api/grammar/${encodeURIComponent(slug)}/examples`

@@ -218,12 +218,9 @@ func quizAnswer(db *store.DB, grader *quiz.ClozeGrader) http.HandlerFunc {
 				}
 			}
 		} else if qu.ContentType == "vocab" {
-			results, err := store.SearchVocab(r.Context(), db, store.VocabSearchOpts{
-				Query: qu.GrammarPoint,
-				Limit: 1,
-			})
-			if err == nil && len(results) > 0 {
-				result.ItemDetailZH = results[0].GlossZH
+			v, err := store.GetVocabByHeadword(r.Context(), db, qu.GrammarPoint)
+			if err == nil {
+				result.ItemDetailZH = v.GlossZH
 			}
 		}
 		writeJSON(w, http.StatusOK, result)

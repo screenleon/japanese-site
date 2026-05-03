@@ -104,6 +104,34 @@ func SearchVocab(ctx context.Context, db *DB, opts VocabSearchOpts) ([]Vocab, er
 	return out, rows.Err()
 }
 
+func GetVocabByHeadword(ctx context.Context, db *DB, headword string) (Vocab, error) {
+	q := `
+		SELECT id, headword, reading, pos,
+		       COALESCE(gloss_en, ''), COALESCE(gloss_ja, ''), COALESCE(gloss_zh, ''),
+		       COALESCE(jlpt_level, ''), frequency_rank,
+		       source, license, COALESCE(validated_by, '')
+		FROM vocab
+		WHERE headword = ?
+		LIMIT 1`
+
+	var v Vocab
+	var freq sql.NullInt64
+	err := db.QueryRowContext(ctx, q, headword).Scan(&v.ID, &v.Headword, &v.Reading, &v.POS,
+		&v.GlossEN, &v.GlossJA, &v.GlossZH, &v.JLPTLevel, &freq,
+		&v.Source, &v.License, &v.ValidatedBy)
+	if errors.Is(err, sql.ErrNoRows) {
+		return Vocab{}, ErrVocabNotFound
+	}
+	if err != nil {
+		return Vocab{}, err
+	}
+	if freq.Valid {
+		n := freq.Int64
+		v.FrequencyRank = &n
+	}
+	return v, nil
+}
+
 // RandomVocab returns one random vocabulary row, optionally filtered by JLPT.
 func RandomVocab(ctx context.Context, db *DB, jlpt string) (Vocab, error) {
 	q := `

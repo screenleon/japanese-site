@@ -194,7 +194,7 @@ export function QuizTab({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentType, grammar, jlpt]);
 
-  const countdownActive = sealedExam && mode === "session" && !!current && remainingSec > 0;
+  const countdownActive = sealedExam && mode === "session" && remainingSec > 0;
   const examExpired = sealedExam && mode === "session" && remainingSec <= 0;
 
   useEffect(() => {
