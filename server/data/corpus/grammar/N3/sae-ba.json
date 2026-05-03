@@ -1,0 +1,15 @@
+{
+  "slug": "sae-ba",
+  "title_ja": "さえ〜ば",
+  "title_zh": "さえ〜ば（只要）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「さえ〜ば」は、その一つの条件が満たされれば十分だ、という意味を表します。名詞には「Nさえあれば」、動詞には「Vます形 + さえすれば」の形がよく使われます。\n\n- 時間さえあれば行けます\n- 練習しさえすれば上手になります",
+  "explanation_zh": "「さえ〜ば」表示只要某個最低條件成立就足夠，意思是「只要……就……」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["だけ", "ばかり"], "error_class": "minimum-condition-pattern"}
+  ]
+}

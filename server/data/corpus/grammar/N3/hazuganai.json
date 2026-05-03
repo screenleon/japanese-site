@@ -1,0 +1,15 @@
+{
+  "slug": "hazuganai",
+  "title_ja": "はずがない",
+  "title_zh": "はずがない（不可能）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「はずがない」は、理由から考えて、その可能性はないと強く言う表現です。「こんなに簡単なはずがない」のように、話し手の確信を表します。\n\n- 彼がうそをつくはずがありません\n- この時間に店が開いているはずがない",
+  "explanation_zh": "「はずがない」表示根據理由判斷「不可能、絕不會」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["はずだ", "かもしれない"], "error_class": "certainty-pattern"}
+  ]
+}
