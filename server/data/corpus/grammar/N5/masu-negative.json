@@ -1,0 +1,17 @@
+{
+  "slug": "masu-negative",
+  "title_ja": "ません",
+  "title_zh": "ません（禮貌否定形）",
+  "jlpt_level": "N5",
+  "explanation_ja": "「ません」は、動詞のます形の否定をていねいに言う形です。「肉を食べません」や「今日は行きません」のように、しないことを表します。過去の否定は「ませんでした」で、「昨日は行きませんでした」のように使います。",
+  "explanation_zh": "「ません」是動詞ます形的禮貌否定式，表示「不做、沒有做」的非過去否定。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_suffix_any": ["ます"], "error_class": "affirmative-form"},
+    {"if_answer_suffix_any": ["ました"], "error_class": "past-form"},
+    {"default": true, "error_class": "wrong-polarity"}
+  ]
+}

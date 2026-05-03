@@ -1,0 +1,17 @@
+{
+  "slug": "tai-desire",
+  "title_ja": "たい",
+  "title_zh": "たい（想要做）",
+  "jlpt_level": "N5",
+  "explanation_ja": "「たい」は、話し手がしたいことを表します。動詞のます形から「ます」を取って、「日本へ行きたいです」や「水を飲みたいです」のように使います。「たい」はい形容詞のように、「行きたくないです」「行きたかったです」と変化します。",
+  "explanation_zh": "「たい」接在動詞ます形去掉ます之後，表示說話者想做某事。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_suffix_any": ["ます"], "error_class": "kept-masu"},
+    {"if_answer_contains_any": ["ほしい"], "error_class": "used-hoshii"},
+    {"default": true, "error_class": "wrong-desire-form"}
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "to-conditional",
+  "title_ja": "と（条件）",
+  "title_zh": "と（條件）",
+  "jlpt_level": "N5",
+  "explanation_ja": "条件の「と」は、あることをすると、自然に次のことが起こる関係を表します。「このボタンを押すと、ドアが開きます」や「春になると、暖かくなります」のように使います。人に頼む文や意志の文には使いにくく、決まった結果を言うときに使います。",
+  "explanation_zh": "條件的「と」表示某條件成立後自然或必然發生的結果，常用於規則、機械操作、自然現象。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_suffix_any": ["たら"], "error_class": "used-tara"},
+    {"if_answer_suffix_any": ["ば"], "error_class": "used-ba"},
+    {"default": true, "error_class": "wrong-conditional"}
+  ]
+}
