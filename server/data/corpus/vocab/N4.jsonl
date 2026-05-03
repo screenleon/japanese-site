@@ -56,7 +56,6 @@
 {"headword":"不便","reading":"ふべん","gloss_ja":"使いにくく、都合が悪いこと。","gloss_zh":"不方便。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"世界","reading":"せかい","gloss_ja":"地球上のすべての地域や人々。ある範囲の社会。","gloss_zh":"世界。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"両方","reading":"りょうほう","gloss_ja":"二つあるもののどちらも。","gloss_zh":"雙方、兩者。","source":"curated","license":"CC-BY-SA-4.0"}
-{"headword":"中々","reading":"なかなか","gloss_ja":"思ったより程度が高い様子。否定と使うと簡単にはできない意味。","gloss_zh":"相當；不容易。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"中学校","reading":"ちゅうがっこう","gloss_ja":"小学校の次に通う学校。","gloss_zh":"國中、中學。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"久しぶり","reading":"ひさしぶり","gloss_ja":"前にした時から長い時間がたっていること。","gloss_zh":"好久不見、久違。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"乗り換える","reading":"のりかえる","gloss_ja":"別の電車やバスなどに移って乗る。","gloss_zh":"轉乘、換車。","source":"curated","license":"CC-BY-SA-4.0"}
@@ -65,7 +64,6 @@
 {"headword":"予定","reading":"よてい","gloss_ja":"これからすることとして決めていること。","gloss_zh":"預定、計畫。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"予約","reading":"よやく","gloss_ja":"前もって席や物などを取っておくこと。","gloss_zh":"預約、預訂。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"予習","reading":"よしゅう","gloss_ja":"授業の前に勉強しておくこと。","gloss_zh":"預習。","source":"curated","license":"CC-BY-SA-4.0"}
-{"headword":"事","reading":"こと","gloss_ja":"出来事や内容を表す広い言葉。動詞などを名詞化する時にも使う。","gloss_zh":"事情；名詞化用法。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"事務所","reading":"じむしょ","gloss_ja":"仕事をするための部屋や場所。","gloss_zh":"辦公室、事務所。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"事故","reading":"じこ","gloss_ja":"思いがけず起こる悪い出来事。","gloss_zh":"事故。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"亡くなる","reading":"なくなる","gloss_ja":"人が死ぬことを丁寧に言う言葉。","gloss_zh":"過世。","source":"curated","license":"CC-BY-SA-4.0"}
@@ -97,7 +95,6 @@
 {"headword":"先輩","reading":"せんぱい","gloss_ja":"学校や職場で、自分より先に入った人。","gloss_zh":"前輩。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"光","reading":"ひかり","gloss_ja":"明るく見えるもの。物を見えるようにするもの。","gloss_zh":"光。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"光る","reading":"ひかる","gloss_ja":"光を出す。また、明るく見える。","gloss_zh":"發光、閃耀。","source":"curated","license":"CC-BY-SA-4.0"}
-{"headword":"全然","reading":"ぜんぜん","gloss_ja":"否定と一緒に使い、まったくそうでないことを表す。","gloss_zh":"完全不、根本不。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"公務員","reading":"こうむいん","gloss_ja":"国や地方の役所で働く人。","gloss_zh":"公務員。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"具合","reading":"ぐあい","gloss_ja":"体や物事の状態。","gloss_zh":"狀況、狀態；身體狀況。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"内","reading":"うち","gloss_ja":"中側。家や自分の所属する範囲。","gloss_zh":"裡面；家、自己這邊。","source":"curated","license":"CC-BY-SA-4.0"}
@@ -120,7 +117,6 @@
 {"headword":"アメリカ","reading":"アメリカ","gloss_ja":"北アメリカ大陸にある国、またはその地域を指す語である。","gloss_zh":"美國；美洲。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"安心","reading":"あんしん","gloss_ja":"心配がなく、気持ちが落ち着いている状態である。","gloss_zh":"安心、放心。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"安全","reading":"あんぜん","gloss_ja":"危険が少なく、害を受ける心配がない状態である。","gloss_zh":"安全。","source":"curated","license":"CC-BY-SA-4.0"}
-{"headword":"案内","reading":"あんない","gloss_ja":"場所や方法を知らせて導くこと。また、その知らせである。","gloss_zh":"引導；介紹、通知。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"意見","reading":"いけん","gloss_ja":"物事についての考えや判断を言葉で表したものである。","gloss_zh":"意見、看法。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"医学","reading":"いがく","gloss_ja":"病気や体の働きを研究し、治療に役立てる学問である。","gloss_zh":"醫學。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"石","reading":"いし","gloss_ja":"地面などにある、硬く小さい岩のかけらである。","gloss_zh":"石頭。","source":"curated","license":"CC-BY-SA-4.0"}
@@ -129,14 +125,10 @@
 {"headword":"受付","reading":"うけつけ","gloss_ja":"申し込みや訪問者を受ける所、またはその仕事である。","gloss_zh":"接待處；受理。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"打つ","reading":"うつ","gloss_ja":"手や道具で強く当てること。また、文字などを入力することにも用いる。","gloss_zh":"打、敲；輸入。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"美しい","reading":"うつくしい","gloss_ja":"形、色、音、心などがきれいで、人に良い感じを与える様子である。","gloss_zh":"美麗的、優美的。","source":"curated","license":"CC-BY-SA-4.0"}
-{"headword":"写る","reading":"うつる","gloss_ja":"写真や映像に姿や形が現れることである。","gloss_zh":"照出、映入。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"腕","reading":"うで","gloss_ja":"肩から手首までの体の部分である。能力や技術の意味にも用いる。","gloss_zh":"手臂；本領。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"裏","reading":"うら","gloss_ja":"表と反対の側である。物事の見えない部分を指すこともある。","gloss_zh":"背面、裡面；內情。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"売り場","reading":"うりば","gloss_ja":"店で商品を売っている場所である。","gloss_zh":"賣場、櫃位。","source":"curated","license":"CC-BY-SA-4.0"}
-{"headword":"嬉しい","reading":"うれしい","gloss_ja":"望んだことが起きて、心が明るくなる様子である。","gloss_zh":"高興的、開心的。","source":"curated","license":"CC-BY-SA-4.0"}
-{"headword":"運転","reading":"うんてん","gloss_ja":"車や機械を操作して動かすことである。","gloss_zh":"駕駛；操作。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"運転手","reading":"うんてんしゅ","gloss_ja":"車やバスなどを運転する人である。","gloss_zh":"司機、駕駛員。","source":"curated","license":"CC-BY-SA-4.0"}
-{"headword":"運動","reading":"うんどう","gloss_ja":"体を動かすこと。また、目的を持って社会に働きかける活動をいう。","gloss_zh":"運動；活動。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"エアコン","reading":"エアコン","gloss_ja":"部屋の温度や湿度を調節する機械である。","gloss_zh":"冷氣、空調。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"枝","reading":"えだ","gloss_ja":"木の幹から分かれて伸びる細い部分である。","gloss_zh":"樹枝。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"選ぶ","reading":"えらぶ","gloss_ja":"いくつかの中から、目的に合うものを決めることである。","gloss_zh":"選擇。","source":"curated","license":"CC-BY-SA-4.0"}
@@ -183,9 +175,7 @@
 {"headword":"首","reading":"くび","gloss_ja":"頭と体をつなぐ部分である。","gloss_zh":"脖子。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"雲","reading":"くも","gloss_ja":"空に浮かぶ、水や氷の細かい粒の集まりである。","gloss_zh":"雲。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"暮れる","reading":"くれる","gloss_ja":"日が沈んで暗くなること。また、季節や年が終わりに近づくことである。","gloss_zh":"天黑；歲末。","source":"curated","license":"CC-BY-SA-4.0"}
-{"headword":"経験","reading":"けいけん","gloss_ja":"実際に見たり行ったりして得た知識や技能である。","gloss_zh":"經驗。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"警察","reading":"けいさつ","gloss_ja":"社会の安全を守り、犯罪を防いだり調べたりする組織である。","gloss_zh":"警察。","source":"curated","license":"CC-BY-SA-4.0"}
-{"headword":"けが","reading":"けが","gloss_ja":"体に傷を負うこと。また、その傷である。","gloss_zh":"受傷、傷。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"景色","reading":"けしき","gloss_ja":"目に見える自然や町の様子である。","gloss_zh":"景色、風景。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"消しゴム","reading":"けしゴム","gloss_ja":"鉛筆などで書いた文字を消すための文房具である。","gloss_zh":"橡皮擦。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"決して","reading":"けっして","gloss_ja":"強く打ち消す時に用いる副詞である。多くは否定表現とともに使う。","gloss_zh":"絕不、決不。","source":"curated","license":"CC-BY-SA-4.0"}
@@ -205,7 +195,6 @@
 {"headword":"故障","reading":"こしょう","gloss_ja":"機械や体の一部などが正常に働かなくなることである。","gloss_zh":"故障。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"ご存じ","reading":"ごぞんじ","gloss_ja":"「知っている」の尊敬語で、相手が知っていることを丁寧にいう語である。","gloss_zh":"知道的尊敬語；您知道。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"答え","reading":"こたえ","gloss_ja":"質問や問題に対して述べる内容である。","gloss_zh":"答案、回答。","source":"curated","license":"CC-BY-SA-4.0"}
-{"headword":"ごみ","reading":"ごみ","gloss_ja":"不要になって捨てる物である。","gloss_zh":"垃圾。","source":"curated","license":"CC-BY-SA-4.0"}
-{"headword":"米","reading":"こめ","gloss_ja":"稲から取れる穀物で、日本では主食として炊いて食べる。","gloss_zh":"米。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"ご覧になる","reading":"ごらんになる","gloss_ja":"「見る」の尊敬語で、相手や第三者が見ることを丁寧にいう語である。","gloss_zh":"看的尊敬語；觀看。","source":"curated","license":"CC-BY-SA-4.0"}
 {"headword":"壊す","reading":"こわす","gloss_ja":"物を割ったり傷つけたりして、使えない状態にすることである。","gloss_zh":"弄壞、破壞。","source":"curated","license":"CC-BY-SA-4.0"}
+{"headword":"上げる","reading":"あげる","gloss_ja":"低い所から高い所へ動かす。人に物を渡す意味でも使う。","gloss_zh":"舉起、提高；給。","source":"curated","license":"CC-BY-SA-4.0"}
