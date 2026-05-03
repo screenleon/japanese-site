@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import { api } from "./api";
+import type { DueCount } from "./apiTypes";
 import type { QuizInitialMode } from "./tabs/QuizTab";
 
 interface HomePageProps {
   onStart: (initialMode: QuizInitialMode) => void;
+  quizCapable: boolean;
 }
 
-export function HomePage({ onStart }: HomePageProps) {
+export function HomePage({ onStart, quizCapable }: HomePageProps) {
   const [grammarCount, setGrammarCount] = useState<number | null>(null);
   const [vocabCount, setVocabCount] = useState<number | null>(null);
+  const [dueCount, setDueCount] = useState<DueCount | null>(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -29,6 +32,21 @@ export function HomePage({ onStart }: HomePageProps) {
     };
   }, []);
 
+  useEffect(() => {
+    if (!quizCapable) return;
+    let cancelled = false;
+    api.getDueCount()
+      .then((d) => {
+        if (!cancelled) setDueCount(d);
+      })
+      .catch(() => {
+        // Static mode and transient API failures simply hide the badge.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [quizCapable]);
+
   return (
     <main className="min-h-screen bg-slate-50">
       <section className="max-w-4xl mx-auto px-4 py-16 md:py-24">
@@ -47,22 +65,41 @@ export function HomePage({ onStart }: HomePageProps) {
           <CountPanel label="單字" value={vocabCount} />
         </div>
 
+        {quizCapable && dueCount !== null && (dueCount.grammar > 0 || dueCount.vocab > 0) && (
+          <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-md flex items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-medium text-amber-800">需要複習</p>
+              <p className="text-xs text-amber-700 mt-0.5">
+                文法 {dueCount.grammar} 題・單字 {dueCount.vocab} 題
+              </p>
+            </div>
+            <button
+              onClick={() => onStart("複習")}
+              className="shrink-0 px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700"
+            >
+              開始複習 ({dueCount.grammar + dueCount.vocab})
+            </button>
+          </div>
+        )}
+
         {error && <p className="mb-6 text-sm text-red-600">無法讀取首頁統計：{error}</p>}
 
-        <div className="flex flex-wrap gap-3">
-          <button
-            onClick={() => onStart("練習")}
-            className="px-5 py-3 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
-          >
-            開始練習
-          </button>
-          <button
-            onClick={() => onStart("測試")}
-            className="px-5 py-3 rounded-md border border-slate-300 bg-white text-slate-800 text-sm font-medium hover:bg-slate-100"
-          >
-            開始測試
-          </button>
-        </div>
+        {quizCapable && (
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => onStart("練習")}
+              className="px-5 py-3 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
+            >
+              開始練習
+            </button>
+            <button
+              onClick={() => onStart("測試")}
+              className="px-5 py-3 rounded-md border border-slate-300 bg-white text-slate-800 text-sm font-medium hover:bg-slate-100"
+            >
+              開始測試
+            </button>
+          </div>
+        )}
       </section>
     </main>
   );

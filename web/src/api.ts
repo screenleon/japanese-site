@@ -12,6 +12,7 @@ import { staticApi } from "./staticApi";
 import type {
   Api,
   Capabilities,
+  DueCount,
   GrammarExample,
   GrammarPoint,
   Kanji,
@@ -113,6 +114,7 @@ export const httpApi: Api = {
     postJSON<GradeResult>(`/api/quiz/answer`, { question_id, answer }),
   stats: (days) =>
     getJSON<Stats>(`/api/quiz/stats${days ? `?days=${days}` : ""}`),
+  getDueCount: () => getJSON<DueCount>("/api/quiz/due-count"),
   markRead: async (key: ReadKey) => {
     const identifier = readKeyIdentifier(key);
     await postEmpty<{ ok: boolean }>(

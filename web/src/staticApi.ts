@@ -1,6 +1,7 @@
 import { ApiError } from "./api";
 import type {
   Api,
+  DueCount,
   GradeResult,
   GrammarPoint,
   Kanji,
@@ -193,6 +194,10 @@ export const staticApi: Api = {
   },
 
   async stats(_days?: number): Promise<Stats> {
+    throw unsupported();
+  },
+
+  async getDueCount(): Promise<DueCount> {
     throw unsupported();
   },
 

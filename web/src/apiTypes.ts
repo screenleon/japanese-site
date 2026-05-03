@@ -133,6 +133,11 @@ export interface Stats {
   recent_wrong: RecentWrongAttempt[];
 }
 
+export interface DueCount {
+  grammar: number;
+  vocab: number;
+}
+
 export type QuizContentType = "grammar" | "vocab";
 
 export interface NextQuestionOpts {
@@ -190,6 +195,7 @@ export interface Api {
   nextQuestion(opts?: NextQuestionOpts): Promise<Question>;
   answer(question_id: string, answer: string): Promise<GradeResult>;
   stats(days?: number): Promise<Stats>;
+  getDueCount(): Promise<DueCount>;
   markRead(key: ReadKey): Promise<void>;
   getProgress(type: ReadContentType, level?: string): Promise<ProgressSummary>;
   getCapabilities(): Promise<Capabilities>;

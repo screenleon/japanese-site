@@ -10,7 +10,7 @@ import {
 } from "../api";
 
 type Mode = "single" | "session" | "summary";
-export type QuizInitialMode = "練習" | "測試";
+export type QuizInitialMode = "練習" | "測試" | "複習";
 type StatsRange = 7 | 30 | 0;
 const EXAM_DURATION_SEC = 600;
 
@@ -27,6 +27,7 @@ export function QuizTab({
   onNavigateGrammar?: (slug: string) => void;
 }) {
   const sealedExam = initialMode === "測試";
+  const reviewMode = initialMode === "複習";
   const [contentType, setContentType] = useState<QuizContentType>("grammar");
   const [grammar, setGrammar] = useState<string>("");
   const [jlpt, setJlpt] = useState<string>("");
@@ -177,7 +178,11 @@ export function QuizTab({
 
   // initial mount
   useEffect(() => {
-    pickNext([]);
+    if (reviewMode) {
+      startSession();
+    } else {
+      pickNext([]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

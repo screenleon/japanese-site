@@ -20,21 +20,27 @@ const tabs: { id: Tab; label: string }[] = [
 ];
 
 export function App() {
+  return (
+    <CapabilitiesProvider>
+      <AppInner />
+    </CapabilitiesProvider>
+  );
+}
+
+function AppInner() {
+  const { quiz } = useCapabilities();
   const [viewState, setViewState] = useState<ViewState>({ view: "home" });
 
   if (viewState.view === "home") {
     return (
       <HomePage
         onStart={(initialMode) => setViewState({ view: "app", initialMode })}
+        quizCapable={quiz}
       />
     );
   }
 
-  return (
-    <CapabilitiesProvider>
-      <AppShell initialMode={viewState.initialMode} />
-    </CapabilitiesProvider>
-  );
+  return <AppShell initialMode={viewState.initialMode} />;
 }
 
 function AppShell({ initialMode }: { initialMode: QuizInitialMode }) {

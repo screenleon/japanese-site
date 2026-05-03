@@ -158,6 +158,24 @@ func NextQuestion(ctx context.Context, db *DB, opts NextQuestionOpts) (Question,
 	return candidates[len(candidates)-1].qu, nil
 }
 
+func CountDue(ctx context.Context, db *DB, contentType string) (int, error) {
+	row := db.QueryRowContext(ctx, `
+		SELECT COUNT(DISTINCT q.id)
+		FROM question q
+		WHERE (
+			(SELECT a.next_due_at FROM attempt a WHERE a.question_id = q.id
+			 ORDER BY a.id DESC LIMIT 1) IS NULL
+			OR (SELECT a.next_due_at FROM attempt a WHERE a.question_id = q.id
+			    ORDER BY a.id DESC LIMIT 1) <= datetime('now')
+		)
+		AND (? = '' OR q.content_type = ?)`, contentType, contentType)
+	var count int
+	if err := row.Scan(&count); err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
 func placeholders(n int) string {
 	if n <= 0 {
 		return ""
