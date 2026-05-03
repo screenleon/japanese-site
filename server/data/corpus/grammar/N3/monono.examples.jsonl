@@ -1,0 +1,5 @@
+{"text_ja":"新しい辞書を買った___、まだあまり使っていません。","text_zh":"雖然買了新字典，但還不太常用。","blank":"ものの","is_correct":1,"hint":"事実を認めて逆接","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"説明は聞いた___、完全には理解できませんでした。","text_zh":"雖然聽了說明，但無法完全理解。","blank":"ものの","is_correct":1,"hint":"聞いたが結果は違う","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この町は静かな___、交通が少し不便です。","text_zh":"這個城鎮雖然安靜，但交通有點不方便。","blank":"ものの","is_correct":1,"hint":"な形容詞 + ものの","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"日本語は好きな___、漢字を覚えるのは大変です。","text_zh":"雖然喜歡日文，但記漢字很辛苦。","blank":"ものの","is_correct":1,"hint":"対照的な内容","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"予約した___、席はまだ決まっていません。","text_zh":"雖然預約了，但座位還沒決定。","blank":"ものの","is_correct":1,"hint":"た形 + ものの","source":"curated","license":"CC-BY-SA-4.0"}

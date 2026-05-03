@@ -1,0 +1,13 @@
+{
+  "slug": "kagiri",
+  "title_ja": "限り",
+  "title_zh": "限り（只要／在範圍內）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「限り」は、ある状態や条件が続く範囲内で物事が成り立つことを表す表現である。動詞の辞書形、ている形、ない形、または「名詞 + の」に接続し、「その条件が続いている間は」「その範囲では」という意味を表す。",
+  "explanation_zh": "「限り」表示「只要某條件持續，就……」或「在某範圍內」。接續為動詞辭書形、ている形、ない形，或「名詞 + の + 限り」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}

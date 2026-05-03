@@ -1,0 +1,13 @@
+{
+  "slug": "dokoroka",
+  "title_ja": "どころか",
+  "title_zh": "どころか（別說／豈止）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「どころか」は、前に述べた内容を否定または低く見積もったうえで、実際にはそれを大きく超える、または反対の状態であることを表す表現である。普通形や名詞に接続し、「それどころではなく」という強い対比を示す。",
+  "explanation_zh": "「どころか」表示「別說……，甚至……」或「豈止……」，用來否定前項並加強後項。接續為普通形或名詞 + どころか。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}
