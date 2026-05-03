@@ -1,0 +1,15 @@
+{
+  "slug": "youni-naru",
+  "title_ja": "ようになる",
+  "title_zh": "ようになる（變得能夠／開始會）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「V辞書形 + ようになる」は、前はできなかったことができる状態に変わることを表します。「Vない形 + ようになる」は、前はしていたことをしない状態へ変わる意味です。\n\n- 漢字が読めるようになりました\n- 最近、夜ふかししないようになりました",
+  "explanation_zh": "「ようになる」表示能力、習慣或狀態的變化，意思是「變得會、變得不再」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["ようにする"], "error_class": "effort-vs-change-pattern"}
+  ]
+}

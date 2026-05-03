@@ -1,0 +1,15 @@
+{
+  "slug": "teiku-tekuru",
+  "title_ja": "ていく・てくる",
+  "title_zh": "ていく・てくる（變化的方向）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「Vていく」は、今から先へ変化や動きが続くことを表します。「Vてくる」は、過去から今までの変化や、話し手の方へ近づく動きを表します。\n\n- これから寒くなっていきます\n- 少しずつ日本語が分かってきました",
+  "explanation_zh": "「ていく」表示往未來延續的變化或離開說話者的動作；「てくる」表示到現在為止的變化或朝說話者靠近的動作。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["ている", "てある"], "error_class": "state-pattern"}
+  ]
+}

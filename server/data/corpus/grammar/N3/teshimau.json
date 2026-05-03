@@ -1,0 +1,15 @@
+{
+  "slug": "teshimau",
+  "title_ja": "てしまう",
+  "title_zh": "てしまう（做完／不小心）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「Vてしまう」は、動作が全部終わることを表します。残念な気持ちや、思わずしてしまった気持ちを表すこともあります。\n\n- 宿題を全部やってしまいました\n- 大切な写真を消してしまいました",
+  "explanation_zh": "「てしまう」表示動作完成，也常帶有遺憾、後悔或不小心做了某事的語氣。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["ておく", "ている"], "error_class": "aspect-pattern"}
+  ]
+}

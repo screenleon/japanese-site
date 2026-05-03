@@ -1,0 +1,15 @@
+{
+  "slug": "hazuda",
+  "title_ja": "はずだ",
+  "title_zh": "はずだ（應該）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「はずだ」は、理由や情報から考えて、当然そうだと思うことを表します。名詞やな形容詞には「の」が入る形もあります。\n\n- 田中さんはもう着いたはずです\n- この店は今日休みのはずです",
+  "explanation_zh": "「はずだ」表示根據理由或資訊推測「照理應該如此」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["べき", "つもり"], "error_class": "expectation-pattern"}
+  ]
+}

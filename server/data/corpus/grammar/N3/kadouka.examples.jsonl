@@ -1,0 +1,5 @@
+{"text_ja":"明日会議がある___どうか、まだ分かりません。","text_zh":"明天是否有會議，還不知道。","blank":"か","is_correct":1,"hint":"是否","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この薬を飲んでもいい___どうか、医者に聞きます。","text_zh":"我會問醫生是否可以吃這個藥。","blank":"か","is_correct":1,"hint":"確認する内容","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"彼が来る___どうか、電話で確認してください。","text_zh":"請打電話確認他是否會來。","blank":"か","is_correct":1,"hint":"来るか来ないか","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この答えが正しい___どうか、自信がありません。","text_zh":"我沒有信心這個答案是否正確。","blank":"か","is_correct":1,"hint":"分からない内容","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"週末に出かける___どうかは、天気によります。","text_zh":"週末是否出門，要看天氣。","blank":"か","is_correct":1,"hint":"AかどうかはBによる","source":"curated","license":"CC-BY-SA-4.0"}

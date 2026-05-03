@@ -1,0 +1,15 @@
+{
+  "slug": "kotoni-suru",
+  "title_ja": "ことにする",
+  "title_zh": "ことにする（決定做）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「V辞書形/ない形 + ことにする」は、自分の意志で決めたことを表します。習慣として決めていることにも使います。\n\n- 毎朝走ることにしました\n- 夜は甘いものを食べないことにしています",
+  "explanation_zh": "「ことにする」表示由自己決定做或不做某事，也可表示自己定下的習慣。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["ことになる"], "error_class": "decision-source-pattern"}
+  ]
+}

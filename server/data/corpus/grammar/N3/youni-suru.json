@@ -1,0 +1,15 @@
+{
+  "slug": "youni-suru",
+  "title_ja": "ようにする",
+  "title_zh": "ようにする（努力做到）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「V辞書形/ない形 + ようにする」は、ある状態になるように努力したり、気をつけたりすることを表します。「毎日読むようにしています」のように、続けている心がけにも使います。\n\n- 忘れないようにします\n- 毎朝早く起きるようにしています",
+  "explanation_zh": "「ようにする」表示努力做到、留意不要做，或持續維持某個習慣。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["ようになる"], "error_class": "effort-vs-change-pattern"}
+  ]
+}
