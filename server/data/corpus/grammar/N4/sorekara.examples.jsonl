@@ -1,0 +1,5 @@
+{"text_ja":"朝ご飯を食べました。___、学校へ行きました。","text_zh":"我吃了早餐。然後去了學校。","blank":"それから","is_correct":1,"hint":"次の出来事へつなぐ","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"駅で友だちに会いました。___、一緒に映画を見ました。","text_zh":"我在車站見到朋友。之後一起看了電影。","blank":"それから","is_correct":1,"hint":"時間の順序","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"宿題をします。___、部屋を掃除します。","text_zh":"我先做作業。然後打掃房間。","blank":"それから","is_correct":1,"hint":"一つ目の後の行動","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この紙に名前を書いてください。___、ここに出してください。","text_zh":"請在這張紙上寫名字。然後交到這裡。","blank":"それから","is_correct":1,"hint":"手順をつなぐ","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"牛乳を買います。___、パンも買います。","text_zh":"我要買牛奶。還有，麵包也要買。","blank":"それから","is_correct":1,"hint":"追加にも使う","source":"curated","license":"CC-BY-SA-4.0"}

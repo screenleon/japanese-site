@@ -1,0 +1,5 @@
+{"text_ja":"朝ご飯を食べ___学校へ行きました。","text_zh":"我沒吃早餐就去學校了。","blank":"ないで","is_correct":1,"hint":"動詞ない形 + で","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"辞書を使わ___この文を読みました。","text_zh":"我沒有用字典就讀了這個句子。","blank":"ないで","is_correct":1,"hint":"使わない + で","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"ここに車を止め___ください。","text_zh":"請不要把車停在這裡。","blank":"ないで","is_correct":1,"hint":"依頼の形","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"電気を消さ___寝てしまいました。","text_zh":"我沒關燈就睡著了。","blank":"ないで","is_correct":1,"hint":"消さない + で","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"名前を書か___出さないでください。","text_zh":"請不要沒寫名字就交出去。","blank":"ないで","is_correct":1,"hint":"しない状態で次の動作","source":"curated","license":"CC-BY-SA-4.0"}

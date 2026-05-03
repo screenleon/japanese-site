@@ -1,0 +1,13 @@
+{
+  "slug": "ato-de",
+  "title_ja": "後で",
+  "title_zh": "後で（在……之後）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「後で」は、ある動作や出来事が終わってから何かをすることを表します。動詞は「た形 + 後で」を使います。名詞の場合は「名詞 + の + 後で」となります。",
+  "explanation_zh": "「後で」表示在某動作或事件結束之後做某事。動詞接た形，名詞接「の」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}

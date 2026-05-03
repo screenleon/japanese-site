@@ -1,0 +1,5 @@
+{"text_ja":"先生は明日テストがある___言いました。","text_zh":"老師說明天有考試。","blank":"って","is_correct":1,"hint":"会話の引用","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"山田さんは今日来ない___聞きました。","text_zh":"我聽說山田先生/小姐今天不來。","blank":"って","is_correct":1,"hint":"聞いた内容を伝える","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この漢字は何___読みますか。","text_zh":"這個漢字讀作什麼？","blank":"って","is_correct":1,"hint":"引用して読み方を聞く","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"駅前に新しい店ができた___本当ですか。","text_zh":"聽說車站前開了新店，是真的嗎？","blank":"って","is_correct":1,"hint":"聞いた話を確認する","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"日本語___おもしろいですね。","text_zh":"日文這個東西很有趣呢。","blank":"って","is_correct":1,"hint":"話題を示す使い方","source":"curated","license":"CC-BY-SA-4.0"}

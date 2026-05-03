@@ -1,0 +1,13 @@
+{
+  "slug": "dakara",
+  "title_ja": "だから",
+  "title_zh": "だから（所以）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「だから」は、前に述べた理由や状況から、後ろの結果や判断を導く接続表現です。前の文が理由、後ろの文が結果になります。書き言葉では「ですから」も使われます。",
+  "explanation_zh": "「だから」連接理由與結果，意思是「所以、因此」。前句說明原因，後句說明結果或判斷。較丁寧或書面可用「ですから」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}

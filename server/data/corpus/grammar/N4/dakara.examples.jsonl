@@ -1,0 +1,5 @@
+{"text_ja":"今日は雨です。___、家にいます。","text_zh":"今天下雨。所以我待在家。","blank":"だから","is_correct":1,"hint":"理由から結果へ","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"明日は試験があります。___、今晩勉強します。","text_zh":"明天有考試。所以今晚要讀書。","blank":"だから","is_correct":1,"hint":"前の文が理由","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この道は危ないです。___、ゆっくり歩いてください。","text_zh":"這條路很危險。所以請慢慢走。","blank":"だから","is_correct":1,"hint":"理由を受けて依頼する","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"電車が遅れました。___、少し遅刻しました。","text_zh":"電車誤點了。所以我有點遲到。","blank":"だから","is_correct":1,"hint":"原因と結果","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この部屋は静かです。___、勉強しやすいです。","text_zh":"這個房間很安靜。所以很適合讀書。","blank":"だから","is_correct":1,"hint":"判断の理由","source":"curated","license":"CC-BY-SA-4.0"}
