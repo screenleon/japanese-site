@@ -154,9 +154,6 @@ func TestGetGrammarExamples(t *testing.T) {
 	if err := Migrate(db); err != nil {
 		t.Fatalf("migrate: %v", err)
 	}
-	if _, err := db.Exec(`ALTER TABLE grammar_example ADD COLUMN hint TEXT`); err != nil {
-		t.Fatalf("add hint column: %v", err)
-	}
 
 	if _, err := db.Exec(`INSERT INTO grammar_point (slug, title_ja, title_zh, jlpt_level, explanation_zh, source, license)
 	                      VALUES ('example-gp', 'テスト', '測試', 'N3', '測試用', 'test', 'CC0')`); err != nil {

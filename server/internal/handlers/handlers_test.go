@@ -417,7 +417,6 @@ func newHandlerTestDB(t *testing.T) *store.DB {
 func seedHandlerTestDB(t *testing.T, db *store.DB) {
 	t.Helper()
 	statements := []string{
-		`ALTER TABLE grammar_example ADD COLUMN hint TEXT`,
 		`INSERT INTO vocab (headword, reading, pos, gloss_en, gloss_ja, gloss_zh, jlpt_level, frequency_rank, source, license, validated_by)
 		 VALUES ('食べる', 'たべる', 'v1', 'eat', '食べ物を口に入れること。', '吃', 'N5', 1, 'test', 'CC0', 'test-validator')`,
 		`INSERT INTO kanji (character, onyomi, kunyomi, meaning_en, meaning_ja, meaning_zh, jlpt_level, grade, stroke_count, source, license, validated_by)

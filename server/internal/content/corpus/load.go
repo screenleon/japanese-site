@@ -132,8 +132,8 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 	insertEx, err := tx.PrepareContext(ctx, `
 		INSERT INTO grammar_example (
 			grammar_point_id, text_ja, text_zh, is_correct,
-			source, license, validated_by, validator_score, validated_at
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+			hint, source, license, validated_by, validator_score, validated_at
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
 	if err != nil {
 		return stats, fmt.Errorf("prepare ex: %w", err)
 	}
@@ -219,7 +219,7 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 				}
 				if _, err := insertEx.ExecContext(ctx,
 					gpID, ex.TextJA, ex.TextZH, ex.IsCorrect,
-					ex.Source, ex.License, GrammarValidatorID, 1.0, now); err != nil {
+					nullStr(ex.Hint), ex.Source, ex.License, GrammarValidatorID, 1.0, now); err != nil {
 					return fmt.Errorf("insert example %s: %w", gp.Slug, err)
 				}
 				stats.GrammarExamples++

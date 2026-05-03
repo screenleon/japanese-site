@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { api, type GrammarExample, type GrammarPoint } from "../api";
 import { useReadTracking } from "../hooks/useReadTracking";
 
@@ -17,6 +17,7 @@ export function GrammarTab({
   const [examples, setExamples] = useState<GrammarExample[]>([]);
   const [showTranslation, setShowTranslation] = useState(false);
   const [loading, setLoading] = useState(true);
+  const initialSlugApplied = useRef(false);
   const [loadingRandom, setLoadingRandom] = useState(false);
   const [err, setErr] = useState("");
 
@@ -49,6 +50,7 @@ export function GrammarTab({
     if (!initialSlug || points.length === 0) return;
     const target = points.find((p) => p.slug === initialSlug);
     if (target) {
+      initialSlugApplied.current = true;
       setSelectedLevel(target.jlpt_level);
       setActiveSlug(target.slug);
     }
@@ -69,6 +71,10 @@ export function GrammarTab({
   useReadTracking(active?.slug ? { type: "grammar", slug: active.slug } : null);
 
   useEffect(() => {
+    if (initialSlugApplied.current) {
+      initialSlugApplied.current = false;
+      return;
+    }
     setActiveSlug("");
     setShowTranslation(false);
   }, [selectedLevel]);
