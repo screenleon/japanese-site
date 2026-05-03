@@ -1,0 +1,5 @@
+{"text_ja":"この店は安い___おいしい。","text_zh":"這家店雖然便宜，味道卻很好。","blank":"わりに","is_correct":1,"hint":"程度のずれ","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"彼は若い___経験が豊富だ。","text_zh":"他雖然年輕，經驗卻很豐富。","blank":"わりに","is_correct":1,"hint":"い形容詞 + わりに","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"値段の___量が少ない。","text_zh":"相對於價格，份量很少。","blank":"わりに","is_correct":1,"hint":"名詞 + の + わりに","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"よく寝た___まだ眠い。","text_zh":"明明睡很多，卻還是很睏。","blank":"わりに","is_correct":1,"hint":"動詞普通形 + わりに","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"静かな___交通は便利だ。","text_zh":"雖然安靜，交通卻很方便。","blank":"わりに","is_correct":1,"hint":"な形容詞 + な + わりに","source":"curated","license":"CC-BY-SA-4.0"}

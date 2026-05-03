@@ -1,0 +1,16 @@
+{
+  "slug": "nishitewa",
+  "title_ja": "〜にしては",
+  "title_zh": "〜にしては（以…來說／就…而言）",
+  "jlpt_level": "N2",
+  "explanation_ja": "「〜にしては」は、前に示した基準から考えると予想と違う、という評価を表す。例として「新人にしては落ち着いている」「六月にしては涼しい」のように、立場・年齢・時期などを基準にして述べる。客観的な基準とのずれを述べる表現で、単なる比較よりも意外さが含まれる。",
+  "explanation_zh": "「〜にしては」表示以某個身分、年齡或條件來看，後項結果和預期不同，帶有「就…而言」的評價感。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_contains_any": ["わりに"], "error_class": "used-warini"},
+    {"if_answer_not_contains_any": ["にしては"], "error_class": "missing-nishitewa"}
+  ]
+}

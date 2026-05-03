@@ -1,0 +1,16 @@
+{
+  "slug": "ta-totan",
+  "title_ja": "〜たとたん",
+  "title_zh": "〜たとたん（一…就…）",
+  "jlpt_level": "N2",
+  "explanation_ja": "「〜たとたん」は、ある動作が終わった直後に予想外のことが起きることを表す。例として「外に出たとたん雨が降り出した」「立ち上がったとたんめまいがした」のように、後件には話し手が意図しない出来事が来る。自分の意志で計画して行う後件には使いにくい。",
+  "explanation_zh": "「〜たとたん」表示某動作剛結束的瞬間，立刻發生意外或非意志性的事情。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_contains_any": ["ところ"], "error_class": "used-tatokoro"},
+    {"if_answer_not_contains_any": ["とたん"], "error_class": "missing-totan"}
+  ]
+}
