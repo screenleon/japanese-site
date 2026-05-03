@@ -1,0 +1,5 @@
+{"text_ja":"___は私の本です。","text_zh":"這是我的書。","blank":"これ","is_correct":1,"hint":"靠近說話者的東西用これ。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"___はあなたのかばんですか。","text_zh":"那是你的包包嗎？","blank":"それ","is_correct":1,"hint":"靠近聽話者的東西用それ。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"___は図書館です。","text_zh":"那邊是圖書館。","blank":"あそこ","is_correct":1,"hint":"離雙方都遠的場所用あそこ。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"トイレは___ですか。","text_zh":"廁所在哪裡？","blank":"どこ","is_correct":1,"hint":"詢問場所用どこ。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"受付は___です。","text_zh":"櫃台在這邊。","blank":"こちら","is_correct":1,"hint":"較禮貌地說「這邊」用こちら。","source":"curated","license":"CC-BY-SA-4.0"}

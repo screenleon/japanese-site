@@ -1,0 +1,13 @@
+{
+  "slug": "tsumori",
+  "title_ja": "つもり",
+  "title_zh": "つもり（打算）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「動詞辞書形 + つもり」は、これから何かをする予定や強い気持ちを表します。否定するときは「動詞ない形 + つもり」を使い、「行かないつもりです」のように言います。自分の意志を説明するときによく使います。",
+  "explanation_zh": "「動詞辞書形 + つもり」表示打算或計畫做某事；否定時用「動詞ない形 + つもり」，表示不打算做。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}

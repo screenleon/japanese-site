@@ -1,0 +1,13 @@
+{
+  "slug": "okage-de",
+  "title_ja": "おかげで",
+  "title_zh": "おかげで（多虧／幸虧）",
+  "jlpt_level": "N3",
+  "explanation_ja": "「おかげで」は、よい結果をもたらした原因や助けを表す表現である。普通形または「名詞 + の」に接続し、感謝やよい評価を伴って用いられる。",
+  "explanation_zh": "「おかげで」表示帶來好結果的原因或幫助，意為「多虧……／幸虧……」。接續為普通形，或「名詞 + の + おかげで」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}

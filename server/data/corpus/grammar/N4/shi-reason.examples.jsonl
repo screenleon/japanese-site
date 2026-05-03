@@ -1,0 +1,5 @@
+{"text_ja":"この店は安い___、駅から近いです。","text_zh":"這家店又便宜，離車站也近。","blank":"し","is_correct":1,"hint":"理由を並べる","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"今日は雨だ___、家で勉強します。","text_zh":"今天又下雨，所以我在家讀書。","blank":"し","is_correct":1,"hint":"名詞・ナ形容詞には「だし」","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この問題は難しい___、時間もありません。","text_zh":"這題又難，也沒有時間。","blank":"し","is_correct":1,"hint":"イ形容詞 + し","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"田中さんは親切だ___、説明も上手です。","text_zh":"田中先生/小姐又親切，說明也很清楚。","blank":"し","is_correct":1,"hint":"ナ形容詞 + だし","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"明日はテストもある___、早く寝ます。","text_zh":"明天也有考試，所以我要早點睡。","blank":"し","is_correct":1,"hint":"事実を理由として挙げる","source":"curated","license":"CC-BY-SA-4.0"}

@@ -1,0 +1,13 @@
+{
+  "slug": "wake-da",
+  "title_ja": "わけだ",
+  "title_zh": "わけだ（怪不得／也就是說）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「わけだ」は、理由や状況を知って、結果が自然だと理解したことを表します。「だからそうなのだ」と納得するときに使います。動詞普通形、い形容詞、な形容詞 + な、名詞 + のに続きます。",
+  "explanation_zh": "「わけだ」表示知道理由或情況後，理解某結果是自然的，常譯為「怪不得」「也就是說」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}

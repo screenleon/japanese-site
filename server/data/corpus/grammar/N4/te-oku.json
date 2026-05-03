@@ -1,0 +1,13 @@
+{
+  "slug": "te-oku",
+  "title_ja": "ておく",
+  "title_zh": "ておく（預先做／保持狀態）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「動詞て形 + おく」は、後で役に立つように前もって何かをすることを表します。また、「窓を開けておく」のように、ある状態をそのままにしておく意味でも使います。会話では「ておく」が「とく」になることもありますが、ここでは標準的な形を扱います。",
+  "explanation_zh": "「動詞て形 + おく」表示為了之後的目的先做好某事，或讓某狀態保持不變。常譯為「先……好」「保持……」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}

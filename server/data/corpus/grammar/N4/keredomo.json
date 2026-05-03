@@ -1,0 +1,13 @@
+{
+  "slug": "keredomo",
+  "title_ja": "けれども",
+  "title_zh": "けれども／けど（但是／雖然）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「けれども」は、前の内容と後ろの内容を対比してつなぐ表現です。「が」より少しやわらかい印象になることがあります。普通形にも丁寧形にも接続できます。会話では短い形の「けど」もよく使われます。",
+  "explanation_zh": "「けれども」連接兩個相對或轉折的內容，語氣比「が」稍柔和。可接普通形或丁寧形。口語常用「けど」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}

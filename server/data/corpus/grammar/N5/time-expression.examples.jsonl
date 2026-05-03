@@ -1,0 +1,5 @@
+{"text_ja":"授業は午前九時___に始まります。","text_zh":"課在上午九點十分開始。","blank":"十分","is_correct":1,"hint":"十分讀作じゅっぷん或じっぷん。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"映画は午後七___です。","text_zh":"電影是晚上七點。","blank":"時","is_correct":1,"hint":"幾點用「時」。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"今は四時___です。","text_zh":"現在是四點半。","blank":"半","is_correct":1,"hint":"三十分也可以說「半」。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"電車は六時五___に来ます。","text_zh":"電車六點五分來。","blank":"分","is_correct":1,"hint":"分鐘用「分」。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"朝ごはんは午前七時___です。","text_zh":"早餐在上午七點半。","blank":"半","is_correct":1,"hint":"半表示三十分。","source":"curated","license":"CC-BY-SA-4.0"}

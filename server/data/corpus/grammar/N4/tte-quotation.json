@@ -1,0 +1,13 @@
+{
+  "slug": "tte-quotation",
+  "title_ja": "って",
+  "title_zh": "って（引用／聽說／話題）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「って」は、会話でよく使われる「と」のくだけた形です。発言や内容を引用するとき、聞いた内容を伝えるとき、また話題を示すときに使います。書面では「と」や「という」を使うほうが改まった表現になります。",
+  "explanation_zh": "「って」是口語中相當於「と」的形式，可用於引用、轉述聽到的內容，也可提示話題。較正式的書面語通常用「と」或「という」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}

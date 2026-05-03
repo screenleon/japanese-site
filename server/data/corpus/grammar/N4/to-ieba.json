@@ -1,0 +1,13 @@
+{
+  "slug": "to-ieba",
+  "title_ja": "といえば／といったら",
+  "title_zh": "といえば／といったら（說到）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「名詞 + といえば」または「名詞 + といったら」は、ある話題を取り上げ、それに関係する事柄を続けて述べる表現である。「その話題から考えると」という意味で、会話の中で連想や代表例を導入する。",
+  "explanation_zh": "「名詞 + といえば／といったら」表示「說到……」，用來提出某個話題，接著引出相關內容、聯想或代表例。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}

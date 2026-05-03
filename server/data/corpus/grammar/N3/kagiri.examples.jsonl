@@ -1,0 +1,5 @@
+{"text_ja":"時間がある___、毎日日本語を読みます。","text_zh":"只要有時間，我每天都讀日文。","blank":"限り","is_correct":1,"hint":"条件が続く間","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"私が知っている___では、彼はまだ日本にいます。","text_zh":"就我所知，他還在日本。","blank":"限り","is_correct":1,"hint":"知識の範囲","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"雨が降らない___、試合は行われます。","text_zh":"只要不下雨，比賽就會舉行。","blank":"限り","is_correct":1,"hint":"ない形 + 限り","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"学生である___、校則を守らなければなりません。","text_zh":"只要還是學生，就必須遵守校規。","blank":"限り","is_correct":1,"hint":"状態が続く間","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"力の___、みんなを手伝いたいです。","text_zh":"在能力所及的範圍內，我想幫助大家。","blank":"限り","is_correct":1,"hint":"名詞 + の + 限り","source":"curated","license":"CC-BY-SA-4.0"}

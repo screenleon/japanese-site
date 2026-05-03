@@ -1,0 +1,5 @@
+{"text_ja":"この本は難しい___、おもしろいです。","text_zh":"這本書雖然難，但是很有趣。","blank":"けれども","is_correct":1,"hint":"対比してつなぐ","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"駅は近い___、家賃は高いです。","text_zh":"車站很近，但是房租很高。","blank":"けれども","is_correct":1,"hint":"前後の内容が対比","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"日本語を勉強しています___、まだ上手ではありません。","text_zh":"我在學日文，不過還不太好。","blank":"けれども","is_correct":1,"hint":"丁寧形にも接続できる","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"少し高い___、このかばんを買いたいです。","text_zh":"雖然有點貴，但我想買這個包包。","blank":"けど","is_correct":1,"hint":"会話でよく使う短い形","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"今日は寒い___、散歩に行きます。","text_zh":"今天很冷，不過我要去散步。","blank":"けれども","is_correct":1,"hint":"逆接を表す","source":"curated","license":"CC-BY-SA-4.0"}

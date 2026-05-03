@@ -1,0 +1,5 @@
+{"text_ja":"午後は雨が降る___。","text_zh":"下午可能會下雨。","blank":"かもしれません","is_correct":1,"hint":"普通形 + かもしれない","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"田中さんは今日来ない___。","text_zh":"田中先生今天也許不會來。","blank":"かもしれません","is_correct":1,"hint":"ない形 + かもしれない","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この店は少し高い___。","text_zh":"這家店可能有點貴。","blank":"かもしれない","is_correct":1,"hint":"い形容詞 + かもしれない","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"明日は休み___。","text_zh":"明天也許是假日。","blank":"かもしれません","is_correct":1,"hint":"名詞は「だ」を付けない","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この答えは正しくない___。","text_zh":"這個答案可能不正確。","blank":"かもしれません","is_correct":1,"hint":"確かではない可能性","source":"curated","license":"CC-BY-SA-4.0"}

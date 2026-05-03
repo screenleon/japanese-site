@@ -1,0 +1,5 @@
+{"text_ja":"私は___朝ごはんを食べます。","text_zh":"我總是吃早餐。","blank":"いつも","is_correct":1,"hint":"最高頻率用いつも。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"田中さんは___図書館へ行きます。","text_zh":"田中先生常去圖書館。","blank":"よく","is_correct":1,"hint":"常常用よく。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"私は___映画を見ます。","text_zh":"我偶爾看電影。","blank":"たまに","is_correct":1,"hint":"偶爾用たまに。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この店にはあまり___。","text_zh":"我不太去這家店。","blank":"行きません","is_correct":1,"hint":"あまり通常和否定形一起用。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"コーヒーは全然___。","text_zh":"我完全不喝咖啡。","blank":"飲みません","is_correct":1,"hint":"全然通常和否定形一起用。","source":"curated","license":"CC-BY-SA-4.0"}

@@ -1,0 +1,13 @@
+{
+  "slug": "demo-particle",
+  "title_ja": "でも",
+  "title_zh": "でも（之類的／就連）",
+  "jlpt_level": "N4",
+  "explanation_ja": "助詞の「でも」は、「名詞 + でも」の形で、例を一つ軽く示したり、やわらかい提案をしたりする表現である。また、「そのようなものでも」という意味で、意外な対象を含める場合にも用いられる。接続詞の「でも」（しかし）とは区別される。",
+  "explanation_zh": "助詞「でも」接在名詞後，可表示「……之類的」作為輕微建議或例子，也可表示「連……也」。需和表示「但是」的接續詞「でも」區分。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "te-ageru",
+  "title_ja": "てあげる",
+  "title_zh": "てあげる（為別人做）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「動詞て形 + あげる」は、話し手や話し手側の人が、相手のために何かをすることを表します。相手に恩を着せるように聞こえる場合があるため、目上の人に使うときは注意が必要です。",
+  "explanation_zh": "「動詞て形 + あげる」表示說話者或自己這邊的人為別人做某事，是給予幫助或好意的表現。對上位者使用時需注意語氣。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}
