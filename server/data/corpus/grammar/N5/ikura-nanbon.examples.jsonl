@@ -1,0 +1,5 @@
+{"text_ja":"この本は___ですか。","text_zh":"這本書多少錢？","blank":"いくら","is_correct":1,"hint":"問價格用いくら。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"ペンは___ありますか。","text_zh":"有幾枝筆？","blank":"何本","is_correct":1,"hint":"問細長物的數量用何本。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"水は一本___ですか。","text_zh":"一瓶水多少錢？","blank":"いくら","is_correct":1,"hint":"問價錢，不是問數量。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"傘を___持っていますか。","text_zh":"你有幾把傘？","blank":"何本","is_correct":1,"hint":"傘可用本計數。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"このジュースは___ですか。","text_zh":"這瓶果汁多少錢？","blank":"いくら","is_correct":1,"hint":"商品價格用いくら。","source":"curated","license":"CC-BY-SA-4.0"}

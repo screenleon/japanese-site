@@ -1,0 +1,5 @@
+{"text_ja":"これは___ですか。","text_zh":"這是什麼？","blank":"何","is_correct":1,"hint":"問東西用何。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"駅は___ですか。","text_zh":"車站在哪裡？","blank":"どこ","is_correct":1,"hint":"問場所用どこ。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"あの人は___ですか。","text_zh":"那個人是誰？","blank":"誰","is_correct":1,"hint":"問人用誰。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"誕生日は___ですか。","text_zh":"生日是什麼時候？","blank":"いつ","is_correct":1,"hint":"問時間用いつ。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"日本語の勉強は___ですか。","text_zh":"日語學習怎麼樣？","blank":"どう","is_correct":1,"hint":"問狀況或感想用どう。","source":"curated","license":"CC-BY-SA-4.0"}

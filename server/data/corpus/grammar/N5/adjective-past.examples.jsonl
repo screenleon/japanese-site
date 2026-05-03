@@ -1,0 +1,5 @@
+{"text_ja":"昨日はとても___です。","text_zh":"昨天非常冷。","blank":"寒かった","is_correct":1,"hint":"寒い的過去形是寒かった。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この映画は___です。","text_zh":"這部電影很有趣。","blank":"おもしろかった","is_correct":1,"hint":"おもしろい的過去形。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"先週は忙しく___です。","text_zh":"上週不忙。","blank":"なかった","is_correct":1,"hint":"い形容詞否定過去用くなかった。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"町は静か___。","text_zh":"城鎮以前很安靜。","blank":"でした","is_correct":1,"hint":"な形容詞的禮貌過去用でした。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"テストは簡単では___。","text_zh":"考試並不簡單。","blank":"ありませんでした","is_correct":1,"hint":"な形容詞的禮貌否定過去。","source":"curated","license":"CC-BY-SA-4.0"}

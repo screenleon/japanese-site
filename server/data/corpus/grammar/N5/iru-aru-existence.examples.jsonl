@@ -1,0 +1,5 @@
+{"text_ja":"教室に学生が___。","text_zh":"教室裡有學生。","blank":"います","is_correct":1,"hint":"人和動物用います。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"机の上に辞書が___。","text_zh":"桌上有字典。","blank":"あります","is_correct":1,"hint":"物品用あります。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"公園に犬が___。","text_zh":"公園裡有狗。","blank":"います","is_correct":1,"hint":"動物用います。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"駅の前に銀行が___。","text_zh":"車站前有銀行。","blank":"あります","is_correct":1,"hint":"建築物用あります。","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"部屋にだれも___。","text_zh":"房間裡誰也不在。","blank":"いません","is_correct":1,"hint":"人的否定用いません。","source":"curated","license":"CC-BY-SA-4.0"}
