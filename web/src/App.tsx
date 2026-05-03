@@ -9,7 +9,7 @@ import { CapabilitiesProvider, useCapabilities } from "./capabilities";
 import { api, type ProgressSummary } from "./api";
 
 type Tab = "quiz" | "grammar" | "vocab" | "kanji" | "sentence";
-type ViewState = { view: "home" } | { view: "app"; initialMode: QuizInitialMode };
+type ViewState = { view: "home" } | { view: "app"; initialMode: QuizInitialMode; initialTab?: Tab };
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "quiz", label: "練習題" },
@@ -34,16 +34,29 @@ function AppInner() {
   if (viewState.view === "home") {
     return (
       <HomePage
-        onStart={(initialMode) => setViewState({ view: "app", initialMode })}
+        onStart={(initialMode, initialTab) =>
+          setViewState({ view: "app", initialMode, initialTab })
+        }
         quizCapable={quiz}
       />
     );
   }
 
-  return <AppShell initialMode={viewState.initialMode} />;
+  return (
+    <AppShell
+      initialMode={viewState.initialMode}
+      initialTab={viewState.initialTab}
+    />
+  );
 }
 
-function AppShell({ initialMode }: { initialMode: QuizInitialMode }) {
+function AppShell({
+  initialMode,
+  initialTab,
+}: {
+  initialMode: QuizInitialMode;
+  initialTab?: Tab;
+}) {
   const { loaded, quiz, sentence } = useCapabilities();
   const visibleTabs = useMemo(
     () =>
@@ -55,7 +68,7 @@ function AppShell({ initialMode }: { initialMode: QuizInitialMode }) {
       }),
     [loaded, quiz, sentence]
   );
-  const [active, setActive] = useState<Tab>("quiz");
+  const [active, setActive] = useState<Tab>(initialTab ?? "quiz");
   const [grammarSlug, setGrammarSlug] = useState<string | undefined>();
 
   useEffect(() => {
@@ -78,7 +91,7 @@ function AppShell({ initialMode }: { initialMode: QuizInitialMode }) {
           </h1>
           <div className="flex flex-wrap items-center justify-end gap-2">
             <ProgressBadge />
-            <span className="text-xs text-slate-500">M3 開發預覽</span>
+            <span className="text-xs text-slate-500">{quiz ? "M3 開發預覽" : "靜態瀏覽"}</span>
           </div>
         </div>
         <nav className="max-w-4xl mx-auto px-4 flex gap-1 -mb-px">

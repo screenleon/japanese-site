@@ -3,8 +3,10 @@ import { api } from "./api";
 import type { DueCount } from "./apiTypes";
 import type { QuizInitialMode } from "./tabs/QuizTab";
 
+type ContentTab = "grammar" | "vocab" | "kanji";
+
 interface HomePageProps {
-  onStart: (initialMode: QuizInitialMode) => void;
+  onStart: (initialMode: QuizInitialMode, initialTab?: ContentTab) => void;
   quizCapable: boolean;
 }
 
@@ -16,7 +18,6 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
 
   useEffect(() => {
     let cancelled = false;
-
     Promise.all([api.listGrammar(), api.searchVocab("", undefined)])
       .then(([grammar, vocab]) => {
         if (cancelled) return;
@@ -26,7 +27,6 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
       .catch((e) => {
         if (!cancelled) setError(String(e));
       });
-
     return () => {
       cancelled = true;
     };
@@ -35,7 +35,8 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
   useEffect(() => {
     if (!quizCapable) return;
     let cancelled = false;
-    api.getDueCount()
+    api
+      .getDueCount()
       .then((d) => {
         if (!cancelled) setDueCount(d);
       })
@@ -56,37 +57,41 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
             日本語学習
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
-            用文法、單字與測驗建立穩定的日文練習節奏。
+            {quizCapable
+              ? "用文法、單字與測驗建立穩定的日文練習節奏。"
+              : "查閱文法說明、單字與漢字，隨時作為學習參考。"}
           </p>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 mb-8">
-          <CountPanel label="文法點" value={grammarCount} />
-          <CountPanel label="單字" value={vocabCount} />
-        </div>
-
-        {quizCapable && dueCount !== null && (dueCount.grammar > 0 || dueCount.vocab > 0) && (
-          <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-md flex items-center justify-between gap-4">
-            <div>
-              <p className="text-sm font-medium text-amber-800">需要複習</p>
-              <p className="text-xs text-amber-700 mt-0.5">
-                文法 {dueCount.grammar} 題・單字 {dueCount.vocab} 題
-              </p>
+        {quizCapable ? (
+          <>
+            <div className="grid gap-3 sm:grid-cols-2 mb-8">
+              <CountPanel label="文法點" value={grammarCount} />
+              <CountPanel label="單字" value={vocabCount} />
             </div>
-            <button
-              onClick={() => onStart("複習")}
-              className="shrink-0 px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700"
-            >
-              開始複習 ({dueCount.grammar + dueCount.vocab})
-            </button>
-          </div>
-        )}
 
-        {error && <p className="mb-6 text-sm text-red-600">無法讀取首頁統計：{error}</p>}
+            {dueCount !== null && (dueCount.grammar > 0 || dueCount.vocab > 0) && (
+              <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-md flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium text-amber-800">需要複習</p>
+                  <p className="text-xs text-amber-700 mt-0.5">
+                    文法 {dueCount.grammar} 題・單字 {dueCount.vocab} 題
+                  </p>
+                </div>
+                <button
+                  onClick={() => onStart("複習")}
+                  className="shrink-0 px-4 py-2 rounded-md bg-amber-600 text-white text-sm font-medium hover:bg-amber-700"
+                >
+                  開始複習 ({dueCount.grammar + dueCount.vocab})
+                </button>
+              </div>
+            )}
 
-        <div className="flex flex-wrap gap-3">
-          {quizCapable ? (
-            <>
+            {error && (
+              <p className="mb-6 text-sm text-red-600">無法讀取首頁統計：{error}</p>
+            )}
+
+            <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => onStart("練習")}
                 className="px-5 py-3 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
@@ -99,16 +104,35 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
               >
                 開始測試
               </button>
-            </>
-          ) : (
-            <button
-              onClick={() => onStart("練習")}
-              className="px-5 py-3 rounded-md bg-slate-700 text-white text-sm font-medium hover:bg-slate-800"
-            >
-              瀏覽內容
-            </button>
-          )}
-        </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="grid gap-3 sm:grid-cols-3 mb-4">
+              <ContentCard
+                label="文法"
+                meta={grammarCount !== null ? `${grammarCount} 點` : "…"}
+                description="JLPT N5–N1 文法說明・例句・用法解析"
+                onClick={() => onStart("練習", "grammar")}
+              />
+              <ContentCard
+                label="單字"
+                meta={vocabCount !== null ? `${vocabCount} 個` : "…"}
+                description="JLPT N5–N1 詞彙・詞性・中文解說"
+                onClick={() => onStart("練習", "vocab")}
+              />
+              <ContentCard
+                label="漢字"
+                meta="讀音・筆畫・部首"
+                description="查詢 JLPT 漢字的音訓讀音與意義"
+                onClick={() => onStart("練習", "kanji")}
+              />
+            </div>
+            <p className="text-xs text-slate-400">
+              練習與複習功能需啟動本地伺服器
+            </p>
+          </>
+        )}
       </section>
     </main>
   );
@@ -122,5 +146,31 @@ function CountPanel({ label, value }: { label: string; value: number | null }) {
       </div>
       <div className="mt-1 text-sm text-slate-500">{label}</div>
     </div>
+  );
+}
+
+function ContentCard({
+  label,
+  meta,
+  description,
+  onClick,
+}: {
+  label: string;
+  meta: string;
+  description: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="group text-left w-full bg-white border border-slate-200 rounded-md p-5 hover:border-slate-300 hover:shadow-sm transition-all"
+    >
+      <div className="flex items-start justify-between mb-2">
+        <span className="text-base font-semibold text-slate-950">{label}</span>
+        <span className="text-slate-400 group-hover:text-blue-500 transition-colors">›</span>
+      </div>
+      <p className="text-sm font-medium text-blue-700">{meta}</p>
+      <p className="mt-1.5 text-xs text-slate-500">{description}</p>
+    </button>
   );
 }
