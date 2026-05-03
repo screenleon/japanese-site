@@ -38,6 +38,7 @@ func Register(mux *http.ServeMux, db *store.DB, ps store.ProgressStore) {
 	mux.HandleFunc("GET /api/quiz/next", quizNext(db))
 	mux.HandleFunc("POST /api/quiz/answer", quizAnswer(db, grader))
 	mux.HandleFunc("GET /api/quiz/stats", quizStats(db))
+	mux.HandleFunc("GET /api/quiz/due-count", quizDueCount(db))
 	mux.HandleFunc("POST /api/read/{type}/{slug}", markRead(ps))
 	mux.HandleFunc("GET /api/progress", progress(db, ps))
 	mux.HandleFunc("GET /api/capabilities", capabilities(ps))
@@ -241,6 +242,22 @@ func quizStats(db *store.DB) http.HandlerFunc {
 			return
 		}
 		writeJSON(w, http.StatusOK, s)
+	}
+}
+
+func quizDueCount(db *store.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		grammar, err := store.CountDue(r.Context(), db, "grammar")
+		if err != nil {
+			httpError(w, r, http.StatusInternalServerError, "internal", err)
+			return
+		}
+		vocab, err := store.CountDue(r.Context(), db, "vocab")
+		if err != nil {
+			httpError(w, r, http.StatusInternalServerError, "internal", err)
+			return
+		}
+		writeJSON(w, http.StatusOK, map[string]int{"grammar": grammar, "vocab": vocab})
 	}
 }
 

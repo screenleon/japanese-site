@@ -97,7 +97,102 @@ func TestLogAttemptSetsNextDueAt(t *testing.T) {
 	}
 }
 
+func TestCountDue(t *testing.T) {
+	db := newMemoryDB(t)
+	defer db.Close()
+	if err := Migrate(db); err != nil {
+		t.Fatalf("migrate: %v", err)
+	}
+	seedStatsQuestionWithContentType(t, db, "duegrammar000001", "gp-due", "grammar")
+	seedStatsQuestionWithContentType(t, db, "futuregrammar001", "gp-future", "grammar")
+	seedStatsQuestionWithContentType(t, db, "duevocab00000001", "gp-vocab-due", "vocab")
+	seedStatsQuestionWithContentType(t, db, "legacyvocab00001", "gp-vocab-legacy", "vocab")
+
+	// duegrammar000001: answered wrong → now overdue → EXISTS check passes → counted
+	if _, err := LogAttempt(context.Background(), db, Attempt{
+		QuestionID: "duegrammar000001",
+		UserAnswer: "wrong",
+		Correct:    false,
+	}); err != nil {
+		t.Fatalf("log due grammar: %v", err)
+	}
+	// futuregrammar001: answered correctly → due in the future → not counted
+	if _, err := LogAttempt(context.Background(), db, Attempt{
+		QuestionID: "futuregrammar001",
+		UserAnswer: "right",
+		Correct:    true,
+	}); err != nil {
+		t.Fatalf("log future grammar: %v", err)
+	}
+	if _, err := LogAttempt(context.Background(), db, Attempt{
+		QuestionID: "duevocab00000001",
+		UserAnswer: "wrong",
+		Correct:    false,
+	}); err != nil {
+		t.Fatalf("log due vocab: %v", err)
+	}
+	if _, err := db.Exec(`INSERT INTO attempt
+		(question_id, user_answer, correct, error_class, next_due_at)
+		VALUES ('legacyvocab00001', 'legacy', 1, NULL, NULL)`); err != nil {
+		t.Fatalf("seed legacy attempt: %v", err)
+	}
+
+	grammar, err := CountDue(context.Background(), db, "grammar")
+	if err != nil {
+		t.Fatalf("CountDue grammar: %v", err)
+	}
+	if grammar != 1 {
+		t.Fatalf("CountDue grammar = %d, want 1", grammar)
+	}
+
+	vocab, err := CountDue(context.Background(), db, "vocab")
+	if err != nil {
+		t.Fatalf("CountDue vocab: %v", err)
+	}
+	if vocab != 2 {
+		t.Fatalf("CountDue vocab = %d, want 2", vocab)
+	}
+
+	total, err := CountDue(context.Background(), db, "")
+	if err != nil {
+		t.Fatalf("CountDue total: %v", err)
+	}
+	if total != 3 {
+		t.Fatalf("CountDue total = %d, want 3", total)
+	}
+}
+
+func TestCountDue_BoundaryAndNeverAttempted(t *testing.T) {
+	db := newMemoryDB(t)
+	defer db.Close()
+	if err := Migrate(db); err != nil {
+		t.Fatalf("migrate: %v", err)
+	}
+	// next_due_at exactly = datetime('now') — must satisfy the <= boundary and be counted
+	seedStatsQuestionWithContentType(t, db, "boundary000000001", "gp-boundary", "grammar")
+	if _, err := db.Exec(`INSERT INTO attempt
+		(question_id, user_answer, correct, error_class, next_due_at)
+		VALUES ('boundary000000001', 'test', 0, NULL, datetime('now'))`); err != nil {
+		t.Fatalf("seed boundary attempt: %v", err)
+	}
+	// never attempted — must NOT be counted (requires at least one attempt)
+	seedStatsQuestionWithContentType(t, db, "neverattempted001", "gp-never", "grammar")
+
+	count, err := CountDue(context.Background(), db, "grammar")
+	if err != nil {
+		t.Fatalf("CountDue: %v", err)
+	}
+	if count != 1 {
+		t.Fatalf("CountDue = %d, want 1 (boundary counted, never-attempted excluded)", count)
+	}
+}
+
 func seedStatsQuestion(t *testing.T, db *DB, id, grammarPoint string) {
+	t.Helper()
+	seedStatsQuestionWithContentType(t, db, id, grammarPoint, "grammar")
+}
+
+func seedStatsQuestionWithContentType(t *testing.T, db *DB, id, grammarPoint, contentType string) {
 	t.Helper()
 	if _, err := db.Exec(`INSERT OR IGNORE INTO grammar_point
 		(slug, title_ja, title_zh, jlpt_level, explanation_zh, source, license)
@@ -105,8 +200,8 @@ func seedStatsQuestion(t *testing.T, db *DB, id, grammarPoint string) {
 		t.Fatalf("seed gp: %v", err)
 	}
 	if _, err := db.Exec(`INSERT INTO question
-		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license)
-		VALUES (?, 'cloze', 'N3', ?, 'Q ___', 'ア', 'test', 'CC0')`, id, grammarPoint); err != nil {
+		(id, kind, jlpt_level, grammar_point, prompt, expected, content_type, source, license)
+		VALUES (?, 'cloze', 'N3', ?, 'Q ___', 'ア', ?, 'test', 'CC0')`, id, grammarPoint, contentType); err != nil {
 		t.Fatalf("seed q: %v", err)
 	}
 }
