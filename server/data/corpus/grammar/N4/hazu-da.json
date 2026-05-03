@@ -1,0 +1,13 @@
+{
+  "slug": "hazu-da",
+  "title_ja": "はずだ",
+  "title_zh": "はずだ（應該／照理說）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「はずだ」は、知っている情報や理由から考えて、そうなると期待できることを表します。動詞普通形、い形容詞、な形容詞 + な、名詞 + のに続きます。単なる希望ではなく、理由に基づく判断です。",
+  "explanation_zh": "「はずだ」表示根據已知資訊或理由推斷「照理應該如此」。不是單純希望，而是有根據的判斷。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}

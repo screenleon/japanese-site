@@ -1,0 +1,13 @@
+{
+  "slug": "te-kureru",
+  "title_ja": "てくれる",
+  "title_zh": "てくれる（別人為我做）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「動詞て形 + くれる」は、相手や第三者が、話し手や話し手側の人のために何かをしてくれることを表します。好意や助けを受けた気持ちを表すときによく使います。",
+  "explanation_zh": "「動詞て形 + くれる」表示別人為說話者或說話者這邊的人做某事，帶有受到幫助或好意的感覺。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}

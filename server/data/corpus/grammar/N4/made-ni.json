@@ -1,0 +1,13 @@
+{
+  "slug": "made-ni",
+  "title_ja": "までに",
+  "title_zh": "までに（在……以前）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「までに」は、ある時点より前に動作を終える必要があることを表します。「三時までに」は三時が期限であるという意味です。「まで」は動作や状態が続く終点を表すため、意味が異なります。",
+  "explanation_zh": "「までに」表示期限，意思是在某個時間點以前完成動作。要注意「まで」表示持續到某時為止，兩者不同。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}

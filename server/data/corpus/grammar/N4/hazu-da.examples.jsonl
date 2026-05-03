@@ -1,0 +1,5 @@
+{"text_ja":"田中さんは毎日勉強しているので、合格する___です。","text_zh":"田中每天都在讀書，所以應該會合格。","blank":"はず","is_correct":1,"hint":"理由から考える","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この店は有名なので、おいしい___です。","text_zh":"這家店很有名，所以應該很好吃。","blank":"はず","is_correct":1,"hint":"い形容詞 + はず","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"今日は日曜日ですから、銀行は休みの___です。","text_zh":"今天是星期日，所以銀行應該休息。","blank":"はず","is_correct":1,"hint":"名詞 + の + はず","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この道をまっすぐ行けば、駅に着く___です。","text_zh":"沿著這條路直走，應該會到車站。","blank":"はず","is_correct":1,"hint":"そうなると考える","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"山田さんはもう家を出たので、すぐ来る___です。","text_zh":"山田已經出門了，所以應該很快會來。","blank":"はず","is_correct":1,"hint":"来る + はず","source":"curated","license":"CC-BY-SA-4.0"}
