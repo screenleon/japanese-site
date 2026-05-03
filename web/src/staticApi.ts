@@ -150,7 +150,7 @@ export const staticApi: Api = {
           `${row.headword} ${row.reading}`.toLocaleLowerCase().includes(query)
         )
       : rows;
-    return { results, count: results.length };
+    return { results, count: results.length, total: rows.length };
   },
 
   async randomVocab(jlpt?: string) {

@@ -48,6 +48,13 @@ func TestAPISmoke(t *testing.T) {
 			wantBody:   `"headword":"食べる"`,
 		},
 		{
+			name:       "vocab search total field",
+			method:     http.MethodGet,
+			path:       "/api/vocab/search?q=食",
+			wantStatus: http.StatusOK,
+			wantBody:   `"total"`,
+		},
+		{
 			name:       "vocab level browse",
 			method:     http.MethodGet,
 			path:       "/api/vocab/search?jlpt=N5",
@@ -95,6 +102,20 @@ func TestAPISmoke(t *testing.T) {
 			path:       "/api/grammar/test-gp",
 			wantStatus: http.StatusOK,
 			wantBody:   `"title_ja":"〜ば"`,
+		},
+		{
+			name:       "grammar examples",
+			method:     http.MethodGet,
+			path:       "/api/grammar/test-gp/examples",
+			wantStatus: http.StatusOK,
+			wantBody:   `"examples"`,
+		},
+		{
+			name:       "grammar examples unknown slug",
+			method:     http.MethodGet,
+			path:       "/api/grammar/no-such-slug/examples",
+			wantStatus: http.StatusOK,
+			wantBody:   `"examples"`,
 		},
 		{
 			name:       "quiz next",
@@ -223,6 +244,13 @@ func TestAPINegativeCases(t *testing.T) {
 			path:       "/api/quiz/next?grammar=missing",
 			wantStatus: http.StatusNotFound,
 			wantError:  "no_questions_match",
+		},
+		{
+			name:       "invalid content type",
+			method:     http.MethodGet,
+			path:       "/api/quiz/next?type=sentence",
+			wantStatus: http.StatusBadRequest,
+			wantError:  "invalid_content_type",
 		},
 		{
 			name:       "no grammar for filter",

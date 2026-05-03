@@ -33,6 +33,7 @@ func Register(mux *http.ServeMux, db *store.DB, ps store.ProgressStore) {
 	mux.HandleFunc("GET /api/sentence/random", sentenceRandom(db))
 	mux.HandleFunc("GET /api/grammar", grammarList(db))
 	mux.HandleFunc("GET /api/grammar/random", grammarRandom(db))
+	mux.HandleFunc("GET /api/grammar/{slug}/examples", grammarExamples(db))
 	mux.HandleFunc("GET /api/grammar/{slug}", grammarGet(db))
 	mux.HandleFunc("GET /api/quiz/next", quizNext(db))
 	mux.HandleFunc("POST /api/quiz/answer", quizAnswer(db, grader))
@@ -75,6 +76,17 @@ func grammarGet(db *store.DB) http.HandlerFunc {
 	}
 }
 
+func grammarExamples(db *store.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		examples, err := store.GetGrammarExamples(r.Context(), db, r.PathValue("slug"))
+		if err != nil {
+			httpError(w, r, http.StatusInternalServerError, "internal", err)
+			return
+		}
+		writeJSON(w, http.StatusOK, map[string]any{"examples": examples, "count": len(examples)})
+	}
+}
+
 func grammarRandom(db *store.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		gp, err := store.RandomGrammarPoint(r.Context(), db, r.URL.Query().Get("jlpt"))
@@ -92,7 +104,13 @@ func grammarRandom(db *store.DB) http.HandlerFunc {
 
 func quizNext(db *store.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		contentType := r.URL.Query().Get("type")
+		if contentType != "" && !validQuizContentType(contentType) {
+			writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid_content_type"})
+			return
+		}
 		opts := store.NextQuestionOpts{
+			ContentType:  contentType,
 			JLPTLevel:    r.URL.Query().Get("jlpt"),
 			GrammarPoint: r.URL.Query().Get("grammar"),
 			ExcludeIDs:   parseIDList(r.URL.Query().Get("exclude")),
@@ -108,6 +126,14 @@ func quizNext(db *store.DB) http.HandlerFunc {
 		}
 		writeJSON(w, http.StatusOK, q)
 	}
+}
+
+func validQuizContentType(contentType string) bool {
+	return contentType == "grammar" || contentType == "vocab"
+}
+
+func isPlaceholderFeedback(s string) bool {
+	return strings.Contains(s, "暫無針對此題的中文說明")
 }
 
 // maxExcludeIDs caps the size of the `?exclude=` list. Realistic frontend
@@ -181,6 +207,22 @@ func quizAnswer(db *store.DB, grader *quiz.ClozeGrader) http.HandlerFunc {
 			httpError(w, r, http.StatusInternalServerError, "internal", err)
 			return
 		}
+		// Enrich result with item context so the frontend can show useful info.
+		result.ContentType = qu.ContentType
+		if qu.ContentType == "grammar" {
+			if gp, err := store.GetGrammarPoint(r.Context(), db, qu.GrammarPoint); err == nil {
+				result.ItemDetailZH = gp.ExplanationZH
+				// Replace placeholder feedback with the real grammar explanation.
+				if result.ExplanationZH == "" || isPlaceholderFeedback(result.ExplanationZH) {
+					result.ExplanationZH = ""
+				}
+			}
+		} else if qu.ContentType == "vocab" {
+			v, err := store.GetVocabByHeadword(r.Context(), db, qu.GrammarPoint)
+			if err == nil {
+				result.ItemDetailZH = v.GlossZH
+			}
+		}
 		writeJSON(w, http.StatusOK, result)
 	}
 }
@@ -240,10 +282,16 @@ func sentenceRandom(db *store.DB) http.HandlerFunc {
 func vocabSearch(db *store.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		q := r.URL.Query().Get("q")
+		jlpt := r.URL.Query().Get("jlpt")
 		results, err := store.SearchVocab(r.Context(), db, store.VocabSearchOpts{
 			Query:     strings.TrimSpace(q),
-			JLPTLevel: r.URL.Query().Get("jlpt"),
+			JLPTLevel: jlpt,
 		})
+		if err != nil {
+			httpError(w, r, http.StatusInternalServerError, "internal", err)
+			return
+		}
+		total, err := store.CountVocab(r.Context(), db, jlpt)
 		if err != nil {
 			httpError(w, r, http.StatusInternalServerError, "internal", err)
 			return
@@ -252,6 +300,7 @@ func vocabSearch(db *store.DB) http.HandlerFunc {
 			"query":   q,
 			"results": results,
 			"count":   len(results),
+			"total":   total,
 		})
 	}
 }

@@ -10,6 +10,7 @@ import (
 
 type Question struct {
 	ID           string `json:"id"`
+	ContentType  string `db:"content_type" json:"content_type"`
 	Kind         string `json:"kind"`
 	JLPTLevel    string `json:"jlpt_level"`
 	GrammarPoint string `json:"grammar_point"`
@@ -32,6 +33,13 @@ type GrammarPoint struct {
 	ExplanationZH string `json:"explanation_zh"`
 }
 
+type GrammarExample struct {
+	ID     int    `db:"id" json:"id"`
+	TextJa string `db:"text_ja" json:"text_ja"`
+	TextZh string `db:"text_zh" json:"text_zh"`
+	Hint   string `db:"hint" json:"hint"`
+}
+
 var ErrQuestionNotFound = errors.New("question not found")
 var ErrGrammarPointNotFound = errors.New("grammar point not found")
 
@@ -44,6 +52,7 @@ var ErrGrammarPointNotFound = errors.New("grammar point not found")
 // thread-safety (math/rand/v2.Rand instances are not safe for concurrent
 // use).
 type NextQuestionOpts struct {
+	ContentType  string
 	JLPTLevel    string
 	GrammarPoint string
 	ExcludeIDs   []string // already-seen question IDs to skip
@@ -59,7 +68,7 @@ type NextQuestionOpts struct {
 // Selection is weighted random in-process across all candidates.
 func NextQuestion(ctx context.Context, db *DB, opts NextQuestionOpts) (Question, error) {
 	q := `
-		SELECT q.id, q.kind, q.jlpt_level, q.grammar_point, q.prompt, q.expected,
+		SELECT q.id, q.content_type, q.kind, q.jlpt_level, q.grammar_point, q.prompt, q.expected,
 		       COALESCE(q.hint, ''), COALESCE(q.payload, ''),
 		       (SELECT a.correct FROM attempt a WHERE a.question_id = q.id
 		         ORDER BY a.id DESC LIMIT 1) AS last_correct
@@ -71,6 +80,10 @@ func NextQuestion(ctx context.Context, db *DB, opts NextQuestionOpts) (Question,
 			    ORDER BY a.id DESC LIMIT 1) <= datetime('now')
 		)`
 	args := []any{}
+	if opts.ContentType != "" {
+		q += ` AND q.content_type = ?`
+		args = append(args, opts.ContentType)
+	}
 	if opts.JLPTLevel != "" {
 		q += ` AND q.jlpt_level = ?`
 		args = append(args, opts.JLPTLevel)
@@ -102,7 +115,7 @@ func NextQuestion(ctx context.Context, db *DB, opts NextQuestionOpts) (Question,
 		var c candidate
 		var lastCorrect sql.NullInt64
 		var payload string
-		if err := rows.Scan(&c.qu.ID, &c.qu.Kind, &c.qu.JLPTLevel, &c.qu.GrammarPoint,
+		if err := rows.Scan(&c.qu.ID, &c.qu.ContentType, &c.qu.Kind, &c.qu.JLPTLevel, &c.qu.GrammarPoint,
 			&c.qu.Prompt, &c.qu.Expected, &c.qu.Hint, &payload, &lastCorrect); err != nil {
 			return Question{}, err
 		}
@@ -161,12 +174,12 @@ func placeholders(n int) string {
 
 func GetQuestion(ctx context.Context, db *DB, id string) (Question, error) {
 	row := db.QueryRowContext(ctx, `
-		SELECT id, kind, jlpt_level, grammar_point, prompt, expected,
+		SELECT id, content_type, kind, jlpt_level, grammar_point, prompt, expected,
 		       COALESCE(hint, ''), COALESCE(payload, '')
 		FROM question WHERE id = ?`, id)
 	var qu Question
 	var payload string
-	if err := row.Scan(&qu.ID, &qu.Kind, &qu.JLPTLevel, &qu.GrammarPoint,
+	if err := row.Scan(&qu.ID, &qu.ContentType, &qu.Kind, &qu.JLPTLevel, &qu.GrammarPoint,
 		&qu.Prompt, &qu.Expected, &qu.Hint, &payload); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return Question{}, ErrQuestionNotFound
@@ -191,6 +204,30 @@ func GetGrammarPoint(ctx context.Context, db *DB, slug string) (GrammarPoint, er
 		return GrammarPoint{}, err
 	}
 	return gp, nil
+}
+
+func GetGrammarExamples(ctx context.Context, db *DB, slug string) ([]GrammarExample, error) {
+	rows, err := db.QueryContext(ctx, `
+		SELECT ge.id, ge.text_ja, COALESCE(ge.text_zh, ''), COALESCE(ge.hint, '')
+		FROM grammar_example ge
+		JOIN grammar_point gp ON ge.grammar_point_id = gp.id
+		WHERE gp.slug = ? AND ge.is_correct = 1
+		ORDER BY ge.id
+		LIMIT 5`, slug)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var out []GrammarExample
+	for rows.Next() {
+		var example GrammarExample
+		if err := rows.Scan(&example.ID, &example.TextJa, &example.TextZh, &example.Hint); err != nil {
+			return nil, err
+		}
+		out = append(out, example)
+	}
+	return out, rows.Err()
 }
 
 func RandomGrammarPoint(ctx context.Context, db *DB, jlpt string) (GrammarPoint, error) {

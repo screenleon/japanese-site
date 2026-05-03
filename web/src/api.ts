@@ -12,6 +12,7 @@ import { staticApi } from "./staticApi";
 import type {
   Api,
   Capabilities,
+  GrammarExample,
   GrammarPoint,
   Kanji,
   NextQuestionOpts,
@@ -80,7 +81,7 @@ async function apiError(response: Response) {
 
 export const httpApi: Api = {
   searchVocab: (q, jlpt) =>
-    getJSON<{ results: VocabRow[]; count: number }>(
+    getJSON<{ results: VocabRow[]; count: number; total: number }>(
       `/api/vocab/search?q=${encodeURIComponent(q)}${jlpt ? `&jlpt=${jlpt}` : ""}`
     ),
   randomVocab: (jlpt) =>
@@ -94,9 +95,14 @@ export const httpApi: Api = {
     ),
   randomGrammar: (jlpt) =>
     getJSON<GrammarPoint>(`/api/grammar/random${jlpt ? `?jlpt=${jlpt}` : ""}`),
-  getGrammar: (slug) => getJSON<GrammarPoint>(`/api/grammar/${slug}`),
+  getGrammar: (slug) => getJSON<GrammarPoint>(`/api/grammar/${encodeURIComponent(slug)}`),
+  getGrammarExamples: (slug) =>
+    getJSON<{ examples: GrammarExample[]; count: number }>(
+      `/api/grammar/${encodeURIComponent(slug)}/examples`
+    ),
   nextQuestion: (opts: NextQuestionOpts = {}) => {
     const q = new URLSearchParams();
+    if (opts.type) q.set("type", opts.type);
     if (opts.jlpt) q.set("jlpt", opts.jlpt);
     if (opts.grammar) q.set("grammar", opts.grammar);
     if (opts.exclude && opts.exclude.length) q.set("exclude", opts.exclude.join(","));

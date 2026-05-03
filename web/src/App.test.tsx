@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "./api";
 import { App } from "./App";
@@ -81,6 +81,7 @@ describe("App tab filtering", () => {
     });
 
     render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: "開始練習" }));
 
     await waitFor(() => {
       expectVisibleTabs(["練習題", "文法", "單字", "漢字", "例句"]);
@@ -97,6 +98,7 @@ describe("App tab filtering", () => {
     });
 
     render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: "開始練習" }));
 
     // Wait for the auto-reset effect to land grammar panel after capabilities resolve.
     // Tabs disappear in render N; setActive("grammar") fires in the post-commit
@@ -120,6 +122,7 @@ describe("App tab filtering", () => {
     );
 
     render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: "開始練習" }));
 
     expect(screen.getByRole("button", { name: "練習題" })).toBeVisible();
 

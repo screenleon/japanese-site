@@ -29,6 +29,22 @@ type VocabSearchOpts struct {
 	Limit     int
 }
 
+// CountVocab returns the total number of vocab rows matching the filter
+// (same filter logic as SearchVocab but without limit).
+func CountVocab(ctx context.Context, db *DB, jlptLevel string) (int, error) {
+	q := `SELECT COUNT(*) FROM vocab WHERE 1 = 1`
+	args := []any{}
+	if jlptLevel != "" {
+		q += ` AND jlpt_level = ?`
+		args = append(args, jlptLevel)
+	}
+	var n int
+	if err := db.QueryRowContext(ctx, q, args...).Scan(&n); err != nil {
+		return 0, err
+	}
+	return n, nil
+}
+
 // SearchVocab finds rows whose headword OR reading starts with q. When q is
 // empty, it returns a level-filtered browse list ordered by frequency. JLPT
 // filter is applied when non-empty. Limit is clamped to [1, 100].
@@ -86,6 +102,34 @@ func SearchVocab(ctx context.Context, db *DB, opts VocabSearchOpts) ([]Vocab, er
 		out = append(out, v)
 	}
 	return out, rows.Err()
+}
+
+func GetVocabByHeadword(ctx context.Context, db *DB, headword string) (Vocab, error) {
+	q := `
+		SELECT id, headword, reading, pos,
+		       COALESCE(gloss_en, ''), COALESCE(gloss_ja, ''), COALESCE(gloss_zh, ''),
+		       COALESCE(jlpt_level, ''), frequency_rank,
+		       source, license, COALESCE(validated_by, '')
+		FROM vocab
+		WHERE headword = ?
+		LIMIT 1`
+
+	var v Vocab
+	var freq sql.NullInt64
+	err := db.QueryRowContext(ctx, q, headword).Scan(&v.ID, &v.Headword, &v.Reading, &v.POS,
+		&v.GlossEN, &v.GlossJA, &v.GlossZH, &v.JLPTLevel, &freq,
+		&v.Source, &v.License, &v.ValidatedBy)
+	if errors.Is(err, sql.ErrNoRows) {
+		return Vocab{}, ErrVocabNotFound
+	}
+	if err != nil {
+		return Vocab{}, err
+	}
+	if freq.Valid {
+		n := freq.Int64
+		v.FrequencyRank = &n
+	}
+	return v, nil
 }
 
 // RandomVocab returns one random vocabulary row, optionally filtered by JLPT.

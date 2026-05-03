@@ -3,11 +3,13 @@ import { VocabTab } from "./tabs/VocabTab";
 import { KanjiTab } from "./tabs/KanjiTab";
 import { SentenceTab } from "./tabs/SentenceTab";
 import { GrammarTab } from "./tabs/GrammarTab";
-import { QuizTab } from "./tabs/QuizTab";
+import { QuizTab, type QuizInitialMode } from "./tabs/QuizTab";
+import { HomePage } from "./HomePage";
 import { CapabilitiesProvider, useCapabilities } from "./capabilities";
 import { api, type ProgressSummary } from "./api";
 
 type Tab = "quiz" | "grammar" | "vocab" | "kanji" | "sentence";
+type ViewState = { view: "home" } | { view: "app"; initialMode: QuizInitialMode };
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "quiz", label: "練習題" },
@@ -18,14 +20,24 @@ const tabs: { id: Tab; label: string }[] = [
 ];
 
 export function App() {
+  const [viewState, setViewState] = useState<ViewState>({ view: "home" });
+
+  if (viewState.view === "home") {
+    return (
+      <HomePage
+        onStart={(initialMode) => setViewState({ view: "app", initialMode })}
+      />
+    );
+  }
+
   return (
     <CapabilitiesProvider>
-      <AppShell />
+      <AppShell initialMode={viewState.initialMode} />
     </CapabilitiesProvider>
   );
 }
 
-function AppShell() {
+function AppShell({ initialMode }: { initialMode: QuizInitialMode }) {
   const { loaded, quiz, sentence } = useCapabilities();
   const visibleTabs = useMemo(
     () =>
@@ -38,12 +50,18 @@ function AppShell() {
     [loaded, quiz, sentence]
   );
   const [active, setActive] = useState<Tab>("quiz");
+  const [grammarSlug, setGrammarSlug] = useState<string | undefined>();
 
   useEffect(() => {
     if (!visibleTabs.some((tab) => tab.id === active)) {
       setActive(visibleTabs[0]?.id ?? "grammar");
     }
   }, [active, visibleTabs]);
+
+  function navigateToGrammar(slug: string) {
+    setGrammarSlug(slug);
+    setActive("grammar");
+  }
 
   return (
     <div className="min-h-screen">
@@ -75,8 +93,12 @@ function AppShell() {
         </nav>
       </header>
       <main className="max-w-4xl mx-auto px-4 py-8">
-        {active === "quiz" && quiz && <QuizTab />}
-        {active === "grammar" && <GrammarTab />}
+        {active === "quiz" && quiz && (
+          <QuizTab initialMode={initialMode} onNavigateGrammar={navigateToGrammar} />
+        )}
+        {active === "grammar" && (
+          <GrammarTab initialSlug={grammarSlug} onSlugConsumed={() => setGrammarSlug(undefined)} />
+        )}
         {active === "vocab" && <VocabTab />}
         {active === "kanji" && <KanjiTab />}
         {active === "sentence" && sentence && <SentenceTab />}

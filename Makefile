@@ -1,7 +1,8 @@
 .PHONY: help lint-rules corpus-scale vet test clean bake-static build-static \
-        bootstrap dev start build dist \
+        bootstrap dev start build dist dist-update \
         run web-dev web-build \
-        seed-jmdict seed-kanjidic2 seed-jlpt seed-tatoeba seed-derive seed-corpus seed-all
+        seed-jmdict seed-kanjidic2 seed-jlpt seed-tatoeba seed-derive seed-corpus seed-all \
+        db-update
 
 # ── Quick start ─────────────────────────────────────────────────────────────
 help:
@@ -11,14 +12,20 @@ help:
 	@echo ""
 	@echo "Other targets:"
 	@echo "  build         Build production server binary + frontend bundle"
-	@echo "  dist          Stage everything into dist/ (binary + web/dist + data)"
+	@echo "  dist          Stage into dist/ — full rebuild + seed-all (slow, fresh deploy)"
+	@echo "  dist-update   Stage into dist/ — build + seed-corpus only (fast, content update)"
+	@echo "  db-update     Reload curated corpus into local dev DB (vocab + grammar questions)"
 	@echo "  test          Go unit tests"
 	@echo "  vet           Go static analysis"
 	@echo "  lint-rules    Layered-rule lint"
 	@echo "  corpus-scale  Report corpus scale against current learning-content floors"
 	@echo "  clean         Remove build artifacts and dev SQLite"
-	@echo "  seed-all      Re-run full corpus pipeline"
-	@echo "  seed-corpus   Reload only the curated L1 corpus"
+	@echo "  seed-all      Re-run full corpus pipeline (incl. external data download)"
+	@echo "  seed-corpus   Reload only the curated L1 corpus (vocab + grammar questions)"
+	@echo ""
+	@echo "Deploy workflow (content update, no external data change):"
+	@echo "  make dist-update   # builds binary + frontend + reloads corpus → dist/"
+	@echo "  # copy dist/ to host; migrations apply automatically on first server start"
 
 # ── Bootstrap & dev ─────────────────────────────────────────────────────────
 bootstrap: bootstrap-server bootstrap-web seed-all
@@ -57,6 +64,7 @@ build-web:
 	cd web && npm run build
 
 # Stage everything into dist/ — copy this directory to deploy.
+# Use dist-update for content-only deploys (skips slow external data pipeline).
 dist: build seed-all
 	rm -rf dist
 	mkdir -p dist/web dist/data
@@ -65,9 +73,27 @@ dist: build seed-all
 	cp server/data/japanese-site.sqlite dist/data/
 	cp server/data/external.lock dist/data/
 	@echo ""
-	@echo "✓ dist/ ready."
-	@echo "Deploy: copy dist/ to target host, then run there:"
+	@echo "✓ dist/ ready. DB migrations apply automatically on first server start."
+	@echo "Deploy: copy dist/ to target host, then run:"
 	@echo "  STATIC_DIR=web DB_PATH=data/japanese-site.sqlite ./api"
+
+# Fast deploy for content-only updates (new grammar/vocab, no external data change).
+# Skips jmdict/kanjidic2/tatoeba download — only reloads curated corpus.
+dist-update: build seed-corpus
+	rm -rf dist
+	mkdir -p dist/web dist/data
+	cp server/bin/api dist/api
+	cp -r web/dist/* dist/web/
+	cp server/data/japanese-site.sqlite dist/data/
+	cp server/data/external.lock dist/data/
+	@echo ""
+	@echo "✓ dist/ ready (corpus updated, external data unchanged)."
+	@echo "Deploy: copy dist/ to target host, then run:"
+	@echo "  STATIC_DIR=web DB_PATH=data/japanese-site.sqlite ./api"
+
+# Reload curated corpus into local dev DB (run after adding new vocab/grammar content).
+db-update: seed-corpus
+	@echo "✓ Local dev DB updated with latest corpus."
 
 # ── Lower-level / individual targets ────────────────────────────────────────
 run:

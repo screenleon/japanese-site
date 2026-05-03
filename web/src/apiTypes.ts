@@ -55,6 +55,13 @@ export interface GrammarPoint {
   explanation_zh: string;
 }
 
+export interface GrammarExample {
+  id: number;
+  text_ja: string;
+  text_zh: string;
+  hint: string;
+}
+
 // Question.id is the deterministic id derived server-side from
 // (slug | prompt | expected) — a 16-char hex string. See
 // `server/internal/content/corpus/load.go`'s `QuestionID`.
@@ -65,6 +72,7 @@ export interface GrammarPoint {
 // that consume non-cloze kinds will narrow it locally.
 export interface Question {
   id: string;
+  content_type: QuizContentType;
   kind: string;
   jlpt_level: string;
   grammar_point: string;
@@ -81,10 +89,19 @@ export interface GradeResult {
   grammar_point: string;
   error_class?: string;
   suggested_next: string[];
+  content_type?: string;
+  item_detail_zh?: string;
 }
 
 export interface GrammarStat {
   grammar_point: string;
+  total: number;
+  correct: number;
+  accuracy: number;
+}
+
+export interface VocabStat {
+  vocab_item: string;
   total: number;
   correct: number;
   accuracy: number;
@@ -111,11 +128,15 @@ export interface Stats {
   wrong: number;
   accuracy: number;
   by_grammar: GrammarStat[];
+  by_vocab: VocabStat[];
   by_error_class: ErrorClassStat[];
   recent_wrong: RecentWrongAttempt[];
 }
 
+export type QuizContentType = "grammar" | "vocab";
+
 export interface NextQuestionOpts {
+  type?: QuizContentType;
   jlpt?: string;
   grammar?: string;
   exclude?: string[];
@@ -158,13 +179,14 @@ export interface ProgressSummary {
 /** Contract for any API client implementation. The default `httpApi` makes
  *  fetch() calls; tests can substitute a mock that satisfies this shape. */
 export interface Api {
-  searchVocab(q: string, jlpt?: string): Promise<{ results: VocabRow[]; count: number }>;
+  searchVocab(q: string, jlpt?: string): Promise<{ results: VocabRow[]; count: number; total: number }>;
   randomVocab(jlpt?: string): Promise<VocabRow>;
   getKanji(ch: string): Promise<Kanji>;
   randomSentence(jlpt?: string): Promise<Sentence>;
   listGrammar(jlpt?: string): Promise<{ points: GrammarPoint[]; count: number }>;
   randomGrammar(jlpt?: string): Promise<GrammarPoint>;
   getGrammar(slug: string): Promise<GrammarPoint>;
+  getGrammarExamples?(slug: string): Promise<{ examples: GrammarExample[]; count: number }>;
   nextQuestion(opts?: NextQuestionOpts): Promise<Question>;
   answer(question_id: string, answer: string): Promise<GradeResult>;
   stats(days?: number): Promise<Stats>;

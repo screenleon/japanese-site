@@ -1,15 +1,23 @@
-import { useEffect, useMemo, useState } from "react";
-import { api, type GrammarPoint } from "../api";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { api, type GrammarExample, type GrammarPoint } from "../api";
 import { useReadTracking } from "../hooks/useReadTracking";
 
 const levels = ["N5", "N4", "N3", "N2", "N1"];
 
-export function GrammarTab() {
+export function GrammarTab({
+  initialSlug,
+  onSlugConsumed,
+}: {
+  initialSlug?: string;
+  onSlugConsumed?: () => void;
+} = {}) {
   const [points, setPoints] = useState<GrammarPoint[]>([]);
   const [selectedLevel, setSelectedLevel] = useState("N5");
   const [activeSlug, setActiveSlug] = useState("");
+  const [examples, setExamples] = useState<GrammarExample[]>([]);
   const [showTranslation, setShowTranslation] = useState(false);
   const [loading, setLoading] = useState(true);
+  const initialSlugApplied = useRef(false);
   const [loadingRandom, setLoadingRandom] = useState(false);
   const [err, setErr] = useState("");
 
@@ -37,6 +45,18 @@ export function GrammarTab() {
     };
   }, []);
 
+  // When navigated here from ResultBox with a specific slug, select it.
+  useEffect(() => {
+    if (!initialSlug || points.length === 0) return;
+    const target = points.find((p) => p.slug === initialSlug);
+    if (target) {
+      initialSlugApplied.current = true;
+      setSelectedLevel(target.jlpt_level);
+      setActiveSlug(target.slug);
+    }
+    onSlugConsumed?.();
+  }, [initialSlug, points]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const grouped = useMemo(() => {
     return levels.map((level) => ({
       level,
@@ -51,12 +71,37 @@ export function GrammarTab() {
   useReadTracking(active?.slug ? { type: "grammar", slug: active.slug } : null);
 
   useEffect(() => {
+    if (initialSlugApplied.current) {
+      initialSlugApplied.current = false;
+      return;
+    }
     setActiveSlug("");
     setShowTranslation(false);
   }, [selectedLevel]);
 
   useEffect(() => {
     setShowTranslation(false);
+  }, [active?.slug]);
+
+  useEffect(() => {
+    let cancelled = false;
+    setExamples([]);
+    if (!active?.slug || !api.getGrammarExamples) {
+      return () => {
+        cancelled = true;
+      };
+    }
+    api
+      .getGrammarExamples(active.slug)
+      .then((r) => {
+        if (!cancelled) setExamples((r.examples || []).slice(0, 5));
+      })
+      .catch((e) => {
+        if (!cancelled) setErr(String(e));
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [active?.slug]);
 
   async function drawRandomGrammar() {
@@ -162,6 +207,21 @@ export function GrammarTab() {
                 <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed">
                   {primaryExplanation}
                 </pre>
+                {examples.length > 0 && (
+                  <section className="mt-6 border-t border-slate-200 pt-5">
+                    <h3 className="text-base font-medium">例文</h3>
+                    <ul className="mt-3 space-y-3">
+                      {examples.map((example) => (
+                        <li key={example.id}>
+                          <p className="text-sm leading-relaxed text-slate-900">
+                            {example.text_ja}
+                          </p>
+                          <p className="mt-1 text-sm text-slate-500">{example.text_zh}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
                 {hasJapaneseExplanation && (
                   <div className="mt-5 border-t border-slate-200 pt-4">
                     <button

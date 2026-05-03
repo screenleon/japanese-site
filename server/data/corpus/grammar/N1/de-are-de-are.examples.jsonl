@@ -1,5 +1,5 @@
-{"text_ja":"賛成___反対___、理由を明確に述べてほしい。","text_zh":"無論贊成或反對，都希望明確說明理由。","blank":"であれ、であれ","is_correct":1,"hint":"二択","source":"curated","license":"CC-BY-SA-4.0"}
-{"text_ja":"国内___海外___、安全基準は同じだ。","text_zh":"無論國內或海外，安全標準都一樣。","blank":"であれ、であれ","is_correct":1,"hint":"条件不問","source":"curated","license":"CC-BY-SA-4.0"}
-{"text_ja":"学生___社会人___、締切は守らなければならない。","text_zh":"無論學生或社會人士，都必須遵守期限。","blank":"であれ、であれ","is_correct":1,"hint":"同一規則","source":"curated","license":"CC-BY-SA-4.0"}
-{"text_ja":"成功___失敗___、記録を残すことに意味がある。","text_zh":"無論成功或失敗，留下紀錄都有意義。","blank":"であれ、であれ","is_correct":1,"hint":"結果不問","source":"curated","license":"CC-BY-SA-4.0"}
-{"text_ja":"紙媒体___電子媒体___、内容の正確さが重要だ。","text_zh":"無論紙本或電子媒體，內容正確性都很重要。","blank":"であれ、であれ","is_correct":1,"hint":"対比","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"賛成であれ反対___、理由を明確に述べてほしい。","text_zh":"無論贊成或反對，都希望明確說明理由。","blank":"であれ","is_correct":1,"hint":"二択","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"国内であれ海外___、安全基準は同じだ。","text_zh":"無論國內或海外，安全標準都一樣。","blank":"であれ","is_correct":1,"hint":"条件不問","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"学生であれ社会人___、締切は守らなければならない。","text_zh":"無論學生或社會人士，都必須遵守期限。","blank":"であれ","is_correct":1,"hint":"同一規則","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"成功であれ失敗___、記録を残すことに意味がある。","text_zh":"無論成功或失敗，留下紀錄都有意義。","blank":"であれ","is_correct":1,"hint":"結果不問","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"紙媒体であれ電子媒体___、内容の正確さが重要だ。","text_zh":"無論紙本或電子媒體，內容正確性都很重要。","blank":"であれ","is_correct":1,"hint":"対比","source":"curated","license":"CC-BY-SA-4.0"}
