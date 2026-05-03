@@ -1,0 +1,16 @@
+{
+  "slug": "ni-hanshite",
+  "title_ja": "〜に反して",
+  "title_zh": "〜に反して（違反／與…相反）",
+  "jlpt_level": "N2",
+  "explanation_ja": "「〜に反して」は、予想・期待・規則などと反対の結果や行動になることを表す。例として「予想に反して試合は静かに終わった」「親の期待に反して音楽の道へ進んだ」のように使う。硬い表現で、前件には期待・意思・規則などが来やすい。",
+  "explanation_zh": "「〜に反して」表示與預想、期待、意志或規則相反，也可表示違反。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_contains_any": ["違って"], "error_class": "used-chigatte"},
+    {"if_answer_not_contains_any": ["反して"], "error_class": "missing-hanshite"}
+  ]
+}

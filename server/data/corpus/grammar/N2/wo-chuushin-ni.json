@@ -1,0 +1,16 @@
+{
+  "slug": "wo-chuushin-ni",
+  "title_ja": "〜を中心に",
+  "title_zh": "〜を中心に（以…為中心）",
+  "jlpt_level": "N2",
+  "explanation_ja": "「〜を中心に」は、ある人・場所・物事を中心として範囲や活動が広がることを表す。例として「駅を中心に店が集まっている」「若者を中心に人気がある」のように使う。中心点を示し、その周辺や関連するものまで含める表現である。",
+  "explanation_zh": "「〜を中心に」表示以某人、地點或事物為中心，活動、範圍或影響向周圍展開。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_contains_any": ["について"], "error_class": "used-nitsuite"},
+    {"if_answer_not_contains_any": ["中心"], "error_class": "missing-chuushin"}
+  ]
+}

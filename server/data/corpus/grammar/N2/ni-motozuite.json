@@ -1,0 +1,16 @@
+{
+  "slug": "ni-motozuite",
+  "title_ja": "〜に基づいて",
+  "title_zh": "〜に基づいて（根據／基於）",
+  "jlpt_level": "N2",
+  "explanation_ja": "「〜に基づいて」は、資料・事実・規則などを根拠として行動や判断をすることを表す。例として「調査結果に基づいて計画を立てる」「法律に基づいて判断する」のように使う。主観ではなく、根拠に支えられていることを示す硬い表現である。",
+  "explanation_zh": "「〜に基づいて」表示根據資料、事實、規則等作判斷或行動，強調有依據。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_contains_any": ["によって"], "error_class": "used-niyotte"},
+    {"if_answer_not_contains_any": ["基づ"], "error_class": "missing-motozuite"}
+  ]
+}

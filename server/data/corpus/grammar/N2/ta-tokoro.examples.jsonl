@@ -1,0 +1,5 @@
+{"text_ja":"駅で聞いた___、次の電車は十分後だった。","text_zh":"在車站詢問之後，得知下一班電車是十分鐘後。","blank":"ところ","is_correct":1,"hint":"た形 + ところ","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"資料を確認した___、数字に誤りがあった。","text_zh":"確認資料後，發現數字有錯。","blank":"ところ","is_correct":1,"hint":"結果が分かる","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"友人に相談した___、よい方法を教えてくれた。","text_zh":"和朋友商量後，他告訴我好方法。","blank":"ところ","is_correct":1,"hint":"行動後の結果","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"医者に見せた___、すぐ休むように言われた。","text_zh":"給醫生看了之後，被告知要馬上休息。","blank":"ところ","is_correct":1,"hint":"客観的な結果","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"メールを送った___、すぐ返事が来た。","text_zh":"寄信後，馬上收到回覆。","blank":"ところ","is_correct":1,"hint":"分かったこと・起きたこと","source":"curated","license":"CC-BY-SA-4.0"}

@@ -1,0 +1,16 @@
+{
+  "slug": "nai-koto-niwa",
+  "title_ja": "〜ないことには",
+  "title_zh": "〜ないことには（不…就不能…）",
+  "jlpt_level": "N2",
+  "explanation_ja": "「〜ないことには」は、前件が実現しなければ後件も実現しない、という必要条件を表す。例として「実物を見ないことには判断できない」「本人に聞かないことには分からない」のように、後件には否定的な表現が来る。必要な前提を強調する硬めの表現である。",
+  "explanation_zh": "「〜ないことには」表示若前項條件不成立，後項就無法成立，後面多接否定或困難的內容。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_contains_any": ["なければ"], "error_class": "used-nakereba"},
+    {"if_answer_not_contains_any": ["ないことには"], "error_class": "missing-nai-koto-niwa"}
+  ]
+}

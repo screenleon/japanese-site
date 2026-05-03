@@ -1,0 +1,16 @@
+{
+  "slug": "ta-tokoro",
+  "title_ja": "〜たところ",
+  "title_zh": "〜たところ（一…之後／結果）",
+  "jlpt_level": "N2",
+  "explanation_ja": "「〜たところ」は、ある行動をした結果として分かったことや起きたことを述べる。例として「調べたところ原因が分かった」「電話したところ留守だった」のように、後件には発見・結果が来やすい。偶然の結果を客観的に述べる、やや硬い表現である。",
+  "explanation_zh": "「〜たところ」表示做了某動作之後，發現或產生了某個結果，語氣偏書面客觀。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_contains_any": ["とたん"], "error_class": "used-tatotan"},
+    {"if_answer_not_contains_any": ["ところ"], "error_class": "missing-tokoro"}
+  ]
+}

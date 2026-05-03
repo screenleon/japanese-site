@@ -1,0 +1,16 @@
+{
+  "slug": "te-hajimete",
+  "title_ja": "〜てはじめて",
+  "title_zh": "〜てはじめて（在…之後才…）",
+  "jlpt_level": "N2",
+  "explanation_ja": "「〜てはじめて」は、ある経験や出来事の後で、それまで分からなかったことに気づくことを表す。例として「失敗してはじめて準備の大切さが分かった」「海外で暮らしてはじめて母語の難しさに気づいた」のように使う。後件には理解・実感・認識の変化が来やすい。",
+  "explanation_zh": "「〜てはじめて」表示經歷前項之後才第一次明白、感受到或注意到某事。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_contains_any": ["から"], "error_class": "used-kara"},
+    {"if_answer_not_contains_any": ["はじめて"], "error_class": "missing-hajimete"}
+  ]
+}
