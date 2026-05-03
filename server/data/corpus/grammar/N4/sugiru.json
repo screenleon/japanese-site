@@ -1,0 +1,15 @@
+{
+  "slug": "sugiru",
+  "title_ja": "すぎる",
+  "title_zh": "すぎる（太過於）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「すぎる」は、程度や量が普通より多いことを表します。例えば「食べすぎました」は食べる量が多すぎたことを表し、「この服は高すぎます」は値段が高すぎることを表します。動詞のます形の語幹、い形容詞の語幹、な形容詞に付けて使います。",
+  "explanation_zh": "「すぎる」表示程度或數量超過一般範圍，意思是「太／過於」。可接動詞ます形語幹、い形容詞語幹、な形容詞。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["とても"], "error_class": "wrong-pattern"}
+  ]
+}

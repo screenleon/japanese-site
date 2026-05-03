@@ -1,0 +1,15 @@
+{
+  "slug": "ta-koto-ga-aru",
+  "title_ja": "たことがある",
+  "title_zh": "たことがある（曾經）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「動詞た形 + ことがある」は、今までの経験を表します。例えば「京都へ行ったことがあります」は行った経験を表し、「すしを作ったことがあります」は作った経験を表します。否定では「たことがありません」を使います。",
+  "explanation_zh": "「動詞た形 + ことがある」表示過去曾有某種經驗，意思是「曾經做過」。否定形是「たことがありません」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["とき"], "error_class": "wrong-pattern"}
+  ]
+}

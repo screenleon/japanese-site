@@ -1,0 +1,15 @@
+{
+  "slug": "nagara",
+  "title_ja": "ながら",
+  "title_zh": "ながら（一邊）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「動詞ます形の語幹 + ながら」は、二つの動作を同時にすることを表します。例えば「音楽を聞きながら勉強します」は聞くことと勉強することを同時にし、「歩きながら話します」は歩くことと話すことを同時にします。後ろの文が主な動作になります。",
+  "explanation_zh": "「動詞ます形語幹 + ながら」表示兩個動作同時進行，意思是「一邊……一邊……」。後面的動作通常是主要動作。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["て"], "error_class": "wrong-pattern"}
+  ]
+}

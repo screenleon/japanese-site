@@ -16,8 +16,8 @@
 | JS-009 | ✅ closed 2026-05-02 | 學習語料擴充 | content | 2026-04-30 | roadmap:#quiz--content-depth |
 | JS-010 | 🔵 active | 連接器抽取規劃 | connector | 2026-05-01 | decisions:#2026-04-27-extract-connector-to-its-own-repository-at-m4 |
 | JS-011 | 🔵 active | 例句翻譯匯入 | content | 2026-05-01 | roadmap:#content-quality |
-| JS-012 | 🔵 active | 單字日文優先 | product | 2026-05-01 | decisions:#2026-04-30-japanese-first-explanations-with-chinese-reveal |
-| JS-013 | 🔵 active | 語料儲存重評 | arch | 2026-05-01 | roadmap:#content-storage--scale |
+| JS-012 | ✅ closed 2026-05-03 | 單字日文優先 | product | 2026-05-01 | decisions:#2026-04-30-japanese-first-explanations-with-chinese-reveal |
+| JS-013 | ✅ closed 2026-05-03 | 語料儲存重評 | arch | 2026-05-01 | roadmap:#content-storage--scale |
 | JS-014 | ✅ closed 2026-04-30 | 等級導向學習 | product | 2026-04-30 | feedback:2026-04-30 |
 | JS-015 | ✅ closed 2026-04-30 | 移除英文備援 | product | 2026-04-30 | feedback:2026-04-30 |
 | JS-016 | 🔵 active | JLPT 等級來源切換 | content | 2026-05-02 | feedback:2026-05-02 |
@@ -94,27 +94,14 @@
 **Tags**: P3
 <!-- 首次記錄: backfilled 2026-05-01 -->
 
-## JS-012 — 單字日文優先
+## JS-012 — 單字日文優先 ✅ 2026-05-03
 
-**Problem**: 單字學習也需要先讀日文的流程，但目前不像文法已有清楚的顯示契約。
+**Outcome**: 隨機單字卡改為 japanese-first 揭示契約：`gloss_zh` 預設隱藏，「顯示中文說明」toggle 按鈕按需揭示，切換新單字時自動收起；字幕與 GrammarTab 一致。
+**See**: pr:#22
 
-**Why**: 若先顯示短譯詞，學習者較難練習從語境與日文說明理解單字。
+## JS-013 — 語料儲存重評 ✅ 2026-05-03
 
-**Requirement**: 單字詳情應優先提供日文說明或語境，繁中則作為需要時確認理解的支援。
-
-**Tags**: P2
-<!-- 首次記錄: backfilled 2026-05-01 -->
-
-## JS-013 — 語料儲存重評
-
-**Problem**: 在語料規模變大前，需要確認目前便於人工審查的儲存形式是否仍能持續使用。
-
-**Why**: 小規模時容易閱讀的格式，在資料量增加後可能因重複 metadata 與難審查差異而變成負擔。
-
-**Requirement**: 在保留人工可審查來源內容與 runtime 索引分離的前提下，決定規模擴大後仍適合 git 管理的儲存方針。
-
-**Tags**: P1
-<!-- 首次記錄: backfilled 2026-05-01 -->
+**Outcome**: 決定維持 flat JSONL per level。JS-012 完成後確認 `gloss_ja`/`gloss_zh` schema 不需要 per-word 延伸結構；觸發重評的前提條件（vocab 需要 per-word examples）目前不存在，故關閉。若未來需要 per-word examples，屆時重開評估。
 
 ## JS-014 — 等級導向學習 ✅ 2026-04-30
 
