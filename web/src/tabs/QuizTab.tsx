@@ -1,22 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   api,
   isApiError,
   type Question,
   type GradeResult,
   type GrammarPoint,
+  type QuizContentType,
   type Stats,
 } from "../api";
 
 type Mode = "single" | "session" | "summary";
+export type QuizInitialMode = "練習" | "測試";
 type StatsRange = 7 | 30 | 0;
+const EXAM_DURATION_SEC = 600;
 
 interface SessionTurn {
   question: Question;
   result: GradeResult | null;
 }
 
-export function QuizTab() {
+export function QuizTab({
+  initialMode = "練習",
+  onNavigateGrammar,
+}: {
+  initialMode?: QuizInitialMode;
+  onNavigateGrammar?: (slug: string) => void;
+}) {
+  const sealedExam = initialMode === "測試";
+  const [contentType, setContentType] = useState<QuizContentType>("grammar");
   const [grammar, setGrammar] = useState<string>("");
   const [jlpt, setJlpt] = useState<string>("");
   const [grammars, setGrammars] = useState<GrammarPoint[]>([]);
@@ -24,8 +35,9 @@ export function QuizTab() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [statsLoading, setStatsLoading] = useState(true);
   const [statsErr, setStatsErr] = useState("");
-  const [mode, setMode] = useState<Mode>("single");
+  const [mode, setMode] = useState<Mode>(sealedExam ? "session" : "single");
   const [target, setTarget] = useState(10);
+  const [remainingSec, setRemainingSec] = useState(EXAM_DURATION_SEC);
 
   const [turns, setTurns] = useState<SessionTurn[]>([]);
   const [current, setCurrent] = useState<Question | null>(null);
@@ -33,6 +45,7 @@ export function QuizTab() {
   const [result, setResult] = useState<GradeResult | null>(null);
   const [err, setErr] = useState("");
   const [notice, setNotice] = useState("");
+  const examSealedRef = useRef(false);
 
   useEffect(() => {
     api.listGrammar().then((r) => setGrammars(r.points || []));
@@ -51,15 +64,16 @@ export function QuizTab() {
     }
   }
 
-  async function pickNext(seenIDs: string[]) {
+  async function pickNext(seenIDs: string[], sessionTurns = turns) {
     setErr("");
     setNotice("");
     setResult(null);
     setAnswer("");
     try {
       const q = await api.nextQuestion({
+        type: contentType,
         jlpt: jlpt || undefined,
-        grammar: grammar || undefined,
+        grammar: contentType === "grammar" ? grammar || undefined : undefined,
         exclude: seenIDs,
       });
       setCurrent(q);
@@ -70,17 +84,38 @@ export function QuizTab() {
       // empty state so the user knows to relax the filter.
       const exhausted = isApiError(e) && e.status === 404;
       setCurrent(null);
-      if (exhausted && mode === "session" && turns.length > 0) {
+      if (exhausted && mode === "session" && sessionTurns.length > 0) {
         setMode("summary");
         return;
       }
-      setErr(exhausted ? "目前的條件下沒有更多題目了，換個文法點或等級試試。" : String(e));
+      setErr(exhausted ? "目前的條件下沒有更多題目了，換個條件試試。" : String(e));
+    }
+  }
+
+  function changeContentType(next: QuizContentType) {
+    setContentType(next);
+    setGrammar("");
+    setTurns([]);
+    setResult(null);
+    setAnswer("");
+    setNotice("");
+    setErr("");
+    if (mode === "summary") {
+      setMode(sealedExam ? "session" : "single");
+    }
+    if (sealedExam) {
+      examSealedRef.current = false;
+      setRemainingSec(EXAM_DURATION_SEC);
     }
   }
 
   async function startSingle() {
-    setMode("single");
+    setMode(sealedExam ? "session" : "single");
     setTurns([]);
+    if (sealedExam) {
+      examSealedRef.current = false;
+      setRemainingSec(EXAM_DURATION_SEC);
+    }
     pickNext([]);
   }
 
@@ -88,22 +123,34 @@ export function QuizTab() {
     setMode("session");
     setTurns([]);
     setResult(null);
+    if (sealedExam) {
+      examSealedRef.current = false;
+      setRemainingSec(EXAM_DURATION_SEC);
+    }
     pickNext([]);
   }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (sealedExam && (remainingSec <= 0 || examSealedRef.current)) return;
     if (!current || !answer.trim()) return;
     try {
       const r = await api.answer(current.id, answer.trim());
-      setResult(r);
+      if (sealedExam && examSealedRef.current) return;
+      setResult(sealedExam ? null : r);
       loadStats();
 
       if (mode === "session") {
         const newTurns = [...turns, { question: current, result: r }];
         setTurns(newTurns);
         if (newTurns.length >= target) {
+          setCurrent(null);
+          setAnswer("");
           setMode("summary");
+          return;
+        }
+        if (sealedExam) {
+          await pickNext(newTurns.map((t) => t.question.id), newTurns);
         }
       }
     } catch (e) {
@@ -145,11 +192,32 @@ export function QuizTab() {
     if (mode === "session" && turns.length > 0 && !result) return;
     pickNext(mode === "session" ? turns.map((t) => t.question.id) : []);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [grammar, jlpt]);
+  }, [contentType, grammar, jlpt]);
+
+  const countdownActive = sealedExam && mode === "session" && !!current && remainingSec > 0;
+  const examExpired = sealedExam && mode === "session" && remainingSec <= 0;
+
+  useEffect(() => {
+    if (!countdownActive) return;
+    const countdown = window.setInterval(() => {
+      setRemainingSec((prev) => Math.max(0, prev - 1));
+    }, 1000);
+    return () => window.clearInterval(countdown);
+  }, [countdownActive]);
+
+  useEffect(() => {
+    if (!examExpired || !current) return;
+    examSealedRef.current = true;
+    setCurrent(null);
+    setAnswer("");
+    setResult(null);
+    setMode("summary");
+  }, [current, examExpired]);
 
   return (
     <section>
       <StatsPanel
+        contentType={contentType}
         stats={stats}
         loading={statsLoading}
         error={statsErr}
@@ -162,40 +230,48 @@ export function QuizTab() {
         mode={mode}
         target={target}
         setTarget={setTarget}
+        contentType={contentType}
+        setContentType={changeContentType}
         grammar={grammar}
         setGrammar={setGrammar}
         jlpt={jlpt}
         setJlpt={setJlpt}
         grammars={grammars}
+        sealedExam={sealedExam}
         onStartSingle={startSingle}
         onStartSession={startSession}
       />
 
       {mode === "session" && (
-        <SessionProgress total={target} turns={turns} />
+        <SessionProgress
+          total={target}
+          turns={turns}
+          remainingSec={sealedExam ? remainingSec : undefined}
+        />
       )}
 
       {err && <p className="text-red-600 text-sm mb-4">{err}</p>}
       {notice && <p className="text-blue-700 text-sm mb-4">{notice}</p>}
 
       {mode === "summary" ? (
-        <Summary turns={turns} onRestart={startSession} />
+        <Summary turns={turns} contentType={contentType} onRestart={startSession} />
       ) : current ? (
         <QuestionForm
           q={current}
           answer={answer}
           setAnswer={setAnswer}
           onSubmit={submit}
-          disabled={!!result}
+          disabled={!!result || examExpired}
         />
       ) : null}
 
-      {result && mode !== "summary" && (
+      {result && mode !== "summary" && !sealedExam && (
         <ResultBox
           result={result}
           hint={current?.hint}
           onNext={next}
           sessionMode={mode === "session"}
+          onNavigateGrammar={onNavigateGrammar}
         />
       )}
     </section>
@@ -203,6 +279,7 @@ export function QuizTab() {
 }
 
 function StatsPanel({
+  contentType,
   stats,
   loading,
   error,
@@ -210,6 +287,7 @@ function StatsPanel({
   onRangeChange,
   onRefresh,
 }: {
+  contentType: QuizContentType;
   stats: Stats | null;
   loading: boolean;
   error: string;
@@ -221,6 +299,10 @@ function StatsPanel({
     .filter((g) => g.total > 0)
     .sort((a, b) => a.accuracy - b.accuracy || b.total - a.total)
     .slice(0, 3);
+  const weakVocab = (stats?.by_vocab ?? [])
+    .filter((v) => v.total > 0)
+    .sort((a, b) => a.accuracy - b.accuracy || b.total - a.total)
+    .slice(0, 3);
   const topErrors = (stats?.by_error_class ?? []).slice(0, 3);
   const recentWrong = (stats?.recent_wrong ?? []).slice(0, 3);
 
@@ -229,7 +311,9 @@ function StatsPanel({
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div>
           <h2 className="text-base font-medium">練習狀態</h2>
-          <p className="text-xs text-slate-500 mt-1">根據已作答紀錄找出需要複習的文法點。</p>
+          <p className="text-xs text-slate-500 mt-1">
+            根據已作答紀錄找出需要複習的{contentType === "grammar" ? "文法點" : "單字"}。
+          </p>
         </div>
         <div className="flex items-center gap-2">
           <select
@@ -266,18 +350,33 @@ function StatsPanel({
           </div>
 
           <div className="grid gap-4 md:grid-cols-3">
-            <StatsList title="優先複習" empty="目前沒有可排序的文法點。">
-              {weakGrammar.map((g) => (
-                <li key={g.grammar_point} className="space-y-1">
-                  <div className="flex justify-between gap-3">
-                    <span className="truncate">{g.grammar_point}</span>
-                    <span className="text-slate-500">{formatPercent(g.accuracy)}</span>
-                  </div>
-                  <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-amber-500" style={{ width: `${Math.round(g.accuracy * 100)}%` }} />
-                  </div>
-                </li>
-              ))}
+            <StatsList
+              title="優先複習"
+              empty={contentType === "grammar" ? "目前沒有可排序的文法點。" : "目前沒有可排序的單字。"}
+            >
+              {contentType === "grammar"
+                ? weakGrammar.map((g) => (
+                    <li key={g.grammar_point} className="space-y-1">
+                      <div className="flex justify-between gap-3">
+                        <span className="truncate">{g.grammar_point}</span>
+                        <span className="text-slate-500">{formatPercent(g.accuracy)}</span>
+                      </div>
+                      <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-amber-500" style={{ width: `${Math.round(g.accuracy * 100)}%` }} />
+                      </div>
+                    </li>
+                  ))
+                : weakVocab.map((v) => (
+                    <li key={v.vocab_item} className="space-y-1">
+                      <div className="flex justify-between gap-3">
+                        <span className="truncate">{v.vocab_item}</span>
+                        <span className="text-slate-500">{formatPercent(v.accuracy)}</span>
+                      </div>
+                      <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-amber-500" style={{ width: `${Math.round(v.accuracy * 100)}%` }} />
+                      </div>
+                    </li>
+                  ))}
             </StatsList>
 
             <StatsList title="常見錯誤" empty="目前沒有錯誤類型。">
@@ -332,36 +431,65 @@ function Toolbar(props: {
   mode: Mode;
   target: number;
   setTarget: (n: number) => void;
+  contentType: QuizContentType;
+  setContentType: (type: QuizContentType) => void;
   grammar: string;
   setGrammar: (s: string) => void;
   jlpt: string;
   setJlpt: (s: string) => void;
   grammars: GrammarPoint[];
+  sealedExam: boolean;
   onStartSingle: () => void;
   onStartSession: () => void;
 }) {
   return (
     <div className="flex flex-wrap items-center gap-2 mb-6">
       <div className="flex border border-slate-300 rounded-md overflow-hidden text-sm">
+        {props.sealedExam ? (
+          <span className="px-3 py-2 bg-blue-600 text-white">測試</span>
+        ) : (
+          <>
+            <button
+              onClick={props.onStartSingle}
+              className={
+                "px-3 py-2 " +
+                (props.mode === "single" ? "bg-blue-600 text-white" : "bg-white text-slate-700")
+              }
+            >
+              單題
+            </button>
+            <button
+              onClick={props.onStartSession}
+              className={
+                "px-3 py-2 border-l border-slate-300 " +
+                (props.mode === "session" || props.mode === "summary"
+                  ? "bg-blue-600 text-white"
+                  : "bg-white text-slate-700")
+              }
+            >
+              套題 ({props.target})
+            </button>
+          </>
+        )}
+      </div>
+      <div className="flex border border-slate-300 rounded-md overflow-hidden text-sm">
         <button
-          onClick={props.onStartSingle}
+          onClick={() => props.setContentType("grammar")}
           className={
             "px-3 py-2 " +
-            (props.mode === "single" ? "bg-blue-600 text-white" : "bg-white text-slate-700")
+            (props.contentType === "grammar" ? "bg-blue-600 text-white" : "bg-white text-slate-700")
           }
         >
-          單題
+          文法
         </button>
         <button
-          onClick={props.onStartSession}
+          onClick={() => props.setContentType("vocab")}
           className={
             "px-3 py-2 border-l border-slate-300 " +
-            (props.mode === "session" || props.mode === "summary"
-              ? "bg-blue-600 text-white"
-              : "bg-white text-slate-700")
+            (props.contentType === "vocab" ? "bg-blue-600 text-white" : "bg-white text-slate-700")
           }
         >
-          套題 ({props.target})
+          單字
         </button>
       </div>
       {props.mode !== "summary" && (
@@ -387,26 +515,48 @@ function Toolbar(props: {
         <option value="N2">N2</option>
         <option value="N1">N1</option>
       </select>
-      <select
-        value={props.grammar}
-        onChange={(e) => props.setGrammar(e.target.value)}
-        className="px-3 py-2 border border-slate-300 rounded-md text-sm bg-white"
-      >
-        <option value="">全文法點</option>
-        {props.grammars.map((g) => (
-          <option key={g.slug} value={g.slug}>
-            {g.jlpt_level} · {g.title_ja}
-          </option>
-        ))}
-      </select>
+      {props.contentType === "grammar" && (
+        <select
+          value={props.grammar}
+          onChange={(e) => props.setGrammar(e.target.value)}
+          className="px-3 py-2 border border-slate-300 rounded-md text-sm bg-white"
+        >
+          <option value="">全文法點</option>
+          {props.grammars.map((g) => (
+            <option key={g.slug} value={g.slug}>
+              {g.jlpt_level} · {g.title_ja}
+            </option>
+          ))}
+        </select>
+      )}
     </div>
   );
 }
 
-function SessionProgress({ total, turns }: { total: number; turns: SessionTurn[] }) {
+function SessionProgress({
+  total,
+  turns,
+  remainingSec,
+}: {
+  total: number;
+  turns: SessionTurn[];
+  remainingSec?: number;
+}) {
   const correct = turns.filter((t) => t.result?.correct).length;
   return (
     <div className="mb-4">
+      {remainingSec !== undefined && (
+        <div className="flex justify-end mb-2">
+          <span
+            className={
+              "text-sm font-medium tabular-nums " +
+              (remainingSec <= 60 ? "text-red-500" : "text-slate-700")
+            }
+          >
+            {formatCountdown(remainingSec)}
+          </span>
+        </div>
+      )}
       <div className="flex justify-between text-xs text-slate-500 mb-1">
         <span>{turns.length} / {total}</span>
         <span>對 {correct} · 錯 {turns.length - correct}</span>
@@ -421,6 +571,13 @@ function SessionProgress({ total, turns }: { total: number; turns: SessionTurn[]
   );
 }
 
+function formatCountdown(seconds: number) {
+  const safeSeconds = Math.max(0, seconds);
+  const minutes = Math.floor(safeSeconds / 60);
+  const remainder = safeSeconds % 60;
+  return `${minutes.toString().padStart(2, "0")}:${remainder.toString().padStart(2, "0")}`;
+}
+
 function QuestionForm(props: {
   q: Question;
   answer: string;
@@ -433,9 +590,6 @@ function QuestionForm(props: {
       onSubmit={props.onSubmit}
       className="bg-white border border-slate-200 rounded-md p-6 space-y-4"
     >
-      <div className="text-xs text-slate-400">
-        {props.q.jlpt_level} · {props.q.grammar_point}
-      </div>
       <p className="text-2xl leading-relaxed">
         {props.q.prompt.split("___").map((part, i, arr) => (
           <span key={i}>
@@ -468,40 +622,82 @@ function ResultBox({
   hint,
   onNext,
   sessionMode,
+  onNavigateGrammar,
 }: {
   result: GradeResult;
   hint?: string;
   onNext: () => void;
   sessionMode: boolean;
+  onNavigateGrammar?: (slug: string) => void;
 }) {
+  const isGrammar = result.content_type === "grammar";
+  const isVocab = result.content_type === "vocab";
+  const showErrorClass = result.error_class && result.error_class !== "generic";
+  const explanation = result.explanation_zh && !result.explanation_zh.includes("暫無針對此題")
+    ? result.explanation_zh
+    : null;
+
   return (
     <div
       className={
-        "mt-4 p-6 rounded-md border " +
+        "mt-4 p-6 rounded-md border space-y-3 " +
         (result.correct
           ? "bg-green-50 border-green-200 text-green-900"
           : "bg-amber-50 border-amber-200 text-amber-900")
       }
     >
       <p className="font-medium">{result.correct ? "正解！" : "不對"}</p>
+
       {!result.correct && (
         <>
-          <p className="text-sm mt-1">
-            你的答案：<code>{result.user_answer}</code>　正確答案：
-            <code>{result.expected}</code>
-            {result.error_class && (
+          <p className="text-sm">
+            你的答案：<code>{result.user_answer}</code>
+            {"　"}正確答案：<code>{result.expected}</code>
+            {showErrorClass && (
               <span className="ml-2 text-xs px-1.5 py-0.5 bg-amber-100 rounded">
                 {result.error_class}
               </span>
             )}
           </p>
-          <p className="text-sm mt-3 leading-relaxed">{result.explanation_zh}</p>
-          {hint && <p className="text-xs mt-2 text-slate-600">提示：{hint}</p>}
+
+          {/* Specific feedback from grader (only if non-placeholder) */}
+          {explanation && (
+            <p className="text-sm leading-relaxed border-l-2 border-amber-400 pl-3">
+              {explanation}
+            </p>
+          )}
+
+          {/* Grammar explanation from corpus */}
+          {isGrammar && result.item_detail_zh && (
+            <div className="text-sm leading-relaxed space-y-1">
+              <p className="text-xs font-medium text-amber-700">文法說明</p>
+              <p className="line-clamp-4">{result.item_detail_zh}</p>
+              {onNavigateGrammar && (
+                <button
+                  onClick={() => onNavigateGrammar(result.grammar_point)}
+                  className="text-xs text-blue-700 hover:underline mt-1"
+                >
+                  查看完整說明 →
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Vocab meaning */}
+          {isVocab && result.item_detail_zh && (
+            <div className="text-sm space-y-1">
+              <p className="text-xs font-medium text-amber-700">詞義</p>
+              <p>{result.item_detail_zh}</p>
+            </div>
+          )}
+
+          {hint && <p className="text-xs text-slate-600">提示：{hint}</p>}
         </>
       )}
+
       <button
         onClick={onNext}
-        className="mt-4 px-3 py-1.5 bg-white border border-slate-300 rounded-md text-sm"
+        className="mt-1 px-3 py-1.5 bg-white border border-slate-300 rounded-md text-sm"
       >
         {sessionMode ? "下一題" : "再來一題"} →
       </button>
@@ -509,7 +705,15 @@ function ResultBox({
   );
 }
 
-function Summary({ turns, onRestart }: { turns: SessionTurn[]; onRestart: () => void }) {
+function Summary({
+  turns,
+  contentType,
+  onRestart,
+}: {
+  turns: SessionTurn[];
+  contentType: QuizContentType;
+  onRestart: () => void;
+}) {
   const correct = turns.filter((t) => t.result?.correct).length;
   const accuracy = turns.length > 0 ? correct / turns.length : 0;
   const wrong = turns.filter((t) => t.result && !t.result.correct);
@@ -538,7 +742,9 @@ function Summary({ turns, onRestart }: { turns: SessionTurn[]; onRestart: () => 
 
       {byGP.size > 0 && (
         <div className="bg-white border border-slate-200 rounded-md p-6">
-          <h3 className="text-sm font-medium mb-3">分文法點</h3>
+          <h3 className="text-sm font-medium mb-3">
+            {contentType === "grammar" ? "分文法點" : "分單字"}
+          </h3>
           <ul className="space-y-2 text-sm">
             {Array.from(byGP.entries()).map(([k, v]) => (
               <li key={k} className="flex justify-between">

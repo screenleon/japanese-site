@@ -29,6 +29,22 @@ type VocabSearchOpts struct {
 	Limit     int
 }
 
+// CountVocab returns the total number of vocab rows matching the filter
+// (same filter logic as SearchVocab but without limit).
+func CountVocab(ctx context.Context, db *DB, jlptLevel string) (int, error) {
+	q := `SELECT COUNT(*) FROM vocab WHERE 1 = 1`
+	args := []any{}
+	if jlptLevel != "" {
+		q += ` AND jlpt_level = ?`
+		args = append(args, jlptLevel)
+	}
+	var n int
+	if err := db.QueryRowContext(ctx, q, args...).Scan(&n); err != nil {
+		return 0, err
+	}
+	return n, nil
+}
+
 // SearchVocab finds rows whose headword OR reading starts with q. When q is
 // empty, it returns a level-filtered browse list ordered by frequency. JLPT
 // filter is applied when non-empty. Limit is clamped to [1, 100].

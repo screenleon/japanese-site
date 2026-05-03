@@ -35,6 +35,7 @@ type Stats struct {
 	Wrong         int                `json:"wrong"`
 	Accuracy      float64            `json:"accuracy"`
 	ByGrammar     []GrammarStat      `json:"by_grammar"`
+	ByVocab       []VocabStat        `json:"by_vocab"`
 	ByErrorClass  []ErrorClassStat   `json:"by_error_class"`
 	RecentWrong   []RecentWrongEntry `json:"recent_wrong"`
 }
@@ -44,6 +45,13 @@ type GrammarStat struct {
 	Total        int     `json:"total"`
 	Correct      int     `json:"correct"`
 	Accuracy     float64 `json:"accuracy"`
+}
+
+type VocabStat struct {
+	VocabItem string  `json:"vocab_item"`
+	Total     int     `json:"total"`
+	Correct   int     `json:"correct"`
+	Accuracy  float64 `json:"accuracy"`
 }
 
 type ErrorClassStat struct {
@@ -64,7 +72,12 @@ type RecentWrongEntry struct {
 // QueryStats summarises the attempt log over the last `days` days.
 // days <= 0 means "all time".
 func QueryStats(ctx context.Context, db *DB, days int) (Stats, error) {
-	var s Stats
+	s := Stats{
+		ByGrammar:    []GrammarStat{},
+		ByVocab:      []VocabStat{},
+		ByErrorClass: []ErrorClassStat{},
+		RecentWrong:  []RecentWrongEntry{},
+	}
 	whereClause := ""
 	args := []any{}
 	if days > 0 {
@@ -86,7 +99,7 @@ func QueryStats(ctx context.Context, db *DB, days int) (Stats, error) {
 	rows, err := db.QueryContext(ctx, `
 		SELECT q.grammar_point, COUNT(*), COALESCE(SUM(a.correct), 0)
 		FROM attempt a JOIN question q ON q.id = a.question_id
-		`+whereClause+`
+		`+orWhere(whereClause, `q.content_type = 'grammar'`)+`
 		GROUP BY q.grammar_point
 		ORDER BY COUNT(*) DESC`, args...)
 	if err != nil {
@@ -102,6 +115,29 @@ func QueryStats(ctx context.Context, db *DB, days int) (Stats, error) {
 			gs.Accuracy = float64(gs.Correct) / float64(gs.Total)
 		}
 		s.ByGrammar = append(s.ByGrammar, gs)
+	}
+	rows.Close()
+
+	rows, err = db.QueryContext(ctx, `
+		SELECT q.grammar_point AS vocab_item, COUNT(*) AS total, COALESCE(SUM(CASE WHEN a.correct THEN 1 ELSE 0 END), 0) AS correct
+		FROM attempt a JOIN question q ON a.question_id = q.id
+		`+orWhere(whereClause, `q.content_type = 'vocab'`)+`
+		GROUP BY q.grammar_point
+		ORDER BY (CAST(COALESCE(SUM(CASE WHEN a.correct THEN 1 ELSE 0 END), 0) AS REAL) / COUNT(*)) ASC
+		LIMIT 20`, args...)
+	if err != nil {
+		return s, err
+	}
+	for rows.Next() {
+		var vs VocabStat
+		if err := rows.Scan(&vs.VocabItem, &vs.Total, &vs.Correct); err != nil {
+			rows.Close()
+			return s, err
+		}
+		if vs.Total > 0 {
+			vs.Accuracy = float64(vs.Correct) / float64(vs.Total)
+		}
+		s.ByVocab = append(s.ByVocab, vs)
 	}
 	rows.Close()
 

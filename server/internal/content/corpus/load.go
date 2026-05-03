@@ -59,12 +59,13 @@ type GrammarExample struct {
 }
 
 type VocabSupport struct {
-	Headword string `json:"headword"`
-	Reading  string `json:"reading"`
-	GlossJA  string `json:"gloss_ja"`
-	GlossZH  string `json:"gloss_zh"`
-	Source   string `json:"source"`
-	License  string `json:"license"`
+	Headword  string `json:"headword"`
+	Reading   string `json:"reading"`
+	GlossJA   string `json:"gloss_ja"`
+	GlossZH   string `json:"gloss_zh"`
+	JLPTLevel string `json:"jlpt_level,omitempty"`
+	Source    string `json:"source"`
+	License   string `json:"license"`
 }
 
 type KanjiSupport struct {
@@ -90,6 +91,7 @@ type LoadStats struct {
 	GrammarPoints   int
 	GrammarExamples int
 	Questions       int
+	VocabQuestions  int
 	VocabSupport    int
 	KanjiSupport    int
 	JLPTOverrides   int
@@ -158,7 +160,7 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 	// Track curated question ids inserted in this run for the orphan
 	// sweep below. In-process Go set scales to the M3 corpus (~450
 	// questions) without breaking SQLite's IN-clause variable cap.
-	seenIDs := map[string]struct{}{}
+	seenGrammarIDs := map[string]struct{}{}
 
 	if _, err := os.Stat(grammarRoot); err == nil {
 		err = filepath.WalkDir(grammarRoot, func(path string, d fs.DirEntry, walkErr error) error {
@@ -228,7 +230,7 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 						GrammarSourceID, ex.License, GrammarValidatorID, 1.0, now); err != nil {
 						return fmt.Errorf("insert question: %w", err)
 					}
-					seenIDs[qid] = struct{}{}
+					seenGrammarIDs[qid] = struct{}{}
 					stats.Questions++
 				}
 			}
@@ -241,6 +243,12 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 	} else if !os.IsNotExist(err) {
 		return stats, err
 	}
+
+	seenVocabIDs, n, err := loadVocabQuestions(ctx, tx, root, now)
+	if err != nil {
+		return stats, err
+	}
+	stats.VocabQuestions = n
 
 	if n, err := loadVocabSupport(ctx, tx, root); err != nil {
 		return stats, err
@@ -267,15 +275,98 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 	// SAFETY: filter is `source = 'curated'` (GrammarSourceID). Do NOT
 	// loosen this — M4's L2 cache promotion writes `source =
 	// 'llm-generated'` rows which must survive a curated-corpus reload.
-	if len(seenIDs) > 0 {
-		if n, err := sweepOrphanQuestions(ctx, tx, seenIDs); err != nil {
-			return stats, fmt.Errorf("orphan sweep: %w", err)
+	if len(seenGrammarIDs) > 0 {
+		if n, err := sweepOrphanQuestions(ctx, tx, "grammar", seenGrammarIDs); err != nil {
+			return stats, fmt.Errorf("grammar orphan sweep: %w", err)
 		} else if n > 0 {
-			slog.Info("swept orphan questions", "count", n)
+			slog.Info("swept orphan questions", "content_type", "grammar", "count", n)
+		}
+	}
+	if seenVocabIDs != nil {
+		if n, err := sweepOrphanQuestions(ctx, tx, "vocab", seenVocabIDs); err != nil {
+			return stats, fmt.Errorf("vocab orphan sweep: %w", err)
+		} else if n > 0 {
+			slog.Info("swept orphan questions", "content_type", "vocab", "count", n)
 		}
 	}
 
 	return stats, tx.Commit()
+}
+
+func loadVocabQuestions(ctx context.Context, tx *sql.Tx, root string, now string) (map[string]struct{}, int, error) {
+	vocabRoot := filepath.Join(root, "vocab")
+	if _, err := os.Stat(vocabRoot); os.IsNotExist(err) {
+		return nil, 0, nil
+	} else if err != nil {
+		return nil, 0, err
+	}
+
+	// The INSERT explicitly sets content_type to 'vocab' so reading-fill
+	// questions remain distinguishable from grammar cloze questions.
+	stmt, err := tx.PrepareContext(ctx, `
+		INSERT INTO question (
+			id, content_type, kind, jlpt_level, grammar_point, prompt, expected, hint, payload,
+			source, license, validated_by, validator_score, validated_at
+		) VALUES (?, 'vocab', 'cloze', ?, ?, ?, ?, NULL, NULL, ?, ?, ?, ?, ?)
+		ON CONFLICT(id) DO UPDATE SET
+			content_type=excluded.content_type,
+			jlpt_level=excluded.jlpt_level,
+			grammar_point=excluded.grammar_point,
+			validated_at=excluded.validated_at`)
+	if err != nil {
+		return nil, 0, fmt.Errorf("prepare vocab question: %w", err)
+	}
+	defer stmt.Close()
+
+	seenIDs := map[string]struct{}{}
+	inserted := 0
+	err = filepath.WalkDir(vocabRoot, func(path string, d fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if d.IsDir() || !strings.HasSuffix(path, ".jsonl") {
+			return nil
+		}
+		level := strings.TrimSuffix(filepath.Base(path), ".jsonl")
+		if !validJLPTLevel(level) {
+			return fmt.Errorf("vocab file has invalid JLPT level %q: %s", level, path)
+		}
+		rows, err := readJSONLFile[VocabSupport](path)
+		if err != nil {
+			return err
+		}
+		for _, row := range rows {
+			if row.Headword == "" || row.Source == "" || row.License == "" {
+				return fmt.Errorf("vocab row missing required fields: %+v", row)
+			}
+			if row.Reading == "" || row.Headword == row.Reading {
+				continue
+			}
+			rowLevel := row.JLPTLevel
+			if rowLevel == "" {
+				rowLevel = level
+			}
+			if !validJLPTLevel(rowLevel) {
+				return fmt.Errorf("vocab row has invalid JLPT level: %+v", row)
+			}
+			// Prompt format: "headword　___" so QuestionForm renders the
+			// kanji as visible context and the blank as the reading input.
+			prompt := row.Headword + "　___"
+			qid := QuestionID(row.Headword, prompt, row.Reading)
+			if _, err := stmt.ExecContext(ctx,
+				qid, rowLevel, row.Headword, prompt, row.Reading,
+				GrammarSourceID, row.License, GrammarValidatorID, 1.0, now); err != nil {
+				return fmt.Errorf("insert vocab question %s/%s: %w", row.Headword, row.Reading, err)
+			}
+			seenIDs[qid] = struct{}{}
+			inserted++
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, inserted, err
+	}
+	return seenIDs, inserted, nil
 }
 
 func loadVocabSupport(ctx context.Context, tx *sql.Tx, root string) (int, error) {
@@ -418,14 +509,17 @@ func loadJLPTOverrides(ctx context.Context, tx *sql.Tx, root string) (int, error
 
 // sweepOrphanQuestions deletes curated question rows whose id is not in
 // the seen set. Returns the number of rows deleted.
-func sweepOrphanQuestions(ctx context.Context, tx *sql.Tx, seenIDs map[string]struct{}) (int64, error) {
+func sweepOrphanQuestions(ctx context.Context, tx *sql.Tx, contentType string, seenIDs map[string]struct{}) (int64, error) {
 	if len(seenIDs) == 0 {
-		// Nothing seen → corpus is empty / not-walked. Don't sweep; that
-		// would wipe a healthy DB on a misconfigured root path.
-		return 0, nil
+		res, err := tx.ExecContext(ctx, `DELETE FROM question WHERE source = ? AND content_type = ?`, GrammarSourceID, contentType)
+		if err != nil {
+			return 0, err
+		}
+		n, _ := res.RowsAffected()
+		return n, nil
 	}
-	args := make([]any, 0, 1+len(seenIDs))
-	args = append(args, GrammarSourceID)
+	args := make([]any, 0, 2+len(seenIDs))
+	args = append(args, GrammarSourceID, contentType)
 	placeholders := make([]byte, 0, 2*len(seenIDs))
 	for id := range seenIDs {
 		if len(placeholders) > 0 {
@@ -434,7 +528,7 @@ func sweepOrphanQuestions(ctx context.Context, tx *sql.Tx, seenIDs map[string]st
 		placeholders = append(placeholders, '?')
 		args = append(args, id)
 	}
-	q := `DELETE FROM question WHERE source = ? AND id NOT IN (` + string(placeholders) + `)`
+	q := `DELETE FROM question WHERE source = ? AND content_type = ? AND id NOT IN (` + string(placeholders) + `)`
 	res, err := tx.ExecContext(ctx, q, args...)
 	if err != nil {
 		return 0, err

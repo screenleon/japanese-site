@@ -25,6 +25,9 @@ type GradeResult struct {
 	GrammarPoint  string   `json:"grammar_point"`
 	ErrorClass    string   `json:"error_class,omitempty"`
 	SuggestedNext []string `json:"suggested_next"`
+	// Enriched by the handler after grading — not populated by the grader itself.
+	ContentType  string `json:"content_type,omitempty"`
+	ItemDetailZH string `json:"item_detail_zh,omitempty"`
 }
 
 // GradeInput is the per-call payload for ClozeGrader.Grade. Future kinds
