@@ -20,7 +20,7 @@
 | JS-013 | ✅ closed 2026-05-03 | 語料儲存重評 | arch | 2026-05-01 | roadmap:#content-storage--scale |
 | JS-014 | ✅ closed 2026-04-30 | 等級導向學習 | product | 2026-04-30 | feedback:2026-04-30 |
 | JS-015 | ✅ closed 2026-04-30 | 移除英文備援 | product | 2026-04-30 | feedback:2026-04-30 |
-| JS-016 | 🔵 active | JLPT 等級來源切換 | content | 2026-05-02 | feedback:2026-05-02 |
+| JS-016 | ✅ closed 2026-05-03 | JLPT 等級來源切換 | content | 2026-05-02 | feedback:2026-05-02 |
 | JS-017 | ✅ closed 2026-05-02 | 已讀內容追蹤 | backend/frontend | 2026-05-02 | feedback:2026-05-02 |
 | JS-018 | ✅ closed 2026-05-02 | github.io 靜態部署 | frontend/ops | 2026-05-02 | decisions:#2026-05-02-js-018-github-pages-static-deployment-scope |
 
@@ -113,16 +113,10 @@
 **Outcome**: 已移除學習介面的英文備援顯示，改以日文優先與繁中支援呈現缺口與可用內容。
 **See**: DECISIONS.md#2026-04-30-vocabulary-and-kanji-use-japanesetraditional-chinese-support-overlays
 
-## JS-016 — JLPT 等級來源切換評估
+## JS-016 — JLPT 等級來源切換 ✅ 2026-05-03
 
-**Problem**: 目前 JLPT 等級判定以 Tanos 舊 JLPT（2010 改版前）為依據，可能與採用新 JLPT 的 Jisho 等公開資源出現等級不一致。
-
-**Why**: 若學習者在其他網站看到的等級與本站不一致，會造成混淆與信任流失。在語料量還小時遷移成本較低，規模變大後重新分類的工作量會大幅膨脹。
-
-**Requirement**: 評估改以 Jisho JLPT level tag 為權威時的差異，做出是否遷移的決策；若決定遷移，需規劃 grammar/vocab/kanji 語料的重新分類流程。
-
-**Tags**: P2
-<!-- 首次記錄: 2026-05-02 -->
+**Outcome**: 完成 Phase 1 Jisho API 稽核（671 筆，81 筆差異 12.07%）；決策採全面切換 Jisho；Phase 3 執行 81 筆 vocab 等級遷移（N1–N5 JSONL 重組），grammar 等級尚未涉及（Jisho grammar tag 資料不足）。
+**See**: audits/js-016-jisho-level-audit-2026-05-03.md, pr:#30, pr:#31
 
 ## JS-017 — 已讀內容追蹤 ✅ 2026-05-02
 
