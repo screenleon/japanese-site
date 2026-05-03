@@ -1,0 +1,16 @@
+{
+  "slug": "nai-mademo",
+  "title_ja": "〜ないまでも",
+  "title_zh": "〜ないまでも（即使不到…程度）",
+  "jlpt_level": "N1",
+  "explanation_ja": "「〜ないまでも」は、最高・理想の水準には達しないとしても、それに近い程度や最低限の水準は満たすと言う書面体の表現である。「満点は取れないまでも合格点は取れる」「専門家とは言えないまでも基礎知識はある」のように、前半で上限を控えめに退け、後半で現実的な評価を述べる。単なる譲歩の「〜なくても」よりも、比較される水準差を意識して述べる点に特徴がある。",
+  "explanation_zh": "「〜ないまでも」表示「即使不到某種程度，至少也……」，常用於正式敘述中，先否定最高標準，再提出較低但仍成立的評價。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_contains_any": ["なくても", "としても"], "error_class": "used-general-concession"},
+    {"if_answer_not_contains_any": ["ないまでも"], "error_class": "missing-nai-mademo"}
+  ]
+}
