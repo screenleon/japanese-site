@@ -1,0 +1,5 @@
+{"text_ja":"雨です___、行きません。","text_zh":"因為下雨，所以不去。","blank":"から","is_correct":1,"hint":"理由","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"今日は忙しいです___、休みません。","text_zh":"因為今天很忙，所以不休息。","blank":"から","is_correct":1,"hint":"理由から結果へ","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"寒いです___、コートを着ます。","text_zh":"因為冷，所以穿外套。","blank":"から","is_correct":1,"hint":"なぜかを言う","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"時間がありません___、急ぎます。","text_zh":"因為沒有時間，所以趕快。","blank":"から","is_correct":1,"hint":"理由のから","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この本はおもしろいです___、読みます。","text_zh":"因為這本書有趣，所以讀。","blank":"から","is_correct":1,"hint":"理由をつなぐ","source":"curated","license":"CC-BY-SA-4.0"}

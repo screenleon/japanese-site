@@ -1,0 +1,17 @@
+{
+  "slug": "ga-contrast",
+  "title_ja": "が（逆接）",
+  "title_zh": "が（轉折）",
+  "jlpt_level": "N5",
+  "explanation_ja": "文の終わりに近い「が」は、前の内容と後ろの内容をやわらかく対比します。「日本語は難しいですが、おもしろいです」や「行きたいですが、時間がありません」のように使います。助詞の主語を示す「が」と形は同じですが、ここでは文と文をつなぎます。",
+  "explanation_zh": "接續助詞「が」可連接兩個句子，表示「但是、可是」的轉折或委婉對比。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["から"], "error_class": "reason-pattern"},
+    {"if_answer_equals_any": ["そして"], "error_class": "simple-and"},
+    {"default": true, "error_class": "wrong-contrast-particle"}
+  ]
+}

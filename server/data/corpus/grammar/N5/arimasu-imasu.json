@@ -1,0 +1,17 @@
+{
+  "slug": "arimasu-imasu",
+  "title_ja": "あります／います",
+  "title_zh": "あります／います（存在）",
+  "jlpt_level": "N5",
+  "explanation_ja": "「あります」と「います」は、物や人がある場所に存在することを表します。「机の上に本があります」は物、「教室に先生がいます」は人や動物に使います。場所は「に」で示し、「駅の前に店があります」のように言います。",
+  "explanation_zh": "「あります」用於無生命物的存在，「います」用於人或動物的存在，場所通常用「に」標示。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["います"], "error_class": "animate-for-thing"},
+    {"if_answer_equals_any": ["あります"], "error_class": "inanimate-for-person"},
+    {"default": true, "error_class": "wrong-existence-verb"}
+  ]
+}

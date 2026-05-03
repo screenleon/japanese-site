@@ -1,0 +1,5 @@
+{"text_ja":"机の上に本が___。","text_zh":"桌上有書。","blank":"あります","is_correct":1,"hint":"物の存在","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"教室に先生が___。","text_zh":"教室裡有老師。","blank":"います","is_correct":1,"hint":"人の存在","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"公園に犬が___。","text_zh":"公園裡有狗。","blank":"います","is_correct":1,"hint":"動物の存在","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"駅の前に店が___。","text_zh":"車站前有店。","blank":"あります","is_correct":1,"hint":"店は物として言う","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"かばんの中にかぎが___。","text_zh":"包包裡有鑰匙。","blank":"あります","is_correct":1,"hint":"物にはあります","source":"curated","license":"CC-BY-SA-4.0"}

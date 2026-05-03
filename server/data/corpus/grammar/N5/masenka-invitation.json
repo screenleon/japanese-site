@@ -1,0 +1,17 @@
+{
+  "slug": "masenka-invitation",
+  "title_ja": "ませんか",
+  "title_zh": "ませんか（邀請）",
+  "jlpt_level": "N5",
+  "explanation_ja": "「ませんか」は、相手をていねいに誘う表現です。「いっしょに昼ご飯を食べませんか」や「明日、映画を見ませんか」のように使います。形は否定ですが、意味は「いっしょにしませんか」という誘いです。",
+  "explanation_zh": "「ませんか」形式上是否定疑問，但常用來禮貌邀請對方一起做某事。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["ますか"], "error_class": "plain-question"},
+    {"if_answer_equals_any": ["ましょう"], "error_class": "volitional-suggestion"},
+    {"default": true, "error_class": "wrong-invitation-form"}
+  ]
+}

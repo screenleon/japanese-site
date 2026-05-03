@@ -1,0 +1,5 @@
+{"text_ja":"日本語は難しいです___、おもしろいです。","text_zh":"日文很難，但是很有趣。","blank":"が","is_correct":1,"hint":"逆接","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"行きたいです___、時間がありません。","text_zh":"想去，但是沒有時間。","blank":"が","is_correct":1,"hint":"やわらかい対比","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この店は高いです___、おいしいです。","text_zh":"這家店很貴，但是好吃。","blank":"が","is_correct":1,"hint":"前と後ろを対比","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"今日は休みです___、勉強します。","text_zh":"今天休假，但是要讀書。","blank":"が","is_correct":1,"hint":"しかしの意味","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"駅は近いです___、道が分かりません。","text_zh":"車站很近，但是不知道路。","blank":"が","is_correct":1,"hint":"文と文をつなぐ","source":"curated","license":"CC-BY-SA-4.0"}

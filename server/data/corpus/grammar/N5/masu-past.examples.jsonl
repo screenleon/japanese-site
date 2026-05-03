@@ -1,0 +1,5 @@
+{"text_ja":"昨日、映画を見___。","text_zh":"昨天看了電影。","blank":"ました","is_correct":1,"hint":"ます形の過去","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"けさ、パンを食べ___。","text_zh":"今天早上吃了麵包。","blank":"ました","is_correct":1,"hint":"終わった動作","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"先週、友だちに会い___。","text_zh":"上週見了朋友。","blank":"ました","is_correct":1,"hint":"過去のこと","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"日曜日に本を読み___。","text_zh":"星期日讀了書。","blank":"ました","is_correct":1,"hint":"ていねいな過去","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"きのう学校へ行き___。","text_zh":"昨天去了學校。","blank":"ました","is_correct":1,"hint":"行きますの過去","source":"curated","license":"CC-BY-SA-4.0"}

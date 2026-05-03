@@ -1,0 +1,17 @@
+{
+  "slug": "kara-reason",
+  "title_ja": "から（理由）",
+  "title_zh": "から（理由）",
+  "jlpt_level": "N5",
+  "explanation_ja": "「から」は、理由を表して、前の文と後ろの文をつなぎます。「雨ですから、行きません」や「忙しいですから、休みません」のように使います。日常会話では、理由を先に言ってから結果を言うときによく使います。",
+  "explanation_zh": "「から」表示原因或理由，相當於「因為……所以……」，語氣較直接。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["ので"], "error_class": "used-node"},
+    {"if_answer_equals_any": ["けど"], "error_class": "contrast-pattern"},
+    {"default": true, "error_class": "wrong-reason-particle"}
+  ]
+}

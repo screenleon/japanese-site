@@ -1,0 +1,5 @@
+{"text_ja":"音楽を聞き___勉強します。","text_zh":"一邊聽音樂一邊讀書。","blank":"ながら","is_correct":1,"hint":"同時にする動作","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"歩き___友だちと話します。","text_zh":"一邊走一邊和朋友說話。","blank":"ながら","is_correct":1,"hint":"歩きますからますを取る","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"テレビを見___ご飯を食べます。","text_zh":"一邊看電視一邊吃飯。","blank":"ながら","is_correct":1,"hint":"二つの動作","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"歌い___部屋をそうじします。","text_zh":"一邊唱歌一邊打掃房間。","blank":"ながら","is_correct":1,"hint":"歌います + ながら","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"メモを見___電話します。","text_zh":"一邊看筆記一邊打電話。","blank":"ながら","is_correct":1,"hint":"主な動作は後ろ","source":"curated","license":"CC-BY-SA-4.0"}
