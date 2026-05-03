@@ -1,0 +1,15 @@
+{
+  "slug": "te-shimau",
+  "title_ja": "てしまう",
+  "title_zh": "てしまう（做完／不小心）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「動詞て形 + しまう」は、動作が全部終わることや、残念な気持ちを表します。例えば「宿題をしてしまいました」は終わったことを表し、「かぎを忘れてしまいました」は困った気持ちを表します。丁寧な文では「てしまいます」「てしまいました」をよく使います。",
+  "explanation_zh": "「動詞て形 + しまう」表示動作完成，或帶有遺憾、懊悔的語氣。常譯為「做完了」或「不小心／結果竟然」。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": [
+    {"if_answer_equals_any": ["ている"], "error_class": "wrong-pattern"}
+  ]
+}

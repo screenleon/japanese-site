@@ -1,0 +1,5 @@
+{"text_ja":"昨日は食べ___ました。","text_zh":"昨天吃太多了。","blank":"すぎ","is_correct":1,"hint":"食べる量が多い","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"このかばんは高___ます。","text_zh":"這個包包太貴了。","blank":"すぎ","is_correct":1,"hint":"高い → 高すぎる","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この部屋は静か___ます。","text_zh":"這個房間太安靜了。","blank":"すぎ","is_correct":1,"hint":"な形容詞 + すぎる","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"テレビを見___ないでください。","text_zh":"請不要看太多電視。","blank":"すぎ","is_correct":1,"hint":"見すぎない","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"このスープは熱___て飲めません。","text_zh":"這個湯太燙，不能喝。","blank":"すぎ","is_correct":1,"hint":"熱い → 熱すぎる","source":"curated","license":"CC-BY-SA-4.0"}

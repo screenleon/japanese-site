@@ -1,0 +1,5 @@
+{"text_ja":"京都へ行った___があります。","text_zh":"我曾經去過京都。","blank":"こと","is_correct":1,"hint":"経験を表す名詞","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この映画を見た___があります。","text_zh":"我曾經看過這部電影。","blank":"こと","is_correct":1,"hint":"た形 + こと","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"日本で電車に乗った___があります。","text_zh":"我曾經在日本搭過電車。","blank":"こと","is_correct":1,"hint":"経験","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"友だちとすしを作った___があります。","text_zh":"我曾經和朋友做過壽司。","blank":"こと","is_correct":1,"hint":"作った + こと","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"雪を見た___がありません。","text_zh":"我不曾看過雪。","blank":"こと","is_correct":1,"hint":"経験の否定","source":"curated","license":"CC-BY-SA-4.0"}
