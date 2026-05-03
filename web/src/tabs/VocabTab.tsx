@@ -9,6 +9,7 @@ export function VocabTab() {
   const [selectedLevel, setSelectedLevel] = useState("N5");
   const [rows, setRows] = useState<VocabRow[]>([]);
   const [randomRow, setRandomRow] = useState<VocabRow | null>(null);
+  const [showTranslation, setShowTranslation] = useState(false);
   const [err, setErr] = useState("");
   const [loadingList, setLoadingList] = useState(false);
   const [loadingRandom, setLoadingRandom] = useState(false);
@@ -41,6 +42,7 @@ export function VocabTab() {
     setErr("");
     try {
       setRandomRow(await api.randomVocab(level));
+      setShowTranslation(false);
     } catch (e) {
       setErr(String(e));
       setRandomRow(null);
@@ -90,7 +92,7 @@ export function VocabTab() {
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div>
             <h2 className="text-lg font-medium">{selectedLevel} 隨機單字</h2>
-            <p className="text-sm text-slate-500">每次抽一個單字，先看日文與讀音，再確認意思。</p>
+            <p className="text-sm text-slate-500">每次抽一個單字，先讀日文說明，再需要時打開中文。</p>
           </div>
           <button
             type="button"
@@ -109,7 +111,20 @@ export function VocabTab() {
             </div>
             <div className="text-sm leading-relaxed">
               <div>{japaneseGloss(randomRow)}</div>
-              <div className="mt-2 text-slate-600">{supportGloss(randomRow)}</div>
+              <div className="mt-5 border-t border-slate-200 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowTranslation((current) => !current)}
+                  className="rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                >
+                  {showTranslation ? "隱藏中文說明" : "顯示中文說明"}
+                </button>
+                {showTranslation && (
+                  <div className="mt-4 text-slate-600">
+                    {randomRow.gloss_zh?.trim() || "繁中釋義待補"}
+                  </div>
+                )}
+              </div>
               <div className="mt-2 text-xs text-slate-400">
                 {randomRow.pos}
                 {randomRow.jlpt_level && <span className="ml-2">{randomRow.jlpt_level}</span>}
