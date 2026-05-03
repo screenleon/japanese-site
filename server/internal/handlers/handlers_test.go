@@ -140,6 +140,20 @@ func TestAPISmoke(t *testing.T) {
 			wantBody:   `"total_attempts":1`,
 		},
 		{
+			name:       "quiz due-count grammar key",
+			method:     http.MethodGet,
+			path:       "/api/quiz/due-count",
+			wantStatus: http.StatusOK,
+			wantBody:   `"grammar"`,
+		},
+		{
+			name:       "quiz due-count vocab key",
+			method:     http.MethodGet,
+			path:       "/api/quiz/due-count",
+			wantStatus: http.StatusOK,
+			wantBody:   `"vocab"`,
+		},
+		{
 			name:       "unknown api",
 			method:     http.MethodGet,
 			path:       "/api/nope",

@@ -72,9 +72,9 @@ export function QuizTab({
     setAnswer("");
     try {
       const q = await api.nextQuestion({
-        type: contentType,
+        type: reviewMode ? undefined : contentType,
         jlpt: jlpt || undefined,
-        grammar: contentType === "grammar" ? grammar || undefined : undefined,
+        grammar: !reviewMode && contentType === "grammar" ? grammar || undefined : undefined,
         exclude: seenIDs,
       });
       setCurrent(q);
@@ -195,6 +195,7 @@ export function QuizTab({
   useEffect(() => {
     if (mode === "summary") return;
     if (mode === "session" && turns.length > 0 && !result) return;
+    if (reviewMode && turns.length === 0) return;
     pickNext(mode === "session" ? turns.map((t) => t.question.id) : []);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentType, grammar, jlpt]);

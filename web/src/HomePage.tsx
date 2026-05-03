@@ -84,22 +84,31 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
 
         {error && <p className="mb-6 text-sm text-red-600">無法讀取首頁統計：{error}</p>}
 
-        {quizCapable && (
-          <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3">
+          {quizCapable ? (
+            <>
+              <button
+                onClick={() => onStart("練習")}
+                className="px-5 py-3 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
+              >
+                開始練習
+              </button>
+              <button
+                onClick={() => onStart("測試")}
+                className="px-5 py-3 rounded-md border border-slate-300 bg-white text-slate-800 text-sm font-medium hover:bg-slate-100"
+              >
+                開始測試
+              </button>
+            </>
+          ) : (
             <button
               onClick={() => onStart("練習")}
-              className="px-5 py-3 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
+              className="px-5 py-3 rounded-md bg-slate-700 text-white text-sm font-medium hover:bg-slate-800"
             >
-              開始練習
+              瀏覽內容
             </button>
-            <button
-              onClick={() => onStart("測試")}
-              className="px-5 py-3 rounded-md border border-slate-300 bg-white text-slate-800 text-sm font-medium hover:bg-slate-100"
-            >
-              開始測試
-            </button>
-          </div>
-        )}
+          )}
+        </div>
       </section>
     </main>
   );

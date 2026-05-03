@@ -108,6 +108,15 @@ func TestCountDue(t *testing.T) {
 	seedStatsQuestionWithContentType(t, db, "duevocab00000001", "gp-vocab-due", "vocab")
 	seedStatsQuestionWithContentType(t, db, "legacyvocab00001", "gp-vocab-legacy", "vocab")
 
+	// duegrammar000001: answered wrong → now overdue → EXISTS check passes → counted
+	if _, err := LogAttempt(context.Background(), db, Attempt{
+		QuestionID: "duegrammar000001",
+		UserAnswer: "wrong",
+		Correct:    false,
+	}); err != nil {
+		t.Fatalf("log due grammar: %v", err)
+	}
+	// futuregrammar001: answered correctly → due in the future → not counted
 	if _, err := LogAttempt(context.Background(), db, Attempt{
 		QuestionID: "futuregrammar001",
 		UserAnswer: "right",
@@ -150,6 +159,31 @@ func TestCountDue(t *testing.T) {
 	}
 	if total != 3 {
 		t.Fatalf("CountDue total = %d, want 3", total)
+	}
+}
+
+func TestCountDue_BoundaryAndNeverAttempted(t *testing.T) {
+	db := newMemoryDB(t)
+	defer db.Close()
+	if err := Migrate(db); err != nil {
+		t.Fatalf("migrate: %v", err)
+	}
+	// next_due_at exactly = datetime('now') — must satisfy the <= boundary and be counted
+	seedStatsQuestionWithContentType(t, db, "boundary000000001", "gp-boundary", "grammar")
+	if _, err := db.Exec(`INSERT INTO attempt
+		(question_id, user_answer, correct, error_class, next_due_at)
+		VALUES ('boundary000000001', 'test', 0, NULL, datetime('now'))`); err != nil {
+		t.Fatalf("seed boundary attempt: %v", err)
+	}
+	// never attempted — must NOT be counted (requires at least one attempt)
+	seedStatsQuestionWithContentType(t, db, "neverattempted001", "gp-never", "grammar")
+
+	count, err := CountDue(context.Background(), db, "grammar")
+	if err != nil {
+		t.Fatalf("CountDue: %v", err)
+	}
+	if count != 1 {
+		t.Fatalf("CountDue = %d, want 1 (boundary counted, never-attempted excluded)", count)
 	}
 }
 

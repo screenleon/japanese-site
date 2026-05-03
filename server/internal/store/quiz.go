@@ -162,7 +162,8 @@ func CountDue(ctx context.Context, db *DB, contentType string) (int, error) {
 	row := db.QueryRowContext(ctx, `
 		SELECT COUNT(DISTINCT q.id)
 		FROM question q
-		WHERE (
+		WHERE EXISTS (SELECT 1 FROM attempt a2 WHERE a2.question_id = q.id)
+		AND (
 			(SELECT a.next_due_at FROM attempt a WHERE a.question_id = q.id
 			 ORDER BY a.id DESC LIMIT 1) IS NULL
 			OR (SELECT a.next_due_at FROM attempt a WHERE a.question_id = q.id
