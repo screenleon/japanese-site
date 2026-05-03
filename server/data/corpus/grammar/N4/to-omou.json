@@ -1,0 +1,13 @@
+{
+  "slug": "to-omou",
+  "title_ja": "と思う",
+  "title_zh": "と思う（我想／我認為）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「普通形 + と思う」は、話し手の考え、意見、予想を述べる表現である。文の内容を「と」で受け、「思う」でその判断が自分の考えであることを示す。断定を避け、やわらかく意見を述べるときにも用いられる。",
+  "explanation_zh": "「普通形 + と思う」表示說話者的想法、意見或推測，常譯為「我想／我認為」。比直接斷定更柔和。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}

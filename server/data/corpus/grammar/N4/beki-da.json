@@ -1,0 +1,13 @@
+{
+  "slug": "beki-da",
+  "title_ja": "べきだ",
+  "title_zh": "べきだ（應該）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「動詞辞書形 + べきだ」は、道理、規則、道徳、責任などから考えて「そうするのが当然である」と述べる表現である。義務や強い助言を表すため、相手に直接使うときは強く聞こえる場合がある。「する」は「するべきだ」と「すべきだ」の両方が用いられる。",
+  "explanation_zh": "「動詞辭書形 + べきだ」表示基於道理、規則、道德或責任而「應該」做某事。語氣較強，直接對對方使用時可能顯得嚴厲。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}

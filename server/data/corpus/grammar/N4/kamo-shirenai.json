@@ -1,0 +1,13 @@
+{
+  "slug": "kamo-shirenai",
+  "title_ja": "かもしれない",
+  "title_zh": "かもしれない（也許／可能）",
+  "jlpt_level": "N4",
+  "explanation_ja": "「普通形 + かもしれない」は、可能性があるが確かではないことを表す表現である。「だろう」よりも確信が弱く、やわらかい推量として用いられる。名詞文とナ形容詞文では、現在肯定の「だ」を付けずに接続することが多い。",
+  "explanation_zh": "「普通形 + かもしれない」表示不確定的可能性，常譯為「也許／可能」。語氣比「だろう」更不確定、更柔和。",
+  "source": "curated",
+  "license": "CC-BY-SA-4.0",
+  "validated_by": "import-curated-v1",
+  "validator_score": 1.0,
+  "classifier_rules": []
+}
