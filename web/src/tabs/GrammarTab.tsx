@@ -152,29 +152,6 @@ export function GrammarTab({
         </div>
       ) : (
         <div className="space-y-5">
-          <section className="rounded-md border border-slate-200 bg-white p-5">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <h2 className="text-lg font-medium">{selectedLevel} 隨機文法</h2>
-                <p className="text-sm text-slate-500">抽一個文法點，先讀日文說明，再需要時打開中文。</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => void drawRandomGrammar()}
-                disabled={loadingRandom}
-                className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white disabled:opacity-50"
-              >
-                {loadingRandom ? "抽取中" : "抽下一個"}
-              </button>
-            </div>
-            {active && (
-              <div className="mt-4 border-t border-slate-100 pt-4">
-                <div className="text-xl font-semibold">{active.title_ja}</div>
-                <div className="mt-1 text-sm text-slate-500">{active.title_zh}</div>
-              </div>
-            )}
-          </section>
-
           <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
             <ul className="space-y-1">
               {levelPoints.map((p) => (
@@ -199,7 +176,17 @@ export function GrammarTab({
             {active && (
               <article className="rounded-md border border-slate-200 bg-white p-6">
                 <header className="mb-4">
-                  <h2 className="text-2xl font-medium">{active.title_ja}</h2>
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <h2 className="text-2xl font-medium">{active.title_ja}</h2>
+                    <button
+                      type="button"
+                      onClick={() => void drawRandomGrammar()}
+                      disabled={loadingRandom}
+                      className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white disabled:opacity-50"
+                    >
+                      {loadingRandom ? "抽取中" : "抽下一個"}
+                    </button>
+                  </div>
                   <p className="text-sm text-slate-500">
                     {active.jlpt_level} · {active.title_zh}
                   </p>
