@@ -30,6 +30,24 @@ const points = [
     jlpt_level: "N3",
     explanation_zh: "表示限定。",
   },
+  {
+    slug: "monono",
+    title_ja: "ものの",
+    title_zh: "ものの（雖然／但是）",
+    jlpt_level: "N3",
+    nuance_note: "口語・くだけた逆接。前文の予想と異なる結果を続ける。",
+    related_slugs: ["monono-formal"],
+    explanation_zh: "雖然但是。",
+  },
+  {
+    slug: "monono-formal",
+    title_ja: "〜ものの",
+    title_zh: "〜ものの（雖然…但是…）",
+    jlpt_level: "N2",
+    nuance_note: "文語的な逆接で、書き言葉や改まった場面で使う。",
+    related_slugs: ["monono"],
+    explanation_zh: "書面逆接。",
+  },
 ];
 
 const listGrammar = vi.mocked(api.listGrammar);
@@ -98,12 +116,34 @@ describe("GrammarTab", () => {
     expect(randomGrammar).toHaveBeenCalledWith("N3");
   });
 
-  it("loads examples with the active slug and level namespace", async () => {
+  it("loads examples with only the active slug", async () => {
     render(<GrammarTab />);
 
     await waitFor(() => {
-      expect(getGrammarExamples).toHaveBeenCalledWith("sae", "N3");
+      expect(getGrammarExamples).toHaveBeenCalledWith("sae");
     });
     expect(screen.getByText("名前さえ書けばいい。")).toBeVisible();
+  });
+
+  it("renders nuance_note for the active grammar point", async () => {
+    render(<GrammarTab initialSlug="monono" />);
+
+    expect(
+      await screen.findByText("口語・くだけた逆接。前文の予想と異なる結果を続ける。")
+    ).toBeVisible();
+  });
+
+  it("renders related grammar buttons and navigates to the variant", async () => {
+    render(<GrammarTab initialSlug="monono" />);
+
+    expect(await screen.findByRole("heading", { name: "ものの" })).toBeVisible();
+    expect(screen.getByText("相關用法")).toBeVisible();
+
+    fireEvent.click(screen.getByRole("button", { name: "〜ものの (N2)" }));
+
+    await waitFor(() => {
+      expect(screen.getByRole("heading", { name: "〜ものの" })).toBeVisible();
+    });
+    expect(getGrammarExamples).toHaveBeenLastCalledWith("monono-formal");
   });
 });

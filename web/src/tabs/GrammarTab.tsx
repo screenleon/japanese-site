@@ -18,6 +18,7 @@ export function GrammarTab({
   const [showTranslation, setShowTranslation] = useState(false);
   const [loading, setLoading] = useState(true);
   const initialSlugApplied = useRef(false);
+  const preserveActiveOnLevelChange = useRef(false);
   const [loadingRandom, setLoadingRandom] = useState(false);
   const [err, setErr] = useState("");
 
@@ -68,11 +69,21 @@ export function GrammarTab({
   const active = levelPoints.find((p) => p.slug === activeSlug) || levelPoints[0] || null;
   const primaryExplanation = active?.explanation_ja || active?.explanation_zh || "";
   const hasJapaneseExplanation = Boolean(active?.explanation_ja?.trim());
+  const relatedPoints = useMemo(() => {
+    return (active?.related_slugs || []).map((slug) => ({
+      slug,
+      point: points.find((p) => p.slug === slug) || null,
+    }));
+  }, [active?.related_slugs, points]);
   useReadTracking(active?.slug ? { type: "grammar", slug: active.slug } : null);
 
   useEffect(() => {
     if (initialSlugApplied.current) {
       initialSlugApplied.current = false;
+      return;
+    }
+    if (preserveActiveOnLevelChange.current) {
+      preserveActiveOnLevelChange.current = false;
       return;
     }
     setActiveSlug("");
@@ -92,7 +103,7 @@ export function GrammarTab({
       };
     }
     api
-      .getGrammarExamples(active.slug, active.jlpt_level)
+      .getGrammarExamples(active.slug)
       .then((r) => {
         if (!cancelled) setExamples((r.examples || []).slice(0, 5));
       })
@@ -102,7 +113,7 @@ export function GrammarTab({
     return () => {
       cancelled = true;
     };
-  }, [active?.slug, active?.jlpt_level]);
+  }, [active?.slug]);
 
   async function drawRandomGrammar() {
     setLoadingRandom(true);
@@ -190,6 +201,11 @@ export function GrammarTab({
                   <p className="text-sm text-slate-500">
                     {active.jlpt_level} · {active.title_zh}
                   </p>
+                  {active.nuance_note && (
+                    <p className="mt-2 text-xs italic text-slate-500">
+                      {active.nuance_note}
+                    </p>
+                  )}
                 </header>
                 <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed">
                   {primaryExplanation}
@@ -207,6 +223,33 @@ export function GrammarTab({
                         </li>
                       ))}
                     </ul>
+                  </section>
+                )}
+                {relatedPoints.length > 0 && (
+                  <section className="mt-6 border-t border-slate-200 pt-5">
+                    <h3 className="text-base font-medium">相關用法</h3>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {relatedPoints.map(({ slug, point }) =>
+                        point ? (
+                          <button
+                            key={slug}
+                            type="button"
+                            onClick={() => {
+                              preserveActiveOnLevelChange.current = true;
+                              setSelectedLevel(point.jlpt_level);
+                              setActiveSlug(point.slug);
+                            }}
+                            className="rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+                          >
+                            {point.title_ja} ({point.jlpt_level})
+                          </button>
+                        ) : (
+                          <span key={slug} className="text-sm text-slate-500">
+                            {slug}
+                          </span>
+                        )
+                      )}
+                    </div>
                   </section>
                 )}
                 {hasJapaneseExplanation && (

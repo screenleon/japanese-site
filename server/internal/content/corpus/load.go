@@ -39,6 +39,8 @@ type GrammarPoint struct {
 	TitleJA         string          `json:"title_ja"`
 	TitleZH         string          `json:"title_zh"`
 	JLPTLevel       string          `json:"jlpt_level"`
+	NuanceNote      string          `json:"nuance_note,omitempty"`
+	RelatedSlugs    []string        `json:"related_slugs,omitempty"`
 	ExplanationJA   string          `json:"explanation_ja,omitempty"`
 	ExplanationZH   string          `json:"explanation_zh"`
 	Source          string          `json:"source"`
@@ -112,14 +114,17 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 
 	upsertGP, err := tx.PrepareContext(ctx, `
 		INSERT INTO grammar_point (
-			slug, title_ja, title_zh, jlpt_level, explanation_ja, explanation_zh,
+			slug, title_ja, title_zh, jlpt_level, nuance_note, related_slugs,
+			explanation_ja, explanation_zh,
 			source, license, validated_by, validator_score, validated_at,
 			classifier_rules
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON CONFLICT(slug) DO UPDATE SET
 			title_ja=excluded.title_ja,
 			title_zh=excluded.title_zh,
 			jlpt_level=excluded.jlpt_level,
+			nuance_note=excluded.nuance_note,
+			related_slugs=excluded.related_slugs,
 			explanation_ja=excluded.explanation_ja,
 			explanation_zh=excluded.explanation_zh,
 			validated_at=excluded.validated_at,
@@ -182,8 +187,13 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 			if err != nil {
 				return fmt.Errorf("classifier rules %s: %w", gp.Slug, err)
 			}
+			relatedSlugs, err := stringSliceJSON(gp.RelatedSlugs)
+			if err != nil {
+				return fmt.Errorf("related slugs %s: %w", gp.Slug, err)
+			}
 			if _, err := upsertGP.ExecContext(ctx,
-				gp.Slug, gp.TitleJA, gp.TitleZH, gp.JLPTLevel, nullStr(gp.ExplanationJA), gp.ExplanationZH,
+				gp.Slug, gp.TitleJA, gp.TitleZH, gp.JLPTLevel, nullStr(gp.NuanceNote), relatedSlugs,
+				nullStr(gp.ExplanationJA), gp.ExplanationZH,
 				gp.Source, gp.License, gp.ValidatedBy, gp.ValidatorScore, now, classifierRules); err != nil {
 				return fmt.Errorf("upsert gp %s: %w", gp.Slug, err)
 			}
@@ -657,6 +667,17 @@ func classifierRulesJSON(rules []quizrule.Rule) (any, error) {
 		return nil, err
 	}
 	body, err := json.Marshal(rules)
+	if err != nil {
+		return nil, err
+	}
+	return string(body), nil
+}
+
+func stringSliceJSON(values []string) (any, error) {
+	if len(values) == 0 {
+		return nil, nil
+	}
+	body, err := json.Marshal(values)
 	if err != nil {
 		return nil, err
 	}

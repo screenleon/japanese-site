@@ -37,7 +37,7 @@ func TestCorpusClassifierRules(t *testing.T) {
 		// N2
 		{"N2", "wakeda", "はずだ", "used-hazu"},
 		{"N2", "monoda", "ことだ", "used-koto"},
-		{"N2", "dokoroka", "ばかりか", "used-bakarika"},
+		{"N2", "dokoroka-formal", "ばかりか", "used-bakarika"},
 		{"N2", "nikanshite", "にとって", "used-nitotte"},
 		{"N2", "tsutsu", "聞きながら", "used-nagara"},
 		{"N2", "tsutsu", "聞いている", "used-teiru"},

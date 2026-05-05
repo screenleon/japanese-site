@@ -3,6 +3,41 @@
 This file records active architectural and behavioral decisions for this repository.
 Agents must read it before planning or implementation tasks.
 
+## 2026-05-05 — Grammar slug uniqueness via descriptor convention
+
+**Context**: Grammar points sharing the same kana reading at different JLPT levels (e.g., ものの at N3 vs 〜ものの at N2) had colliding slugs. PR #34's defensive level-namespace in the dump pipeline kept files from clobbering but left slug-as-PK semantically broken. Long-term maintainability requires globally unique slugs.
+
+**Decision**:
+1. Grammar slugs are globally unique across all JLPT levels (lint invariant).
+2. When two grammar points share a base reading (kana), the lower-level variant keeps the bare slug; the higher-level variant adds a descriptor suffix: `<base>-<descriptor>`.
+3. Descriptor controlled vocabulary (extend this list as new collisions arise; do not coin ad-hoc):
+   - `bungo` 文語的 / literary register
+   - `formal` 改まった / formal register
+   - `casual` くだけた / conversational register
+   - `emphatic` 強調 / emphatic usage
+   - `extended` 延伸用法 / extended usage
+   - `paired` 對應變體 / paired form
+4. Two new optional schema fields on `GrammarPoint`:
+   - `nuance_note?: string` — short Japanese gloss (1–2 sentences) explaining the level/register difference
+   - `related_slugs?: string[]` — cross-reference to variant grammar points
+5. Lint invariant: all grammar slugs globally unique; all `related_slugs` values point to existing slugs.
+
+**Initial migrations** (this PR):
+- N2 ものの → slug `monono-formal`
+- N2 どころか → slug `dokoroka-formal`
+- All four entries (N3/N2 of both pairs) get `nuance_note` + `related_slugs`.
+
+**Why `formal` for both** (rather than `bungo` / `emphatic`):
+- `bungo` (文語) literally means *classical / pre-modern Japanese* — too strong for ものの at N2, which is modern formal/written register, not classical.
+- `emphatic` for どころか overstates the difference — N3 どころか is already strongly emphatic; the N2 form differs by register and pattern complexity, not by "more emphasis."
+- `formal` is the most honest label for both pairs: same word, written/sophisticated register, with more complex predicate structures common at N2. `bungo` and `emphatic` remain in the vocabulary for cases that genuinely fit them (e.g. truly classical-grammar entries, or pairs where N2 is materially more emphatic than N3).
+
+**Consequences**:
+- The `level` parameter on `Api.getGrammarExamples` (added defensively in PR #34) is removed.
+- `dump-grammar-examples.sh` outputs flat `web/public/data/grammar-examples/<slug>.jsonl` (no per-level dirs).
+- `GrammarTab` renders `nuance_note` (when present) below the title-zh subtitle; renders `related_slugs` as a "相關用法" section after examples with clickable navigation to the variant.
+- Future grammar points sharing a base reading must pick a descriptor from the controlled vocabulary above, or extend the vocabulary by amending this DECISIONS entry.
+
 ## 2026-05-02: JS-018 GitHub Pages static deployment scope
 
 - **Context**: The site currently requires the Go backend + SQLite to run; the only way to view content is to clone and self-host. JS-017's cloud-mode design (NullProgressStore + random content, no persistence) maps cleanly onto static hosting, so a public deployment was opened as JS-018. GitHub Pages is the natural target — free, zero-ops, but limited to static assets (no Go server, no SQLite at runtime). Several scope dimensions were open: which features ship in the static build, how corpus reaches the browser, how the SPA decides which transport to use, and how routing handles project-page URL prefixes.

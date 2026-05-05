@@ -23,7 +23,7 @@
 | JS-016 | ✅ closed 2026-05-03 | JLPT 等級來源切換 | content | 2026-05-02 | feedback:2026-05-02 |
 | JS-017 | ✅ closed 2026-05-02 | 已讀內容追蹤 | backend/frontend | 2026-05-02 | feedback:2026-05-02 |
 | JS-018 | ✅ closed 2026-05-02 | github.io 靜態部署 | frontend/ops | 2026-05-02 | decisions:#2026-05-02-js-018-github-pages-static-deployment-scope |
-| JS-023 | 🔵 active | 跨等級 slug 唯一性 | content | 2026-05-05 | pr:#34 |
+| JS-023 | ✅ closed 2026-05-05 | 跨等級 slug 唯一性 | content | 2026-05-05 | pr:#34 |
 | JS-024 | 🔵 active | corpus 縮水偵測 | ops | 2026-05-05 | pr:#34 |
 | JS-025 | 🔵 active | 子資源錯誤不該打掛主視圖 | frontend | 2026-05-05 | pr:#34 |
 | JS-026 | 🔵 active | dump pipeline 整合進 bake-static | arch | 2026-05-05 | pr:#34 |
@@ -141,7 +141,7 @@
 **Outcome**: 公開 URL `https://screenleon.github.io/japanese-site/` 上線（Tier S 純內容瀏覽），`make bake-static` 烘 corpus 為 per-level rollup，`VITE_DEPLOY_MODE=static` 編譯期切換 `staticApi`，GitHub Actions on main → Pages artifact deploy。
 **See**: DECISIONS.md#2026-05-02-js-018-github-pages-static-deployment-scope, pr:#19
 
-## JS-023 — 跨等級 slug 唯一性
+## JS-023 — 跨等級 slug 唯一性 ✅ 2026-05-05
 
 **Problem**: `server/data/corpus/grammar/<level>/<slug>.examples.jsonl` 與 `web/public/data/grammar/<level>.json` 存在跨等級重名 slug（`monono`、`dokoroka` 在 N2 與 N3 都有不同標題的條目）。PR #34 透過 namespace by level 修掉 dump 端的錯置，但根源是兩個語法點共用 slug。
 
@@ -149,8 +149,11 @@
 
 **Requirement**: grammar corpus slug 跨等級 globally unique；或加 lint / schema check 強制此 invariant；或重新命名其中一個語法點（建議將 N3 變體改名以保留 N2 的「〜ものの」「〜どころか」原 slug）。
 
+**Outcome**: 採 descriptor convention：低等級保留 bare slug，高等級加受控 descriptor（N2 `monono-formal`, `dokoroka-formal`）。`GrammarPoint` 加入 `nuance_note` / `related_slugs`，`lint-grammar` 強制全域 slug 唯一與 related slug 不懸空，static examples dump 改為 flat `<slug>.jsonl`，`getGrammarExamples(slug)` 移除 level 參數。
+
 **Tags**: P2, content
 **Source**: PR #34 risk-reviewer
+**See**: DECISIONS.md#2026-05-05--grammar-slug-uniqueness-via-descriptor-convention
 <!-- 首次記錄: 2026-05-05 -->
 
 ## JS-024 — corpus 縮水偵測
@@ -221,6 +224,8 @@
 
 **Requirement**: 評估 (a) 收斂到 quizCapable + 容忍 bundle 帶字串，(b) 在 capabilities layer 引入 `srsCapable` / `dueCountCapable` 並讓 capabilities 同時感知 build-mode，(c) 維持現狀並加註解說明為何兩 flag。決策後落地。
 
+**Note 2026-05-05**: JS-023 已移除 `getGrammarExamples(slug, level?)` 的 optional level 參數；PR #34 的 level leak 其中一個 load-bearing case 已解決。HomePage build-time flag vs runtime capability 收斂仍獨立保留待評估。
+
 **Tags**: P3, frontend
 **Source**: PR #34 critic + architecture-reviewer (low)
 <!-- 首次記錄: 2026-05-05 -->
@@ -286,5 +291,4 @@
 **Tags**: P3, frontend
 **Source**: PR #35 round-1 critic (medium)
 <!-- 首次記錄: 2026-05-05 -->
-
 

@@ -51,6 +51,8 @@ export interface GrammarPoint {
   title_ja: string;
   title_zh: string;
   jlpt_level: string;
+  nuance_note?: string;
+  related_slugs?: string[];
   explanation_ja?: string;
   explanation_zh: string;
 }
@@ -190,7 +192,7 @@ export interface Api {
   listGrammar(jlpt?: string): Promise<{ points: GrammarPoint[]; count: number }>;
   randomGrammar(jlpt?: string): Promise<GrammarPoint>;
   getGrammar(slug: string): Promise<GrammarPoint>;
-  getGrammarExamples?(slug: string, level?: string): Promise<{ examples: GrammarExample[]; count: number }>;
+  getGrammarExamples?(slug: string): Promise<{ examples: GrammarExample[]; count: number }>;
   nextQuestion(opts?: NextQuestionOpts): Promise<Question>;
   answer(question_id: string, answer: string): Promise<GradeResult>;
   stats(days?: number): Promise<Stats>;
