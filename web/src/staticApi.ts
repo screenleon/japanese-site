@@ -19,6 +19,7 @@ import type {
 const levels = ["N1", "N2", "N3", "N4", "N5"];
 const jsonlCache = new Map<string, Promise<unknown[]>>();
 const jsonCache = new Map<string, Promise<unknown>>();
+type FetchOptions = { on404?: "empty" | "throw" };
 
 export function resetStaticApiCachesForTest() {
   jsonCache.clear();
@@ -31,29 +32,35 @@ function dataPath(path: string): string {
   return `${base.replace(/\/$/, "")}/data/${path.replace(/^\//, "")}`;
 }
 
-async function fetchJSON<T>(path: string): Promise<T> {
+async function fetchJSON<T>(path: string, options: FetchOptions = {}): Promise<T> {
   const url = dataPath(path);
-  if (!jsonCache.has(url)) {
+  const on404 = options.on404 ?? "throw";
+  const cacheKey = `${url}|404:${on404}`;
+  if (!jsonCache.has(cacheKey)) {
     const promise = fetch(url)
       .then(async (response) => {
-        if (!response.ok) throw staticFetchError(response, "not_found");
+        if (response.status === 404 && on404 === "empty") return [] as T;
+        if (!response.ok) throw staticFetchError(response);
         return response.json();
       })
       .catch((error) => {
-        jsonCache.delete(url);
+        jsonCache.delete(cacheKey);
         throw error;
       });
-    jsonCache.set(url, promise);
+    jsonCache.set(cacheKey, promise);
   }
-  return jsonCache.get(url) as Promise<T>;
+  return jsonCache.get(cacheKey) as Promise<T>;
 }
 
-async function fetchJSONL<T>(path: string): Promise<T[]> {
+async function fetchJSONL<T>(path: string, options: FetchOptions = {}): Promise<T[]> {
   const url = dataPath(path);
-  if (!jsonlCache.has(url)) {
+  const on404 = options.on404 ?? "throw";
+  const cacheKey = `${url}|404:${on404}`;
+  if (!jsonlCache.has(cacheKey)) {
     const promise = fetch(url)
       .then(async (response) => {
-        if (!response.ok) throw staticFetchError(response, "not_found");
+        if (response.status === 404 && on404 === "empty") return [];
+        if (!response.ok) throw staticFetchError(response);
         const text = await response.text();
         return text
           .split(/\r?\n/)
@@ -62,15 +69,16 @@ async function fetchJSONL<T>(path: string): Promise<T[]> {
           .map((line) => JSON.parse(line));
       })
       .catch((error) => {
-        jsonlCache.delete(url);
+        jsonlCache.delete(cacheKey);
         throw error;
       });
-    jsonlCache.set(url, promise);
+    jsonlCache.set(cacheKey, promise);
   }
-  return jsonlCache.get(url) as Promise<T[]>;
+  return jsonlCache.get(cacheKey) as Promise<T[]>;
 }
 
-function staticFetchError(response: Response, code: string): ApiError {
+function staticFetchError(response: Response): ApiError {
+  const code = response.status === 404 ? "not_found" : "http_error";
   return new ApiError(response.status, response.statusText, code);
 }
 
@@ -130,15 +138,16 @@ function stableID(level: string, index: number): number {
   return levelOffset + index + 1;
 }
 
-async function loadGrammarLevel(level: string): Promise<GrammarPoint[]> {
-  return fetchJSON<GrammarPoint[]>(`grammar/${level}.json`);
+async function loadGrammarLevel(
+  level: string,
+  options: FetchOptions = {}
+): Promise<GrammarPoint[]> {
+  return fetchJSON<GrammarPoint[]>(`grammar/${level}.json`, options);
 }
 
 async function loadGrammarLevels(jlpt?: string): Promise<GrammarPoint[]> {
   const groups = await Promise.all(
-    normalizeLevel(jlpt).map((level) =>
-      loadGrammarLevel(level).catch(() => [] as GrammarPoint[])
-    )
+    normalizeLevel(jlpt).map((level) => loadGrammarLevel(level, { on404: "empty" }))
   );
   return groups.flat();
 }
@@ -187,14 +196,11 @@ export const staticApi: Api = {
   },
 
   async getGrammarExamples(slug: string) {
-    try {
-      const examples = await fetchJSONL<GrammarExample>(
-        `grammar-examples/${slug}.jsonl`
-      );
-      return { examples, count: examples.length };
-    } catch {
-      return { examples: [], count: 0 };
-    }
+    const examples = await fetchJSONL<GrammarExample>(
+      `grammar-examples/${slug}.jsonl`,
+      { on404: "empty" }
+    );
+    return { examples, count: examples.length };
   },
 
   async nextQuestion(_opts?: NextQuestionOpts): Promise<Question> {

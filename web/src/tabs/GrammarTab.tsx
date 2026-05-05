@@ -107,8 +107,8 @@ export function GrammarTab({
       .then((r) => {
         if (!cancelled) setExamples((r.examples || []).slice(0, 5));
       })
-      .catch((e) => {
-        if (!cancelled) setErr(String(e));
+      .catch(() => {
+        if (!cancelled) setExamples([]);
       });
     return () => {
       cancelled = true;

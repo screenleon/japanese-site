@@ -105,9 +105,9 @@ describe("staticApi", () => {
         )
     );
 
-    await expect(staticApi.randomGrammar("N1")).rejects.toSatisfy((error) =>
-      isApiError(error, "not_found")
-    );
+    await expect(staticApi.randomGrammar("N1")).rejects.toSatisfy((error) => {
+      return error instanceof ApiError && error.status === 503;
+    });
     await expect(staticApi.randomGrammar("N1")).resolves.toMatchObject({
       slug: "aru-majiki",
     });
@@ -239,6 +239,34 @@ describe("staticApi", () => {
     await expect(staticApi.getGrammarExamples?.("missing")).resolves.toEqual({
       examples: [],
       count: 0,
+    });
+  });
+
+  it("getGrammarExamples propagates non-404 HTTP errors as ApiError", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        Promise.resolve(new Response("", { status: 500, statusText: "Server Error" }))
+      )
+    );
+
+    await expect(staticApi.getGrammarExamples?.("missing")).rejects.toSatisfy(
+      (error) => {
+        return error instanceof ApiError && error.status === 500;
+      }
+    );
+  });
+
+  it("listGrammar propagates non-404 level rollup errors as ApiError", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        Promise.resolve(new Response("", { status: 500, statusText: "Server Error" }))
+      )
+    );
+
+    await expect(staticApi.listGrammar("N1")).rejects.toSatisfy((error) => {
+      return error instanceof ApiError && error.status === 500;
     });
   });
 

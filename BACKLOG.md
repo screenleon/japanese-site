@@ -25,9 +25,9 @@
 | JS-018 | ✅ closed 2026-05-02 | github.io 靜態部署 | frontend/ops | 2026-05-02 | decisions:#2026-05-02-js-018-github-pages-static-deployment-scope |
 | JS-023 | ✅ closed 2026-05-05 | 跨等級 slug 唯一性 | content | 2026-05-05 | pr:#34 |
 | JS-024 | 🔵 active | corpus 縮水偵測 | ops | 2026-05-05 | pr:#34 |
-| JS-025 | 🔵 active | 子資源錯誤不該打掛主視圖 | frontend | 2026-05-05 | pr:#34 |
+| JS-025 | ✅ closed 2026-05-06 | 子資源錯誤不該打掛主視圖 | frontend | 2026-05-05 | pr:#TBD |
 | JS-026 | 🔵 active | dump pipeline 整合進 bake-static | arch | 2026-05-05 | pr:#34 |
-| JS-027 | 🔵 active | staticApi 統一 fault model | arch | 2026-05-05 | pr:#34 |
+| JS-027 | ✅ closed 2026-05-06 | staticApi 統一 fault model | arch | 2026-05-05 | pr:#TBD |
 | JS-028 | 🔵 active | CC-BY-SA attribution 落地 | content | 2026-05-05 | pr:#34 |
 | JS-029 | 🔵 active | HomePage flag 二元收斂評估 | frontend | 2026-05-05 | pr:#34 |
 | JS-030 | ✅ closed 2026-05-05 | Cloud 副標 mode-aware | frontend | 2026-05-05 | pr:#34 |
@@ -177,17 +177,10 @@
 **Source**: PR #34 risk-reviewer (medium)
 <!-- 首次記錄: 2026-05-05 -->
 
-## JS-025 — 子資源錯誤不該打掛主視圖
+## JS-025 — 子資源錯誤不該打掛主視圖 ✅ 2026-05-06
 
-**Problem**: `GrammarTab` 在 `api.getGrammarExamples` 失敗時呼叫 `setErr(String(e))`；component 用單一 `err` 早返回，missing examples 子資源會把整個文法 tab 變成 error 畫面，但文法解釋本身明明正常。
-
-**Why**: examples 是 grammar point 的可選子資源（不是每個 slug 都必須有 curated example），子資源 fetch 失敗不該影響主資源渲染。
-
-**Requirement**: GrammarTab 對 examples-fetch 錯誤靜默為空陣列或顯示 inline「例文 暫無」caption，不污染 page-level err。
-
-**Tags**: P2, frontend
-**Source**: PR #34 critic (medium)
-<!-- 首次記錄: 2026-05-05 -->
+**Outcome**: GrammarTab 的 examples 子資源失敗改為靜默空陣列，不再污染 page-level err；主文法內容可正常渲染。
+**See**: pr:#TBD
 
 ## JS-026 — dump pipeline 整合進 bake-static
 
@@ -201,17 +194,10 @@
 **Source**: PR #34 architecture-reviewer (medium)
 <!-- 首次記錄: 2026-05-05 -->
 
-## JS-027 — staticApi 統一 fault model
+## JS-027 — staticApi 統一 fault model ✅ 2026-05-06
 
-**Problem**: `staticApi` 各方法錯誤處理風格不一致：`loadGrammarLevels` 用 `.catch(() => [])` per-level、新增的 `getGrammarExamples` try/catch 包整段、其他則直接拋 `ApiError`。同一檔案三種模式並存。
-
-**Why**: 失敗模式不一致使呼叫端難以推理「我拿到 [] 是真的沒資料還是壞了」；單元測試對「期望什麼錯誤行為」也沒單一規約。
-
-**Requirement**: 在 `fetchJSON` / `fetchJSONL` 一處區分 404（回空）vs 其他錯誤（rethrow），caller 不再各自 try/catch。
-
-**Tags**: P3, arch
-**Source**: PR #34 critic + architecture-reviewer (low)
-<!-- 首次記錄: 2026-05-05 -->
+**Outcome**: staticApi 的 fetchJSON/fetchJSONL 統一支援 opt-in 404 empty 行為；非 404 HTTP 錯誤保留為 ApiError 並向上傳遞。
+**See**: pr:#TBD
 
 ## JS-028 — CC-BY-SA attribution 落地
 

@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { api } from "../api";
+import { api, ApiError } from "../api";
 import { GrammarTab } from "./GrammarTab";
 
 vi.mock("../hooks/useReadTracking", () => ({
@@ -8,6 +8,17 @@ vi.mock("../hooks/useReadTracking", () => ({
 }));
 
 vi.mock("../api", () => ({
+  ApiError: class ApiError extends Error {
+    readonly status: number;
+    readonly code: string;
+
+    constructor(status: number, statusText: string, code: string) {
+      super(`${status} ${statusText}${code ? `: ${code}` : ""}`);
+      this.name = "ApiError";
+      this.status = status;
+      this.code = code;
+    }
+  },
   api: {
     listGrammar: vi.fn(),
     randomGrammar: vi.fn(),
@@ -62,6 +73,18 @@ const points = [
 const listGrammar = vi.mocked(api.listGrammar);
 const randomGrammar = vi.mocked(api.randomGrammar);
 const getGrammarExamples = vi.mocked(api.getGrammarExamples!);
+
+async function expectMainEntryWithoutExamples(errorText: RegExp) {
+  expect(await screen.findByRole("heading", { name: "ものの" })).toBeVisible();
+  expect(screen.getByText("雖然但是。")).toBeVisible();
+  expect(
+    screen.getByText("口語・くだけた逆接。前文の予想と異なる結果を続ける。")
+  ).toBeVisible();
+  expect(screen.getByRole("heading", { name: "考え方のヒント" })).toBeVisible();
+  expect(screen.getByText("相關用法")).toBeVisible();
+  expect(screen.queryByText("例文")).not.toBeInTheDocument();
+  expect(screen.queryByText(errorText)).not.toBeInTheDocument();
+}
 
 describe("GrammarTab", () => {
   beforeEach(() => {
@@ -132,6 +155,34 @@ describe("GrammarTab", () => {
       expect(getGrammarExamples).toHaveBeenCalledWith("sae");
     });
     expect(screen.getByText("名前さえ書けばいい。")).toBeVisible();
+  });
+
+  it("examples 404 — page renders main entry without crashing", async () => {
+    getGrammarExamples.mockRejectedValue(
+      new ApiError(404, "Not Found", "not_found")
+    );
+
+    render(<GrammarTab initialSlug="monono" />);
+
+    await expectMainEntryWithoutExamples(/not_found/);
+  });
+
+  it("examples 500 — page renders main entry without crashing", async () => {
+    getGrammarExamples.mockRejectedValue(
+      new ApiError(500, "Server Error", "server_error")
+    );
+
+    render(<GrammarTab initialSlug="monono" />);
+
+    await expectMainEntryWithoutExamples(/server_error/);
+  });
+
+  it("examples network reject — page renders main entry without crashing", async () => {
+    getGrammarExamples.mockRejectedValue(new Error("network down"));
+
+    render(<GrammarTab initialSlug="monono" />);
+
+    await expectMainEntryWithoutExamples(/network down/);
   });
 
   it("renders nuance_note for the active grammar point", async () => {
