@@ -42,7 +42,7 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
   }, []);
 
   useEffect(() => {
-    if (!showQuizControls) return;
+    if (isStaticBuild || !quizCapable) return;
     let cancelled = false;
     api
       .getDueCount()
@@ -55,7 +55,7 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
     return () => {
       cancelled = true;
     };
-  }, [showQuizControls]);
+  }, [isStaticBuild, quizCapable]);
 
   return (
     <main className="min-h-screen bg-slate-50">
