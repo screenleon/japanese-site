@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 import { useEffect, useState } from "react";
 import { api } from "./api";
 import type { DueCount } from "./apiTypes";
@@ -15,15 +17,15 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
   const [vocabCount, setVocabCount] = useState<number | null>(null);
   const [dueCount, setDueCount] = useState<DueCount | null>(null);
   const [error, setError] = useState("");
-  // Read process.env first so test stubs (vi.stubEnv → process.env in node) win
-  // over the import.meta.env path that Vite injects at build time.
-  const deployMode =
+  const testDeployMode =
     (globalThis as { process?: { env?: { VITE_DEPLOY_MODE?: string } } }).process
-      ?.env?.VITE_DEPLOY_MODE ??
-    (import.meta as ImportMeta & { env: { VITE_DEPLOY_MODE?: string } }).env
-      .VITE_DEPLOY_MODE;
+      ?.env?.VITE_DEPLOY_MODE;
+  const deployMode =
+    import.meta.env.MODE === "test"
+      ? testDeployMode ?? import.meta.env.VITE_DEPLOY_MODE
+      : import.meta.env.VITE_DEPLOY_MODE;
   const isStaticBuild = deployMode === "static";
-  const showQuizControls = !isStaticBuild;
+  const showQuizControls = !isStaticBuild && quizCapable;
 
   useEffect(() => {
     let cancelled = false;
@@ -72,9 +74,25 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
           </p>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 mb-8">
-          <CountPanel label="文法點" value={grammarCount} />
-          <CountPanel label="單字" value={vocabCount} />
+        <div className="grid gap-3 sm:grid-cols-3 mb-8">
+          <NavCard
+            label="文法"
+            count={grammarCount}
+            description="JLPT N5–N1 文法說明"
+            onClick={() => onStart("練習", "grammar")}
+          />
+          <NavCard
+            label="單字"
+            count={vocabCount}
+            description="JLPT N5–N1 詞彙與例句"
+            onClick={() => onStart("練習", "vocab")}
+          />
+          <NavCard
+            label="漢字"
+            count={undefined}
+            description="讀音・筆畫・部首"
+            onClick={() => onStart("練習", "kanji")}
+          />
         </div>
 
         {showQuizControls ? (
@@ -121,13 +139,32 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
   );
 }
 
-function CountPanel({ label, value }: { label: string; value: number | null }) {
+function NavCard({
+  label,
+  count,
+  description,
+  onClick,
+}: {
+  label: string;
+  count?: number | null;
+  description: string;
+  onClick: () => void;
+}) {
   return (
-    <div className="bg-white border border-slate-200 rounded-md p-5">
-      <div className="text-3xl font-semibold text-slate-950">
-        {value === null ? "..." : value}
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full text-left bg-white border border-slate-200 rounded-md p-5 hover:border-slate-300 hover:shadow-sm transition"
+    >
+      <div className="flex items-baseline justify-between gap-3">
+        <div className="text-2xl font-semibold text-slate-950">{label}</div>
+        {count !== undefined && (
+          <div className="text-3xl font-semibold text-slate-950">
+            {count === null ? "..." : count}
+          </div>
+        )}
       </div>
-      <div className="mt-1 text-sm text-slate-500">{label}</div>
-    </div>
+      <div className="mt-2 text-sm text-slate-500">{description}</div>
+    </button>
   );
 }
