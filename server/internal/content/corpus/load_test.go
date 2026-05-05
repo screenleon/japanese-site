@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/screenleon/japanese-site/server/internal/store"
@@ -320,6 +321,124 @@ func TestLoad_StoresAnnotationsTransitionFields(t *testing.T) {
 	}
 	if vocabAnnotations["usage"] != usage {
 		t.Fatalf("annotations.usage = %q, want %q", vocabAnnotations["usage"], usage)
+	}
+}
+
+func TestLoad_RejectsGrammarAnnotationConflict(t *testing.T) {
+	tmpRoot := t.TempDir()
+	dbPath := filepath.Join(tmpRoot, "test.sqlite")
+	corpusRoot := filepath.Join(tmpRoot, "corpus")
+	grammarDir := filepath.Join(corpusRoot, "grammar", "N4")
+	if err := os.MkdirAll(grammarDir, 0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+	gp := `{
+		"slug": "te-iru-conflict",
+		"title_ja": "ている",
+		"title_zh": "ている",
+		"jlpt_level": "N4",
+		"mental_model": "flat A",
+		"annotations": {"mental_model": "nested B"},
+		"explanation_zh": "conflict test",
+		"source": "curated",
+		"license": "CC0-1.0",
+		"validated_by": "test",
+		"validator_score": 1.0
+	}`
+	if err := os.WriteFile(filepath.Join(grammarDir, "te-iru-conflict.json"), []byte(gp), 0o644); err != nil {
+		t.Fatalf("write gp: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(grammarDir, "te-iru-conflict.examples.jsonl"), []byte(exampleA), 0o644); err != nil {
+		t.Fatalf("write ex: %v", err)
+	}
+
+	db, err := store.Open(dbPath)
+	if err != nil {
+		t.Fatalf("open: %v", err)
+	}
+	defer db.Close()
+	if err := store.Migrate(db); err != nil {
+		t.Fatalf("migrate: %v", err)
+	}
+
+	_, err = Load(context.Background(), db.DB, corpusRoot)
+	if err == nil {
+		t.Fatal("expected conflicting flat/nested annotations to fail")
+	}
+	for _, want := range []string{"te-iru-conflict", "flat A", "nested B"} {
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("error %q does not contain %q", err.Error(), want)
+		}
+	}
+}
+
+func TestLoad_PreservesExistingAnnotationsWhenSourceOmitsThem(t *testing.T) {
+	tmpRoot := t.TempDir()
+	dbPath := filepath.Join(tmpRoot, "test.sqlite")
+	corpusRoot := filepath.Join(tmpRoot, "corpus")
+	grammarDir := filepath.Join(corpusRoot, "grammar", "N4")
+	vocabDir := filepath.Join(corpusRoot, "vocab")
+	for _, dir := range []string{grammarDir, vocabDir} {
+		if err := os.MkdirAll(dir, 0o755); err != nil {
+			t.Fatalf("mkdir %s: %v", dir, err)
+		}
+	}
+	gp := `{
+		"slug": "annotation-preserve",
+		"title_ja": "保存",
+		"title_zh": "保存",
+		"jlpt_level": "N4",
+		"explanation_zh": "preserve test",
+		"source": "curated",
+		"license": "CC0-1.0",
+		"validated_by": "test",
+		"validator_score": 1.0
+	}`
+	if err := os.WriteFile(filepath.Join(grammarDir, "annotation-preserve.json"), []byte(gp), 0o644); err != nil {
+		t.Fatalf("write gp: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(grammarDir, "annotation-preserve.examples.jsonl"), []byte(exampleA), 0o644); err != nil {
+		t.Fatalf("write ex: %v", err)
+	}
+	vocabSupport := `{"headword":"食べる","reading":"たべる","gloss_ja":"食べ物を口に入れること。","gloss_zh":"吃","source":"curated","license":"CC-BY-SA-4.0"}` + "\n"
+	if err := os.WriteFile(filepath.Join(vocabDir, "N5.jsonl"), []byte(vocabSupport), 0o644); err != nil {
+		t.Fatalf("write vocab support: %v", err)
+	}
+
+	db, err := store.Open(dbPath)
+	if err != nil {
+		t.Fatalf("open: %v", err)
+	}
+	defer db.Close()
+	if err := store.Migrate(db); err != nil {
+		t.Fatalf("migrate: %v", err)
+	}
+	if _, err := db.Exec(`INSERT INTO vocab (headword, reading, pos, gloss_en, annotations, source, license)
+		VALUES ('食べる', 'たべる', 'v1', 'eat', '{"usage":"preserve vocab usage"}', 'jmdict', 'CC-BY-SA-4.0')`); err != nil {
+		t.Fatalf("seed vocab: %v", err)
+	}
+	if _, err := db.Exec(`INSERT INTO grammar_point
+		(slug, title_ja, title_zh, jlpt_level, explanation_zh, annotations, source, license)
+		VALUES ('annotation-preserve', '古い保存', '舊保存', 'N4', 'old', '{"mental_model":"preserve grammar model"}', 'test', 'CC0')`); err != nil {
+		t.Fatalf("seed grammar: %v", err)
+	}
+
+	if _, err := Load(context.Background(), db.DB, corpusRoot); err != nil {
+		t.Fatalf("load: %v", err)
+	}
+
+	var raw string
+	if err := db.QueryRow(`SELECT annotations FROM vocab WHERE headword = '食べる' AND reading = 'たべる'`).Scan(&raw); err != nil {
+		t.Fatalf("select vocab annotations: %v", err)
+	}
+	if raw != `{"usage":"preserve vocab usage"}` {
+		t.Fatalf("vocab annotations = %q, want preserved usage", raw)
+	}
+	if err := db.QueryRow(`SELECT annotations FROM grammar_point WHERE slug = 'annotation-preserve'`).Scan(&raw); err != nil {
+		t.Fatalf("select grammar annotations: %v", err)
+	}
+	if raw != `{"mental_model":"preserve grammar model"}` {
+		t.Fatalf("grammar annotations = %q, want preserved mental_model", raw)
 	}
 }
 

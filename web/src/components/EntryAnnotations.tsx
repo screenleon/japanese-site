@@ -1,6 +1,6 @@
-import type { Annotations } from "../apiTypes";
+import { ANNOTATION_KINDS, type AnnotationKind, type Annotations } from "../apiTypes";
 
-const labels: Record<keyof Annotations, string> = {
+export const LABELS: Record<AnnotationKind, string> = {
   usage: "使い方",
   collocations: "コロケーション",
   particle_pairing: "助詞の組み合わせ",
@@ -9,17 +9,16 @@ const labels: Record<keyof Annotations, string> = {
   nuance_note: "ニュアンス",
 };
 
-const defaultKinds = Object.keys(labels) as (keyof Annotations)[];
-
 export function EntryAnnotations({
   annotations,
   kinds,
 }: {
   annotations?: Annotations;
-  kinds?: (keyof Annotations)[];
+  kinds?: AnnotationKind[];
 }) {
-  const visibleKinds = (kinds || defaultKinds).filter((kind) =>
-    annotations?.[kind]?.trim()
+  const allowedKinds = new Set(kinds ?? ANNOTATION_KINDS);
+  const visibleKinds = ANNOTATION_KINDS.filter(
+    (kind) => allowedKinds.has(kind) && annotations?.[kind]?.trim()
   );
 
   if (visibleKinds.length === 0) return null;
@@ -34,7 +33,7 @@ export function EntryAnnotations({
               role="heading"
               aria-level={3}
             >
-              {labels[kind]}
+              {LABELS[kind]}
             </dt>
             <dd className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-sky-950">
               {annotations?.[kind]}

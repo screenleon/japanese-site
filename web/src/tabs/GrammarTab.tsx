@@ -14,8 +14,8 @@ const levels = ["N5", "N4", "N3", "N2", "N1"];
 function mergeFromGrammarPoint(point: GrammarPoint): Annotations {
   return {
     ...point.annotations,
-    mental_model: point.annotations?.mental_model || point.mental_model,
-    nuance_note: point.annotations?.nuance_note || point.nuance_note,
+    mental_model: point.annotations?.mental_model ?? point.mental_model,
+    nuance_note: point.annotations?.nuance_note ?? point.nuance_note,
   };
 }
 

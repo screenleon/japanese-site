@@ -77,6 +77,13 @@ func TestAPISmoke(t *testing.T) {
 			wantBody:   `"usage":"「食べる」は日常の食事や食べ物を口に入れる動作に使う。`,
 		},
 		{
+			name:       "vocab get unknown headword",
+			method:     http.MethodGet,
+			path:       "/api/vocab/unknown-headword",
+			wantStatus: http.StatusNotFound,
+			wantBody:   `"error":"not_found"`,
+		},
+		{
 			name:       "kanji lookup",
 			method:     http.MethodGet,
 			path:       "/api/kanji/食",

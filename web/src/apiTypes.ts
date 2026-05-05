@@ -22,14 +22,17 @@ export interface VocabRow {
   validated_by?: string;
 }
 
-export interface Annotations {
-  usage?: string;
-  collocations?: string;
-  particle_pairing?: string;
-  synonym_diff?: string;
-  mental_model?: string;
-  nuance_note?: string;
-}
+export const ANNOTATION_KINDS = [
+  "usage",
+  "collocations",
+  "particle_pairing",
+  "synonym_diff",
+  "mental_model",
+  "nuance_note",
+] as const;
+
+export type AnnotationKind = typeof ANNOTATION_KINDS[number];
+export type Annotations = Partial<Record<AnnotationKind, string>>;
 
 export interface Kanji {
   id: number;

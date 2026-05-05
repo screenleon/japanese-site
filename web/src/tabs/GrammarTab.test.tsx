@@ -73,6 +73,17 @@ const points = [
     },
     explanation_zh: "正在／狀態。",
   },
+  {
+    slug: "empty-nested",
+    title_ja: "空文字",
+    title_zh: "empty nested",
+    jlpt_level: "N3",
+    mental_model: "flat mental model must not replace empty nested",
+    annotations: {
+      mental_model: "",
+    },
+    explanation_zh: "空文字の遷移確認。",
+  },
 ];
 
 const listGrammar = vi.mocked(api.listGrammar);
@@ -256,6 +267,15 @@ describe("GrammarTab", () => {
     expect(await screen.findByText("nested mental model wins")).toBeVisible();
     expect(screen.getByText("nested nuance renders")).toBeVisible();
     expect(screen.queryByText("flat mental model should not render when nested exists")).not.toBeInTheDocument();
+  });
+
+  it("does not fall back to flat fields when nested annotations contain an empty string", async () => {
+    render(<GrammarTab initialSlug="empty-nested" />);
+
+    expect(await screen.findByRole("heading", { name: "空文字" })).toBeVisible();
+    expect(
+      screen.queryByText("flat mental model must not replace empty nested")
+    ).not.toBeInTheDocument();
   });
 
   it("renders related grammar buttons and navigates to the variant", async () => {

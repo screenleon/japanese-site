@@ -303,6 +303,49 @@ func TestMigrate_0020_Annotations(t *testing.T) {
 	}
 }
 
+func TestMigrate_0020_BackfillsExistingRows(t *testing.T) {
+	db := newMemoryDB(t)
+	defer db.Close()
+
+	migrateThrough(t, db, "0019_grammar_mental_model.sql")
+
+	if _, err := db.Exec(`INSERT INTO vocab (headword, reading, pos, source, license)
+		VALUES ('注釈', 'ちゅうしゃく', 'n', 'test', 'CC0')`); err != nil {
+		t.Fatalf("seed vocab: %v", err)
+	}
+	if _, err := db.Exec(`INSERT INTO grammar_point (slug, title_ja, title_zh, jlpt_level, explanation_zh, source, license)
+		VALUES ('annotation-gp', '注釈', '註解', 'N3', 'test', 'test', 'CC0')`); err != nil {
+		t.Fatalf("seed grammar: %v", err)
+	}
+
+	if err := Migrate(db); err != nil {
+		t.Fatalf("migrate 0020: %v", err)
+	}
+
+	for _, table := range []string{"vocab", "grammar_point"} {
+		var count int
+		if err := db.QueryRow(`SELECT COUNT(*) FROM pragma_table_info(?) WHERE name='annotations'`, table).Scan(&count); err != nil {
+			t.Fatalf("query %s annotations column: %v", table, err)
+		}
+		if count != 1 {
+			t.Fatalf("%s annotations column count = %d, want 1", table, count)
+		}
+	}
+
+	for _, query := range []string{
+		`SELECT annotations FROM vocab WHERE headword='注釈'`,
+		`SELECT annotations FROM grammar_point WHERE slug='annotation-gp'`,
+	} {
+		var got string
+		if err := db.QueryRow(query).Scan(&got); err != nil {
+			t.Fatalf("read backfilled annotations: %v", err)
+		}
+		if got != "{}" {
+			t.Fatalf("backfilled annotations = %q, want {}", got)
+		}
+	}
+}
+
 func TestMigrate_0018_FeedbackTemplateDokorokaRekey(t *testing.T) {
 	db := newMemoryDB(t)
 	defer db.Close()

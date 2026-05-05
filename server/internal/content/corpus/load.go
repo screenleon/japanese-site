@@ -133,7 +133,10 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 			explanation_zh=excluded.explanation_zh,
 			validated_at=excluded.validated_at,
 			classifier_rules=excluded.classifier_rules,
-			annotations=excluded.annotations`)
+			annotations=CASE
+				WHEN excluded.annotations = '{}' THEN grammar_point.annotations
+				ELSE excluded.annotations
+			END`)
 	if err != nil {
 		return stats, fmt.Errorf("prepare gp: %w", err)
 	}
@@ -198,7 +201,7 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 			}
 			annotations, err := mergeGrammarAnnotations(&gp)
 			if err != nil {
-				return fmt.Errorf("annotations %s: %w", gp.Slug, err)
+				return err
 			}
 			if _, err := upsertGP.ExecContext(ctx,
 				gp.Slug, gp.TitleJA, gp.TitleZH, gp.JLPTLevel, nullStr(gp.NuanceNote), nullStr(gp.MentalModel), relatedSlugs,
@@ -400,7 +403,7 @@ func loadVocabSupport(ctx context.Context, tx *sql.Tx, root string) (int, error)
 		UPDATE vocab
 		   SET gloss_ja = ?,
 		       gloss_zh = ?,
-		       annotations = ?,
+		       annotations = CASE WHEN ? = '{}' THEN annotations ELSE ? END,
 		       validated_by = COALESCE(validated_by, ?),
 		       validated_at = COALESCE(validated_at, ?)
 		 WHERE headword = ? AND reading = ?`)
@@ -419,7 +422,7 @@ func loadVocabSupport(ctx context.Context, tx *sql.Tx, root string) (int, error)
 		if err != nil {
 			return updated, fmt.Errorf("vocab annotations %s/%s: %w", row.Headword, row.Reading, err)
 		}
-		res, err := stmt.ExecContext(ctx, row.GlossJA, row.GlossZH, annotations, GrammarValidatorID, now, row.Headword, row.Reading)
+		res, err := stmt.ExecContext(ctx, row.GlossJA, row.GlossZH, annotations, annotations, GrammarValidatorID, now, row.Headword, row.Reading)
 		if err != nil {
 			return updated, fmt.Errorf("update vocab support %s/%s: %w", row.Headword, row.Reading, err)
 		}
@@ -695,15 +698,17 @@ func mergeGrammarAnnotations(gp *GrammarPoint) (string, error) {
 		obj = map[string]string{}
 	}
 
+	if err := mergeGrammarAnnotationField(gp.Slug, "mental_model", gp.MentalModel, obj); err != nil {
+		return "", err
+	}
 	if gp.MentalModel == "" {
 		gp.MentalModel = obj["mental_model"]
-	} else if obj["mental_model"] == "" {
-		obj["mental_model"] = gp.MentalModel
+	}
+	if err := mergeGrammarAnnotationField(gp.Slug, "nuance_note", gp.NuanceNote, obj); err != nil {
+		return "", err
 	}
 	if gp.NuanceNote == "" {
 		gp.NuanceNote = obj["nuance_note"]
-	} else if obj["nuance_note"] == "" {
-		obj["nuance_note"] = gp.NuanceNote
 	}
 
 	body, err := json.Marshal(obj)
@@ -711,6 +716,17 @@ func mergeGrammarAnnotations(gp *GrammarPoint) (string, error) {
 		return "", err
 	}
 	return string(body), nil
+}
+
+func mergeGrammarAnnotationField(slug, kind, flat string, obj map[string]string) error {
+	nested := obj[kind]
+	if flat != "" && nested != "" && flat != nested {
+		return fmt.Errorf("grammar %s: %s conflict — flat=%q nested=%q", slug, kind, flat, nested)
+	}
+	if flat != "" && nested == "" {
+		obj[kind] = flat
+	}
+	return nil
 }
 
 func validJLPTLevel(level string) bool {

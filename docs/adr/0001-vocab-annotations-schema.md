@@ -129,6 +129,13 @@ Grammar (existing fields):
 - `lint-grammar` and a new `lint-vocab` (today there is none) need to check
   `annotations.*` shape; existing `mental_model` / `nuance_note` lint rules
   retarget.
+- The spike landed `GET /api/vocab/{headword}` as a single-vocab fetch endpoint,
+  mirroring the `GetGrammarPoint` path, to enable handler-level annotations
+  testing. This was out-of-scope for the original brief but in-scope for the
+  test acceptance.
+- Migration 0020 transactional safety is provided by the existing migration
+  framework: `migrate.go:150` applies each migration body with
+  `tx.Exec(string(body))` inside the per-migration transaction.
 
 ## Alternatives considered
 

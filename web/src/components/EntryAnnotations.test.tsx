@@ -41,4 +41,22 @@ describe("EntryAnnotations", () => {
     rerender(<EntryAnnotations annotations={{ usage: "   " }} />);
     expect(container).toBeEmptyDOMElement();
   });
+
+  it("ignores unknown runtime annotation keys", () => {
+    render(
+      <EntryAnnotations
+        annotations={
+          {
+            usage: "会話でよく使う。",
+            foo: "bar",
+          } as never
+        }
+      />
+    );
+
+    expect(screen.getByText("使い方")).toBeVisible();
+    expect(screen.getByText("会話でよく使う。")).toBeVisible();
+    expect(screen.queryByText("bar")).not.toBeInTheDocument();
+    expect(screen.queryByText("undefined")).not.toBeInTheDocument();
+  });
 });
