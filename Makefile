@@ -1,4 +1,4 @@
-.PHONY: help lint-rules corpus-scale vet test clean bake-static build-static \
+.PHONY: help lint-rules corpus-scale vet test clean bake-static dump-grammar-examples build-static \
         bootstrap dev start build dist dist-update \
         run web-dev web-build \
         seed-jmdict seed-kanjidic2 seed-jlpt seed-tatoeba seed-derive seed-corpus seed-all \
@@ -126,7 +126,10 @@ bake-static:
 	@cp -r server/data/corpus/kanji web/public/data/
 	@echo "bake-static: web/public/data populated"
 
-build-static: bake-static
+dump-grammar-examples:
+	bash scripts/dump-grammar-examples.sh
+
+build-static: bake-static dump-grammar-examples
 	cd web && VITE_DEPLOY_MODE=static VITE_DEPLOY_BASE=/japanese-site/ npm run build
 
 lint-rules:
