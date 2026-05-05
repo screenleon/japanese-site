@@ -15,6 +15,8 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
   const [vocabCount, setVocabCount] = useState<number | null>(null);
   const [dueCount, setDueCount] = useState<DueCount | null>(null);
   const [error, setError] = useState("");
+  // Read process.env first so test stubs (vi.stubEnv → process.env in node) win
+  // over the import.meta.env path that Vite injects at build time.
   const deployMode =
     (globalThis as { process?: { env?: { VITE_DEPLOY_MODE?: string } } }).process
       ?.env?.VITE_DEPLOY_MODE ??
@@ -40,7 +42,7 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
   }, []);
 
   useEffect(() => {
-    if (!quizCapable) return;
+    if (!showQuizControls) return;
     let cancelled = false;
     api
       .getDueCount()
@@ -48,12 +50,12 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
         if (!cancelled) setDueCount(d);
       })
       .catch(() => {
-        // Static mode and transient API failures simply hide the badge.
+        // Transient API failures simply hide the badge.
       });
     return () => {
       cancelled = true;
     };
-  }, [quizCapable]);
+  }, [showQuizControls]);
 
   return (
     <main className="min-h-screen bg-slate-50">

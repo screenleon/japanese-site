@@ -31,6 +31,10 @@
 | JS-028 | 🔵 active | CC-BY-SA attribution 落地 | content | 2026-05-05 | pr:#34 |
 | JS-029 | 🔵 active | HomePage flag 二元收斂評估 | frontend | 2026-05-05 | pr:#34 |
 | JS-030 | ✅ closed 2026-05-05 | Cloud 副標 mode-aware | frontend | 2026-05-05 | pr:#34 |
+| JS-031 | 🔵 active | build-static parallel-make race | ops | 2026-05-05 | pr:#34 |
+| JS-032 | 🔵 active | ARCHITECTURE.md rollup vs per-item 慣例 | docs | 2026-05-05 | pr:#34 |
+| JS-033 | 🔵 active | examples slice cap=5 邊界測試 | frontend | 2026-05-05 | pr:#34 |
+| JS-034 | 🔵 active | dev-mode `quizCapable=false` HomePage CTA dead-end | frontend | 2026-05-05 | pr:#34 |
 
 ---
 
@@ -224,4 +228,55 @@
 
 **Outcome**: PR #34 把 HomePage 副標改回 mode-aware：cloud 走「查閱文法說明、單字與漢字，隨時作為學習參考。」、local/dev 走「用文法、單字與測驗建立穩定的日文練習節奏。」修正合併到統一副標時對 cloud 使用者承諾「測驗」但 cloud 沒此功能的不誠實 copy。
 **See**: pr:#34
+
+## JS-031 — build-static parallel-make race
+
+**Problem**: `Makefile` 的 `build-static` target 同時把 `bake-static` 與 `dump-grammar-examples` 列為 prereq，但兩者之間沒有順序依賴。`bake-static` 執行 `rm -rf web/public/data` 後重建；`dump-grammar-examples` 在同目錄下 `mkdir` 並寫入。`make -j` 平行執行下，bake 的 rm 可能踩掉 dump 已寫的檔，或兩者同時 mkdir。
+
+**Why**: GitHub Pages CI 不使用 `-j`，prod 不受影響；但本地開發者用 `make -j build-static` 加速時會 race。
+
+**Requirement**: 三選一：(a) 加順序依賴 `dump-grammar-examples: bake-static`；(b) 把 `bash scripts/dump-grammar-examples.sh` 內聯進 `bake-static` recipe（與 JS-026 的整併方向一致，可一併解決）；(c) `.NOTPARALLEL: build-static`。
+
+**Tags**: P3, ops
+**Source**: PR #34 round-2 critic (medium)
+**Depends-on**: JS-026（若整併方案落地，JS-031 自動關閉）
+<!-- 首次記錄: 2026-05-05 -->
+
+## JS-032 — ARCHITECTURE.md rollup vs per-item 慣例
+
+**Problem**: `web/public/data/` 既有資料採 `<type>/<level>.<ext>` 平面 rollup 模式（grammar、kanji、vocab），PR #34 引入的 `grammar-examples` 改採 `<type>/<level>/<slug>.<ext>` 巢狀 per-item 模式。兩種模式並存合理（前者一次性載入、後者 lazy fetch），但 `ARCHITECTURE.md` 沒記載此分流規則，未來新增 per-item 資源（vocab examples、kanji compounds）時容易任選一種而背離 spirit。
+
+**Why**: 慣例若不寫下來，下次有人新增資源時會憑直覺寫，造成 layout 漸進腐化。
+
+**Requirement**: 在 `ARCHITECTURE.md` 補一段「Data layers」子節：rollup 用 `<type>/<level>.<ext>`、per-item lazy 用 `<type>/<level>/<slug>.<ext>`；新增資源時 access pattern 決定 layout。
+
+**Tags**: P3, docs
+**Source**: PR #34 round-2 architecture-reviewer (low)
+<!-- 首次記錄: 2026-05-05 -->
+
+## JS-033 — examples slice cap=5 邊界測試
+
+**Problem**: `GrammarTab.tsx` 對 `examples` 做 `slice(0, 5)` 顯示上限，但 `GrammarTab.test.tsx` 沒有 length=0、length=1、length>5 的邊界 case。如果 cap 被改為 `slice(0, 10)` 或拿掉，現行測試不會失敗。
+
+**Why**: cap=5 是 UX 決策（避免 article 過長），需要測試 pin 住此 invariant，避免後續無意間放寬。
+
+**Requirement**: `GrammarTab.test.tsx` 補三個測試：(a) 0 examples → no `例文` heading rendered，(b) 1 example → 1 `<li>` rendered，(c) 6 examples → 5 `<li>` rendered（pin slice cap）。
+
+**Tags**: P3, frontend
+**Source**: PR #34 round-2 qa-tester (low, boundary-coverage gap)
+<!-- 首次記錄: 2026-05-05 -->
+
+## JS-034 — dev-mode `quizCapable=false` HomePage CTA dead-end
+
+**Problem**: PR #34 把 HomePage 兩種模式（quizCapable=true / false）收斂為單一 layout，CTA cluster 統一以 `!isStaticBuild` gate。這帶來 round-2 critic 觀察到的回歸：dev 模式下若 backend `/capabilities` 回報 `quiz=false`（例：quiz subsystem 出錯或被刻意停用），HomePage 仍渲染「開始練習」「開始測試」CTA；點擊後路由到 quiz tab，但 capabilities 把該 tab 過濾為空白，使用者無法進入 quiz、也得不到清楚的解釋。
+
+**Why**: 直觀 fix（`showQuizControls = !isStaticBuild && quizCapable`）會讓 CTA 在 capabilities 尚未 resolve 時消失，破壞 `App.test.tsx` 三個既有測試對「pre-resolve flash 行為」的預期；正確修法需要同時調整測試與處理 capability-loading 中間態（skeleton 或 loading state）。屬獨立 UX 工作，不適合與 cloud-parity 主題混合。
+
+**Requirement**: 評估三條路徑並擇一：(a) 在 HomePage 加 `!loaded` 中間態渲染 skeleton；(b) 將 CTA 改為 disabled 狀態並顯示 tooltip「需 backend quiz 啟用」；(c) onStart handler 內檢查 `quizCapable`，若 false 改路由到 grammar tab 並 toast 提示。任一路徑需同步更新 `App.test.tsx` 三個測試使用 `findByRole` 異步等待 capabilities resolve。
+
+**Tags**: P2, frontend
+**Source**: PR #34 round-2 critic (medium)
+**Related**: JS-029（HomePage flag duplication trade-off）— 兩者可一起處理或拆開做。
+<!-- 首次記錄: 2026-05-05 -->
+
 

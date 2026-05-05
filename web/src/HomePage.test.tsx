@@ -65,5 +65,6 @@ describe("HomePage", () => {
     });
     expect(screen.getByText("文法點")).toBeVisible();
     expect(screen.getByText("單字")).toBeVisible();
+    expect(getDueCount).not.toHaveBeenCalled();
   });
 });
