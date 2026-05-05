@@ -15,6 +15,10 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
   const [vocabCount, setVocabCount] = useState<number | null>(null);
   const [dueCount, setDueCount] = useState<DueCount | null>(null);
   const [error, setError] = useState("");
+  const isStaticBuild =
+    (import.meta as ImportMeta & { env: { VITE_DEPLOY_MODE?: string } }).env
+      .VITE_DEPLOY_MODE === "static";
+  const showQuizControls = !isStaticBuild;
 
   useEffect(() => {
     let cancelled = false;
@@ -57,19 +61,17 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
             日本語学習
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
-            {quizCapable
-              ? "用文法、單字與測驗建立穩定的日文練習節奏。"
-              : "查閱文法說明、單字與漢字，隨時作為學習參考。"}
+            用文法、單字與測驗建立穩定的日文練習節奏。
           </p>
         </div>
 
-        {quizCapable ? (
-          <>
-            <div className="grid gap-3 sm:grid-cols-2 mb-8">
-              <CountPanel label="文法點" value={grammarCount} />
-              <CountPanel label="單字" value={vocabCount} />
-            </div>
+        <div className="grid gap-3 sm:grid-cols-2 mb-8">
+          <CountPanel label="文法點" value={grammarCount} />
+          <CountPanel label="單字" value={vocabCount} />
+        </div>
 
+        {showQuizControls ? (
+          <>
             {dueCount !== null && (dueCount.grammar > 0 || dueCount.vocab > 0) && (
               <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-md flex items-center justify-between gap-4">
                 <div>
@@ -106,33 +108,7 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
               </button>
             </div>
           </>
-        ) : (
-          <>
-            <div className="grid gap-3 sm:grid-cols-3 mb-4">
-              <ContentCard
-                label="文法"
-                meta={grammarCount !== null ? `${grammarCount} 點` : "…"}
-                description="JLPT N5–N1 文法說明・例句・用法解析"
-                onClick={() => onStart("練習", "grammar")}
-              />
-              <ContentCard
-                label="單字"
-                meta={vocabCount !== null ? `${vocabCount} 個` : "…"}
-                description="JLPT N5–N1 詞彙・詞性・中文解說"
-                onClick={() => onStart("練習", "vocab")}
-              />
-              <ContentCard
-                label="漢字"
-                meta="讀音・筆畫・部首"
-                description="查詢 JLPT 漢字的音訓讀音與意義"
-                onClick={() => onStart("練習", "kanji")}
-              />
-            </div>
-            <p className="text-xs text-slate-400">
-              練習與複習功能需啟動本地伺服器
-            </p>
-          </>
-        )}
+        ) : null}
       </section>
     </main>
   );
@@ -146,31 +122,5 @@ function CountPanel({ label, value }: { label: string; value: number | null }) {
       </div>
       <div className="mt-1 text-sm text-slate-500">{label}</div>
     </div>
-  );
-}
-
-function ContentCard({
-  label,
-  meta,
-  description,
-  onClick,
-}: {
-  label: string;
-  meta: string;
-  description: string;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className="group text-left w-full bg-white border border-slate-200 rounded-md p-5 hover:border-slate-300 hover:shadow-sm transition-all"
-    >
-      <div className="flex items-start justify-between mb-2">
-        <span className="text-base font-semibold text-slate-950">{label}</span>
-        <span className="text-slate-400 group-hover:text-blue-500 transition-colors">›</span>
-      </div>
-      <p className="text-sm font-medium text-blue-700">{meta}</p>
-      <p className="mt-1.5 text-xs text-slate-500">{description}</p>
-    </button>
   );
 }
