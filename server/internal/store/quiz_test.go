@@ -131,8 +131,8 @@ func TestGetGrammarPointIncludesJapaneseExplanation(t *testing.T) {
 	}
 
 	if _, err := db.Exec(`INSERT INTO grammar_point
-		(slug, title_ja, title_zh, jlpt_level, explanation_ja, explanation_zh, source, license)
-		VALUES ('test-gp', 'テスト', '測試', 'N3', '日本語の説明', '中文說明', 'test', 'CC0')`); err != nil {
+		(slug, title_ja, title_zh, jlpt_level, mental_model, explanation_ja, explanation_zh, source, license)
+		VALUES ('test-gp', 'テスト', '測試', 'N3', '思考の説明', '日本語の説明', '中文說明', 'test', 'CC0')`); err != nil {
 		t.Fatalf("seed gp: %v", err)
 	}
 
@@ -142,6 +142,9 @@ func TestGetGrammarPointIncludesJapaneseExplanation(t *testing.T) {
 	}
 	if got.ExplanationJA != "日本語の説明" {
 		t.Fatalf("ExplanationJA = %q, want Japanese explanation", got.ExplanationJA)
+	}
+	if got.MentalModel != "思考の説明" {
+		t.Fatalf("MentalModel = %q, want mental model", got.MentalModel)
 	}
 	if got.ExplanationZH != "中文說明" {
 		t.Fatalf("ExplanationZH = %q, want Chinese explanation", got.ExplanationZH)

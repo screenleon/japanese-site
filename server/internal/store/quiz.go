@@ -30,6 +30,7 @@ type GrammarPoint struct {
 	TitleZH       string   `json:"title_zh"`
 	JLPTLevel     string   `json:"jlpt_level"`
 	NuanceNote    string   `json:"nuance_note,omitempty"`
+	MentalModel   string   `json:"mental_model,omitempty"`
 	RelatedSlugs  []string `json:"related_slugs,omitempty"`
 	ExplanationJA string   `json:"explanation_ja,omitempty"`
 	ExplanationZH string   `json:"explanation_zh"`
@@ -216,12 +217,12 @@ func GetQuestion(ctx context.Context, db *DB, id string) (Question, error) {
 func GetGrammarPoint(ctx context.Context, db *DB, slug string) (GrammarPoint, error) {
 	row := db.QueryRowContext(ctx, `
 		SELECT slug, title_ja, title_zh, jlpt_level,
-		       COALESCE(nuance_note, ''), COALESCE(related_slugs, ''),
+		       COALESCE(nuance_note, ''), COALESCE(mental_model, ''), COALESCE(related_slugs, ''),
 		       COALESCE(explanation_ja, ''), explanation_zh
 		FROM grammar_point WHERE slug = ?`, slug)
 	var gp GrammarPoint
 	var relatedSlugs string
-	if err := row.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.NuanceNote, &relatedSlugs, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
+	if err := row.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.NuanceNote, &gp.MentalModel, &relatedSlugs, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return GrammarPoint{}, ErrGrammarPointNotFound
 		}
@@ -259,7 +260,7 @@ func GetGrammarExamples(ctx context.Context, db *DB, slug string) ([]GrammarExam
 
 func RandomGrammarPoint(ctx context.Context, db *DB, jlpt string) (GrammarPoint, error) {
 	q := `SELECT slug, title_ja, title_zh, jlpt_level,
-	             COALESCE(nuance_note, ''), COALESCE(related_slugs, ''),
+	             COALESCE(nuance_note, ''), COALESCE(mental_model, ''), COALESCE(related_slugs, ''),
 	             COALESCE(explanation_ja, ''), explanation_zh
 	      FROM grammar_point WHERE 1 = 1`
 	args := []any{}
@@ -272,7 +273,7 @@ func RandomGrammarPoint(ctx context.Context, db *DB, jlpt string) (GrammarPoint,
 	row := db.QueryRowContext(ctx, q, args...)
 	var gp GrammarPoint
 	var relatedSlugs string
-	if err := row.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.NuanceNote, &relatedSlugs, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
+	if err := row.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.NuanceNote, &gp.MentalModel, &relatedSlugs, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return GrammarPoint{}, ErrGrammarPointNotFound
 		}
@@ -286,7 +287,7 @@ func RandomGrammarPoint(ctx context.Context, db *DB, jlpt string) (GrammarPoint,
 
 func ListGrammarPoints(ctx context.Context, db *DB, jlpt string) ([]GrammarPoint, error) {
 	q := `SELECT slug, title_ja, title_zh, jlpt_level,
-	             COALESCE(nuance_note, ''), COALESCE(related_slugs, ''),
+	             COALESCE(nuance_note, ''), COALESCE(mental_model, ''), COALESCE(related_slugs, ''),
 	             COALESCE(explanation_ja, ''), explanation_zh
 	      FROM grammar_point`
 	args := []any{}
@@ -304,7 +305,7 @@ func ListGrammarPoints(ctx context.Context, db *DB, jlpt string) ([]GrammarPoint
 	for rows.Next() {
 		var gp GrammarPoint
 		var relatedSlugs string
-		if err := rows.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.NuanceNote, &relatedSlugs, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
+		if err := rows.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.NuanceNote, &gp.MentalModel, &relatedSlugs, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
 			return nil, err
 		}
 		if err := decodeStringSlice(relatedSlugs, &gp.RelatedSlugs); err != nil {

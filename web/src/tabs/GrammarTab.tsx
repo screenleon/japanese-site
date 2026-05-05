@@ -206,6 +206,14 @@ export function GrammarTab({
                       {active.nuance_note}
                     </p>
                   )}
+                  {active.mental_model && (
+                    <section className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-4 py-3">
+                      <h3 className="text-sm font-semibold text-amber-900">思考のヒント</h3>
+                      <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-amber-950">
+                        {active.mental_model}
+                      </p>
+                    </section>
+                  )}
                 </header>
                 <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed">
                   {primaryExplanation}

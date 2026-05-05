@@ -41,6 +41,7 @@
 | JS-038 | 🔵 active | GitHub Pages 部署 cache 過渡視窗 | ops | 2026-05-05 | pr:#36 |
 | JS-039 | 🔵 active | staticApi slug encodeURIComponent 一致性 | frontend | 2026-05-05 | pr:#36 |
 | JS-040 | 🔵 active | vocab usage / collocation / 助詞 / 近義差別標註 | content | 2026-05-05 | feedback:2026-05-05 |
+| JS-041 | 🔵 active | grammar mental_model MVP | content/frontend | 2026-05-06 | feedback:2026-05-06 |
 
 ---
 
@@ -373,3 +374,16 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: user feedback 2026-05-05 — 「單字的用法 其實用法不一樣 那個後續接的內容也會不一樣 這部分也需要特別說明」
 **Related**: JS-023（grammar 端 nuance_note 同類問題）；PR-B（agent-generated 例句擴充，可共用 generation pipeline）
 <!-- 首次記錄: 2026-05-05 -->
+
+## JS-041 — grammar mental_model MVP
+
+**Problem**: 文法條目已有 `nuance_note` 可補 register / level 差異，但還缺「用日文思考時該怎麼看這個形式」的 mental model。學習者回饋指出多個卡點不是單純意思不懂，而是仍以中文式動賓、受益方向、被動受害感、自他動詞視角去套日文。
+
+**Why**: JS-040 會把 vocab usage annotation 擴到約 2900 筆；在 grammar 端先用小範圍 MVP 固定 schema、lint 與 UI pattern，能降低後續大規模標註的設計風險。
+
+**Requirement**: 在 GrammarPoint schema 加 optional `mental_model?: string`，語料 JSON 同名欄位可被 lint / loader / API / frontend 正確處理。先補 4 個可落在既有條目的思考提示：戒中文動賓思維（狀態 vs 動作）、授受動詞恩惠方向、受害／不本意受身視角、自他動詞區分。GrammarTab 在 `nuance_note` 下方以「思考のヒント」區塊渲染，有值才顯示；測試覆蓋 present / absent。
+
+**Tags**: P2, content, frontend
+**Source**: user feedback 2026-05-06 — 9 個「用日文思考」技巧中的 tip 1 / 3 / 4 / 5
+**Related**: JS-040（vocab usage annotation spike）
+<!-- 首次記錄: 2026-05-06 -->

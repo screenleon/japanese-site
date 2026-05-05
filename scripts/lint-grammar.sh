@@ -52,6 +52,11 @@ while IFS= read -r -d '' file; do
 		echo "lint-grammar: $rel nuance_note must be a non-empty string when present" >&2
 		EXIT_CODE=1
 	fi
+
+	if ! jq -e '(.mental_model == null) or (.mental_model | type == "string" and (gsub("\\s"; "") | length > 0))' "$file" >/dev/null; then
+		echo "lint-grammar: $rel mental_model must be a non-empty string when present" >&2
+		EXIT_CODE=1
+	fi
 done < <(find "$GRAMMAR_ROOT" -mindepth 2 -maxdepth 2 -type f -name '*.json' -print0 | sort -z)
 
 if [[ ! -s "$slugs" ]]; then

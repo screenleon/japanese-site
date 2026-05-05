@@ -36,6 +36,8 @@ const points = [
     title_zh: "ものの（雖然／但是）",
     jlpt_level: "N3",
     nuance_note: "口語・くだけた逆接。前文の予想と異なる結果を続ける。",
+    mental_model:
+      "前件を事実として置いたうえで、後件で予想から外れる結果を示す。逆接を一つの流れとして読むことで、単なる接続詞ではなく判断の向きを意識できる。",
     related_slugs: ["monono-formal"],
     explanation_zh: "雖然但是。",
   },
@@ -138,6 +140,24 @@ describe("GrammarTab", () => {
     expect(
       await screen.findByText("口語・くだけた逆接。前文の予想と異なる結果を続ける。")
     ).toBeVisible();
+  });
+
+  it("renders mental_model for the active grammar point", async () => {
+    render(<GrammarTab initialSlug="monono" />);
+
+    expect(await screen.findByRole("heading", { name: "思考のヒント" })).toBeVisible();
+    expect(
+      screen.getByText(
+        "前件を事実として置いたうえで、後件で予想から外れる結果を示す。逆接を一つの流れとして読むことで、単なる接続詞ではなく判断の向きを意識できる。"
+      )
+    ).toBeVisible();
+  });
+
+  it("omits the mental_model heading when the active grammar point has none", async () => {
+    render(<GrammarTab initialSlug="sae" />);
+
+    expect(await screen.findByRole("heading", { name: "〜さえ" })).toBeVisible();
+    expect(screen.queryByRole("heading", { name: "思考のヒント" })).not.toBeInTheDocument();
   });
 
   it("renders related grammar buttons and navigates to the variant", async () => {

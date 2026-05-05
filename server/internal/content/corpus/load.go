@@ -40,6 +40,7 @@ type GrammarPoint struct {
 	TitleZH         string          `json:"title_zh"`
 	JLPTLevel       string          `json:"jlpt_level"`
 	NuanceNote      string          `json:"nuance_note,omitempty"`
+	MentalModel     string          `json:"mental_model,omitempty"`
 	RelatedSlugs    []string        `json:"related_slugs,omitempty"`
 	ExplanationJA   string          `json:"explanation_ja,omitempty"`
 	ExplanationZH   string          `json:"explanation_zh"`
@@ -114,16 +115,17 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 
 	upsertGP, err := tx.PrepareContext(ctx, `
 		INSERT INTO grammar_point (
-			slug, title_ja, title_zh, jlpt_level, nuance_note, related_slugs,
+			slug, title_ja, title_zh, jlpt_level, nuance_note, mental_model, related_slugs,
 			explanation_ja, explanation_zh,
 			source, license, validated_by, validator_score, validated_at,
 			classifier_rules
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON CONFLICT(slug) DO UPDATE SET
 			title_ja=excluded.title_ja,
 			title_zh=excluded.title_zh,
 			jlpt_level=excluded.jlpt_level,
 			nuance_note=excluded.nuance_note,
+			mental_model=excluded.mental_model,
 			related_slugs=excluded.related_slugs,
 			explanation_ja=excluded.explanation_ja,
 			explanation_zh=excluded.explanation_zh,
@@ -192,7 +194,7 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 				return fmt.Errorf("related slugs %s: %w", gp.Slug, err)
 			}
 			if _, err := upsertGP.ExecContext(ctx,
-				gp.Slug, gp.TitleJA, gp.TitleZH, gp.JLPTLevel, nullStr(gp.NuanceNote), relatedSlugs,
+				gp.Slug, gp.TitleJA, gp.TitleZH, gp.JLPTLevel, nullStr(gp.NuanceNote), nullStr(gp.MentalModel), relatedSlugs,
 				nullStr(gp.ExplanationJA), gp.ExplanationZH,
 				gp.Source, gp.License, gp.ValidatedBy, gp.ValidatorScore, now, classifierRules); err != nil {
 				return fmt.Errorf("upsert gp %s: %w", gp.Slug, err)

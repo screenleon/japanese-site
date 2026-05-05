@@ -52,6 +52,7 @@ export interface GrammarPoint {
   title_zh: string;
   jlpt_level: string;
   nuance_note?: string;
+  mental_model?: string;
   related_slugs?: string[];
   explanation_ja?: string;
   explanation_zh: string;
