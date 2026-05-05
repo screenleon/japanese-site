@@ -59,7 +59,6 @@ export interface GrammarExample {
   id: number;
   text_ja: string;
   text_zh: string;
-  hint: string;
 }
 
 // Question.id is the deterministic id derived server-side from
@@ -191,7 +190,7 @@ export interface Api {
   listGrammar(jlpt?: string): Promise<{ points: GrammarPoint[]; count: number }>;
   randomGrammar(jlpt?: string): Promise<GrammarPoint>;
   getGrammar(slug: string): Promise<GrammarPoint>;
-  getGrammarExamples?(slug: string): Promise<{ examples: GrammarExample[]; count: number }>;
+  getGrammarExamples?(slug: string, level?: string): Promise<{ examples: GrammarExample[]; count: number }>;
   nextQuestion(opts?: NextQuestionOpts): Promise<Question>;
   answer(question_id: string, answer: string): Promise<GradeResult>;
   stats(days?: number): Promise<Stats>;

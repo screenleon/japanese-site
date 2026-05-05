@@ -3,6 +3,7 @@ import type {
   Api,
   DueCount,
   GradeResult,
+  GrammarExample,
   GrammarPoint,
   Kanji,
   NextQuestionOpts,
@@ -183,6 +184,20 @@ export const staticApi: Api = {
     const found = all.find((p) => p.slug === slug);
     if (!found) throw new ApiError(404, "Not Found", "not_found");
     return found;
+  },
+
+  async getGrammarExamples(slug: string, level?: string) {
+    try {
+      const path = level
+        ? `grammar-examples/${level}/${slug}.jsonl`
+        : `grammar-examples/${slug}.jsonl`;
+      const examples = await fetchJSONL<GrammarExample>(
+        path
+      );
+      return { examples, count: examples.length };
+    } catch {
+      return { examples: [], count: 0 };
+    }
   },
 
   async nextQuestion(_opts?: NextQuestionOpts): Promise<Question> {

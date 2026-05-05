@@ -27,6 +27,7 @@ vi.mock("./tabs/SentenceTab", () => ({
 vi.mock("./api", () => ({
   api: {
     searchVocab: vi.fn().mockResolvedValue({ results: [], count: 0 }),
+    getDueCount: vi.fn().mockResolvedValue({ grammar: 0, vocab: 0 }),
     randomVocab: vi.fn().mockResolvedValue(null),
     getKanji: vi.fn().mockResolvedValue(null),
     randomSentence: vi.fn().mockResolvedValue(null),

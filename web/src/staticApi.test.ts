@@ -214,4 +214,56 @@ describe("staticApi", () => {
       isApiError(error, "unsupported_in_static_mode")
     );
   });
+
+  it("getGrammarExamples reads level-namespaced jsonl and returns compact examples", async () => {
+    responses.set(
+      "/data/grammar-examples/N2/sae.jsonl",
+      [
+        '{"id":1,"text_ja":"名前さえ書けばいい。","text_zh":"只要寫名字就好。"}',
+        '{"id":2,"text_ja":"水さえあれば足りる。","text_zh":"只要有水就夠了。"}',
+      ].join("\n")
+    );
+
+    const result = await staticApi.getGrammarExamples?.("sae", "N2");
+
+    expect(result).toEqual({
+      count: 2,
+      examples: [
+        { id: 1, text_ja: "名前さえ書けばいい。", text_zh: "只要寫名字就好。" },
+        { id: 2, text_ja: "水さえあれば足りる。", text_zh: "只要有水就夠了。" },
+      ],
+    });
+  });
+
+  it("getGrammarExamples returns an empty result on 404", async () => {
+    await expect(staticApi.getGrammarExamples?.("missing", "N2")).resolves.toEqual({
+      examples: [],
+      count: 0,
+    });
+  });
+
+  it("getGrammarExamples requests the level namespace path", async () => {
+    responses.set(
+      "/data/grammar-examples/N2/sae.jsonl",
+      '{"id":1,"text_ja":"名前さえ書けばいい。","text_zh":"只要寫名字就好。"}'
+    );
+
+    await staticApi.getGrammarExamples?.("sae", "N2");
+
+    expect(fetch).toHaveBeenCalledWith("/data/grammar-examples/N2/sae.jsonl");
+  });
+
+  it("getGrammarExamples deduplicates concurrent reads for the same slug and level", async () => {
+    responses.set(
+      "/data/grammar-examples/N2/sae.jsonl",
+      '{"id":1,"text_ja":"名前さえ書けばいい。","text_zh":"只要寫名字就好。"}'
+    );
+
+    await Promise.all([
+      staticApi.getGrammarExamples?.("sae", "N2"),
+      staticApi.getGrammarExamples?.("sae", "N2"),
+    ]);
+
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
 });
