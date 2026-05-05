@@ -82,7 +82,7 @@ describe("App tab filtering", () => {
     });
 
     render(<App />);
-    fireEvent.click(screen.getByRole("button", { name: "開始練習" }));
+    fireEvent.click(await screen.findByRole("button", { name: "開始練習" }));
 
     await waitFor(() => {
       expectVisibleTabs(["練習題", "文法", "單字", "漢字", "例句"]);
@@ -99,12 +99,10 @@ describe("App tab filtering", () => {
     });
 
     render(<App />);
-    fireEvent.click(screen.getByRole("button", { name: "開始練習" }));
+    fireEvent.click(await screen.findByRole("button", { name: /^文法/ }));
 
-    // Wait for the auto-reset effect to land grammar panel after capabilities resolve.
-    // Tabs disappear in render N; setActive("grammar") fires in the post-commit
-    // effect so grammar panel renders in render N+1. Both bullets must be in
-    // waitFor or the second assertion races the effect.
+    // The reference nav cards remain available even when quiz capability is disabled;
+    // after capabilities resolve, quiz and sentence tabs are filtered out.
     await waitFor(() => {
       expect(screen.queryByRole("button", { name: "練習題" })).not.toBeInTheDocument();
       expect(screen.queryByRole("button", { name: "例句" })).not.toBeInTheDocument();
@@ -114,7 +112,7 @@ describe("App tab filtering", () => {
     expect(screen.queryByLabelText("quiz panel")).not.toBeInTheDocument();
   });
 
-  it("falls back to grammar when initial active tab disappears", async () => {
+  it("enters grammar through the nav card while capabilities are loading", async () => {
     let resolveCapabilities: (capabilities: Capabilities) => void = () => {};
     getCapabilities.mockReturnValueOnce(
       new Promise((resolve) => {
@@ -123,9 +121,10 @@ describe("App tab filtering", () => {
     );
 
     render(<App />);
-    fireEvent.click(screen.getByRole("button", { name: "開始練習" }));
+    fireEvent.click(await screen.findByRole("button", { name: /^文法/ }));
 
     expect(screen.getByRole("button", { name: "練習題" })).toBeVisible();
+    expect(screen.getByLabelText("grammar panel")).toBeVisible();
 
     resolveCapabilities({
       progress: false,

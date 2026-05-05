@@ -34,7 +34,8 @@
 | JS-031 | 🔵 active | build-static parallel-make race | ops | 2026-05-05 | pr:#34 |
 | JS-032 | 🔵 active | ARCHITECTURE.md rollup vs per-item 慣例 | docs | 2026-05-05 | pr:#34 |
 | JS-033 | 🔵 active | examples slice cap=5 邊界測試 | frontend | 2026-05-05 | pr:#34 |
-| JS-034 | 🔵 active | dev-mode `quizCapable=false` HomePage CTA dead-end | frontend | 2026-05-05 | pr:#34 |
+| JS-034 | ✅ closed 2026-05-05 | dev-mode `quizCapable=false` HomePage CTA dead-end | frontend | 2026-05-05 | pr:#35 |
+| JS-035 | 🔵 active | App auto-fallback effect 失去測試覆蓋 | frontend | 2026-05-05 | pr:#35 |
 
 ---
 
@@ -266,17 +267,24 @@
 **Source**: PR #34 round-2 qa-tester (low, boundary-coverage gap)
 <!-- 首次記錄: 2026-05-05 -->
 
-## JS-034 — dev-mode `quizCapable=false` HomePage CTA dead-end
+## JS-034 — dev-mode `quizCapable=false` HomePage CTA dead-end ✅ 2026-05-05
 
-**Problem**: PR #34 把 HomePage 兩種模式（quizCapable=true / false）收斂為單一 layout，CTA cluster 統一以 `!isStaticBuild` gate。這帶來 round-2 critic 觀察到的回歸：dev 模式下若 backend `/capabilities` 回報 `quiz=false`（例：quiz subsystem 出錯或被刻意停用），HomePage 仍渲染「開始練習」「開始測試」CTA；點擊後路由到 quiz tab，但 capabilities 把該 tab 過濾為空白，使用者無法進入 quiz、也得不到清楚的解釋。
+**Outcome**: PR #35 完整重設計 HomePage 導航時順手關掉 — `showQuizControls` 收斂為 `!isStaticBuild && quizCapable`，CTA 在 capability 未 resolve 或 quiz 被停用時都不渲染；同時 3-card NavCard grid 提供獨立的 grammar/vocab/kanji 入口，使用者不會卡住。`App.test.tsx` 三個既有測試也同步改 `findByRole` / NavCard 路徑。
+**See**: pr:#35
 
-**Why**: 直觀 fix（`showQuizControls = !isStaticBuild && quizCapable`）會讓 CTA 在 capabilities 尚未 resolve 時消失，破壞 `App.test.tsx` 三個既有測試對「pre-resolve flash 行為」的預期；正確修法需要同時調整測試與處理 capability-loading 中間態（skeleton 或 loading state）。屬獨立 UX 工作，不適合與 cloud-parity 主題混合。
+## JS-035 — App auto-fallback effect 失去測試覆蓋
 
-**Requirement**: 評估三條路徑並擇一：(a) 在 HomePage 加 `!loaded` 中間態渲染 skeleton；(b) 將 CTA 改為 disabled 狀態並顯示 tooltip「需 backend quiz 啟用」；(c) onStart handler 內檢查 `quizCapable`，若 false 改路由到 grammar tab 並 toast 提示。任一路徑需同步更新 `App.test.tsx` 三個測試使用 `findByRole` 異步等待 capabilities resolve。
+**Problem**: PR #35 把 `App.test.tsx` test 3 的觸發從 `開始練習` CTA 改為 `文法` NavCard 後，原本對 `App.tsx:74-78` 自動 fallback effect（active tab 被 capabilities 過濾掉時自動切到 grammar）的覆蓋消失了。新版 test 3 用 `initialTab="grammar"`，從未觸發 fallback。
 
-**Tags**: P2, frontend
-**Source**: PR #34 round-2 critic (medium)
-**Related**: JS-029（HomePage flag duplication trade-off）— 兩者可一起處理或拆開做。
+**Why**: PR #35 是因應 CTA 改為 capability-gated 才必須改測試觸發點；自動 fallback effect 仍在程式碼裡正常運作，但無 test 把守。未來重構若無意間破壞此 effect（例：把 `useEffect(..., [visibleTabs, active])` 寫錯），現有 45 個測試都不會 fail。
+
+**Requirement**: 新增 `App.test.tsx` 一個獨立 case 直接覆蓋 fallback effect。可行做法：
+(a) `mockCapabilities` 先回 `quiz=true`，render App，await `findByRole("開始練習")`，click，再用 `mockReturnValue` 第二次回 `quiz=false` + 觸發 capabilities re-resolve（需要 CapabilitiesProvider 支援 refresh），assert grammar panel；
+(b) 抽出 fallback 邏輯為純函式（`computeNextActiveTab(prev, visibleTabs)`），unit test 該函式。
+(b) 較乾淨且不依賴 provider 內部，建議優先。
+
+**Tags**: P3, frontend
+**Source**: PR #35 round-1 critic (medium)
 <!-- 首次記錄: 2026-05-05 -->
 
 

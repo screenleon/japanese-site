@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "./api";
 import { HomePage } from "./HomePage";
@@ -36,13 +36,21 @@ describe("HomePage", () => {
     ).toBeVisible();
     expect(screen.getByRole("button", { name: "開始練習" })).toBeVisible();
     expect(screen.getByRole("button", { name: "開始測試" })).toBeVisible();
+    expect(screen.getByRole("button", { name: /^文法/ })).toBeVisible();
+    expect(screen.getByRole("button", { name: /^單字/ })).toBeVisible();
+    expect(screen.getByRole("button", { name: /^漢字/ })).toBeVisible();
 
     await waitFor(() => {
       expect(screen.getByText("12")).toBeVisible();
       expect(screen.getByText("34")).toBeVisible();
     });
-    expect(screen.getByText("文法點")).toBeVisible();
-    expect(screen.getByText("單字")).toBeVisible();
+    expect(screen.getByText("JLPT N5–N1 文法說明")).toBeVisible();
+    expect(screen.getByText("JLPT N5–N1 詞彙與例句")).toBeVisible();
+    expect(screen.getByText("讀音・筆畫・部首")).toBeVisible();
+    // 漢字 NavCard has no count slot — pin against a regression that would
+    // render a "..." placeholder if the count!==undefined guard was removed.
+    const kanjiCard = screen.getByRole("button", { name: /^漢字/ });
+    expect(kanjiCard.querySelector("[data-testid='nav-count']")).toBeNull();
     expect(listGrammar).toHaveBeenCalledTimes(1);
     expect(searchVocab).toHaveBeenCalledWith("", undefined);
   });
@@ -58,13 +66,44 @@ describe("HomePage", () => {
     expect(screen.queryByRole("button", { name: "開始練習" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "開始測試" })).not.toBeInTheDocument();
     expect(screen.queryByText("需要複習")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^文法/ })).toBeVisible();
+    expect(screen.getByRole("button", { name: /^單字/ })).toBeVisible();
+    expect(screen.getByRole("button", { name: /^漢字/ })).toBeVisible();
 
     await waitFor(() => {
       expect(screen.getByText("12")).toBeVisible();
       expect(screen.getByText("34")).toBeVisible();
     });
-    expect(screen.getByText("文法點")).toBeVisible();
-    expect(screen.getByText("單字")).toBeVisible();
     expect(getDueCount).not.toHaveBeenCalled();
+  });
+
+  it("hides quiz CTAs when capabilities report quiz disabled in dev mode", async () => {
+    render(<HomePage onStart={vi.fn()} quizCapable={false} />);
+
+    await waitFor(() => {
+      expect(screen.getByText("12")).toBeVisible();
+    });
+
+    expect(screen.queryByRole("button", { name: "開始練習" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "開始測試" })).not.toBeInTheDocument();
+    expect(screen.queryByText("需要複習")).not.toBeInTheDocument();
+    expect(getDueCount).not.toHaveBeenCalled();
+
+    expect(screen.getByRole("button", { name: /^文法/ })).toBeVisible();
+    expect(screen.getByRole("button", { name: /^單字/ })).toBeVisible();
+    expect(screen.getByRole("button", { name: /^漢字/ })).toBeVisible();
+  });
+
+  it.each([
+    ["文法", "grammar"],
+    ["單字", "vocab"],
+    ["漢字", "kanji"],
+  ] as const)("calls onStart with %s tab when its card is clicked", async (label, tab) => {
+    const onStart = vi.fn();
+    render(<HomePage onStart={onStart} quizCapable={true} />);
+
+    fireEvent.click(await screen.findByRole("button", { name: new RegExp(`^${label}`) }));
+
+    expect(onStart).toHaveBeenCalledWith("練習", tab);
   });
 });
