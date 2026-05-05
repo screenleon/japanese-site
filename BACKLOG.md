@@ -40,7 +40,7 @@
 | JS-037 | 🔵 active | nuance_note 渲染樣式提升 | frontend | 2026-05-05 | pr:#36 |
 | JS-038 | 🔵 active | GitHub Pages 部署 cache 過渡視窗 | ops | 2026-05-05 | pr:#36 |
 | JS-039 | 🔵 active | staticApi slug encodeURIComponent 一致性 | frontend | 2026-05-05 | pr:#36 |
-| JS-040 | 🔵 active | vocab usage / collocation / 助詞 / 近義差別標註 | content | 2026-05-05 | feedback:2026-05-05 |
+| JS-040 | 🟡 in_progress | vocab usage / collocation / 助詞 / 近義差別標註 | content | 2026-05-05 | feedback:2026-05-05, ADR-0001 |
 | JS-041 | ✅ closed 2026-05-06 | grammar mental_model MVP | content/frontend | 2026-05-06 | feedback:2026-05-06 |
 | JS-041a | 🔵 active | lint-grammar mental_model negative fixtures | content/ops | 2026-05-06 | pr:#37 |
 | JS-041b | 🔵 active | JS-041 tier-2 coverage hardening | backend/frontend | 2026-05-06 | pr:#37 |
@@ -360,8 +360,9 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 範圍：vocab corpus 共 ~2900 條，全面補滿 usage 註記是大工程；應分階段（先補 N3-N1 易混淆的近義詞群，再下沉到 N4-N5）。可考慮先用 LLM 生成草稿 + 人工 review（沿用 PR-B 即將設計的 generation pipeline）。
 
 **Tags**: P2, content
+**Status note (2026-05-06)**: in_progress — schema spike landed via PR #TBD; full content rollout follows. See ADR-0001 (`docs/adr/0001-vocab-annotations-schema.md`).
 **Source**: user feedback 2026-05-05 — 「單字的用法 其實用法不一樣 那個後續接的內容也會不一樣 這部分也需要特別說明」
-**Related**: JS-023（grammar 端 nuance_note 同類問題）；PR-B（agent-generated 例句擴充，可共用 generation pipeline）
+**Related**: ADR-0001（nested annotations schema）；JS-023（grammar 端 nuance_note 同類問題）；PR-B（agent-generated 例句擴充，可共用 generation pipeline）
 <!-- 首次記錄: 2026-05-05 -->
 
 ## JS-041 — grammar mental_model MVP ✅ 2026-05-06

@@ -16,9 +16,19 @@ export interface VocabRow {
   gloss_zh?: string;
   jlpt_level?: string;
   frequency_rank?: number;
+  annotations?: Annotations;
   source: string;
   license: string;
   validated_by?: string;
+}
+
+export interface Annotations {
+  usage?: string;
+  collocations?: string;
+  particle_pairing?: string;
+  synonym_diff?: string;
+  mental_model?: string;
+  nuance_note?: string;
 }
 
 export interface Kanji {
@@ -53,6 +63,7 @@ export interface GrammarPoint {
   jlpt_level: string;
   nuance_note?: string;
   mental_model?: string;
+  annotations?: Annotations;
   related_slugs?: string[];
   explanation_ja?: string;
   explanation_zh: string;

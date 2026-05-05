@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api, type VocabRow } from "../api";
+import { EntryAnnotations } from "../components/EntryAnnotations";
 import { useReadTracking } from "../hooks/useReadTracking";
 
 const levels = ["N5", "N4", "N3", "N2", "N1"];
@@ -64,6 +65,13 @@ export function VocabTab() {
     return row.gloss_ja?.trim() || "日本語の説明は準備中です。";
   }
 
+  function hasAnnotations(row: VocabRow) {
+    return Boolean(
+      row.annotations &&
+        Object.values(row.annotations).some((value) => value?.trim())
+    );
+  }
+
   return (
     <section className="space-y-6">
       <div className="grid gap-3 sm:grid-cols-5">
@@ -111,6 +119,11 @@ export function VocabTab() {
             </div>
             <div className="text-sm leading-relaxed">
               <div>{japaneseGloss(randomRow)}</div>
+              {hasAnnotations(randomRow) && (
+                <div className="mt-4">
+                  <EntryAnnotations annotations={randomRow.annotations} />
+                </div>
+              )}
               <div className="mt-5 border-t border-slate-200 pt-4">
                 <button
                   type="button"
@@ -175,6 +188,11 @@ export function VocabTab() {
               </div>
               <div className="min-w-0 flex-1">
                 <div className="text-sm">{japaneseGloss(r)}</div>
+                {hasAnnotations(r) && (
+                  <div className="mt-3">
+                    <EntryAnnotations annotations={r.annotations} />
+                  </div>
+                )}
                 <div className="mt-1 text-xs text-slate-500">{supportGloss(r)}</div>
                 <div className="mt-1 text-xs text-slate-400">
                   {r.pos}

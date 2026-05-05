@@ -25,15 +25,16 @@ type Question struct {
 }
 
 type GrammarPoint struct {
-	Slug          string   `json:"slug"`
-	TitleJA       string   `json:"title_ja"`
-	TitleZH       string   `json:"title_zh"`
-	JLPTLevel     string   `json:"jlpt_level"`
-	NuanceNote    string   `json:"nuance_note,omitempty"`
-	MentalModel   string   `json:"mental_model,omitempty"`
-	RelatedSlugs  []string `json:"related_slugs,omitempty"`
-	ExplanationJA string   `json:"explanation_ja,omitempty"`
-	ExplanationZH string   `json:"explanation_zh"`
+	Slug          string          `json:"slug"`
+	TitleJA       string          `json:"title_ja"`
+	TitleZH       string          `json:"title_zh"`
+	JLPTLevel     string          `json:"jlpt_level"`
+	NuanceNote    string          `json:"nuance_note,omitempty"`
+	MentalModel   string          `json:"mental_model,omitempty"`
+	Annotations   json.RawMessage `json:"annotations,omitempty"`
+	RelatedSlugs  []string        `json:"related_slugs,omitempty"`
+	ExplanationJA string          `json:"explanation_ja,omitempty"`
+	ExplanationZH string          `json:"explanation_zh"`
 }
 
 type GrammarExample struct {
@@ -218,16 +219,19 @@ func GetGrammarPoint(ctx context.Context, db *DB, slug string) (GrammarPoint, er
 	row := db.QueryRowContext(ctx, `
 		SELECT slug, title_ja, title_zh, jlpt_level,
 		       COALESCE(nuance_note, ''), COALESCE(mental_model, ''), COALESCE(related_slugs, ''),
+		       COALESCE(annotations, '{}') AS annotations,
 		       COALESCE(explanation_ja, ''), explanation_zh
 		FROM grammar_point WHERE slug = ?`, slug)
 	var gp GrammarPoint
 	var relatedSlugs string
-	if err := row.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.NuanceNote, &gp.MentalModel, &relatedSlugs, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
+	var annotations string
+	if err := row.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.NuanceNote, &gp.MentalModel, &relatedSlugs, &annotations, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return GrammarPoint{}, ErrGrammarPointNotFound
 		}
 		return GrammarPoint{}, err
 	}
+	gp.Annotations = json.RawMessage(annotations)
 	if err := decodeStringSlice(relatedSlugs, &gp.RelatedSlugs); err != nil {
 		return GrammarPoint{}, err
 	}
@@ -261,6 +265,7 @@ func GetGrammarExamples(ctx context.Context, db *DB, slug string) ([]GrammarExam
 func RandomGrammarPoint(ctx context.Context, db *DB, jlpt string) (GrammarPoint, error) {
 	q := `SELECT slug, title_ja, title_zh, jlpt_level,
 	             COALESCE(nuance_note, ''), COALESCE(mental_model, ''), COALESCE(related_slugs, ''),
+	             COALESCE(annotations, '{}') AS annotations,
 	             COALESCE(explanation_ja, ''), explanation_zh
 	      FROM grammar_point WHERE 1 = 1`
 	args := []any{}
@@ -273,12 +278,14 @@ func RandomGrammarPoint(ctx context.Context, db *DB, jlpt string) (GrammarPoint,
 	row := db.QueryRowContext(ctx, q, args...)
 	var gp GrammarPoint
 	var relatedSlugs string
-	if err := row.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.NuanceNote, &gp.MentalModel, &relatedSlugs, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
+	var annotations string
+	if err := row.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.NuanceNote, &gp.MentalModel, &relatedSlugs, &annotations, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return GrammarPoint{}, ErrGrammarPointNotFound
 		}
 		return GrammarPoint{}, err
 	}
+	gp.Annotations = json.RawMessage(annotations)
 	if err := decodeStringSlice(relatedSlugs, &gp.RelatedSlugs); err != nil {
 		return GrammarPoint{}, err
 	}
@@ -288,6 +295,7 @@ func RandomGrammarPoint(ctx context.Context, db *DB, jlpt string) (GrammarPoint,
 func ListGrammarPoints(ctx context.Context, db *DB, jlpt string) ([]GrammarPoint, error) {
 	q := `SELECT slug, title_ja, title_zh, jlpt_level,
 	             COALESCE(nuance_note, ''), COALESCE(mental_model, ''), COALESCE(related_slugs, ''),
+	             COALESCE(annotations, '{}') AS annotations,
 	             COALESCE(explanation_ja, ''), explanation_zh
 	      FROM grammar_point`
 	args := []any{}
@@ -305,9 +313,11 @@ func ListGrammarPoints(ctx context.Context, db *DB, jlpt string) ([]GrammarPoint
 	for rows.Next() {
 		var gp GrammarPoint
 		var relatedSlugs string
-		if err := rows.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.NuanceNote, &gp.MentalModel, &relatedSlugs, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
+		var annotations string
+		if err := rows.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.NuanceNote, &gp.MentalModel, &relatedSlugs, &annotations, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
 			return nil, err
 		}
+		gp.Annotations = json.RawMessage(annotations)
 		if err := decodeStringSlice(relatedSlugs, &gp.RelatedSlugs); err != nil {
 			return nil, err
 		}

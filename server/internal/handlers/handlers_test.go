@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -69,6 +70,13 @@ func TestAPISmoke(t *testing.T) {
 			wantBody:   `"headword":"食べる"`,
 		},
 		{
+			name:       "vocab get",
+			method:     http.MethodGet,
+			path:       "/api/vocab/" + url.PathEscape("食べる"),
+			wantStatus: http.StatusOK,
+			wantBody:   `"usage":"「食べる」は日常の食事や食べ物を口に入れる動作に使う。`,
+		},
+		{
 			name:       "kanji lookup",
 			method:     http.MethodGet,
 			path:       "/api/kanji/食",
@@ -101,7 +109,7 @@ func TestAPISmoke(t *testing.T) {
 			method:     http.MethodGet,
 			path:       "/api/grammar/test-gp",
 			wantStatus: http.StatusOK,
-			wantBody:   `"title_ja":"〜ば"`,
+			wantBody:   `"mental_model":"条件を先に置き、後件が成り立つ場面を考える。`,
 		},
 		{
 			name:       "grammar examples",
@@ -189,6 +197,48 @@ func TestAPISmoke(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestAPIAnnotationsRoundTrip(t *testing.T) {
+	db := newHandlerTestDB(t)
+	mux := http.NewServeMux()
+	Register(mux, db, store.NewSQLiteProgressStore(db))
+
+	t.Run("grammar annotations", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodGet, "/api/grammar/test-gp", nil)
+		rec := httptest.NewRecorder()
+		mux.ServeHTTP(rec, req)
+		if rec.Code != http.StatusOK {
+			t.Fatalf("status = %d, body=%s", rec.Code, rec.Body.String())
+		}
+		var body struct {
+			Annotations map[string]string `json:"annotations"`
+		}
+		if err := json.NewDecoder(rec.Body).Decode(&body); err != nil {
+			t.Fatalf("decode grammar body: %v", err)
+		}
+		if body.Annotations["mental_model"] != "条件を先に置き、後件が成り立つ場面を考える。" {
+			t.Fatalf("annotations.mental_model = %q", body.Annotations["mental_model"])
+		}
+	})
+
+	t.Run("vocab annotations", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodGet, "/api/vocab/"+url.PathEscape("食べる"), nil)
+		rec := httptest.NewRecorder()
+		mux.ServeHTTP(rec, req)
+		if rec.Code != http.StatusOK {
+			t.Fatalf("status = %d, body=%s", rec.Code, rec.Body.String())
+		}
+		var body struct {
+			Annotations map[string]string `json:"annotations"`
+		}
+		if err := json.NewDecoder(rec.Body).Decode(&body); err != nil {
+			t.Fatalf("decode vocab body: %v", err)
+		}
+		if body.Annotations["usage"] != "「食べる」は日常の食事や食べ物を口に入れる動作に使う。" {
+			t.Fatalf("annotations.usage = %q", body.Annotations["usage"])
+		}
+	})
 }
 
 func TestQuizAnswerUnknownQuestionReturnsStableCode(t *testing.T) {
@@ -431,14 +481,14 @@ func newHandlerTestDB(t *testing.T) *store.DB {
 func seedHandlerTestDB(t *testing.T, db *store.DB) {
 	t.Helper()
 	statements := []string{
-		`INSERT INTO vocab (headword, reading, pos, gloss_en, gloss_ja, gloss_zh, jlpt_level, frequency_rank, source, license, validated_by)
-		 VALUES ('食べる', 'たべる', 'v1', 'eat', '食べ物を口に入れること。', '吃', 'N5', 1, 'test', 'CC0', 'test-validator')`,
+		`INSERT INTO vocab (headword, reading, pos, gloss_en, gloss_ja, gloss_zh, jlpt_level, frequency_rank, annotations, source, license, validated_by)
+		 VALUES ('食べる', 'たべる', 'v1', 'eat', '食べ物を口に入れること。', '吃', 'N5', 1, '{"usage":"「食べる」は日常の食事や食べ物を口に入れる動作に使う。"}', 'test', 'CC0', 'test-validator')`,
 		`INSERT INTO kanji (character, onyomi, kunyomi, meaning_en, meaning_ja, meaning_zh, jlpt_level, grade, stroke_count, source, license, validated_by)
 		 VALUES ('食', 'ショク', 'た.べる', 'eat', '食べること。食べ物。', '吃／食物', 'N5', 2, 9, 'test', 'CC0', 'test-validator')`,
 		`INSERT INTO sentence (text_ja, text_en, jlpt_level, source, license, validated_by)
 		 VALUES ('ご飯を食べます。', 'I eat rice.', 'N5', 'test', 'CC0', 'test-validator')`,
-		`INSERT INTO grammar_point (slug, title_ja, title_zh, jlpt_level, explanation_zh, source, license, validated_by)
-		 VALUES ('test-gp', '〜ば', '條件形', 'N5', '測試文法說明', 'test', 'CC0', 'test-validator')`,
+		`INSERT INTO grammar_point (slug, title_ja, title_zh, jlpt_level, mental_model, annotations, explanation_zh, source, license, validated_by)
+		 VALUES ('test-gp', '〜ば', '條件形', 'N5', '条件を先に置き、後件が成り立つ場面を考える。', '{"mental_model":"条件を先に置き、後件が成り立つ場面を考える。"}', '測試文法說明', 'test', 'CC0', 'test-validator')`,
 		`INSERT INTO question (id, kind, jlpt_level, grammar_point, prompt, expected, hint, source, license, validated_by)
 		 VALUES ('testquestion0001', 'cloze', 'N5', 'test-gp', '時間が ___ 行きます。', 'あれば', 'ば形', 'test', 'CC0', 'test-validator')`,
 		`INSERT INTO feedback_template (grammar_point, error_class, body_zh, source, license)

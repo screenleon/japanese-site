@@ -1,0 +1,2 @@
+ALTER TABLE vocab ADD COLUMN annotations TEXT NOT NULL DEFAULT '{}';
+ALTER TABLE grammar_point ADD COLUMN annotations TEXT NOT NULL DEFAULT '{}';

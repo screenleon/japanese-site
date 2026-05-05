@@ -29,6 +29,7 @@ func Register(mux *http.ServeMux, db *store.DB, ps store.ProgressStore) {
 	mux.HandleFunc("GET /api/version", version)
 	mux.HandleFunc("GET /api/vocab/search", vocabSearch(db))
 	mux.HandleFunc("GET /api/vocab/random", vocabRandom(db))
+	mux.HandleFunc("GET /api/vocab/{headword}", vocabGet(db))
 	mux.HandleFunc("GET /api/kanji/{char}", kanjiLookup(db))
 	mux.HandleFunc("GET /api/sentence/random", sentenceRandom(db))
 	mux.HandleFunc("GET /api/grammar", grammarList(db))
@@ -327,6 +328,21 @@ func vocabRandom(db *store.DB) http.HandlerFunc {
 		v, err := store.RandomVocab(r.Context(), db, r.URL.Query().Get("jlpt"))
 		if errors.Is(err, store.ErrVocabNotFound) {
 			writeJSON(w, http.StatusNotFound, map[string]string{"error": "no_vocab"})
+			return
+		}
+		if err != nil {
+			httpError(w, r, http.StatusInternalServerError, "internal", err)
+			return
+		}
+		writeJSON(w, http.StatusOK, v)
+	}
+}
+
+func vocabGet(db *store.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		v, err := store.GetVocabByHeadword(r.Context(), db, r.PathValue("headword"))
+		if errors.Is(err, store.ErrVocabNotFound) {
+			writeJSON(w, http.StatusNotFound, map[string]string{"error": "not_found"})
 			return
 		}
 		if err != nil {

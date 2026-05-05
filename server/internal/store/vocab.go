@@ -3,24 +3,26 @@ package store
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"errors"
 )
 
 var ErrVocabNotFound = errors.New("vocab not found")
 
 type Vocab struct {
-	ID            int64  `json:"id"`
-	Headword      string `json:"headword"`
-	Reading       string `json:"reading"`
-	POS           string `json:"pos"`
-	GlossEN       string `json:"gloss_en,omitempty"`
-	GlossJA       string `json:"gloss_ja,omitempty"`
-	GlossZH       string `json:"gloss_zh,omitempty"`
-	JLPTLevel     string `json:"jlpt_level,omitempty"`
-	FrequencyRank *int64 `json:"frequency_rank,omitempty"`
-	Source        string `json:"source"`
-	License       string `json:"license"`
-	ValidatedBy   string `json:"validated_by,omitempty"`
+	ID            int64           `json:"id"`
+	Headword      string          `json:"headword"`
+	Reading       string          `json:"reading"`
+	POS           string          `json:"pos"`
+	GlossEN       string          `json:"gloss_en,omitempty"`
+	GlossJA       string          `json:"gloss_ja,omitempty"`
+	GlossZH       string          `json:"gloss_zh,omitempty"`
+	JLPTLevel     string          `json:"jlpt_level,omitempty"`
+	FrequencyRank *int64          `json:"frequency_rank,omitempty"`
+	Annotations   json.RawMessage `json:"annotations,omitempty"`
+	Source        string          `json:"source"`
+	License       string          `json:"license"`
+	ValidatedBy   string          `json:"validated_by,omitempty"`
 }
 
 type VocabSearchOpts struct {
@@ -61,6 +63,7 @@ func SearchVocab(ctx context.Context, db *DB, opts VocabSearchOpts) ([]Vocab, er
 		SELECT id, headword, reading, pos,
 		       COALESCE(gloss_en, ''), COALESCE(gloss_ja, ''), COALESCE(gloss_zh, ''),
 		       COALESCE(jlpt_level, ''), frequency_rank,
+		       COALESCE(annotations, '{}') AS annotations,
 		       source, license, COALESCE(validated_by, '')
 		FROM vocab
 		WHERE 1 = 1
@@ -90,11 +93,13 @@ func SearchVocab(ctx context.Context, db *DB, opts VocabSearchOpts) ([]Vocab, er
 	for rows.Next() {
 		var v Vocab
 		var freq sql.NullInt64
+		var annotations string
 		if err := rows.Scan(&v.ID, &v.Headword, &v.Reading, &v.POS,
 			&v.GlossEN, &v.GlossJA, &v.GlossZH, &v.JLPTLevel, &freq,
-			&v.Source, &v.License, &v.ValidatedBy); err != nil {
+			&annotations, &v.Source, &v.License, &v.ValidatedBy); err != nil {
 			return nil, err
 		}
+		v.Annotations = json.RawMessage(annotations)
 		if freq.Valid {
 			n := freq.Int64
 			v.FrequencyRank = &n
@@ -109,6 +114,7 @@ func GetVocabByHeadword(ctx context.Context, db *DB, headword string) (Vocab, er
 		SELECT id, headword, reading, pos,
 		       COALESCE(gloss_en, ''), COALESCE(gloss_ja, ''), COALESCE(gloss_zh, ''),
 		       COALESCE(jlpt_level, ''), frequency_rank,
+		       COALESCE(annotations, '{}') AS annotations,
 		       source, license, COALESCE(validated_by, '')
 		FROM vocab
 		WHERE headword = ?
@@ -116,9 +122,10 @@ func GetVocabByHeadword(ctx context.Context, db *DB, headword string) (Vocab, er
 
 	var v Vocab
 	var freq sql.NullInt64
+	var annotations string
 	err := db.QueryRowContext(ctx, q, headword).Scan(&v.ID, &v.Headword, &v.Reading, &v.POS,
 		&v.GlossEN, &v.GlossJA, &v.GlossZH, &v.JLPTLevel, &freq,
-		&v.Source, &v.License, &v.ValidatedBy)
+		&annotations, &v.Source, &v.License, &v.ValidatedBy)
 	if errors.Is(err, sql.ErrNoRows) {
 		return Vocab{}, ErrVocabNotFound
 	}
@@ -129,6 +136,7 @@ func GetVocabByHeadword(ctx context.Context, db *DB, headword string) (Vocab, er
 		n := freq.Int64
 		v.FrequencyRank = &n
 	}
+	v.Annotations = json.RawMessage(annotations)
 	return v, nil
 }
 
@@ -138,6 +146,7 @@ func RandomVocab(ctx context.Context, db *DB, jlpt string) (Vocab, error) {
 		SELECT id, headword, reading, pos,
 		       COALESCE(gloss_en, ''), COALESCE(gloss_ja, ''), COALESCE(gloss_zh, ''),
 		       COALESCE(jlpt_level, ''), frequency_rank,
+		       COALESCE(annotations, '{}') AS annotations,
 		       source, license, COALESCE(validated_by, '')
 		FROM vocab
 		WHERE 1 = 1`
@@ -153,9 +162,10 @@ func RandomVocab(ctx context.Context, db *DB, jlpt string) (Vocab, error) {
 
 	var v Vocab
 	var freq sql.NullInt64
+	var annotations string
 	err := db.QueryRowContext(ctx, q, args...).Scan(&v.ID, &v.Headword, &v.Reading, &v.POS,
 		&v.GlossEN, &v.GlossJA, &v.GlossZH, &v.JLPTLevel, &freq,
-		&v.Source, &v.License, &v.ValidatedBy)
+		&annotations, &v.Source, &v.License, &v.ValidatedBy)
 	if errors.Is(err, sql.ErrNoRows) {
 		return Vocab{}, ErrVocabNotFound
 	}
@@ -166,5 +176,6 @@ func RandomVocab(ctx context.Context, db *DB, jlpt string) (Vocab, error) {
 		n := freq.Int64
 		v.FrequencyRank = &n
 	}
+	v.Annotations = json.RawMessage(annotations)
 	return v, nil
 }

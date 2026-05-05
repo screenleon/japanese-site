@@ -57,6 +57,25 @@ while IFS= read -r -d '' file; do
 		echo "lint-grammar: $rel mental_model must be a non-empty string when present" >&2
 		EXIT_CODE=1
 	fi
+
+	if ! jq -e '(.annotations == null) or (.annotations | type == "object")' "$file" >/dev/null; then
+		echo "lint-grammar: $rel annotations must be an object when present" >&2
+		EXIT_CODE=1
+	fi
+	while IFS= read -r kind; do
+		[[ -z "$kind" ]] && continue
+		case "$kind" in
+			usage | collocations | particle_pairing | synonym_diff | mental_model | nuance_note) ;;
+			*)
+				echo "lint-grammar: $rel annotations has unsupported kind '$kind'" >&2
+				EXIT_CODE=1
+				;;
+		esac
+	done < <(jq -r 'select(.annotations | type == "object") | .annotations | keys_unsorted[]' "$file")
+	if ! jq -e '(.annotations == null) or (.annotations | type != "object") or (.annotations | all(.[]; type == "string" and (gsub("\\s"; "") | length > 0)))' "$file" >/dev/null; then
+		echo "lint-grammar: $rel annotations values must be non-empty strings" >&2
+		EXIT_CODE=1
+	fi
 done < <(find "$GRAMMAR_ROOT" -mindepth 2 -maxdepth 2 -type f -name '*.json' -print0 | sort -z)
 
 if [[ ! -s "$slugs" ]]; then

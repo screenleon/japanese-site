@@ -41,6 +41,7 @@ type GrammarPoint struct {
 	JLPTLevel       string          `json:"jlpt_level"`
 	NuanceNote      string          `json:"nuance_note,omitempty"`
 	MentalModel     string          `json:"mental_model,omitempty"`
+	Annotations     json.RawMessage `json:"annotations,omitempty"`
 	RelatedSlugs    []string        `json:"related_slugs,omitempty"`
 	ExplanationJA   string          `json:"explanation_ja,omitempty"`
 	ExplanationZH   string          `json:"explanation_zh"`
@@ -62,13 +63,14 @@ type GrammarExample struct {
 }
 
 type VocabSupport struct {
-	Headword  string `json:"headword"`
-	Reading   string `json:"reading"`
-	GlossJA   string `json:"gloss_ja"`
-	GlossZH   string `json:"gloss_zh"`
-	JLPTLevel string `json:"jlpt_level,omitempty"`
-	Source    string `json:"source"`
-	License   string `json:"license"`
+	Headword    string          `json:"headword"`
+	Reading     string          `json:"reading"`
+	GlossJA     string          `json:"gloss_ja"`
+	GlossZH     string          `json:"gloss_zh"`
+	JLPTLevel   string          `json:"jlpt_level,omitempty"`
+	Annotations json.RawMessage `json:"annotations,omitempty"`
+	Source      string          `json:"source"`
+	License     string          `json:"license"`
 }
 
 type KanjiSupport struct {
@@ -118,8 +120,8 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 			slug, title_ja, title_zh, jlpt_level, nuance_note, mental_model, related_slugs,
 			explanation_ja, explanation_zh,
 			source, license, validated_by, validator_score, validated_at,
-			classifier_rules
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			classifier_rules, annotations
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON CONFLICT(slug) DO UPDATE SET
 			title_ja=excluded.title_ja,
 			title_zh=excluded.title_zh,
@@ -130,7 +132,8 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 			explanation_ja=excluded.explanation_ja,
 			explanation_zh=excluded.explanation_zh,
 			validated_at=excluded.validated_at,
-			classifier_rules=excluded.classifier_rules`)
+			classifier_rules=excluded.classifier_rules,
+			annotations=excluded.annotations`)
 	if err != nil {
 		return stats, fmt.Errorf("prepare gp: %w", err)
 	}
@@ -193,10 +196,14 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 			if err != nil {
 				return fmt.Errorf("related slugs %s: %w", gp.Slug, err)
 			}
+			annotations, err := mergeGrammarAnnotations(&gp)
+			if err != nil {
+				return fmt.Errorf("annotations %s: %w", gp.Slug, err)
+			}
 			if _, err := upsertGP.ExecContext(ctx,
 				gp.Slug, gp.TitleJA, gp.TitleZH, gp.JLPTLevel, nullStr(gp.NuanceNote), nullStr(gp.MentalModel), relatedSlugs,
 				nullStr(gp.ExplanationJA), gp.ExplanationZH,
-				gp.Source, gp.License, gp.ValidatedBy, gp.ValidatorScore, now, classifierRules); err != nil {
+				gp.Source, gp.License, gp.ValidatedBy, gp.ValidatorScore, now, classifierRules, annotations); err != nil {
 				return fmt.Errorf("upsert gp %s: %w", gp.Slug, err)
 			}
 			stats.GrammarPoints++
@@ -393,6 +400,7 @@ func loadVocabSupport(ctx context.Context, tx *sql.Tx, root string) (int, error)
 		UPDATE vocab
 		   SET gloss_ja = ?,
 		       gloss_zh = ?,
+		       annotations = ?,
 		       validated_by = COALESCE(validated_by, ?),
 		       validated_at = COALESCE(validated_at, ?)
 		 WHERE headword = ? AND reading = ?`)
@@ -407,7 +415,11 @@ func loadVocabSupport(ctx context.Context, tx *sql.Tx, root string) (int, error)
 		if row.Headword == "" || row.Reading == "" || row.GlossJA == "" || row.GlossZH == "" || row.Source == "" || row.License == "" {
 			return updated, fmt.Errorf("vocab support row missing required fields: %+v", row)
 		}
-		res, err := stmt.ExecContext(ctx, row.GlossJA, row.GlossZH, GrammarValidatorID, now, row.Headword, row.Reading)
+		annotations, err := normalizeAnnotations(row.Annotations)
+		if err != nil {
+			return updated, fmt.Errorf("vocab annotations %s/%s: %w", row.Headword, row.Reading, err)
+		}
+		res, err := stmt.ExecContext(ctx, row.GlossJA, row.GlossZH, annotations, GrammarValidatorID, now, row.Headword, row.Reading)
 		if err != nil {
 			return updated, fmt.Errorf("update vocab support %s/%s: %w", row.Headword, row.Reading, err)
 		}
@@ -650,6 +662,55 @@ func nullStr(s string) any {
 		return nil
 	}
 	return s
+}
+
+func normalizeAnnotations(raw json.RawMessage) (string, error) {
+	if len(raw) == 0 {
+		return "{}", nil
+	}
+	var obj map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &obj); err != nil {
+		return "", err
+	}
+	if obj == nil {
+		return "{}", nil
+	}
+	body, err := json.Marshal(obj)
+	if err != nil {
+		return "", err
+	}
+	return string(body), nil
+}
+
+func mergeGrammarAnnotations(gp *GrammarPoint) (string, error) {
+	raw := gp.Annotations
+	if len(raw) == 0 {
+		raw = json.RawMessage(`{}`)
+	}
+	var obj map[string]string
+	if err := json.Unmarshal(raw, &obj); err != nil {
+		return "", err
+	}
+	if obj == nil {
+		obj = map[string]string{}
+	}
+
+	if gp.MentalModel == "" {
+		gp.MentalModel = obj["mental_model"]
+	} else if obj["mental_model"] == "" {
+		obj["mental_model"] = gp.MentalModel
+	}
+	if gp.NuanceNote == "" {
+		gp.NuanceNote = obj["nuance_note"]
+	} else if obj["nuance_note"] == "" {
+		obj["nuance_note"] = gp.NuanceNote
+	}
+
+	body, err := json.Marshal(obj)
+	if err != nil {
+		return "", err
+	}
+	return string(body), nil
 }
 
 func validJLPTLevel(level string) bool {
