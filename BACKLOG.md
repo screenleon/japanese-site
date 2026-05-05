@@ -40,6 +40,7 @@
 | JS-037 | 🔵 active | nuance_note 渲染樣式提升 | frontend | 2026-05-05 | pr:#36 |
 | JS-038 | 🔵 active | GitHub Pages 部署 cache 過渡視窗 | ops | 2026-05-05 | pr:#36 |
 | JS-039 | 🔵 active | staticApi slug encodeURIComponent 一致性 | frontend | 2026-05-05 | pr:#36 |
+| JS-040 | 🔵 active | vocab usage / collocation / 助詞 / 近義差別標註 | content | 2026-05-05 | feedback:2026-05-05 |
 
 ---
 
@@ -342,4 +343,33 @@
 
 **Tags**: P3, frontend
 **Source**: PR #36 round-1 security-reviewer (low, defense-in-depth)
+<!-- 首次記錄: 2026-05-05 -->
+
+## JS-040 — vocab usage / collocation / 助詞 / 近義差別標註
+
+**Problem**: vocab JSON 目前有 `gloss_ja` / `gloss_zh`，但缺乏「**怎麼用**」這層 meta-knowledge。學習者看到近義詞（例：〜について vs 〜に関して、〜ように vs 〜ために）gloss 相近但實際用法、後接內容、適用情境、register 都不同，現在的 schema 無法表達。動詞的助詞要求（が vs を）、慣用搭配（雨が降る ≠ ＊雨を降る）、近義詞差別也都沒有結構化記錄。
+
+**Why**: 例句（PR-B 預期會做）能間接展示 collocation pattern，但對於 register 差別、近義詞辨析、助詞約束這類 meta-level 知識，需要顯式註記才能可靠掌握。學習者單看 gloss 容易混用近義詞、漏掉必要 particle、用錯 collocation。JS-023 在 grammar 端用 `nuance_note` 解了同類問題（同詞不同 level/register 的差別），vocab 端對應的空缺一樣需要結構化。
+
+**Requirement**: 評估在 vocab schema 加 optional fields（兩個方向二擇一或混合）：
+
+A. **Free-form 路線**（彈性，作者負擔輕）：
+- `usage_note?: string` — 簡短日文說明，自由 narrative 形式涵蓋 register / 適用情境 / 必要 particle / 慣用搭配 / 近義差別
+
+B. **結構化路線**（schema 嚴謹，UI 可分區渲染）：
+- `register?: "formal" | "casual" | "neutral" | "literary"`
+- `collocations?: string[]` — 常見搭配（e.g. 約束: ["約束を守る", "約束を破る", "約束を交わす"]）
+- `particle_pattern?: string` — 助詞要求（e.g. 注意: "Nに注意する"）
+- `synonym_diff?: { with: string; note_ja: string }[]` — 近義詞 + 差別說明
+- `usage_note?: string` — 上述以外的 narrative 補充
+
+C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太雜再切結構化。
+
+跟 PR-B（agent-generated 例句）配合：例句負責 implicit pattern 展示，usage 註記負責 explicit meta-knowledge。實作此 backlog 時也要同步在 VocabTab UI 渲染新欄位（類似 GrammarTab 的 nuance_note 處理），以及 lint 規則（例如 collocations 至少 N 個若 register=formal 等）。
+
+範圍：vocab corpus 共 ~2900 條，全面補滿 usage 註記是大工程；應分階段（先補 N3-N1 易混淆的近義詞群，再下沉到 N4-N5）。可考慮先用 LLM 生成草稿 + 人工 review（沿用 PR-B 即將設計的 generation pipeline）。
+
+**Tags**: P2, content
+**Source**: user feedback 2026-05-05 — 「單字的用法 其實用法不一樣 那個後續接的內容也會不一樣 這部分也需要特別說明」
+**Related**: JS-023（grammar 端 nuance_note 同類問題）；PR-B（agent-generated 例句擴充，可共用 generation pipeline）
 <!-- 首次記錄: 2026-05-05 -->
