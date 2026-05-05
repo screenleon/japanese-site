@@ -23,7 +23,7 @@
 | JS-016 | ✅ closed 2026-05-03 | JLPT 等級來源切換 | content | 2026-05-02 | feedback:2026-05-02 |
 | JS-017 | ✅ closed 2026-05-02 | 已讀內容追蹤 | backend/frontend | 2026-05-02 | feedback:2026-05-02 |
 | JS-018 | ✅ closed 2026-05-02 | github.io 靜態部署 | frontend/ops | 2026-05-02 | decisions:#2026-05-02-js-018-github-pages-static-deployment-scope |
-| JS-023 | 🔵 active | 跨等級 slug 唯一性 | content | 2026-05-05 | pr:#34 |
+| JS-023 | ✅ closed 2026-05-05 | 跨等級 slug 唯一性 | content | 2026-05-05 | pr:#34 |
 | JS-024 | 🔵 active | corpus 縮水偵測 | ops | 2026-05-05 | pr:#34 |
 | JS-025 | 🔵 active | 子資源錯誤不該打掛主視圖 | frontend | 2026-05-05 | pr:#34 |
 | JS-026 | 🔵 active | dump pipeline 整合進 bake-static | arch | 2026-05-05 | pr:#34 |
@@ -36,6 +36,10 @@
 | JS-033 | 🔵 active | examples slice cap=5 邊界測試 | frontend | 2026-05-05 | pr:#34 |
 | JS-034 | ✅ closed 2026-05-05 | dev-mode `quizCapable=false` HomePage CTA dead-end | frontend | 2026-05-05 | pr:#35 |
 | JS-035 | 🔵 active | App auto-fallback effect 失去測試覆蓋 | frontend | 2026-05-05 | pr:#35 |
+| JS-036 | 🔵 active | lint-grammar reciprocity + level-dir match | content | 2026-05-05 | pr:#36 |
+| JS-037 | 🔵 active | nuance_note 渲染樣式提升 | frontend | 2026-05-05 | pr:#36 |
+| JS-038 | 🔵 active | GitHub Pages 部署 cache 過渡視窗 | ops | 2026-05-05 | pr:#36 |
+| JS-039 | 🔵 active | staticApi slug encodeURIComponent 一致性 | frontend | 2026-05-05 | pr:#36 |
 
 ---
 
@@ -141,7 +145,7 @@
 **Outcome**: 公開 URL `https://screenleon.github.io/japanese-site/` 上線（Tier S 純內容瀏覽），`make bake-static` 烘 corpus 為 per-level rollup，`VITE_DEPLOY_MODE=static` 編譯期切換 `staticApi`，GitHub Actions on main → Pages artifact deploy。
 **See**: DECISIONS.md#2026-05-02-js-018-github-pages-static-deployment-scope, pr:#19
 
-## JS-023 — 跨等級 slug 唯一性
+## JS-023 — 跨等級 slug 唯一性 ✅ 2026-05-05
 
 **Problem**: `server/data/corpus/grammar/<level>/<slug>.examples.jsonl` 與 `web/public/data/grammar/<level>.json` 存在跨等級重名 slug（`monono`、`dokoroka` 在 N2 與 N3 都有不同標題的條目）。PR #34 透過 namespace by level 修掉 dump 端的錯置，但根源是兩個語法點共用 slug。
 
@@ -149,8 +153,11 @@
 
 **Requirement**: grammar corpus slug 跨等級 globally unique；或加 lint / schema check 強制此 invariant；或重新命名其中一個語法點（建議將 N3 變體改名以保留 N2 的「〜ものの」「〜どころか」原 slug）。
 
+**Outcome**: 採 descriptor convention：低等級保留 bare slug，高等級加受控 descriptor（N2 `monono-formal`, `dokoroka-formal`）。`GrammarPoint` 加入 `nuance_note` / `related_slugs`，`lint-grammar` 強制全域 slug 唯一與 related slug 不懸空，static examples dump 改為 flat `<slug>.jsonl`，`getGrammarExamples(slug)` 移除 level 參數。
+
 **Tags**: P2, content
 **Source**: PR #34 risk-reviewer
+**See**: DECISIONS.md#2026-05-05--grammar-slug-uniqueness-via-descriptor-convention
 <!-- 首次記錄: 2026-05-05 -->
 
 ## JS-024 — corpus 縮水偵測
@@ -221,6 +228,8 @@
 
 **Requirement**: 評估 (a) 收斂到 quizCapable + 容忍 bundle 帶字串，(b) 在 capabilities layer 引入 `srsCapable` / `dueCountCapable` 並讓 capabilities 同時感知 build-mode，(c) 維持現狀並加註解說明為何兩 flag。決策後落地。
 
+**Note 2026-05-05**: JS-023 已移除 `getGrammarExamples(slug, level?)` 的 optional level 參數；PR #34 的 level leak 其中一個 load-bearing case 已解決。HomePage build-time flag vs runtime capability 收斂仍獨立保留待評估。
+
 **Tags**: P3, frontend
 **Source**: PR #34 critic + architecture-reviewer (low)
 <!-- 首次記錄: 2026-05-05 -->
@@ -287,4 +296,50 @@
 **Source**: PR #35 round-1 critic (medium)
 <!-- 首次記錄: 2026-05-05 -->
 
+## JS-036 — lint-grammar reciprocity + level-dir match
 
+**Problem**: `scripts/lint-grammar.sh` 在 PR #36 強制全域 slug 唯一與 related_slugs 不懸空，但缺兩個 invariant：(a) `jlpt_level` 必須等於父目錄名（N3/foo.json 的 jlpt_level 必須是 N3）；(b) related_slugs 雙向對稱（A 列 B 則 B 必須列 A）。沒有檢查時 authoring 錯誤會默默通過。
+
+**Why**: 控制詞彙文件設計依賴雙向 invariant，但目前只靠 reviewer 注意。下次 collision 進來容易 drift。
+
+**Requirement**: lint-grammar 加兩個 pass — (1) jq 比較 .jlpt_level 與從 path 推導的 level；(2) 建 related-edge set 檢查每個 (A,B) 都有對應 (B,A)。同步擴 test-lint-grammar.sh fixture。
+
+**Tags**: P3, content
+**Source**: PR #36 round-1 critic (medium)
+<!-- 首次記錄: 2026-05-05 -->
+
+## JS-037 — nuance_note 渲染樣式提升
+
+**Problem**: GrammarTab 把 nuance_note 渲染成 text-xs italic slate-500，緊接在 title-zh subtitle（也是 slate-500）下面，視覺被壓得最輕。但這是新增的、有編輯價值的對比說明，應更顯眼。
+
+**Why**: 目前文字密度跟周邊一致，使用者可能直接跳過 nuance_note 不看。
+
+**Requirement**: 試 (a) 升級為 text-sm slate-600；或 (b) 包進類似「相關用法」的小邊框/背景塊；或 (c) 加 icon prefix。需 design 試做 + 學習者觀感檢驗。
+
+**Tags**: P3, frontend
+**Source**: PR #36 round-1 critic (low)
+<!-- 首次記錄: 2026-05-05 -->
+
+## JS-038 — GitHub Pages 部署 cache 過渡視窗
+
+**Problem**: PR #36 把 dump 路徑從 `data/grammar-examples/<level>/<slug>.jsonl` 改成 flat `data/grammar-examples/<slug>.jsonl`。已開啟 site 的使用者持有舊 JS bundle，部署後仍打舊路徑導致 404。`staticApi.getGrammarExamples` 把任何錯誤吞為空陣列，使用者看到「無例文」與「真的沒例文」無法區分。
+
+**Why**: Vite 對 JS 做 hash bundling，所以 reload 後會自動取得新 bundle，但已開的 tab 不會 reload。風險區間：「跨部署仍開著 tab 的使用者」。
+
+**Requirement**: 評估 (a) 兩次部署過渡（先寫 dual-path 一次部署，再純 flat 一次部署）；或 (b) 接受並文件化過渡風險；或 (c) staticApi 看到 404 顯示 inline 提示「請重新載入頁面」。
+
+**Tags**: P3, ops
+**Source**: PR #36 round-1 risk-reviewer (medium)
+<!-- 首次記錄: 2026-05-05 -->
+
+## JS-039 — staticApi slug encodeURIComponent 一致性
+
+**Problem**: `web/src/api.ts` httpApi 的 grammar slug 路徑用 `encodeURIComponent(slug)`，但 `web/src/staticApi.ts` 的 getGrammarExamples 直接 `${slug}` 插值，沒 encode。今天因為 corpus 是 repo-controlled 且 lint-grammar 強制 `[a-z0-9-]+` shape 沒有 attacker reach，但 defense-in-depth 應收齊。
+
+**Why**: 若未來有 caller 傳非受控 slug，staticApi 路徑就有 path-traversal / URL injection 風險；兩端應 posture 一致。
+
+**Requirement**: staticApi.getGrammarExamples 與 getGrammar 都用 `encodeURIComponent(slug)` 包；或在進入 staticApi 前 assert `/^[a-z0-9-]+$/.test(slug)`。
+
+**Tags**: P3, frontend
+**Source**: PR #36 round-1 security-reviewer (low, defense-in-depth)
+<!-- 首次記錄: 2026-05-05 -->

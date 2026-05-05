@@ -21,13 +21,10 @@ for level in N5 N4 N3 N2 N1; do
 		continue
 	fi
 
-	level_out_dir="$out_dir/$level"
-	mkdir -p "$level_out_dir"
-
 	for src in "$src_dir"/*.examples.jsonl; do
 		file_name=$(basename "$src")
 		slug=${file_name%.examples.jsonl}
-		out="$level_out_dir/$slug.jsonl"
+		out="$out_dir/$slug.jsonl"
 
 		jq -s -c '
 			map(select(.is_correct == 1))

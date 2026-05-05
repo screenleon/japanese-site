@@ -186,13 +186,10 @@ export const staticApi: Api = {
     return found;
   },
 
-  async getGrammarExamples(slug: string, level?: string) {
+  async getGrammarExamples(slug: string) {
     try {
-      const path = level
-        ? `grammar-examples/${level}/${slug}.jsonl`
-        : `grammar-examples/${slug}.jsonl`;
       const examples = await fetchJSONL<GrammarExample>(
-        path
+        `grammar-examples/${slug}.jsonl`
       );
       return { examples, count: examples.length };
     } catch {

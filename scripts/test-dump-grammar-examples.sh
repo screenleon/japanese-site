@@ -22,11 +22,11 @@ cat > "$tmp_root/server/data/corpus/grammar/N3/monono.examples.jsonl" <<'JSONL'
 {"text_ja":"___ placeholder should not survive","blank":"bad","text_zh":"wrong row","is_correct":0}
 JSONL
 
-cat > "$tmp_root/server/data/corpus/grammar/N3/sae.examples.jsonl" <<'JSONL'
+cat > "$tmp_root/server/data/corpus/grammar/N3/sae-ba.examples.jsonl" <<'JSONL'
 {"text_ja":"名前___書けばいい。","blank":"さえ","text_zh":"只要寫名字就好。","is_correct":1}
 JSONL
 
-cat > "$tmp_root/server/data/corpus/grammar/N2/monono.examples.jsonl" <<'JSONL'
+cat > "$tmp_root/server/data/corpus/grammar/N2/monono-formal.examples.jsonl" <<'JSONL'
 {"text_ja":"説明は受けた___、納得できない。","blank":"ものの","text_zh":"雖然聽了說明，但不能接受。","is_correct":1}
 JSONL
 
@@ -36,11 +36,12 @@ JSONL
 
 ROOT_DIR="$tmp_root" bash scripts/dump-grammar-examples.sh >/tmp/test-dump-grammar-examples.log
 
-test -f "$tmp_root/web/public/data/grammar-examples/N3/monono.jsonl"
-test -f "$tmp_root/web/public/data/grammar-examples/N3/sae.jsonl"
-test -f "$tmp_root/web/public/data/grammar-examples/N2/monono.jsonl"
-test -f "$tmp_root/web/public/data/grammar-examples/N2/sae.jsonl"
+test -f "$tmp_root/web/public/data/grammar-examples/monono.jsonl"
+test -f "$tmp_root/web/public/data/grammar-examples/sae.jsonl"
+test -f "$tmp_root/web/public/data/grammar-examples/monono-formal.jsonl"
 test ! -e "$tmp_root/web/public/data/grammar-examples/stale.jsonl"
+test ! -d "$tmp_root/web/public/data/grammar-examples/N2"
+test ! -d "$tmp_root/web/public/data/grammar-examples/N3"
 
 if grep -R '___' "$tmp_root/web/public/data/grammar-examples" >/dev/null; then
 	echo "test-dump-grammar-examples: placeholder survived" >&2
@@ -53,10 +54,10 @@ if grep -R '"hint"\|"license"\|wrong row' "$tmp_root/web/public/data/grammar-exa
 fi
 
 jq -e 'keys == ["id","text_ja","text_zh"]' \
-	"$tmp_root/web/public/data/grammar-examples/N3/monono.jsonl" >/dev/null
+	"$tmp_root/web/public/data/grammar-examples/monono.jsonl" >/dev/null
 jq -e '.text_ja == "行くものの、時間がない。"' \
-	"$tmp_root/web/public/data/grammar-examples/N3/monono.jsonl" >/dev/null
+	"$tmp_root/web/public/data/grammar-examples/monono.jsonl" >/dev/null
 jq -e '.text_ja == "説明は受けたものの、納得できない。"' \
-	"$tmp_root/web/public/data/grammar-examples/N2/monono.jsonl" >/dev/null
+	"$tmp_root/web/public/data/grammar-examples/monono-formal.jsonl" >/dev/null
 
 echo "test-dump-grammar-examples: fixture passed"

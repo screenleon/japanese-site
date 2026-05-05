@@ -25,12 +25,14 @@ type Question struct {
 }
 
 type GrammarPoint struct {
-	Slug          string `json:"slug"`
-	TitleJA       string `json:"title_ja"`
-	TitleZH       string `json:"title_zh"`
-	JLPTLevel     string `json:"jlpt_level"`
-	ExplanationJA string `json:"explanation_ja,omitempty"`
-	ExplanationZH string `json:"explanation_zh"`
+	Slug          string   `json:"slug"`
+	TitleJA       string   `json:"title_ja"`
+	TitleZH       string   `json:"title_zh"`
+	JLPTLevel     string   `json:"jlpt_level"`
+	NuanceNote    string   `json:"nuance_note,omitempty"`
+	RelatedSlugs  []string `json:"related_slugs,omitempty"`
+	ExplanationJA string   `json:"explanation_ja,omitempty"`
+	ExplanationZH string   `json:"explanation_zh"`
 }
 
 type GrammarExample struct {
@@ -213,13 +215,19 @@ func GetQuestion(ctx context.Context, db *DB, id string) (Question, error) {
 
 func GetGrammarPoint(ctx context.Context, db *DB, slug string) (GrammarPoint, error) {
 	row := db.QueryRowContext(ctx, `
-		SELECT slug, title_ja, title_zh, jlpt_level, COALESCE(explanation_ja, ''), explanation_zh
+		SELECT slug, title_ja, title_zh, jlpt_level,
+		       COALESCE(nuance_note, ''), COALESCE(related_slugs, ''),
+		       COALESCE(explanation_ja, ''), explanation_zh
 		FROM grammar_point WHERE slug = ?`, slug)
 	var gp GrammarPoint
-	if err := row.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
+	var relatedSlugs string
+	if err := row.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.NuanceNote, &relatedSlugs, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return GrammarPoint{}, ErrGrammarPointNotFound
 		}
+		return GrammarPoint{}, err
+	}
+	if err := decodeStringSlice(relatedSlugs, &gp.RelatedSlugs); err != nil {
 		return GrammarPoint{}, err
 	}
 	return gp, nil
@@ -250,7 +258,9 @@ func GetGrammarExamples(ctx context.Context, db *DB, slug string) ([]GrammarExam
 }
 
 func RandomGrammarPoint(ctx context.Context, db *DB, jlpt string) (GrammarPoint, error) {
-	q := `SELECT slug, title_ja, title_zh, jlpt_level, COALESCE(explanation_ja, ''), explanation_zh
+	q := `SELECT slug, title_ja, title_zh, jlpt_level,
+	             COALESCE(nuance_note, ''), COALESCE(related_slugs, ''),
+	             COALESCE(explanation_ja, ''), explanation_zh
 	      FROM grammar_point WHERE 1 = 1`
 	args := []any{}
 	if jlpt != "" {
@@ -261,17 +271,23 @@ func RandomGrammarPoint(ctx context.Context, db *DB, jlpt string) (GrammarPoint,
 
 	row := db.QueryRowContext(ctx, q, args...)
 	var gp GrammarPoint
-	if err := row.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
+	var relatedSlugs string
+	if err := row.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.NuanceNote, &relatedSlugs, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return GrammarPoint{}, ErrGrammarPointNotFound
 		}
+		return GrammarPoint{}, err
+	}
+	if err := decodeStringSlice(relatedSlugs, &gp.RelatedSlugs); err != nil {
 		return GrammarPoint{}, err
 	}
 	return gp, nil
 }
 
 func ListGrammarPoints(ctx context.Context, db *DB, jlpt string) ([]GrammarPoint, error) {
-	q := `SELECT slug, title_ja, title_zh, jlpt_level, COALESCE(explanation_ja, ''), explanation_zh
+	q := `SELECT slug, title_ja, title_zh, jlpt_level,
+	             COALESCE(nuance_note, ''), COALESCE(related_slugs, ''),
+	             COALESCE(explanation_ja, ''), explanation_zh
 	      FROM grammar_point`
 	args := []any{}
 	if jlpt != "" {
@@ -287,10 +303,21 @@ func ListGrammarPoints(ctx context.Context, db *DB, jlpt string) ([]GrammarPoint
 	var out []GrammarPoint
 	for rows.Next() {
 		var gp GrammarPoint
-		if err := rows.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
+		var relatedSlugs string
+		if err := rows.Scan(&gp.Slug, &gp.TitleJA, &gp.TitleZH, &gp.JLPTLevel, &gp.NuanceNote, &relatedSlugs, &gp.ExplanationJA, &gp.ExplanationZH); err != nil {
+			return nil, err
+		}
+		if err := decodeStringSlice(relatedSlugs, &gp.RelatedSlugs); err != nil {
 			return nil, err
 		}
 		out = append(out, gp)
 	}
 	return out, rows.Err()
+}
+
+func decodeStringSlice(raw string, dst *[]string) error {
+	if raw == "" {
+		return nil
+	}
+	return json.Unmarshal([]byte(raw), dst)
 }
