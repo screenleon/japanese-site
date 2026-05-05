@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { api, type GrammarExample, type GrammarPoint } from "../api";
+import { api, isApiError, type GrammarExample, type GrammarPoint } from "../api";
 import { useReadTracking } from "../hooks/useReadTracking";
 
 const levels = ["N5", "N4", "N3", "N2", "N1"];
@@ -15,9 +15,11 @@ export function GrammarTab({
   const [selectedLevel, setSelectedLevel] = useState("N5");
   const [activeSlug, setActiveSlug] = useState("");
   const [examples, setExamples] = useState<GrammarExample[]>([]);
+  const [examplesFailed, setExamplesFailed] = useState(false);
   const [showTranslation, setShowTranslation] = useState(false);
   const [loading, setLoading] = useState(true);
   const initialSlugApplied = useRef(false);
+  const skipExamplesForInitialSlug = useRef(false);
   const preserveActiveOnLevelChange = useRef(false);
   const [loadingRandom, setLoadingRandom] = useState(false);
   const [err, setErr] = useState("");
@@ -52,6 +54,7 @@ export function GrammarTab({
     const target = points.find((p) => p.slug === initialSlug);
     if (target) {
       initialSlugApplied.current = true;
+      skipExamplesForInitialSlug.current = true;
       setSelectedLevel(target.jlpt_level);
       setActiveSlug(target.slug);
     }
@@ -97,6 +100,13 @@ export function GrammarTab({
   useEffect(() => {
     let cancelled = false;
     setExamples([]);
+    setExamplesFailed(false);
+    if (skipExamplesForInitialSlug.current) {
+      skipExamplesForInitialSlug.current = false;
+      return () => {
+        cancelled = true;
+      };
+    }
     if (!active?.slug || !api.getGrammarExamples) {
       return () => {
         cancelled = true;
@@ -107,8 +117,12 @@ export function GrammarTab({
       .then((r) => {
         if (!cancelled) setExamples((r.examples || []).slice(0, 5));
       })
-      .catch(() => {
-        if (!cancelled) setExamples([]);
+      .catch((err) => {
+        console.warn("grammar examples fetch failed", err);
+        if (!cancelled) {
+          setExamples([]);
+          setExamplesFailed(!isApiError(err, "not_found"));
+        }
       });
     return () => {
       cancelled = true;
@@ -225,19 +239,23 @@ export function GrammarTab({
                 <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed">
                   {primaryExplanation}
                 </pre>
-                {examples.length > 0 && (
+                {(examples.length > 0 || examplesFailed) && (
                   <section className="mt-6 border-t border-slate-200 pt-5">
                     <h3 className="text-base font-medium">例文</h3>
-                    <ul className="mt-3 space-y-3">
-                      {examples.map((example) => (
-                        <li key={example.id}>
-                          <p className="text-sm leading-relaxed text-slate-900">
-                            {example.text_ja}
-                          </p>
-                          <p className="mt-1 text-sm text-slate-500">{example.text_zh}</p>
-                        </li>
-                      ))}
-                    </ul>
+                    {examples.length === 0 ? (
+                      <p className="mt-2 text-sm text-slate-500">例文を表示できません。</p>
+                    ) : (
+                      <ul className="mt-3 space-y-3">
+                        {examples.map((example) => (
+                          <li key={example.id}>
+                            <p className="text-sm leading-relaxed text-slate-900">
+                              {example.text_ja}
+                            </p>
+                            <p className="mt-1 text-sm text-slate-500">{example.text_zh}</p>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </section>
                 )}
                 {relatedPoints.length > 0 && (

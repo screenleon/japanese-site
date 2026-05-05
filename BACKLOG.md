@@ -25,9 +25,9 @@
 | JS-018 | ✅ closed 2026-05-02 | github.io 靜態部署 | frontend/ops | 2026-05-02 | decisions:#2026-05-02-js-018-github-pages-static-deployment-scope |
 | JS-023 | ✅ closed 2026-05-05 | 跨等級 slug 唯一性 | content | 2026-05-05 | pr:#34 |
 | JS-024 | 🔵 active | corpus 縮水偵測 | ops | 2026-05-05 | pr:#34 |
-| JS-025 | ✅ closed 2026-05-06 | 子資源錯誤不該打掛主視圖 | frontend | 2026-05-05 | pr:#TBD |
+| JS-025 | ✅ closed 2026-05-06 | 子資源錯誤不該打掛主視圖 | frontend | 2026-05-05 | pr:#38 |
 | JS-026 | 🔵 active | dump pipeline 整合進 bake-static | arch | 2026-05-05 | pr:#34 |
-| JS-027 | ✅ closed 2026-05-06 | staticApi 統一 fault model | arch | 2026-05-05 | pr:#TBD |
+| JS-027 | ✅ closed 2026-05-06 | staticApi 統一 fault model | arch | 2026-05-05 | pr:#38 |
 | JS-028 | 🔵 active | CC-BY-SA attribution 落地 | content | 2026-05-05 | pr:#34 |
 | JS-029 | 🔵 active | HomePage flag 二元收斂評估 | frontend | 2026-05-05 | pr:#34 |
 | JS-030 | ✅ closed 2026-05-05 | Cloud 副標 mode-aware | frontend | 2026-05-05 | pr:#34 |
@@ -180,7 +180,7 @@
 ## JS-025 — 子資源錯誤不該打掛主視圖 ✅ 2026-05-06
 
 **Outcome**: GrammarTab 的 examples 子資源失敗改為靜默空陣列，不再污染 page-level err；主文法內容可正常渲染。
-**See**: pr:#TBD
+**See**: pr:#38
 
 ## JS-026 — dump pipeline 整合進 bake-static
 
@@ -197,7 +197,7 @@
 ## JS-027 — staticApi 統一 fault model ✅ 2026-05-06
 
 **Outcome**: staticApi 的 fetchJSON/fetchJSONL 統一支援 opt-in 404 empty 行為；非 404 HTTP 錯誤保留為 ApiError 並向上傳遞。
-**See**: pr:#TBD
+**See**: pr:#38
 
 ## JS-028 — CC-BY-SA attribution 落地
 

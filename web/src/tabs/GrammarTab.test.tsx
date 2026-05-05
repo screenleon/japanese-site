@@ -7,24 +7,17 @@ vi.mock("../hooks/useReadTracking", () => ({
   useReadTracking: vi.fn(),
 }));
 
-vi.mock("../api", () => ({
-  ApiError: class ApiError extends Error {
-    readonly status: number;
-    readonly code: string;
-
-    constructor(status: number, statusText: string, code: string) {
-      super(`${status} ${statusText}${code ? `: ${code}` : ""}`);
-      this.name = "ApiError";
-      this.status = status;
-      this.code = code;
-    }
-  },
-  api: {
-    listGrammar: vi.fn(),
-    randomGrammar: vi.fn(),
-    getGrammarExamples: vi.fn(),
-  },
-}));
+vi.mock("../api", async () => {
+  const actual = await vi.importActual<typeof import("../api")>("../api");
+  return {
+    ...actual,
+    api: {
+      listGrammar: vi.fn(),
+      randomGrammar: vi.fn(),
+      getGrammarExamples: vi.fn(),
+    },
+  };
+});
 
 const points = [
   {
@@ -83,11 +76,16 @@ async function expectMainEntryWithoutExamples(errorText: RegExp) {
   expect(screen.getByRole("heading", { name: "考え方のヒント" })).toBeVisible();
   expect(screen.getByText("相關用法")).toBeVisible();
   expect(screen.queryByText("例文")).not.toBeInTheDocument();
+  expect(screen.queryByText("例文を表示できません。")).not.toBeInTheDocument();
   expect(screen.queryByText(errorText)).not.toBeInTheDocument();
+  expect(screen.queryByRole("alert")).toBeNull();
 }
 
 describe("GrammarTab", () => {
+  let warn: ReturnType<typeof vi.spyOn>;
+
   beforeEach(() => {
+    warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     listGrammar.mockResolvedValue({ points, count: points.length });
     randomGrammar.mockResolvedValue(points[1]);
     getGrammarExamples.mockResolvedValue({
@@ -104,6 +102,7 @@ describe("GrammarTab", () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    warn.mockRestore();
   });
 
   it("places the draw-random button inside the active article header", async () => {
@@ -165,16 +164,31 @@ describe("GrammarTab", () => {
     render(<GrammarTab initialSlug="monono" />);
 
     await expectMainEntryWithoutExamples(/not_found/);
+    expect(getGrammarExamples).toHaveBeenCalledWith("monono");
+    expect(getGrammarExamples).toHaveBeenCalledTimes(1);
+    expect(warn).toHaveBeenCalledWith(
+      "grammar examples fetch failed",
+      expect.objectContaining({ status: 404, code: "not_found" })
+    );
   });
 
   it("examples 500 — page renders main entry without crashing", async () => {
     getGrammarExamples.mockRejectedValue(
-      new ApiError(500, "Server Error", "server_error")
+      new ApiError(500, "Server Error", "http_error")
     );
 
     render(<GrammarTab initialSlug="monono" />);
 
-    await expectMainEntryWithoutExamples(/server_error/);
+    expect(await screen.findByRole("heading", { name: "ものの" })).toBeVisible();
+    expect(await screen.findByText("例文を表示できません。")).toBeVisible();
+    expect(screen.queryByText(/http_error/)).not.toBeInTheDocument();
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(getGrammarExamples).toHaveBeenCalledWith("monono");
+    expect(getGrammarExamples).toHaveBeenCalledTimes(1);
+    expect(warn).toHaveBeenCalledWith(
+      "grammar examples fetch failed",
+      expect.objectContaining({ status: 500, code: "http_error" })
+    );
   });
 
   it("examples network reject — page renders main entry without crashing", async () => {
@@ -182,7 +196,16 @@ describe("GrammarTab", () => {
 
     render(<GrammarTab initialSlug="monono" />);
 
-    await expectMainEntryWithoutExamples(/network down/);
+    expect(await screen.findByRole("heading", { name: "ものの" })).toBeVisible();
+    expect(await screen.findByText("例文を表示できません。")).toBeVisible();
+    expect(screen.queryByText(/network down/)).not.toBeInTheDocument();
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(getGrammarExamples).toHaveBeenCalledWith("monono");
+    expect(getGrammarExamples).toHaveBeenCalledTimes(1);
+    expect(warn).toHaveBeenCalledWith(
+      "grammar examples fetch failed",
+      expect.objectContaining({ message: "network down" })
+    );
   });
 
   it("renders nuance_note for the active grammar point", async () => {

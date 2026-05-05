@@ -17,9 +17,11 @@ import type {
 } from "./apiTypes";
 
 const levels = ["N1", "N2", "N3", "N4", "N5"];
-const jsonlCache = new Map<string, Promise<unknown[]>>();
-const jsonCache = new Map<string, Promise<unknown>>();
-type FetchOptions = { on404?: "empty" | "throw" };
+const jsonlCache = new Map<string, Promise<unknown[] | ApiError>>();
+const jsonCache = new Map<string, Promise<unknown | ApiError>>();
+type EmptyArrayFetchOptions = { on404: "empty-array" };
+type ThrowFetchOptions = { on404?: "throw" };
+type FetchOptions = EmptyArrayFetchOptions | ThrowFetchOptions;
 
 export function resetStaticApiCachesForTest() {
   jsonCache.clear();
@@ -32,54 +34,103 @@ function dataPath(path: string): string {
   return `${base.replace(/\/$/, "")}/data/${path.replace(/^\//, "")}`;
 }
 
+async function fetchJSON<T>(path: string, options?: ThrowFetchOptions): Promise<T>;
+async function fetchJSON<T extends readonly unknown[]>(
+  path: string,
+  options: EmptyArrayFetchOptions
+): Promise<T>;
 async function fetchJSON<T>(path: string, options: FetchOptions = {}): Promise<T> {
   const url = dataPath(path);
   const on404 = options.on404 ?? "throw";
-  const cacheKey = `${url}|404:${on404}`;
-  if (!jsonCache.has(cacheKey)) {
-    const promise = fetch(url)
-      .then(async (response) => {
-        if (response.status === 404 && on404 === "empty") return [] as T;
-        if (!response.ok) throw staticFetchError(response);
-        return response.json();
-      })
-      .catch((error) => {
-        jsonCache.delete(cacheKey);
-        throw error;
-      });
-    jsonCache.set(cacheKey, promise);
+  if (!jsonCache.has(url)) {
+    jsonCache.set(url, fetchJSONRaw(url));
   }
-  return jsonCache.get(cacheKey) as Promise<T>;
+
+  const result = await jsonCache.get(url)!;
+  if (result instanceof ApiError) {
+    if (result.status === 404 && on404 === "empty-array") {
+      return [] as unknown as T;
+    }
+    if (result.status !== 404) jsonCache.delete(url);
+    throw result;
+  }
+  return result as T;
 }
 
-async function fetchJSONL<T>(path: string, options: FetchOptions = {}): Promise<T[]> {
+async function fetchJSONL<T>(path: string, options?: ThrowFetchOptions): Promise<T[]>;
+async function fetchJSONL<T extends readonly unknown[]>(
+  path: string,
+  options: EmptyArrayFetchOptions
+): Promise<T>;
+async function fetchJSONL<T>(
+  path: string,
+  options: FetchOptions = {}
+): Promise<T[] | T> {
   const url = dataPath(path);
   const on404 = options.on404 ?? "throw";
-  const cacheKey = `${url}|404:${on404}`;
-  if (!jsonlCache.has(cacheKey)) {
-    const promise = fetch(url)
-      .then(async (response) => {
-        if (response.status === 404 && on404 === "empty") return [];
-        if (!response.ok) throw staticFetchError(response);
-        const text = await response.text();
-        return text
-          .split(/\r?\n/)
-          .map((line) => line.trim())
-          .filter(Boolean)
-          .map((line) => JSON.parse(line));
-      })
-      .catch((error) => {
-        jsonlCache.delete(cacheKey);
-        throw error;
-      });
-    jsonlCache.set(cacheKey, promise);
+  if (!jsonlCache.has(url)) {
+    jsonlCache.set(url, fetchJSONLRaw(url));
   }
-  return jsonlCache.get(cacheKey) as Promise<T[]>;
+
+  const result = await jsonlCache.get(url)!;
+  if (result instanceof ApiError) {
+    if (result.status === 404 && on404 === "empty-array") {
+      return [] as unknown as T;
+    }
+    if (result.status !== 404) jsonlCache.delete(url);
+    throw result;
+  }
+  return result as T[];
+}
+
+async function fetchJSONRaw(url: string): Promise<unknown | ApiError> {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) return staticFetchError(response);
+    try {
+      return await response.json();
+    } catch (error) {
+      return parseFetchError(response.status, error);
+    }
+  } catch (error) {
+    return networkFetchError(error);
+  }
+}
+
+async function fetchJSONLRaw(url: string): Promise<unknown[] | ApiError> {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) return staticFetchError(response);
+    const text = await response.text();
+    try {
+      return text
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line) => JSON.parse(line));
+    } catch (error) {
+      return parseFetchError(response.status, error);
+    }
+  } catch (error) {
+    return networkFetchError(error);
+  }
 }
 
 function staticFetchError(response: Response): ApiError {
   const code = response.status === 404 ? "not_found" : "http_error";
   return new ApiError(response.status, response.statusText, code);
+}
+
+function parseFetchError(status: number, cause: unknown): ApiError {
+  const error = new ApiError(status, "Parse Error", "parse_error");
+  (error as Error & { cause?: unknown }).cause = cause;
+  return error;
+}
+
+function networkFetchError(cause: unknown): ApiError {
+  const error = new ApiError(0, "Network Error", "network_error");
+  (error as Error & { cause?: unknown }).cause = cause;
+  return error;
 }
 
 function unsupported(): ApiError {
@@ -140,17 +191,50 @@ function stableID(level: string, index: number): number {
 
 async function loadGrammarLevel(
   level: string,
+  options?: ThrowFetchOptions
+): Promise<GrammarPoint[]>;
+async function loadGrammarLevel(
+  level: string,
+  options: EmptyArrayFetchOptions
+): Promise<GrammarPoint[]>;
+async function loadGrammarLevel(
+  level: string,
   options: FetchOptions = {}
 ): Promise<GrammarPoint[]> {
+  if (options.on404 === "empty-array") {
+    return fetchJSON<GrammarPoint[]>(`grammar/${level}.json`, {
+      on404: "empty-array",
+    });
+  }
   return fetchJSON<GrammarPoint[]>(`grammar/${level}.json`, options);
 }
 
 async function loadGrammarLevels(jlpt?: string): Promise<GrammarPoint[]> {
+  if (jlpt) {
+    return loadGrammarLevel(jlpt, { on404: "empty-array" });
+  }
+
   const groups = await Promise.all(
-    normalizeLevel(jlpt).map((level) => loadGrammarLevel(level, { on404: "empty" }))
+    levels.map(async (level) => {
+      try {
+        return await loadGrammarLevel(level, { on404: "empty-array" });
+      } catch (err) {
+        console.warn("grammar level rollup fetch failed", { level, err });
+        return [];
+      }
+    })
   );
   return groups.flat();
 }
+
+if (false) {
+  // @ts-expect-error on404 empty-array is only valid for array-shaped JSON.
+  void fetchJSON<GrammarPoint>("grammar/N1.json", { on404: "empty-array" });
+  // @ts-expect-error on404 empty-array is only valid for JSONL array result types.
+  void fetchJSONL<GrammarExample>("grammar-examples/sae.jsonl", { on404: "empty-array" });
+}
+
+export const staticApiTestHooks = { fetchJSON, fetchJSONL };
 
 export const staticApi: Api = {
   async searchVocab(q: string, jlpt?: string) {
@@ -196,9 +280,9 @@ export const staticApi: Api = {
   },
 
   async getGrammarExamples(slug: string) {
-    const examples = await fetchJSONL<GrammarExample>(
+    const examples = await fetchJSONL<GrammarExample[]>(
       `grammar-examples/${slug}.jsonl`,
-      { on404: "empty" }
+      { on404: "empty-array" }
     );
     return { examples, count: examples.length };
   },
