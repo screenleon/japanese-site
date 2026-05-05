@@ -239,6 +239,18 @@ items:
       - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
       - "Validated: npm run build"
 
+  - id: JS-040
+    title: Add nested annotations schema spike
+    status: doing
+    priority: P2
+    milestone: content
+    area: content/backend/frontend
+    source: ADR-0001
+    notes:
+      - Schema spike landed via PR #TBD; full content rollout follows.
+      - Add nested annotations object across vocab and grammar with six allowed kinds.
+      - Keep grammar mental_model and nuance_note flat fields during transition; frontend reads nested first and flat fields as fallback.
+
   - id: JS-041
     title: Add grammar mental_model MVP
     status: done

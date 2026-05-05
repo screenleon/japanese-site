@@ -1,8 +1,27 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { api, isApiError, type GrammarExample, type GrammarPoint } from "../api";
+import {
+  api,
+  isApiError,
+  type Annotations,
+  type GrammarExample,
+  type GrammarPoint,
+} from "../api";
+import { EntryAnnotations } from "../components/EntryAnnotations";
 import { useReadTracking } from "../hooks/useReadTracking";
 
 const levels = ["N5", "N4", "N3", "N2", "N1"];
+
+function mergeFromGrammarPoint(point: GrammarPoint): Annotations {
+  return {
+    ...point.annotations,
+    mental_model: point.annotations?.mental_model ?? point.mental_model,
+    nuance_note: point.annotations?.nuance_note ?? point.nuance_note,
+  };
+}
+
+function hasAnnotations(annotations: Annotations) {
+  return Object.values(annotations).some((value) => value?.trim());
+}
 
 export function GrammarTab({
   initialSlug,
@@ -216,24 +235,12 @@ export function GrammarTab({
                     {active.jlpt_level} · {active.title_zh}
                   </p>
                 </header>
-                {(active.nuance_note || active.mental_model) && (
-                  <div className="mb-4 grid gap-3 sm:grid-cols-2">
-                    {active.nuance_note && (
-                      <aside className="rounded-md border border-sky-200 bg-sky-50 px-4 py-3">
-                        <h3 className="text-sm font-semibold text-sky-900">ニュアンス</h3>
-                        <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-sky-950">
-                          {active.nuance_note}
-                        </p>
-                      </aside>
-                    )}
-                    {active.mental_model && (
-                      <aside className="rounded-md border border-amber-200 bg-amber-50 px-4 py-3">
-                        <h3 className="text-sm font-semibold text-amber-900">考え方のヒント</h3>
-                        <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-amber-950">
-                          {active.mental_model}
-                        </p>
-                      </aside>
-                    )}
+                {hasAnnotations(mergeFromGrammarPoint(active)) && (
+                  <div className="mb-4">
+                    <EntryAnnotations
+                      annotations={mergeFromGrammarPoint(active)}
+                      kinds={["nuance_note", "mental_model"]}
+                    />
                   </div>
                 )}
                 <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed">

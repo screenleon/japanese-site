@@ -4,6 +4,7 @@ shopt -s nullglob
 
 ROOT_DIR=${ROOT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}
 GRAMMAR_ROOT=${GRAMMAR_ROOT:-"$ROOT_DIR/server/data/corpus/grammar"}
+ANNOTATION_KINDS_FILE=${ANNOTATION_KINDS_FILE:-"$ROOT_DIR/scripts/annotations-kinds.txt"}
 EXIT_CODE=0
 
 if ! command -v jq >/dev/null 2>&1; then
@@ -15,6 +16,24 @@ if [[ ! -d "$GRAMMAR_ROOT" ]]; then
 	echo "lint-grammar: missing grammar root: $GRAMMAR_ROOT" >&2
 	exit 1
 fi
+
+if [[ ! -f "$ANNOTATION_KINDS_FILE" ]]; then
+	echo "lint-grammar: missing annotation kinds file: $ANNOTATION_KINDS_FILE" >&2
+	exit 1
+fi
+
+mapfile -t ANNOTATION_KINDS < "$ANNOTATION_KINDS_FILE"
+is_annotation_kind() {
+	local candidate=$1
+	local known
+	for known in "${ANNOTATION_KINDS[@]}"; do
+		[[ -z "$known" ]] && continue
+		if [[ "$candidate" == "$known" ]]; then
+			return 0
+		fi
+	done
+	return 1
+}
 
 tmpdir=$(mktemp -d)
 cleanup() {
@@ -55,6 +74,22 @@ while IFS= read -r -d '' file; do
 
 	if ! jq -e '(.mental_model == null) or (.mental_model | type == "string" and (gsub("\\s"; "") | length > 0))' "$file" >/dev/null; then
 		echo "lint-grammar: $rel mental_model must be a non-empty string when present" >&2
+		EXIT_CODE=1
+	fi
+
+	if ! jq -e '(.annotations == null) or (.annotations | type == "object")' "$file" >/dev/null; then
+		echo "lint-grammar: $rel annotations must be an object when present" >&2
+		EXIT_CODE=1
+	fi
+	while IFS= read -r kind; do
+		[[ -z "$kind" ]] && continue
+		if ! is_annotation_kind "$kind"; then
+			echo "lint-grammar: $rel annotations has unsupported kind '$kind'" >&2
+			EXIT_CODE=1
+		fi
+	done < <(jq -r 'select(.annotations | type == "object") | .annotations | keys_unsorted[]' "$file")
+	if ! jq -e '(.annotations == null) or (.annotations | type != "object") or (.annotations | all(.[]; type == "string" and (gsub("\\s"; "") | length > 0)))' "$file" >/dev/null; then
+		echo "lint-grammar: $rel annotations values must be non-empty strings" >&2
 		EXIT_CODE=1
 	fi
 done < <(find "$GRAMMAR_ROOT" -mindepth 2 -maxdepth 2 -type f -name '*.json' -print0 | sort -z)

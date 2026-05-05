@@ -61,6 +61,29 @@ const points = [
     related_slugs: ["monono"],
     explanation_zh: "書面逆接。",
   },
+  {
+    slug: "te-iru",
+    title_ja: "ている",
+    title_zh: "ている",
+    jlpt_level: "N3",
+    mental_model: "flat mental model should not render when nested exists",
+    annotations: {
+      mental_model: "nested mental model wins",
+      nuance_note: "nested nuance renders",
+    },
+    explanation_zh: "正在／狀態。",
+  },
+  {
+    slug: "empty-nested",
+    title_ja: "空文字",
+    title_zh: "empty nested",
+    jlpt_level: "N3",
+    mental_model: "flat mental model must not replace empty nested",
+    annotations: {
+      mental_model: "",
+    },
+    explanation_zh: "空文字の遷移確認。",
+  },
 ];
 
 const listGrammar = vi.mocked(api.listGrammar);
@@ -235,6 +258,23 @@ describe("GrammarTab", () => {
       screen.queryByText(
         "前件を事実として置いたうえで、後件で予想から外れる結果を示す。逆接を一つの流れとして読むことで、単なる接続詞ではなく判断の向きを意識できる。"
       )
+    ).not.toBeInTheDocument();
+  });
+
+  it("prefers nested annotations over flat transition fields", async () => {
+    render(<GrammarTab initialSlug="te-iru" />);
+
+    expect(await screen.findByText("nested mental model wins")).toBeVisible();
+    expect(screen.getByText("nested nuance renders")).toBeVisible();
+    expect(screen.queryByText("flat mental model should not render when nested exists")).not.toBeInTheDocument();
+  });
+
+  it("does not fall back to flat fields when nested annotations contain an empty string", async () => {
+    render(<GrammarTab initialSlug="empty-nested" />);
+
+    expect(await screen.findByRole("heading", { name: "空文字" })).toBeVisible();
+    expect(
+      screen.queryByText("flat mental model must not replace empty nested")
     ).not.toBeInTheDocument();
   });
 

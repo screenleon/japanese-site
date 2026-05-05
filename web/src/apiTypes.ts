@@ -16,10 +16,23 @@ export interface VocabRow {
   gloss_zh?: string;
   jlpt_level?: string;
   frequency_rank?: number;
+  annotations?: Annotations;
   source: string;
   license: string;
   validated_by?: string;
 }
+
+export const ANNOTATION_KINDS = [
+  "usage",
+  "collocations",
+  "particle_pairing",
+  "synonym_diff",
+  "mental_model",
+  "nuance_note",
+] as const;
+
+export type AnnotationKind = typeof ANNOTATION_KINDS[number];
+export type Annotations = Partial<Record<AnnotationKind, string>>;
 
 export interface Kanji {
   id: number;
@@ -53,6 +66,7 @@ export interface GrammarPoint {
   jlpt_level: string;
   nuance_note?: string;
   mental_model?: string;
+  annotations?: Annotations;
   related_slugs?: string[];
   explanation_ja?: string;
   explanation_zh: string;

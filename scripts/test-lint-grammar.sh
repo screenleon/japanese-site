@@ -23,6 +23,9 @@ cat > "$grammar_root/N3/monono.json" <<'JSON'
   "jlpt_level": "N3",
   "nuance_note": "口語・くだけた逆接。",
   "mental_model": "前件を事実として置き、後件で予想外の結果を見る。",
+  "annotations": {
+    "mental_model": "前件を事実として置き、後件で予想外の結果を見る。"
+  },
   "related_slugs": ["monono-formal"],
   "explanation_zh": "雖然但是",
   "source": "curated",
@@ -70,5 +73,35 @@ if GRAMMAR_ROOT="$dangling_root" bash scripts/lint-grammar.sh >/tmp/test-lint-gr
 	exit 1
 fi
 grep -F "related_slugs points to missing slug 'missing-slug'" /tmp/test-lint-grammar-dangling.err >/dev/null
+
+unknown_annotation_root="$tmp_root/unknown-annotation"
+cp -R "$grammar_root" "$unknown_annotation_root"
+jq '.annotations.foo = "bad kind"' "$unknown_annotation_root/N3/monono.json" > "$unknown_annotation_root/N3/monono.tmp"
+mv "$unknown_annotation_root/N3/monono.tmp" "$unknown_annotation_root/N3/monono.json"
+if GRAMMAR_ROOT="$unknown_annotation_root" bash scripts/lint-grammar.sh >/tmp/test-lint-grammar-unknown-annotation.out 2>/tmp/test-lint-grammar-unknown-annotation.err; then
+	echo "test-lint-grammar: unknown annotation kind fixture unexpectedly passed" >&2
+	exit 1
+fi
+grep -F "annotations has unsupported kind 'foo'" /tmp/test-lint-grammar-unknown-annotation.err >/dev/null
+
+empty_annotation_root="$tmp_root/empty-annotation"
+cp -R "$grammar_root" "$empty_annotation_root"
+jq '.annotations.usage = ""' "$empty_annotation_root/N3/monono.json" > "$empty_annotation_root/N3/monono.tmp"
+mv "$empty_annotation_root/N3/monono.tmp" "$empty_annotation_root/N3/monono.json"
+if GRAMMAR_ROOT="$empty_annotation_root" bash scripts/lint-grammar.sh >/tmp/test-lint-grammar-empty-annotation.out 2>/tmp/test-lint-grammar-empty-annotation.err; then
+	echo "test-lint-grammar: empty annotation value fixture unexpectedly passed" >&2
+	exit 1
+fi
+grep -F "annotations values must be non-empty strings" /tmp/test-lint-grammar-empty-annotation.err >/dev/null
+
+non_string_annotation_root="$tmp_root/non-string-annotation"
+cp -R "$grammar_root" "$non_string_annotation_root"
+jq '.annotations.usage = 123' "$non_string_annotation_root/N3/monono.json" > "$non_string_annotation_root/N3/monono.tmp"
+mv "$non_string_annotation_root/N3/monono.tmp" "$non_string_annotation_root/N3/monono.json"
+if GRAMMAR_ROOT="$non_string_annotation_root" bash scripts/lint-grammar.sh >/tmp/test-lint-grammar-non-string-annotation.out 2>/tmp/test-lint-grammar-non-string-annotation.err; then
+	echo "test-lint-grammar: non-string annotation value fixture unexpectedly passed" >&2
+	exit 1
+fi
+grep -F "annotations values must be non-empty strings" /tmp/test-lint-grammar-non-string-annotation.err >/dev/null
 
 echo "test-lint-grammar: fixture passed"
