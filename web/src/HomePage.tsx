@@ -15,9 +15,12 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
   const [vocabCount, setVocabCount] = useState<number | null>(null);
   const [dueCount, setDueCount] = useState<DueCount | null>(null);
   const [error, setError] = useState("");
-  const isStaticBuild =
+  const deployMode =
+    (globalThis as { process?: { env?: { VITE_DEPLOY_MODE?: string } } }).process
+      ?.env?.VITE_DEPLOY_MODE ??
     (import.meta as ImportMeta & { env: { VITE_DEPLOY_MODE?: string } }).env
-      .VITE_DEPLOY_MODE === "static";
+      .VITE_DEPLOY_MODE;
+  const isStaticBuild = deployMode === "static";
   const showQuizControls = !isStaticBuild;
 
   useEffect(() => {
@@ -61,7 +64,9 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
             日本語学習
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
-            用文法、單字與測驗建立穩定的日文練習節奏。
+            {isStaticBuild
+              ? "查閱文法說明、單字與漢字，隨時作為學習參考。"
+              : "用文法、單字與測驗建立穩定的日文練習節奏。"}
           </p>
         </div>
 

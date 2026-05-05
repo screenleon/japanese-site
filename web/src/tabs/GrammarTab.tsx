@@ -92,7 +92,7 @@ export function GrammarTab({
       };
     }
     api
-      .getGrammarExamples(active.slug)
+      .getGrammarExamples(active.slug, active.jlpt_level)
       .then((r) => {
         if (!cancelled) setExamples((r.examples || []).slice(0, 5));
       })
@@ -102,7 +102,7 @@ export function GrammarTab({
     return () => {
       cancelled = true;
     };
-  }, [active?.slug]);
+  }, [active?.slug, active?.jlpt_level]);
 
   async function drawRandomGrammar() {
     setLoadingRandom(true);
