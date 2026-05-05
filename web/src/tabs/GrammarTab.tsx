@@ -201,20 +201,27 @@ export function GrammarTab({
                   <p className="text-sm text-slate-500">
                     {active.jlpt_level} · {active.title_zh}
                   </p>
-                  {active.nuance_note && (
-                    <p className="mt-2 text-xs italic text-slate-500">
-                      {active.nuance_note}
-                    </p>
-                  )}
-                  {active.mental_model && (
-                    <section className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-4 py-3">
-                      <h3 className="text-sm font-semibold text-amber-900">思考のヒント</h3>
-                      <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-amber-950">
-                        {active.mental_model}
-                      </p>
-                    </section>
-                  )}
                 </header>
+                {(active.nuance_note || active.mental_model) && (
+                  <div className="mb-4 grid gap-3 sm:grid-cols-2">
+                    {active.nuance_note && (
+                      <aside className="rounded-md border border-sky-200 bg-sky-50 px-4 py-3">
+                        <h3 className="text-sm font-semibold text-sky-900">ニュアンス</h3>
+                        <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-sky-950">
+                          {active.nuance_note}
+                        </p>
+                      </aside>
+                    )}
+                    {active.mental_model && (
+                      <aside className="rounded-md border border-amber-200 bg-amber-50 px-4 py-3">
+                        <h3 className="text-sm font-semibold text-amber-900">考え方のヒント</h3>
+                        <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-amber-950">
+                          {active.mental_model}
+                        </p>
+                      </aside>
+                    )}
+                  </div>
+                )}
                 <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed">
                   {primaryExplanation}
                 </pre>

@@ -145,7 +145,7 @@ describe("GrammarTab", () => {
   it("renders mental_model for the active grammar point", async () => {
     render(<GrammarTab initialSlug="monono" />);
 
-    expect(await screen.findByRole("heading", { name: "思考のヒント" })).toBeVisible();
+    expect(await screen.findByRole("heading", { name: "考え方のヒント" })).toBeVisible();
     expect(
       screen.getByText(
         "前件を事実として置いたうえで、後件で予想から外れる結果を示す。逆接を一つの流れとして読むことで、単なる接続詞ではなく判断の向きを意識できる。"
@@ -157,7 +157,11 @@ describe("GrammarTab", () => {
     render(<GrammarTab initialSlug="sae" />);
 
     expect(await screen.findByRole("heading", { name: "〜さえ" })).toBeVisible();
-    expect(screen.queryByRole("heading", { name: "思考のヒント" })).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(
+        "前件を事実として置いたうえで、後件で予想から外れる結果を示す。逆接を一つの流れとして読むことで、単なる接続詞ではなく判断の向きを意識できる。"
+      )
+    ).not.toBeInTheDocument();
   });
 
   it("renders related grammar buttons and navigates to the variant", async () => {
