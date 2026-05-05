@@ -47,6 +47,10 @@ describe("HomePage", () => {
     expect(screen.getByText("JLPT N5–N1 文法說明")).toBeVisible();
     expect(screen.getByText("JLPT N5–N1 詞彙與例句")).toBeVisible();
     expect(screen.getByText("讀音・筆畫・部首")).toBeVisible();
+    // 漢字 NavCard has no count slot — pin against a regression that would
+    // render a "..." placeholder if the count!==undefined guard was removed.
+    const kanjiCard = screen.getByRole("button", { name: /^漢字/ });
+    expect(kanjiCard.querySelector("[data-testid='nav-count']")).toBeNull();
     expect(listGrammar).toHaveBeenCalledTimes(1);
     expect(searchVocab).toHaveBeenCalledWith("", undefined);
   });

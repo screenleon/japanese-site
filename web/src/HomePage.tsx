@@ -17,13 +17,13 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
   const [vocabCount, setVocabCount] = useState<number | null>(null);
   const [dueCount, setDueCount] = useState<DueCount | null>(null);
   const [error, setError] = useState("");
-  const testDeployMode =
-    (globalThis as { process?: { env?: { VITE_DEPLOY_MODE?: string } } }).process
-      ?.env?.VITE_DEPLOY_MODE;
+  // Read process.env first so test stubs (vi.stubEnv → process.env in node) win
+  // over the import.meta.env path that Vite injects at build time.
   const deployMode =
-    import.meta.env.MODE === "test"
-      ? testDeployMode ?? import.meta.env.VITE_DEPLOY_MODE
-      : import.meta.env.VITE_DEPLOY_MODE;
+    (globalThis as { process?: { env?: { VITE_DEPLOY_MODE?: string } } }).process
+      ?.env?.VITE_DEPLOY_MODE ??
+    (import.meta as ImportMeta & { env: { VITE_DEPLOY_MODE?: string } }).env
+      .VITE_DEPLOY_MODE;
   const isStaticBuild = deployMode === "static";
   const showQuizControls = !isStaticBuild && quizCapable;
 
@@ -159,7 +159,7 @@ function NavCard({
       <div className="flex items-baseline justify-between gap-3">
         <div className="text-2xl font-semibold text-slate-950">{label}</div>
         {count !== undefined && (
-          <div className="text-3xl font-semibold text-slate-950">
+          <div data-testid="nav-count" className="text-3xl font-semibold text-slate-950">
             {count === null ? "..." : count}
           </div>
         )}
