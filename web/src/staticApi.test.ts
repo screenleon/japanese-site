@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ApiError, isApiError } from "./api";
-import { resetStaticApiCachesForTest, staticApi } from "./staticApi";
+import { resetStaticApiCachesForTest, staticApi, staticApiTestHooks } from "./staticApi";
 
 const responses = new Map<string, string>();
 
@@ -18,6 +18,16 @@ function textResponse(body: string) {
   });
 }
 
+function grammarPoint(slug: string, level: string) {
+  return {
+    slug,
+    title_ja: slug,
+    title_zh: slug,
+    jlpt_level: level,
+    explanation_zh: slug,
+  };
+}
+
 describe("staticApi", () => {
   beforeEach(() => {
     resetStaticApiCachesForTest();
@@ -33,6 +43,10 @@ describe("staticApi", () => {
         return Promise.resolve(jsonResponse(JSON.parse(body)));
       })
     );
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it("returns static capabilities with quiz and sentence disabled", async () => {
@@ -105,9 +119,9 @@ describe("staticApi", () => {
         )
     );
 
-    await expect(staticApi.randomGrammar("N1")).rejects.toSatisfy((error) =>
-      isApiError(error, "not_found")
-    );
+    await expect(staticApi.randomGrammar("N1")).rejects.toSatisfy((error) => {
+      return error instanceof ApiError && error.status === 503;
+    });
     await expect(staticApi.randomGrammar("N1")).resolves.toMatchObject({
       slug: "aru-majiki",
     });
@@ -206,6 +220,45 @@ describe("staticApi", () => {
     });
   });
 
+  it("fetchJSON propagates 500 HTTP error with http_error code", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        Promise.resolve(new Response("", { status: 500, statusText: "Server Error" }))
+      )
+    );
+
+    await expect(staticApi.randomGrammar("N1")).rejects.toSatisfy((error) => {
+      return (
+        error instanceof ApiError &&
+        error.status === 500 &&
+        error.code === "http_error"
+      );
+    });
+  });
+
+  it("fetchJSON wraps malformed JSON parse failures as ApiError", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        Promise.resolve(
+          new Response("{not-json}", {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          })
+        )
+      )
+    );
+
+    await expect(staticApi.randomGrammar("N1")).rejects.toSatisfy((error) => {
+      return (
+        error instanceof ApiError &&
+        error.status === 200 &&
+        error.code === "parse_error"
+      );
+    });
+  });
+
   it("rejects unsupported quiz and sentence methods in static mode", async () => {
     await expect(staticApi.randomSentence()).rejects.toSatisfy((error) =>
       isApiError(error, "unsupported_in_static_mode")
@@ -241,6 +294,116 @@ describe("staticApi", () => {
       count: 0,
     });
   });
+
+  it("getGrammarExamples propagates non-404 HTTP errors as ApiError", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        Promise.resolve(new Response("", { status: 500, statusText: "Server Error" }))
+      )
+    );
+
+    await expect(staticApi.getGrammarExamples?.("missing")).rejects.toSatisfy(
+      (error) => {
+        return error instanceof ApiError && error.status === 500;
+      }
+    );
+  });
+
+  it("getGrammarExamples wraps malformed JSONL parse failures as ApiError", async () => {
+    responses.set("/data/grammar-examples/bad.jsonl", "{not-json}");
+
+    await expect(staticApi.getGrammarExamples?.("bad")).rejects.toSatisfy((error) => {
+      return (
+        error instanceof ApiError &&
+        error.status === 200 &&
+        error.code === "parse_error"
+      );
+    });
+  });
+
+  it("listGrammar propagates non-404 level rollup errors as ApiError", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        Promise.resolve(new Response("", { status: 500, statusText: "Server Error" }))
+      )
+    );
+
+    await expect(staticApi.listGrammar("N1")).rejects.toSatisfy((error) => {
+      return error instanceof ApiError && error.status === 500;
+    });
+  });
+
+  it("listGrammar rollup swallows a 404 level and returns available levels", async () => {
+    responses.set("/data/grammar/N1.json", JSON.stringify([grammarPoint("n1-a", "N1")]));
+    responses.set("/data/grammar/N3.json", JSON.stringify([grammarPoint("n3-a", "N3")]));
+    responses.set("/data/grammar/N4.json", JSON.stringify([grammarPoint("n4-a", "N4")]));
+    responses.set("/data/grammar/N5.json", JSON.stringify([grammarPoint("n5-a", "N5")]));
+
+    const result = await staticApi.listGrammar();
+
+    expect(result.points.map((point) => point.slug)).toEqual([
+      "n1-a",
+      "n3-a",
+      "n4-a",
+      "n5-a",
+    ]);
+  });
+
+  it("listGrammar rollup warns and degrades when one level returns 500", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.stubGlobal(
+      "fetch",
+      vi.fn((url: string) => {
+        if (url === "/data/grammar/N2.json") {
+          return Promise.resolve(
+            new Response("", { status: 500, statusText: "Server Error" })
+          );
+        }
+        const level = url.match(/\/data\/grammar\/(N[1-5])\.json$/)?.[1] ?? "N1";
+        return Promise.resolve(jsonResponse([grammarPoint(`${level.toLowerCase()}-a`, level)]));
+      })
+    );
+
+    const result = await staticApi.listGrammar();
+
+    expect(result.points.map((point) => point.slug)).toEqual([
+      "n1-a",
+      "n3-a",
+      "n4-a",
+      "n5-a",
+    ]);
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn).toHaveBeenCalledWith("grammar level rollup fetch failed", {
+      level: "N2",
+      err: expect.objectContaining({ status: 500, code: "http_error" }),
+    });
+  });
+
+  it("uses a URL-only JSON cache key across different on404 policies", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        Promise.resolve(new Response("", { status: 404, statusText: "Not Found" }))
+      )
+    );
+
+    await expect(
+      staticApiTestHooks.fetchJSON<unknown[]>("/same-url.json", {
+        on404: "empty-array",
+      })
+    ).resolves.toEqual([]);
+    await expect(
+      staticApiTestHooks.fetchJSON<unknown[]>("/same-url.json", {
+        on404: "throw",
+      })
+    ).rejects.toSatisfy((error) => {
+      return error instanceof ApiError && error.status === 404;
+    });
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
+
 
   it("getGrammarExamples requests the flat slug path", async () => {
     responses.set(
