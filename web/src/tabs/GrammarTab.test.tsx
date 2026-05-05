@@ -40,6 +40,13 @@ const points = [
     explanation_zh: "雖然但是。",
   },
   {
+    slug: "zzz-decoy-n2-foo",
+    title_ja: "デコイ",
+    title_zh: "decoy N2 entry",
+    jlpt_level: "N2",
+    explanation_zh: "如果 related-slug navigation 沒有設定 active slug，會落到這一筆。",
+  },
+  {
     slug: "monono-formal",
     title_ja: "〜ものの",
     title_zh: "〜ものの（雖然…但是…）",
@@ -144,6 +151,7 @@ describe("GrammarTab", () => {
     await waitFor(() => {
       expect(screen.getByRole("heading", { name: "〜ものの" })).toBeVisible();
     });
+    expect(screen.queryByRole("heading", { name: "デコイ" })).not.toBeInTheDocument();
     expect(getGrammarExamples).toHaveBeenLastCalledWith("monono-formal");
   });
 });

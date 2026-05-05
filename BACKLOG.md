@@ -36,6 +36,10 @@
 | JS-033 | 🔵 active | examples slice cap=5 邊界測試 | frontend | 2026-05-05 | pr:#34 |
 | JS-034 | ✅ closed 2026-05-05 | dev-mode `quizCapable=false` HomePage CTA dead-end | frontend | 2026-05-05 | pr:#35 |
 | JS-035 | 🔵 active | App auto-fallback effect 失去測試覆蓋 | frontend | 2026-05-05 | pr:#35 |
+| JS-036 | 🔵 active | lint-grammar reciprocity + level-dir match | content | 2026-05-05 | pr:#36 |
+| JS-037 | 🔵 active | nuance_note 渲染樣式提升 | frontend | 2026-05-05 | pr:#36 |
+| JS-038 | 🔵 active | GitHub Pages 部署 cache 過渡視窗 | ops | 2026-05-05 | pr:#36 |
+| JS-039 | 🔵 active | staticApi slug encodeURIComponent 一致性 | frontend | 2026-05-05 | pr:#36 |
 
 ---
 
@@ -292,3 +296,50 @@
 **Source**: PR #35 round-1 critic (medium)
 <!-- 首次記錄: 2026-05-05 -->
 
+## JS-036 — lint-grammar reciprocity + level-dir match
+
+**Problem**: `scripts/lint-grammar.sh` 在 PR #36 強制全域 slug 唯一與 related_slugs 不懸空，但缺兩個 invariant：(a) `jlpt_level` 必須等於父目錄名（N3/foo.json 的 jlpt_level 必須是 N3）；(b) related_slugs 雙向對稱（A 列 B 則 B 必須列 A）。沒有檢查時 authoring 錯誤會默默通過。
+
+**Why**: 控制詞彙文件設計依賴雙向 invariant，但目前只靠 reviewer 注意。下次 collision 進來容易 drift。
+
+**Requirement**: lint-grammar 加兩個 pass — (1) jq 比較 .jlpt_level 與從 path 推導的 level；(2) 建 related-edge set 檢查每個 (A,B) 都有對應 (B,A)。同步擴 test-lint-grammar.sh fixture。
+
+**Tags**: P3, content
+**Source**: PR #36 round-1 critic (medium)
+<!-- 首次記錄: 2026-05-05 -->
+
+## JS-037 — nuance_note 渲染樣式提升
+
+**Problem**: GrammarTab 把 nuance_note 渲染成 text-xs italic slate-500，緊接在 title-zh subtitle（也是 slate-500）下面，視覺被壓得最輕。但這是新增的、有編輯價值的對比說明，應更顯眼。
+
+**Why**: 目前文字密度跟周邊一致，使用者可能直接跳過 nuance_note 不看。
+
+**Requirement**: 試 (a) 升級為 text-sm slate-600；或 (b) 包進類似「相關用法」的小邊框/背景塊；或 (c) 加 icon prefix。需 design 試做 + 學習者觀感檢驗。
+
+**Tags**: P3, frontend
+**Source**: PR #36 round-1 critic (low)
+<!-- 首次記錄: 2026-05-05 -->
+
+## JS-038 — GitHub Pages 部署 cache 過渡視窗
+
+**Problem**: PR #36 把 dump 路徑從 `data/grammar-examples/<level>/<slug>.jsonl` 改成 flat `data/grammar-examples/<slug>.jsonl`。已開啟 site 的使用者持有舊 JS bundle，部署後仍打舊路徑導致 404。`staticApi.getGrammarExamples` 把任何錯誤吞為空陣列，使用者看到「無例文」與「真的沒例文」無法區分。
+
+**Why**: Vite 對 JS 做 hash bundling，所以 reload 後會自動取得新 bundle，但已開的 tab 不會 reload。風險區間：「跨部署仍開著 tab 的使用者」。
+
+**Requirement**: 評估 (a) 兩次部署過渡（先寫 dual-path 一次部署，再純 flat 一次部署）；或 (b) 接受並文件化過渡風險；或 (c) staticApi 看到 404 顯示 inline 提示「請重新載入頁面」。
+
+**Tags**: P3, ops
+**Source**: PR #36 round-1 risk-reviewer (medium)
+<!-- 首次記錄: 2026-05-05 -->
+
+## JS-039 — staticApi slug encodeURIComponent 一致性
+
+**Problem**: `web/src/api.ts` httpApi 的 grammar slug 路徑用 `encodeURIComponent(slug)`，但 `web/src/staticApi.ts` 的 getGrammarExamples 直接 `${slug}` 插值，沒 encode。今天因為 corpus 是 repo-controlled 且 lint-grammar 強制 `[a-z0-9-]+` shape 沒有 attacker reach，但 defense-in-depth 應收齊。
+
+**Why**: 若未來有 caller 傳非受控 slug，staticApi 路徑就有 path-traversal / URL injection 風險；兩端應 posture 一致。
+
+**Requirement**: staticApi.getGrammarExamples 與 getGrammar 都用 `encodeURIComponent(slug)` 包；或在進入 staticApi 前 assert `/^[a-z0-9-]+$/.test(slug)`。
+
+**Tags**: P3, frontend
+**Source**: PR #36 round-1 security-reviewer (low, defense-in-depth)
+<!-- 首次記錄: 2026-05-05 -->
