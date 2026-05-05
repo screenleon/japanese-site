@@ -192,7 +192,7 @@ func TestMigrate_0018_GrammarVariants(t *testing.T) {
 		t.Fatalf("migrate: %v", err)
 	}
 
-	for _, column := range []string{"nuance_note", "related_slugs"} {
+	for _, column := range []string{"nuance_note", "mental_model", "related_slugs"} {
 		var count int
 		if err := db.QueryRow(`SELECT COUNT(*) FROM pragma_table_info('grammar_point') WHERE name=?`, column).Scan(&count); err != nil {
 			t.Fatalf("query %s column: %v", column, err)
@@ -203,8 +203,8 @@ func TestMigrate_0018_GrammarVariants(t *testing.T) {
 	}
 
 	if _, err := db.Exec(`INSERT INTO grammar_point
-		(slug, title_ja, title_zh, jlpt_level, nuance_note, related_slugs, explanation_zh, source, license)
-		VALUES ('variant-direct', '直接', '直接', 'N3', 'test note', '["foo","bar"]', 'direct json test', 'test', 'CC0')`); err != nil {
+		(slug, title_ja, title_zh, jlpt_level, nuance_note, mental_model, related_slugs, explanation_zh, source, license)
+		VALUES ('variant-direct', '直接', '直接', 'N3', 'test note', 'test model', '["foo","bar"]', 'direct json test', 'test', 'CC0')`); err != nil {
 		t.Fatalf("seed direct gp: %v", err)
 	}
 	direct, err := GetGrammarPoint(context.Background(), db, "variant-direct")
@@ -213,6 +213,9 @@ func TestMigrate_0018_GrammarVariants(t *testing.T) {
 	}
 	if direct.NuanceNote != "test note" {
 		t.Fatalf("direct NuanceNote = %q, want test note", direct.NuanceNote)
+	}
+	if direct.MentalModel != "test model" {
+		t.Fatalf("direct MentalModel = %q, want test model", direct.MentalModel)
 	}
 	if want := []string{"foo", "bar"}; !reflect.DeepEqual(direct.RelatedSlugs, want) {
 		t.Fatalf("direct RelatedSlugs = %#v, want %#v", direct.RelatedSlugs, want)
@@ -230,6 +233,7 @@ func TestMigrate_0018_GrammarVariants(t *testing.T) {
 		"title_zh": "讀取",
 		"jlpt_level": "N3",
 		"nuance_note": "loaded note",
+		"mental_model": "loaded model",
 		"related_slugs": ["alpha", "beta"],
 		"explanation_zh": "loader json test",
 		"source": "curated",
@@ -249,6 +253,9 @@ func TestMigrate_0018_GrammarVariants(t *testing.T) {
 	}
 	if loaded.NuanceNote != "loaded note" {
 		t.Fatalf("loaded NuanceNote = %q, want loaded note", loaded.NuanceNote)
+	}
+	if loaded.MentalModel != "loaded model" {
+		t.Fatalf("loaded MentalModel = %q, want loaded model", loaded.MentalModel)
 	}
 	if want := []string{"alpha", "beta"}; !reflect.DeepEqual(loaded.RelatedSlugs, want) {
 		t.Fatalf("loaded RelatedSlugs = %#v, want %#v", loaded.RelatedSlugs, want)

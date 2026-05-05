@@ -41,6 +41,10 @@
 | JS-038 | 🔵 active | GitHub Pages 部署 cache 過渡視窗 | ops | 2026-05-05 | pr:#36 |
 | JS-039 | 🔵 active | staticApi slug encodeURIComponent 一致性 | frontend | 2026-05-05 | pr:#36 |
 | JS-040 | 🔵 active | vocab usage / collocation / 助詞 / 近義差別標註 | content | 2026-05-05 | feedback:2026-05-05 |
+| JS-041 | ✅ closed 2026-05-06 | grammar mental_model MVP | content/frontend | 2026-05-06 | feedback:2026-05-06 |
+| JS-041a | 🔵 active | lint-grammar mental_model negative fixtures | content/ops | 2026-05-06 | pr:#37 |
+| JS-041b | 🔵 active | JS-041 tier-2 coverage hardening | backend/frontend | 2026-05-06 | pr:#37 |
+| JS-042 | 🔵 active | full grammar mental_model rollout | content | 2026-05-06 | feedback:2026-05-06 |
 
 ---
 
@@ -373,3 +377,54 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: user feedback 2026-05-05 — 「單字的用法 其實用法不一樣 那個後續接的內容也會不一樣 這部分也需要特別說明」
 **Related**: JS-023（grammar 端 nuance_note 同類問題）；PR-B（agent-generated 例句擴充，可共用 generation pipeline）
 <!-- 首次記錄: 2026-05-05 -->
+
+## JS-041 — grammar mental_model MVP ✅ 2026-05-06
+
+**Problem**: 文法條目已有 `nuance_note` 可補 register / level 差異，但還缺「用日文思考時該怎麼看這個形式」的 mental model。學習者回饋指出多個卡點不是單純意思不懂，而是仍以中文式動賓、受益方向、被動受害感、自他動詞視角去套日文。
+
+**Why**: JS-040 會把 vocab usage annotation 擴到約 2900 筆；在 grammar 端先用小範圍 MVP 固定 schema、lint 與 UI pattern，能降低後續大規模標註的設計風險。
+
+**Requirement**: 在 GrammarPoint schema 加 optional `mental_model?: string`，語料 JSON 同名欄位可被 lint / loader / API / frontend 正確處理。先補 4 個可落在既有條目的思考提示：戒中文動賓思維（狀態 vs 動作）、授受動詞恩惠方向、受害／不本意受身視角、自他動詞區分。GrammarTab 在 `nuance_note` 下方以「考え方のヒント」區塊渲染，有值才顯示；測試覆蓋 present / absent。
+
+**Outcome**: PR #37 spike added the `mental_model` field through schema, lint, loader, API, and GrammarTab rendering, with four curated seed entries. PR-gate follow-up aligned the annotation UI with `nuance_note`, fixed invalid header semantics, and rewrote three seed mental models to stay anchored to their entry topics.
+
+**Tags**: P2, content, frontend
+**Source**: user feedback 2026-05-06 — 9 個「用日文思考」技巧中的 tip 1 / 3 / 4 / 5
+**Related**: JS-040（vocab usage annotation spike）
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-041a — lint-grammar mental_model negative fixtures
+
+**Problem**: `scripts/lint-grammar.sh` accepts the new `mental_model` / existing `nuance_note` shape, but the negative-path fixture coverage does not yet prove that invalid annotation values fail.
+
+**Why**: Without fixtures for empty string, whitespace-only string, and non-string values, future lint edits can accidentally weaken the curated-corpus contract while tests still pass.
+
+**Requirement**: Add lint fixtures and `scripts/test-lint-grammar.sh` cases proving `mental_model` and `nuance_note` reject empty string, whitespace-only, and non-string values.
+
+**Tags**: P3, content, ops
+**Source**: PR #37 PR-gate critic + qa-tester soft advisories 2026-05-06
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-041b — JS-041 tier-2 coverage hardening
+
+**Problem**: JS-041 covers the MVP path, but deeper end-to-end invariants are still implicit across API serialization, real seed loading, and static deployment artifacts.
+
+**Why**: `mental_model` is content that must survive loader, API, frontend, and static publishing boundaries. If any boundary drops it, the UI can silently lose curated annotations.
+
+**Requirement**: Add `handlers_test.go` integration coverage asserting `GET /api/grammar/{slug}` serializes `mental_model` end-to-end; add `load_test.go` real-seed assertions that `yogi-naku-sareru`, `te-iru`, `te-kureru`, and `na-adjective` have non-empty `mental_model` after `Load`; regenerate stale `web/dist/data/grammar/*` bundles if `web/dist` is checked in for GitHub Pages.
+
+**Tags**: P3, backend, frontend
+**Source**: PR #37 PR-gate critic + qa-tester soft advisories 2026-05-06
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-042 — full grammar mental_model rollout
+
+**Problem**: JS-041 intentionally seeded only 4 grammar entries as a spike, leaving roughly 196 of ~200 grammar entries without mental-model guidance.
+
+**Why**: The user wants this thinking layer broadly across current grammar and vocabulary, but writing the rest before the annotation schema direction is settled risks large-scale churn.
+
+**Requirement**: Roll out `mental_model` coverage to all ~200 grammar entries across N5–N1. Treat this as an LLM-pipeline plus human-review effort similar in shape to JS-040 vocab usage. Block until the JS-040 annotations schema decision lands, especially the flat field repeats vs nested `annotations` object choice, so the project does not author 196 entries in the wrong shape.
+
+**Tags**: P2, content, blocked-by:JS-040
+**Source**: user feedback 2026-05-06 — 「目前有的單字或者文法 都需要增加這部分」
+<!-- 首次記錄: 2026-05-06 -->
