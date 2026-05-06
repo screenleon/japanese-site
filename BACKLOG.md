@@ -52,6 +52,12 @@
 | JS-045 | 🔵 active | resolve `milestone:` dual semantics before pm-schema v1 freeze | arch | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-046 | 🔵 active | normalise `area:` vocabulary across backlog entries | content | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-047 | 🔵 active | reconcile stale yml status for JS-009 / JS-012 / JS-013 | ops | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-048 | 🔵 active | replace hand-maintained Go allowedAnnotationKinds with go:generate / init() | arch/backend | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-049 | 🔵 active | normalizeAnnotations 補 empty-raw / malformed-JSON 分支測試 | backend | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-050 | 🔵 active | annotations-kinds generator 加 CI smoke / pre-commit hook | ops | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-051 | 🔵 active | lint-vocab.sh 錯誤訊息列出違規 headword + shell quoting 修正 | ops | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-052 | 🔵 active | make lint 聚合 target 補入 lint-grammar；defense-in-depth comment 集中化 | ops | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-053 | 🔵 active | annotations 未知 kind 的 observability（log / metric） | backend | 2026-05-06 | pr-gate:2026-05-06 |
 
 ---
 
@@ -531,4 +537,78 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 
 **Tags**: P3, ops
 **Source**: pr-gate:2026-05-06 qa-tester LOW (pre-existing main drift)
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-048 — replace hand-maintained Go allowedAnnotationKinds with go:generate / init()
+
+**Problem**: JS-040b 在 `server/internal/content/corpus/load.go` 引入 `allowedAnnotationKinds` Go map，是繼 `web/src/apiTypes.ts` 的 `ANNOTATION_KINDS`、`scripts/annotations-kinds.txt`、ADR-0001 之後的第 4 個 SoT。本 PR 已加 contract test 鎖住與 .txt 一致，但仍是手維。
+
+**Why**: ADR 不變量必須由測試鎖住（2026-05-06 決策），但根本解法是消除 SoT 重複。當前 silent-drop 語意搭配手維 map：若新增 kind 而 Go 忘了同步，loader 靜默掉資料，contract test 才會發現 — 屬於 fail-after-the-fact 模式。
+
+**Requirement**:（與 JS-053 一併決策）擇一：(a) `go:generate` 從 `scripts/annotations-kinds.txt` 產出 Go const slice / map；(b) `init()` 啟動時讀檔；(c) 改用 build-tag embedded 檔案（`//go:embed`）。同時決策 silent-drop vs fail-fast：建議 fail-fast + lint pre-flight 為主、loader 為 last-resort log（呼應 JS-053）。
+
+**Tags**: P2, arch, backend
+**Related**: JS-053（observability，需一同決策 silent-drop 語意）
+**Source**: pr-gate:2026-05-06 critic MEDIUM #1 + architecture MEDIUM
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-049 — normalizeAnnotations 補 empty-raw / malformed-JSON 分支測試
+
+**Problem**: JS-040b 加了 3 個 normalizeAnnotations test case（happy / unknown-only / mixed），但跳過 (a) `len(raw)==0` 回 `"{}"` 與 (b) `json.Unmarshal` 失敗回 error 兩個分支。
+
+**Why**: 本來只有 integration test 間接覆蓋，現在已有 focused unit test 表面，補上邊界與 error path 是兩行的事。
+
+**Requirement**: 加 `TestNormalizeAnnotations_EmptyRawReturnsEmptyObject` 與 `TestNormalizeAnnotations_MalformedJSONReturnsError`。
+
+**Tags**: P3, backend
+**Source**: pr-gate:2026-05-06 qa-tester LOW
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-050 — annotations-kinds generator 加 CI smoke / pre-commit hook
+
+**Problem**: JS-040b 把 `scripts/annotations-kinds.txt` 變成 generated artifact，但沒 hook 在 commit 或 CI 自動跑 generator；漂移仍要靠 invariant test 事後抓。
+
+**Why**: 現有 invariant test 是事後安全網（PR-time fail），缺 commit-time 提示；長期應與 JS-044（backlog generator 對應的 lint-backlog-render）合作建立統一 generator 規範。
+
+**Requirement**: 加 `make verify-generated`（或 pre-commit hook）跑 generator + `git diff --exit-code annotations-kinds.txt`；CI 啟用。
+
+**Tags**: P3, ops
+**Source**: pr-gate:2026-05-06 critic LOW + architecture LOW
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-051 — lint-vocab.sh 錯誤訊息列出違規 headword + shell quoting 修正
+
+**Problem**: `scripts/lint-vocab.sh` 偵測到未知 annotation kind 時錯誤訊息只列檔案名（`lint-vocab: vocab/N3.jsonl annotations has unsupported kind 'foo'`），不含 headword；數百筆 entry 中要找錯位需手動 grep。`rel="${file#$ROOT_DIR/}"` 內 `$ROOT_DIR` 未引號，理論上對含特殊字元的路徑脆弱。
+
+**Why**: 提升 dev ergonomics + shell hardening；同類問題 lint-grammar.sh 也有，可一併處理。
+
+**Requirement**: 改 `jq -r 'select(.annotations) | [(.headword // "?"), (.annotations | keys_unsorted | join(","))] | @tsv'` per-row 解析；錯誤訊息含 headword。修 `${file#"$ROOT_DIR"/}` quoting。
+
+**Tags**: P3, ops
+**Source**: pr-gate:2026-05-06 critic LOW + qa-tester LOW
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-052 — make lint 聚合 target 補入 lint-grammar；defense-in-depth comment 集中化
+
+**Problem**: JS-040b 加的 `make lint` 聚合為 `lint: lint-rules lint-vocab`；lint-grammar 只透過 `lint-rules` 內 inline 呼叫，依賴脆弱。`load.go` `normalizeAnnotations` 與 `mergeGrammarAnnotations` 兩處 allowlist filter 各自有 defense-in-depth 註解，未來政策改（silent-drop → fail-fast）需同步動兩處易漏。
+
+**Why**: 顯式聚合 + 集中化政策註解，預防漏改。
+
+**Requirement**: `lint: lint-rules lint-grammar lint-vocab`；把 defense-in-depth 註解集中在 `allowedAnnotationKinds` var 宣告處，呼叫處只指 var。
+
+**Tags**: P3, ops
+**Source**: pr-gate:2026-05-06 critic LOW
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-053 — annotations 未知 kind 的 observability（log / metric）
+
+**Problem**: `normalizeAnnotations` 與 `mergeGrammarAnnotations` 對未知 kind 採 silent-drop。對齊 2026-05-06 決策「fail-loudly tickets must come with ops observability」的反向 — silent filter 沒可觀測機制等於沒 last-resort，繞過 lint 的壞資料永不浮上。
+
+**Why**: 即便保持 silent-drop 語意（不阻斷 startup），也應有 log / counter 讓 ops 看到「lint 漏掉幾筆 typo kind 進到 loader」。
+
+**Requirement**:（與 JS-048 一併決策）若選 fail-fast，本票 closes-by JS-048；若維持 silent-drop，加 `log.Printf("corpus loader: dropping unknown annotation kind %q on slug=%s", kind, slug)` 或對應 metric。
+
+**Tags**: P3, backend
+**Related**: JS-048（一併決策 silent-drop 語意）
+**Source**: pr-gate:2026-05-06 architecture LOW
 <!-- 首次記錄: 2026-05-06 -->

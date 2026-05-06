@@ -361,6 +361,27 @@ func TestNormalizeAnnotations_MixedKnownAndUnknownKeepsKnown(t *testing.T) {
 	assertRawMessageMapEqual(t, got, want)
 }
 
+func TestMergeGrammarAnnotations_UnknownKindIsFiltered(t *testing.T) {
+	gp := &GrammarPoint{
+		Slug:        "test-slug",
+		Annotations: json.RawMessage(`{"usage": "keep me", "typo_kind": "drop me"}`),
+	}
+	body, err := mergeGrammarAnnotations(gp)
+	if err != nil {
+		t.Fatalf("merge: %v", err)
+	}
+	var got map[string]string
+	if err := json.Unmarshal([]byte(body), &got); err != nil {
+		t.Fatalf("unmarshal: %v", err)
+	}
+	if _, ok := got["typo_kind"]; ok {
+		t.Fatalf("unknown kind leaked through merge allowlist: %#v", got)
+	}
+	if got["usage"] != "keep me" {
+		t.Fatalf("known kind dropped from merge: %#v", got)
+	}
+}
+
 func TestLoad_RejectsGrammarAnnotationConflict(t *testing.T) {
 	tmpRoot := t.TempDir()
 	dbPath := filepath.Join(tmpRoot, "test.sqlite")

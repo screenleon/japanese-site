@@ -22,7 +22,7 @@ if [[ ! -f "$ANNOTATION_KINDS_FILE" ]]; then
 	exit 1
 fi
 
-mapfile -t ANNOTATION_KINDS < "$ANNOTATION_KINDS_FILE"
+mapfile -t ANNOTATION_KINDS < <(grep -vE '^\s*(#|$)' "$ANNOTATION_KINDS_FILE")
 is_annotation_kind() {
 	local candidate=$1
 	local known
