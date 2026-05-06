@@ -457,17 +457,15 @@ items:
 
   - id: JS-035
     title: Restore App auto-fallback effect test coverage
-    status: done
+    status: todo
     priority: P3
     milestone: M3
     area: frontend
     source: pr:#35
-    completed_at: "2026-05-06"
     notes:
       - PR #35 changed App.test.tsx test 3 trigger to NavCard, removing coverage of App.tsx auto-fallback effect when active tab gets filtered out.
       - Either drive capabilities re-resolve in test, or extract computeNextActiveTab as pure function and unit test.
-      - Source - PR #35 round-1 critic (medium).
-      - Closed 2026-05-06 — downgraded to advisory; auto-fallback effect can be re-tested when the area is next touched.
+      - Source - PR #35 round-1 critic (medium) — kept open per pr-gate 2026-05-06 critic re-flag (MEDIUM-tier finding, not eligible for hygiene downgrade).
 
   - id: JS-036
     title: lint-grammar reciprocity + level-dir match invariants
@@ -812,7 +810,7 @@ items:
       - Dialect coupled to current 2/4-space yml shape; structural drift would silently mis-parse.
       - Replace with js-yaml or strict allowlist with Object.create(null) guard.
       - Source - pr-gate critic LOW #5 + sec LOW #2 + arch LOW #1 + risk LOW #3.
-      - Absorbs JS-058 (extend test fixtures, superseded 2026-05-06): replacing the parser will rewrite the fixture surface.
+      - Absorbs JS-058 category (f) "YAML quoted-list parser semantics" (2026-05-06): the parser swap is responsible for that one fixture; JS-058 (a)-(e) were downgraded to advisory, not absorbed.
 
   - id: JS-058
     title: extend test-generate-backlog-md fixtures
@@ -825,7 +823,7 @@ items:
     notes:
       - Missing fixtures - status=done without completed_at, missing 首次記錄 with no fallback, empty items[], suffix ids (JS-040b/041a/041b/025c) sort + heading round-trip, legacy section comment-fallback path, YAML quoted-list parser semantics.
       - Source - pr-gate qa-tester LOW.
-      - Closed 2026-05-06 — superseded by JS-057 (replacing the YAML parser will rewrite the fixture surface; reopening as part of JS-057 brief).
+      - Closed 2026-05-06 — only category (f) YAML quoted-list parser semantics is absorbed by JS-057; categories (a) status=done w/o completed_at, (b) missing 首次記錄 fallback, (c) empty items[], (d) suffix-id sort, (e) legacy comment-fallback path are downgraded to advisory (parser swap does not rewrite generator-behaviour fixtures).
 
   - id: JS-059
     title: lint-backlog-render use mktemp for backup file

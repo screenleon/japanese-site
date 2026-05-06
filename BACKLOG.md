@@ -38,7 +38,7 @@
 | JS-032 | ✅ closed 2026-05-06 | ARCHITECTURE.md rollup vs per-item 慣例 | docs | 2026-05-05 | pr:#34 |
 | JS-033 | ✅ closed 2026-05-06 | examples slice cap=5 邊界測試 | frontend | 2026-05-05 | pr:#34 |
 | JS-034 | ✅ closed 2026-05-05 | dev-mode `quizCapable=false` HomePage CTA dead-end | frontend | 2026-05-05 | pr:#35 |
-| JS-035 | ✅ closed 2026-05-06 | App auto-fallback effect 失去測試覆蓋 | frontend | 2026-05-05 | pr:#35 |
+| JS-035 | 🔵 active | App auto-fallback effect 失去測試覆蓋 | frontend | 2026-05-05 | pr:#35 |
 | JS-036 | 🔵 active | lint-grammar reciprocity + level-dir match | content | 2026-05-05 | pr:#36 |
 | JS-037 | ✅ closed 2026-05-06 | nuance_note 渲染樣式提升 | frontend | 2026-05-05 | pr:#36 |
 | JS-038 | 🔵 active | GitHub Pages 部署 cache 過渡視窗 | operations | 2026-05-05 | pr:#36 |
@@ -289,11 +289,21 @@
 **Outcome**: PR #35 完整重設計 HomePage 導航時順手關掉 — `showQuizControls` 收斂為 `!isStaticBuild && quizCapable`，CTA 在 capability 未 resolve 或 quiz 被停用時都不渲染；同時 3-card NavCard grid 提供獨立的 grammar/vocab/kanji 入口，使用者不會卡住。`App.test.tsx` 三個既有測試也同步改 `findByRole` / NavCard 路徑。
 **See**: pr:#35
 
-## JS-035 — App auto-fallback effect 失去測試覆蓋 ✅ 2026-05-06
+## JS-035 — App auto-fallback effect 失去測試覆蓋
 
-**Outcome**: Closed 2026-05-06 — downgraded to advisory; auto-fallback effect can be re-tested when the area is next touched.
-**See**: PR #35 round-1 critic (medium)
+**Problem**: PR #35 把 `App.test.tsx` test 3 的觸發從 `開始練習` CTA 改為 `文法` NavCard 後，原本對 `App.tsx:74-78` 自動 fallback effect（active tab 被 capabilities 過濾掉時自動切到 grammar）的覆蓋消失了。新版 test 3 用 `initialTab="grammar"`，從未觸發 fallback。
+
+**Why**: PR #35 是因應 CTA 改為 capability-gated 才必須改測試觸發點；自動 fallback effect 仍在程式碼裡正常運作，但無 test 把守。未來重構若無意間破壞此 effect（例：把 `useEffect(..., [visibleTabs, active])` 寫錯），現有 45 個測試都不會 fail。
+
+**Requirement**: 新增 `App.test.tsx` 一個獨立 case 直接覆蓋 fallback effect。可行做法：
+(a) `mockCapabilities` 先回 `quiz=true`，render App，await `findByRole("開始練習")`，click，再用 `mockReturnValue` 第二次回 `quiz=false` + 觸發 capabilities re-resolve（需要 CapabilitiesProvider 支援 refresh），assert grammar panel；
+(b) 抽出 fallback 邏輯為純函式（`computeNextActiveTab(prev, visibleTabs)`），unit test 該函式。
+(b) 較乾淨且不依賴 provider 內部，建議優先。
+
+**Tags**: P3, frontend
+**Source**: PR #35 round-1 critic (medium)
 <!-- 首次記錄: 2026-05-05 -->
+
 ## JS-036 — lint-grammar reciprocity + level-dir match
 
 **Problem**: `scripts/lint-grammar.sh` 在 PR #36 強制全域 slug 唯一與 related_slugs 不懸空，但缺兩個 invariant：(a) `jlpt_level` 必須等於父目錄名（N3/foo.json 的 jlpt_level 必須是 N3）；(b) related_slugs 雙向對稱（A 列 B 則 B 必須列 A）。沒有檢查時 authoring 錯誤會默默通過。
@@ -464,6 +474,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 
 **Requirement**: 決策 (a) `milestone:` 僅承載 release bucket，把 content 移到新欄位 `theme:` 或 `track:`；或 (b) 文件化 `milestone:` 為 free-form tag，停止與 M3/M4 並用。決策後 retag 所有條目。
 
+**Absorbs**: JS-062 (folded 2026-05-06) — boundary clarification: milestone normalisation is JS-045 territory; area was JS-046.
 **Tags**: P2, arch
 **Source**: pr-gate:2026-05-06 architecture-reviewer MEDIUM
 <!-- 首次記錄: 2026-05-06 -->
@@ -488,6 +499,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 
 **Requirement**:（與 JS-053 一併決策）擇一：(a) `go:generate` 從 `scripts/annotations-kinds.txt` 產出 Go const slice / map；(b) `init()` 啟動時讀檔；(c) 改用 build-tag embedded 檔案（`//go:embed`）。同時決策 silent-drop vs fail-fast：建議 fail-fast + lint pre-flight 為主、loader 為 last-resort log（呼應 JS-053）。
 
+**Absorbs**: JS-053 (superseded 2026-05-06) — silent-drop vs fail-fast picking decides whether observability log/metric is needed.
 **Tags**: P2, arch, backend
 **Related**: JS-053（observability，需一同決策 silent-drop 語意）
 **Source**: pr-gate:2026-05-06 critic MEDIUM #1 + architecture MEDIUM
@@ -564,6 +576,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 
 **Requirement**: generator 寫至 temp file → diff → 僅在 `backlog-render` target 時 atomic mv 至 BACKLOG.md。
 
+**Absorbs**: JS-059 (mktemp + trap-clean) and JS-060 (diff -u for CI logs) (both superseded 2026-05-06) — same lint-backlog-render recipe touchpoint.
 **Tags**: P3, operations
 **Source**: pr-gate:2026-05-06 critic LOW #4 + risk LOW #1
 <!-- 首次記錄: 2026-05-06 -->
@@ -576,13 +589,14 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 
 **Requirement**: 換 `js-yaml` 並用 `safeLoad`，或 `Object.create(null)` + key allowlist；補負向測試 fixture（quoted-list、prototype keys、多行）。
 
+**Absorbs**: JS-058 category (f) YAML quoted-list parser semantics (2026-05-06) — JS-058 (a)-(e) generator-behaviour fixtures were downgraded to advisory, not absorbed here.
 **Tags**: P2, arch, operations
 **Source**: pr-gate:2026-05-06 critic LOW #5 + sec LOW #2 + arch LOW #1 + risk LOW #3
 <!-- 首次記錄: 2026-05-06 -->
 
 ## JS-058 — extend test-generate-backlog-md fixtures ✅ 2026-05-06
 
-**Outcome**: Closed 2026-05-06 — superseded by JS-057 (replacing the YAML parser will rewrite the fixture surface).
+**Outcome**: Closed 2026-05-06 — category (f) YAML quoted-list parser semantics absorbed by JS-057; categories (a)–(e) (status=done w/o completed_at, missing 首次記錄 fallback, empty items[], suffix-id sort, legacy comment-fallback) downgraded to advisory.
 **See**: pr-gate:2026-05-06 qa-tester LOW
 <!-- 首次記錄: 2026-05-06 -->
 ## JS-059 — lint-backlog-render use mktemp for backup file ✅ 2026-05-06
