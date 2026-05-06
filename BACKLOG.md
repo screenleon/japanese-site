@@ -32,15 +32,15 @@
 | JS-026 | 🔵 active | dump pipeline 整合進 bake-static | architecture | 2026-05-05 | pr:#34 |
 | JS-027 | ✅ closed 2026-05-06 | staticApi 統一 fault model | architecture | 2026-05-05 | pr:#38 |
 | JS-028 | 🔵 active | CC-BY-SA attribution 落地 | content | 2026-05-05 | pr:#34 |
-| JS-029 | 🔵 active | HomePage flag 二元收斂評估 | frontend | 2026-05-05 | pr:#34 |
+| JS-029 | ✅ closed 2026-05-06 | HomePage flag 二元收斂評估 | frontend | 2026-05-05 | pr:#34 |
 | JS-030 | ✅ closed 2026-05-05 | Cloud 副標 mode-aware | frontend | 2026-05-05 | pr:#34 |
-| JS-031 | 🔵 active | build-static parallel-make race | operations | 2026-05-05 | pr:#34 |
-| JS-032 | 🔵 active | ARCHITECTURE.md rollup vs per-item 慣例 | docs | 2026-05-05 | pr:#34 |
-| JS-033 | 🔵 active | examples slice cap=5 邊界測試 | frontend | 2026-05-05 | pr:#34 |
+| JS-031 | ✅ closed 2026-05-06 | build-static parallel-make race | operations | 2026-05-05 | pr:#34 |
+| JS-032 | ✅ closed 2026-05-06 | ARCHITECTURE.md rollup vs per-item 慣例 | docs | 2026-05-05 | pr:#34 |
+| JS-033 | ✅ closed 2026-05-06 | examples slice cap=5 邊界測試 | frontend | 2026-05-05 | pr:#34 |
 | JS-034 | ✅ closed 2026-05-05 | dev-mode `quizCapable=false` HomePage CTA dead-end | frontend | 2026-05-05 | pr:#35 |
 | JS-035 | 🔵 active | App auto-fallback effect 失去測試覆蓋 | frontend | 2026-05-05 | pr:#35 |
 | JS-036 | 🔵 active | lint-grammar reciprocity + level-dir match | content | 2026-05-05 | pr:#36 |
-| JS-037 | 🔵 active | nuance_note 渲染樣式提升 | frontend | 2026-05-05 | pr:#36 |
+| JS-037 | ✅ closed 2026-05-06 | nuance_note 渲染樣式提升 | frontend | 2026-05-05 | pr:#36 |
 | JS-038 | 🔵 active | GitHub Pages 部署 cache 過渡視窗 | operations | 2026-05-05 | pr:#36 |
 | JS-039 | 🔵 active | staticApi slug encodeURIComponent 一致性 | frontend | 2026-05-05 | pr:#36 |
 | JS-040 | 🟡 in_progress | vocab usage / collocation / 助詞 / 近義差別標註 | content/backend/frontend | 2026-05-05 | ADR-0001 |
@@ -58,17 +58,17 @@
 | JS-049 | 🔵 active | normalizeAnnotations 補 empty-raw / malformed-JSON 分支測試 | backend | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-050 | 🔵 active | annotations-kinds generator 加 CI smoke / pre-commit hook | operations | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-051 | 🔵 active | lint-vocab.sh 錯誤訊息列出違規 headword + shell quoting 修正 | operations | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-052 | 🔵 active | make lint 聚合 target 補入 lint-grammar；defense-in-depth comment 集中化 | operations | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-053 | 🔵 active | annotations 未知 kind 的 observability（log / metric） | backend | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-052 | ✅ closed 2026-05-06 | make lint 聚合 target 補入 lint-grammar；defense-in-depth comment 集中化 | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-053 | ✅ closed 2026-05-06 | annotations 未知 kind 的 observability（log / metric） | backend | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-054 | 🔵 active | unify Refs column source value shape (short vs long form) | operations | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-055 | 🔵 active | backfill 首次記錄 HTML comment in legacy sections (JS-001..JS-018) | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-055 | ✅ closed 2026-05-06 | backfill 首次記錄 HTML comment in legacy sections (JS-001..JS-018) | operations | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-056 | 🔵 active | lint-backlog-render write-order — diff before write or atomic-rename | operations | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-057 | 🔵 active | replace hand-rolled YAML parser in scripts/generate-backlog-md.mjs | arch/operations | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-058 | 🔵 active | extend test-generate-backlog-md fixtures | operations | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-059 | 🔵 active | lint-backlog-render use mktemp for backup file | operations | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-060 | 🔵 active | CI use diff -u instead of diff -q for backlog drift visibility | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-058 | ✅ closed 2026-05-06 | extend test-generate-backlog-md fixtures | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-059 | ✅ closed 2026-05-06 | lint-backlog-render use mktemp for backup file | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-060 | ✅ closed 2026-05-06 | CI use diff -u instead of diff -q for backlog drift visibility | operations | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-061 | 🔵 active | re-evaluate yml notes field after generator scope narrowing | arch/operations | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-062 | 🔵 active | tighten JS-046 closure scope vs JS-045 milestone field boundary | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-062 | ✅ closed 2026-05-06 | tighten JS-046 closure scope vs JS-045 milestone field boundary | operations | 2026-05-06 | pr-gate:2026-05-06 |
 
 ---
 
@@ -259,62 +259,31 @@
 **Source**: PR #34 security-reviewer (informational)
 <!-- 首次記錄: 2026-05-05 -->
 
-## JS-029 — HomePage flag 二元收斂評估
+## JS-029 — HomePage flag 二元收斂評估 ✅ 2026-05-06
 
-**Problem**: `web/src/HomePage.tsx` 同時用 `VITE_DEPLOY_MODE`（build-time）與 `quizCapable`（runtime）做相關但不同的 gating — `isStaticBuild` 隱藏 CTA cluster（讓 Vite tree-shake 出 bundle）、`quizCapable` 仍 gate `dueCount` fetch。critic + architecture 認為 capabilities 應為單一 feature-gate signal，transport mode 不該漏到 page component。
-
-**Why**: 直接收斂到 `quizCapable` 會讓 CTA 字串留在 static bundle（失去 build-time elision）；保留兩 flag 違反 capabilities 契約但保住 bundle 乾淨。需要明確決策該優先哪一邊。
-
-**Requirement**: 評估 (a) 收斂到 quizCapable + 容忍 bundle 帶字串，(b) 在 capabilities layer 引入 `srsCapable` / `dueCountCapable` 並讓 capabilities 同時感知 build-mode，(c) 維持現狀並加註解說明為何兩 flag。決策後落地。
-
-**Note 2026-05-05**: JS-023 已移除 `getGrammarExamples(slug, level?)` 的 optional level 參數；PR #34 的 level leak 其中一個 load-bearing case 已解決。HomePage build-time flag vs runtime capability 收斂仍獨立保留待評估。
-
-**Tags**: P3, frontend
-**Source**: PR #34 critic + architecture-reviewer (low)
+**Outcome**: Closed 2026-05-06 — downgraded to advisory per WIP-cap cleanup; reopen if dual-flag actually causes a learner-visible bug.
+**See**: PR #34 critic + architecture-reviewer (low)
 <!-- 首次記錄: 2026-05-05 -->
-
 ## JS-030 — Cloud 副標 mode-aware ✅ 2026-05-05
 
 **Outcome**: PR #34 把 HomePage 副標改回 mode-aware：cloud 走「查閱文法說明、單字與漢字，隨時作為學習參考。」、local/dev 走「用文法、單字與測驗建立穩定的日文練習節奏。」修正合併到統一副標時對 cloud 使用者承諾「測驗」但 cloud 沒此功能的不誠實 copy。
 **See**: pr:#34
 
-## JS-031 — build-static parallel-make race
+## JS-031 — build-static parallel-make race ✅ 2026-05-06
 
-**Problem**: `Makefile` 的 `build-static` target 同時把 `bake-static` 與 `dump-grammar-examples` 列為 prereq，但兩者之間沒有順序依賴。`bake-static` 執行 `rm -rf web/public/data` 後重建；`dump-grammar-examples` 在同目錄下 `mkdir` 並寫入。`make -j` 平行執行下，bake 的 rm 可能踩掉 dump 已寫的檔，或兩者同時 mkdir。
-
-**Why**: GitHub Pages CI 不使用 `-j`，prod 不受影響；但本地開發者用 `make -j build-static` 加速時會 race。
-
-**Requirement**: 三選一：(a) 加順序依賴 `dump-grammar-examples: bake-static`；(b) 把 `bash scripts/dump-grammar-examples.sh` 內聯進 `bake-static` recipe（與 JS-026 的整併方向一致，可一併解決）；(c) `.NOTPARALLEL: build-static`。
-
-**Tags**: P3, ops
-**Source**: PR #34 round-2 critic (medium)
-**Depends-on**: JS-026（若整併方案落地，JS-031 自動關閉）
+**Outcome**: Closed 2026-05-06 — downgraded to advisory; theoretical race not observed in practice.
+**See**: PR #34 round-2 critic (medium)
 <!-- 首次記錄: 2026-05-05 -->
+## JS-032 — ARCHITECTURE.md rollup vs per-item 慣例 ✅ 2026-05-06
 
-## JS-032 — ARCHITECTURE.md rollup vs per-item 慣例
-
-**Problem**: `web/public/data/` 既有資料採 `<type>/<level>.<ext>` 平面 rollup 模式（grammar、kanji、vocab），PR #34 引入的 `grammar-examples` 改採 `<type>/<level>/<slug>.<ext>` 巢狀 per-item 模式。兩種模式並存合理（前者一次性載入、後者 lazy fetch），但 `ARCHITECTURE.md` 沒記載此分流規則，未來新增 per-item 資源（vocab examples、kanji compounds）時容易任選一種而背離 spirit。
-
-**Why**: 慣例若不寫下來，下次有人新增資源時會憑直覺寫，造成 layout 漸進腐化。
-
-**Requirement**: 在 `ARCHITECTURE.md` 補一段「Data layers」子節：rollup 用 `<type>/<level>.<ext>`、per-item lazy 用 `<type>/<level>/<slug>.<ext>`；新增資源時 access pattern 決定 layout。
-
-**Tags**: P3, docs
-**Source**: PR #34 round-2 architecture-reviewer (low)
+**Outcome**: Closed 2026-05-06 — downgraded to advisory; add the layout note when ARCHITECTURE.md is next touched.
+**See**: PR #34 round-2 architecture-reviewer (low)
 <!-- 首次記錄: 2026-05-05 -->
+## JS-033 — examples slice cap=5 邊界測試 ✅ 2026-05-06
 
-## JS-033 — examples slice cap=5 邊界測試
-
-**Problem**: `GrammarTab.tsx` 對 `examples` 做 `slice(0, 5)` 顯示上限，但 `GrammarTab.test.tsx` 沒有 length=0、length=1、length>5 的邊界 case。如果 cap 被改為 `slice(0, 10)` 或拿掉，現行測試不會失敗。
-
-**Why**: cap=5 是 UX 決策（避免 article 過長），需要測試 pin 住此 invariant，避免後續無意間放寬。
-
-**Requirement**: `GrammarTab.test.tsx` 補三個測試：(a) 0 examples → no `例文` heading rendered，(b) 1 example → 1 `<li>` rendered，(c) 6 examples → 5 `<li>` rendered（pin slice cap）。
-
-**Tags**: P3, frontend
-**Source**: PR #34 round-2 qa-tester (low, boundary-coverage gap)
+**Outcome**: Closed 2026-05-06 — downgraded to advisory; boundary tests are nice-to-have, not bug-tracking.
+**See**: PR #34 round-2 qa-tester (low)
 <!-- 首次記錄: 2026-05-05 -->
-
 ## JS-034 — dev-mode `quizCapable=false` HomePage CTA dead-end ✅ 2026-05-05
 
 **Outcome**: PR #35 完整重設計 HomePage 導航時順手關掉 — `showQuizControls` 收斂為 `!isStaticBuild && quizCapable`，CTA 在 capability 未 resolve 或 quiz 被停用時都不渲染；同時 3-card NavCard grid 提供獨立的 grammar/vocab/kanji 入口，使用者不會卡住。`App.test.tsx` 三個既有測試也同步改 `findByRole` / NavCard 路徑。
@@ -347,18 +316,11 @@
 **Source**: PR #36 round-1 critic (medium)
 <!-- 首次記錄: 2026-05-05 -->
 
-## JS-037 — nuance_note 渲染樣式提升
+## JS-037 — nuance_note 渲染樣式提升 ✅ 2026-05-06
 
-**Problem**: GrammarTab 把 nuance_note 渲染成 text-xs italic slate-500，緊接在 title-zh subtitle（也是 slate-500）下面，視覺被壓得最輕。但這是新增的、有編輯價值的對比說明，應更顯眼。
-
-**Why**: 目前文字密度跟周邊一致，使用者可能直接跳過 nuance_note 不看。
-
-**Requirement**: 試 (a) 升級為 text-sm slate-600；或 (b) 包進類似「相關用法」的小邊框/背景塊；或 (c) 加 icon prefix。需 design 試做 + 學習者觀感檢驗。
-
-**Tags**: P3, frontend
-**Source**: PR #36 round-1 critic (low)
+**Outcome**: Closed 2026-05-06 — downgraded to advisory; visual upgrade is design judgment, not tracked deferral.
+**See**: PR #36 round-1 critic (low)
 <!-- 首次記錄: 2026-05-05 -->
-
 ## JS-038 — GitHub Pages 部署 cache 過渡視窗
 
 **Problem**: PR #36 把 dump 路徑從 `data/grammar-examples/<level>/<slug>.jsonl` 改成 flat `data/grammar-examples/<slug>.jsonl`。已開啟 site 的使用者持有舊 JS bundle，部署後仍打舊路徑導致 404。`staticApi.getGrammarExamples` 把任何錯誤吞為空陣列，使用者看到「無例文」與「真的沒例文」無法區分。
@@ -512,6 +474,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 
 **Requirement**: 決策 (a) `milestone:` 僅承載 release bucket，把 content 移到新欄位 `theme:` 或 `track:`；或 (b) 文件化 `milestone:` 為 free-form tag，停止與 M3/M4 並用。決策後 retag 所有條目。
 
+**Absorbs**: JS-062 (folded 2026-05-06) — boundary clarification: milestone normalisation is JS-045 territory; area was JS-046.
 **Tags**: P2, arch
 **Source**: pr-gate:2026-05-06 architecture-reviewer MEDIUM
 <!-- 首次記錄: 2026-05-06 -->
@@ -536,6 +499,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 
 **Requirement**:（與 JS-053 一併決策）擇一：(a) `go:generate` 從 `scripts/annotations-kinds.txt` 產出 Go const slice / map；(b) `init()` 啟動時讀檔；(c) 改用 build-tag embedded 檔案（`//go:embed`）。同時決策 silent-drop vs fail-fast：建議 fail-fast + lint pre-flight 為主、loader 為 last-resort log（呼應 JS-053）。
 
+**Absorbs**: JS-053 (superseded 2026-05-06) — silent-drop vs fail-fast picking decides whether observability log/metric is needed.
 **Tags**: P2, arch, backend
 **Related**: JS-053（observability，需一同決策 silent-drop 語意）
 **Source**: pr-gate:2026-05-06 critic MEDIUM #1 + architecture MEDIUM
@@ -577,31 +541,16 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: pr-gate:2026-05-06 critic LOW + qa-tester LOW
 <!-- 首次記錄: 2026-05-06 -->
 
-## JS-052 — make lint 聚合 target 補入 lint-grammar；defense-in-depth comment 集中化
+## JS-052 — make lint 聚合 target 補入 lint-grammar；defense-in-depth comment 集中化 ✅ 2026-05-06
 
-**Problem**: JS-040b 加的 `make lint` 聚合為 `lint: lint-rules lint-vocab`；lint-grammar 只透過 `lint-rules` 內 inline 呼叫，依賴脆弱。`load.go` `normalizeAnnotations` 與 `mergeGrammarAnnotations` 兩處 allowlist filter 各自有 defense-in-depth 註解，未來政策改（silent-drop → fail-fast）需同步動兩處易漏。
-
-**Why**: 顯式聚合 + 集中化政策註解，預防漏改。
-
-**Requirement**: `lint: lint-rules lint-grammar lint-vocab`；把 defense-in-depth 註解集中在 `allowedAnnotationKinds` var 宣告處，呼叫處只指 var。
-
-**Tags**: P3, ops
-**Source**: pr-gate:2026-05-06 critic LOW
+**Outcome**: Closed 2026-05-06 — downgraded to advisory; tidy at next make-target touch.
+**See**: pr-gate:2026-05-06 critic LOW
 <!-- 首次記錄: 2026-05-06 -->
+## JS-053 — annotations 未知 kind 的 observability（log / metric） ✅ 2026-05-06
 
-## JS-053 — annotations 未知 kind 的 observability（log / metric）
-
-**Problem**: `normalizeAnnotations` 與 `mergeGrammarAnnotations` 對未知 kind 採 silent-drop。對齊 2026-05-06 決策「fail-loudly tickets must come with ops observability」的反向 — silent filter 沒可觀測機制等於沒 last-resort，繞過 lint 的壞資料永不浮上。
-
-**Why**: 即便保持 silent-drop 語意（不阻斷 startup），也應有 log / counter 讓 ops 看到「lint 漏掉幾筆 typo kind 進到 loader」。
-
-**Requirement**:（與 JS-048 一併決策）若選 fail-fast，本票 closes-by JS-048；若維持 silent-drop，加 `log.Printf("corpus loader: dropping unknown annotation kind %q on slug=%s", kind, slug)` 或對應 metric。
-
-**Tags**: P3, backend
-**Related**: JS-048（一併決策 silent-drop 語意）
-**Source**: pr-gate:2026-05-06 architecture LOW
+**Outcome**: Closed 2026-05-06 — superseded by JS-048 (annotations Go map redesign decides silent-drop vs fail-fast; observability falls out of that decision).
+**See**: pr-gate:2026-05-06 architecture LOW
 <!-- 首次記錄: 2026-05-06 -->
-
 ## JS-054 — unify Refs column source value shape (short vs long form)
 
 **Problem**: JS-044 generator 渲染 Refs 欄位時直接照抄 yml `source:`，但既有 yml 同時存在長形（`DECISIONS.md#…`、`ROADMAP.md#…`）與短形（`pr:#36`、`feedback:YYYY-MM-DD`、`pr-gate:YYYY-MM-DD`），index 表呈現不一致。
@@ -614,18 +563,11 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: pr-gate:2026-05-06 critic MED #2
 <!-- 首次記錄: 2026-05-06 -->
 
-## JS-055 — backfill 首次記錄 HTML comment in legacy sections (JS-001..JS-018)
+## JS-055 — backfill 首次記錄 HTML comment in legacy sections (JS-001..JS-018) ✅ 2026-05-06
 
-**Problem**: 19 個 sections（JS-001..JS-009、JS-012..JS-018）缺 `<!-- 首次記錄: YYYY-MM-DD -->` HTML comment；JS-044 generator 暫退到 index table 既存日期當 fallback。
-
-**Why**: 該 fallback 是 single-shot — 若日後對乾淨 md 重新 render，generator 會 fail()。
-
-**Requirement**: 從現行 index table 抽日期，回填 HTML comment 到 19 個 sections。落地後 generator 不再依賴 table-as-fallback。
-
-**Tags**: P3, operations
-**Source**: pr-gate:2026-05-06 critic LOW #3
+**Outcome**: Closed 2026-05-06 — downgraded to advisory; backfill 19 legacy 首次記錄 comments opportunistically.
+**See**: pr-gate:2026-05-06 critic LOW #3
 <!-- 首次記錄: 2026-05-06 -->
-
 ## JS-056 — lint-backlog-render write-order — diff before write or atomic-rename
 
 **Problem**: `make lint-backlog-render` 先寫 BACKLOG.md 再 diff；若 generator 中途 crash，working tree 已被改、restore 分支只在 diff mismatch 時觸發。
@@ -634,6 +576,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 
 **Requirement**: generator 寫至 temp file → diff → 僅在 `backlog-render` target 時 atomic mv 至 BACKLOG.md。
 
+**Absorbs**: JS-059 (mktemp + trap-clean) and JS-060 (diff -u for CI logs) (both superseded 2026-05-06) — same lint-backlog-render recipe touchpoint.
 **Tags**: P3, operations
 **Source**: pr-gate:2026-05-06 critic LOW #4 + risk LOW #1
 <!-- 首次記錄: 2026-05-06 -->
@@ -646,46 +589,26 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 
 **Requirement**: 換 `js-yaml` 並用 `safeLoad`，或 `Object.create(null)` + key allowlist；補負向測試 fixture（quoted-list、prototype keys、多行）。
 
+**Absorbs**: JS-058 category (f) YAML quoted-list parser semantics (2026-05-06) — JS-058 (a)-(e) generator-behaviour fixtures were downgraded to advisory, not absorbed here.
 **Tags**: P2, arch, operations
 **Source**: pr-gate:2026-05-06 critic LOW #5 + sec LOW #2 + arch LOW #1 + risk LOW #3
 <!-- 首次記錄: 2026-05-06 -->
 
-## JS-058 — extend test-generate-backlog-md fixtures
+## JS-058 — extend test-generate-backlog-md fixtures ✅ 2026-05-06
 
-**Problem**: 既有 fixtures 涵蓋 idempotency / missing-id / status mapping / bootstrap skip / orphan-md / duplicate-sections。仍缺：(a) status=done without completed_at；(b) 缺 `首次記錄` 且無 fallback；(c) empty items[]；(d) suffix ids（JS-040b/041a/041b/025c）排序與 heading round-trip；(e) legacy section comment-fallback 路徑；(f) YAML quoted-list parser 語意。
-
-**Why**: 三條 explicit fail() 在生產上沒被觸發過，coverage gap 即未驗證。
-
-**Requirement**: 新增 6 個 fixture cases，每條對應 generator 的 fail() 分支，斷言 exit non-zero + error message 字串。
-
-**Tags**: P3, operations
-**Source**: pr-gate:2026-05-06 qa-tester LOW
+**Outcome**: Closed 2026-05-06 — category (f) YAML quoted-list parser semantics absorbed by JS-057; categories (a)–(e) (status=done w/o completed_at, missing 首次記錄 fallback, empty items[], suffix-id sort, legacy comment-fallback) downgraded to advisory.
+**See**: pr-gate:2026-05-06 qa-tester LOW
 <!-- 首次記錄: 2026-05-06 -->
+## JS-059 — lint-backlog-render use mktemp for backup file ✅ 2026-05-06
 
-## JS-059 — lint-backlog-render use mktemp for backup file
-
-**Problem**: `/tmp/backlog.before.md` 為固定路徑，多用戶主機上有 symlink hazard；同機並發兩次 lint 也會互踩。
-
-**Why**: defense-in-depth；CI 雖 ephemeral safe，dev 工作站可能多人。
-
-**Requirement**: 改 `tmpfile=$(mktemp)`，加 `trap` cleanup；recipe 端引用該變數。
-
-**Tags**: P3, operations
-**Source**: pr-gate:2026-05-06 sec LOW #1
+**Outcome**: Closed 2026-05-06 — superseded by JS-056 (mktemp + atomic-rename are the same touchpoint in lint-backlog-render).
+**See**: pr-gate:2026-05-06 sec LOW #1
 <!-- 首次記錄: 2026-05-06 -->
+## JS-060 — CI use diff -u instead of diff -q for backlog drift visibility ✅ 2026-05-06
 
-## JS-060 — CI use diff -u instead of diff -q for backlog drift visibility
-
-**Problem**: lint-backlog-render fail 時 CI log 只有 "Files differ" 加「Run: make backlog-render」提示，看不到實際 delta。
-
-**Why**: 觸發者要 pull branch + 本地跑才能看出哪邊漂移，每次 +2–5 分鐘。
-
-**Requirement**: 改用 `diff -u` 或 `git --no-pager diff --no-index`，CI log 直接呈現 unified diff。
-
-**Tags**: P3, operations
-**Source**: pr-gate:2026-05-06 risk LOW #2
+**Outcome**: Closed 2026-05-06 — superseded by JS-056 (diff -u is a one-line tweak in the same recipe).
+**See**: pr-gate:2026-05-06 risk LOW #2
 <!-- 首次記錄: 2026-05-06 -->
-
 ## JS-061 — re-evaluate yml notes field after generator scope narrowing
 
 **Problem**: JS-044 落地後 md 敘述為唯一 narrative SoT，但 yml `notes:` 欄位仍各條目存在；尚無 reader 程式化消費，等於閒置 + drift 風險。
@@ -698,14 +621,8 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: pr-gate:2026-05-06 arch LOW #2
 <!-- 首次記錄: 2026-05-06 -->
 
-## JS-062 — tighten JS-046 closure scope vs JS-045 milestone field boundary
+## JS-062 — tighten JS-046 closure scope vs JS-045 milestone field boundary ✅ 2026-05-06
 
-**Problem**: JS-046 在本 PR 已修正 closure 措辭為 area 範圍；但與 JS-045（milestone 雙語意）的工作範圍邊界仍隱晦。
-
-**Why**: JS-045 啟動時若沒清楚範疇宣告，可能重複處理 area（JS-046 做過）或忽略 milestone normalisation 的細節。
-
-**Requirement**: 在 JS-045 brief / notes 顯式註明：milestone 欄位 normalisation 由 JS-045 唯一負責；area 已由 JS-046 完成、不再涉。
-
-**Tags**: P3, operations
-**Source**: pr-gate:2026-05-06 critic LOW #2
+**Outcome**: Closed 2026-05-06 — folded into JS-045 notes (boundary clarification belongs in JS-045 brief, not as an independent ticket).
+**See**: pr-gate:2026-05-06 critic LOW #2
 <!-- 首次記錄: 2026-05-06 -->

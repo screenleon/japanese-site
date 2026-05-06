@@ -376,16 +376,18 @@ items:
 
   - id: JS-029
     title: HomePage flag binary convergence (build-mode vs capabilities)
-    status: todo
+    status: done
     priority: P3
     milestone: content
     area: frontend
     source: pr:#34
+    completed_at: "2026-05-06"
     notes:
       - HomePage.tsx mixes VITE_DEPLOY_MODE (build-time tree-shake) and quizCapable (runtime gate).
       - Decide between converging to quizCapable (loses bundle elision), extending capabilities with srsCapable, or documenting status quo.
       - "Note 2026-05-05: JS-023 已移除 getGrammarExamples(slug, level?) 的 optional level 參數；PR #34 的 level leak 其中一個 load-bearing case 已解決。HomePage build-time flag vs runtime capability 收斂仍獨立保留待評估。"
       - Source - PR #34 critic + architecture-reviewer (low).
+      - Closed 2026-05-06 — downgraded to advisory per WIP-cap cleanup. Reopen if the dual flag actually causes a learner-visible bug.
 
   - id: JS-030
     title: Cloud subtitle mode-aware copy
@@ -400,40 +402,46 @@ items:
 
   - id: JS-031
     title: build-static parallel-make race
-    status: todo
+    status: done
     priority: P3
     milestone: M3
     area: operations
     source: pr:#34
+    completed_at: "2026-05-06"
     depends_on: [JS-026]
     notes:
       - bake-static and dump-grammar-examples are peer prereqs without ordering; make -j can race rm vs mkdir on web/public/data.
       - Add ordering, inline dump into bake-static (overlap with JS-026), or set .NOTPARALLEL.
       - Source - PR #34 round-2 critic (medium).
+      - Closed 2026-05-06 — downgraded to advisory; theoretical race not observed in practice. Reopen if `make -j build-static` actually surfaces the race.
 
   - id: JS-032
     title: Document rollup vs per-item layout convention in ARCHITECTURE.md
-    status: todo
+    status: done
     priority: P3
     milestone: content
     area: docs
     source: pr:#34
+    completed_at: "2026-05-06"
     notes:
       - web/public/data uses both flat rollup (<type>/<level>.<ext>) and nested per-item (<type>/<level>/<slug>.<ext>) layouts.
       - Add ARCHITECTURE.md "Data layers" subsection so future resources pick layout from access pattern.
       - Source - PR #34 round-2 architecture-reviewer (low).
+      - Closed 2026-05-06 — downgraded to advisory. Add the layout note when ARCHITECTURE.md is next touched, do not track as a standalone ticket.
 
   - id: JS-033
     title: GrammarTab examples slice-cap=5 boundary tests
-    status: todo
+    status: done
     priority: P3
     milestone: M3
     area: frontend
     source: pr:#34
+    completed_at: "2026-05-06"
     notes:
       - GrammarTab.tsx slices examples at 5 but tests cover neither length=0 nor length>5.
       - Add boundary cases (0 / 1 / 6 examples) so cap is pinned.
       - Source - PR #34 round-2 qa-tester (low, boundary-coverage gap).
+      - Closed 2026-05-06 — downgraded to advisory; coverage gap remains but boundary tests for slice cap are nice-to-have, not bug-tracking.
 
   - id: JS-034
     title: HomePage dev-mode quizCapable=false CTA dead-end
@@ -457,7 +465,7 @@ items:
     notes:
       - PR #35 changed App.test.tsx test 3 trigger to NavCard, removing coverage of App.tsx auto-fallback effect when active tab gets filtered out.
       - Either drive capabilities re-resolve in test, or extract computeNextActiveTab as pure function and unit test.
-      - Source - PR #35 round-1 critic (medium).
+      - Source - PR #35 round-1 critic (medium) — kept open per pr-gate 2026-05-06 critic re-flag (MEDIUM-tier finding, not eligible for hygiene downgrade).
 
   - id: JS-036
     title: lint-grammar reciprocity + level-dir match invariants
@@ -473,15 +481,17 @@ items:
 
   - id: JS-037
     title: nuance_note rendering visual upgrade
-    status: todo
+    status: done
     priority: P3
     milestone: content
     area: frontend
     source: pr:#36
+    completed_at: "2026-05-06"
     notes:
       - GrammarTab renders nuance_note as text-xs italic slate-500 immediately under title-zh subtitle so it visually disappears.
       - Try text-sm slate-600, bordered block, or icon prefix; verify with learner-facing review.
       - Source - PR #36 round-1 critic (low).
+      - Closed 2026-05-06 — downgraded to advisory; visual upgrade is design judgment, not a tracked deferral.
 
   - id: JS-038
     title: GitHub Pages deploy cache transition window
@@ -632,6 +642,7 @@ items:
       - milestone field currently mixes release-bucket values (M3/M4/DX) and topic-tag values (content). Same-shape entries get opposite milestones (JS-024 ops -> content; JS-031 ops -> M3).
       - Decide (a) milestone = release-bucket only; lift content to new theme or track field; or (b) document milestone as free-form tag and stop using M3/M4 alongside it. Then retag all entries.
       - Source - pr-gate architecture-reviewer MEDIUM.
+      - Absorbs JS-062 (closure-scope clarification, folded 2026-05-06): when working JS-045, explicitly state milestone normalisation is JS-045's responsibility; area is JS-046 territory.
 
   - id: JS-046
     title: normalise area vocabulary across backlog entries
@@ -675,6 +686,7 @@ items:
       - Contract test (allowlist_contract_test.go) locks the invariant short-term, but root fix is to derive Go map from scripts/annotations-kinds.txt via go:generate, init() at runtime, or //go:embed.
       - Decide silent-drop vs fail-fast semantics with JS-053 — recommend fail-fast at loader with lint pre-flight as primary gate.
       - Source - pr-gate critic MEDIUM #1 + architecture MEDIUM.
+      - Absorbs JS-053 (superseded 2026-05-06): observability decision (log/metric on silent-drop) is part of this ticket's silent-drop vs fail-fast picking.
 
   - id: JS-049
     title: normalizeAnnotations 補 empty-raw / malformed-JSON 分支測試
@@ -716,30 +728,34 @@ items:
 
   - id: JS-052
     title: make lint 聚合 target 補入 lint-grammar 與 defense-in-depth 註解集中化
-    status: todo
+    status: done
     priority: P3
     milestone: ops
     area: operations
     source: pr-gate:2026-05-06
+    completed_at: "2026-05-06"
     notes:
       - JS-040b's `lint:` target only lists lint-rules lint-vocab; lint-grammar is invoked transitively via lint-rules — coverage is incidental.
       - normalizeAnnotations and mergeGrammarAnnotations each carry their own defense-in-depth comment; centralise at allowedAnnotationKinds var to avoid drift.
       - Make lint explicit dependency list; move comment to var declaration; call sites just reference the var.
       - Source - pr-gate critic LOW.
+      - Closed 2026-05-06 — downgraded to advisory; tidy at next make-target touch.
 
   - id: JS-053
     title: annotations 未知 kind 的 observability (log / metric)
-    status: todo
+    status: done
     priority: P3
     milestone: ops
     area: backend
     source: pr-gate:2026-05-06
+    completed_at: "2026-05-06"
     related: [JS-048]
     notes:
       - normalizeAnnotations / mergeGrammarAnnotations silent-drop unknown kinds; no log/metric emitted.
       - Contradicts 2026-05-06 fail-loudly observability decision (inverse application — silent filter without observability is silent failure).
       - If JS-048 picks fail-fast, this ticket becomes closed-by JS-048; if silent-drop is retained, emit log.Printf or counter so ops can see lint bypasses.
       - Source - pr-gate architecture LOW.
+      - Closed 2026-05-06 — superseded by JS-048 (annotations Go map redesign decides silent-drop vs fail-fast; observability falls out of that decision).
 
   - id: JS-054
     title: unify Refs column source value shape (short vs long form)
@@ -755,16 +771,18 @@ items:
 
   - id: JS-055
     title: backfill 首次記錄 HTML comment in legacy sections (JS-001..JS-018)
-    status: todo
+    status: done
     priority: P3
     milestone: ops
     area: operations
     source: pr-gate:2026-05-06
+    completed_at: "2026-05-06"
     notes:
       - 19 sections (JS-001..JS-009, JS-012..JS-018) lack <!-- 首次記錄: YYYY-MM-DD --> HTML comment; generator falls back to existing index-table date.
       - Single-shot fallback — if md regenerated against fresh table, fail() halts.
       - Backfill comments from current index table dates so generator no longer depends on table-as-fallback.
       - Source - pr-gate critic LOW #3.
+      - Closed 2026-05-06 — downgraded to advisory; backfill 19 legacy 首次記錄 comments opportunistically when sections are next touched.
 
   - id: JS-056
     title: lint-backlog-render write-order — diff before write or atomic-rename
@@ -777,6 +795,7 @@ items:
       - lint-backlog-render writes BACKLOG.md before diffing; if generator crashes mid-run, working tree mutated; restore branch only on diff mismatch.
       - Restructure to write generator output to temp file, then diff, only mv on backlog-render target.
       - Source - pr-gate critic LOW #4 + risk LOW #1.
+      - Absorbs JS-059 (mktemp safety) and JS-060 (diff -u for CI logs) (both superseded 2026-05-06): same recipe, same touchpoint.
 
   - id: JS-057
     title: replace hand-rolled YAML parser in scripts/generate-backlog-md.mjs
@@ -791,41 +810,48 @@ items:
       - Dialect coupled to current 2/4-space yml shape; structural drift would silently mis-parse.
       - Replace with js-yaml or strict allowlist with Object.create(null) guard.
       - Source - pr-gate critic LOW #5 + sec LOW #2 + arch LOW #1 + risk LOW #3.
+      - Absorbs JS-058 category (f) "YAML quoted-list parser semantics" (2026-05-06): the parser swap is responsible for that one fixture; JS-058 (a)-(e) were downgraded to advisory, not absorbed.
 
   - id: JS-058
     title: extend test-generate-backlog-md fixtures
-    status: todo
+    status: done
     priority: P3
     milestone: ops
     area: operations
     source: pr-gate:2026-05-06
+    completed_at: "2026-05-06"
     notes:
       - Missing fixtures - status=done without completed_at, missing 首次記錄 with no fallback, empty items[], suffix ids (JS-040b/041a/041b/025c) sort + heading round-trip, legacy section comment-fallback path, YAML quoted-list parser semantics.
       - Source - pr-gate qa-tester LOW.
+      - Closed 2026-05-06 — only category (f) YAML quoted-list parser semantics is absorbed by JS-057; categories (a) status=done w/o completed_at, (b) missing 首次記錄 fallback, (c) empty items[], (d) suffix-id sort, (e) legacy comment-fallback path are downgraded to advisory (parser swap does not rewrite generator-behaviour fixtures).
 
   - id: JS-059
     title: lint-backlog-render use mktemp for backup file
-    status: todo
+    status: done
     priority: P3
     milestone: ops
     area: operations
     source: pr-gate:2026-05-06
+    completed_at: "2026-05-06"
     notes:
       - /tmp/backlog.before.md predictable path; symlink hazard on multi-user host; concurrency-racy.
       - Use mktemp; trap-clean.
       - Source - pr-gate sec LOW #1.
+      - Closed 2026-05-06 — superseded by JS-056 (mktemp + atomic-rename are the same touchpoint in lint-backlog-render).
 
   - id: JS-060
     title: CI use diff -u instead of diff -q for backlog drift visibility
-    status: todo
+    status: done
     priority: P3
     milestone: ops
     area: operations
     source: pr-gate:2026-05-06
+    completed_at: "2026-05-06"
     notes:
       - lint-backlog-render fails with only "Files differ"; contributor must pull branch + run locally to see what changed.
       - Replace diff -q with diff -u (or git --no-pager diff --no-index) so CI logs show actual delta.
       - Source - pr-gate risk LOW #2.
+      - Closed 2026-05-06 — superseded by JS-056 (diff -u change is a one-line tweak in the same recipe; folded into JS-056 scope).
 
   - id: JS-061
     title: re-evaluate yml notes field after generator scope narrowing
@@ -841,15 +867,17 @@ items:
 
   - id: JS-062
     title: tighten JS-046 closure scope vs JS-045 milestone field boundary
-    status: todo
+    status: done
     priority: P3
     milestone: ops
     area: operations
     source: pr-gate:2026-05-06
+    completed_at: "2026-05-06"
     notes:
       - JS-046 closure originally claimed normalisation across "all yml entries" but milestone:ops left untouched on 11 entries; that field is JS-045 territory.
       - Closure has been tightened in this PR to acknowledge area-only scope; document in JS-045 brief that milestone normalisation is its responsibility.
       - Source - pr-gate critic LOW #2.
+      - Closed 2026-05-06 — folded into JS-045 notes (boundary clarification belongs in JS-045 brief, not as an independent ticket).
 
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.
