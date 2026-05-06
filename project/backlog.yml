@@ -1,3 +1,5 @@
+schema_version: v1
+
 # Development backlog for japanese-site.
 #
 # Purpose:
@@ -239,6 +241,271 @@ items:
       - "Validated: env GOCACHE=/tmp/go-build-cache go test ./..."
       - "Validated: npm run build"
 
+  - id: JS-016
+    title: JLPT level source switch from Tanos to Jisho
+    status: done
+    priority: P1
+    milestone: content
+    area: content
+    source: feedback:2026-05-02
+    completed_at: "2026-05-03"
+    notes:
+      - Phase 1 Jisho audit (671 entries, 81 differences = 12.07%) decided full switch to Jisho.
+      - Phase 3 migrated 81 vocab entries across N1-N5 JSONL.
+      - Audit report at audits/js-016-jisho-level-audit-2026-05-03.md.
+
+  - id: JS-017
+    title: Read-tracking dual-mode capability gate
+    status: done
+    priority: P1
+    milestone: M3
+    area: backend/frontend
+    source: feedback-2026-05-02
+    completed_at: "2026-05-02"
+    notes:
+      - ProgressStore capabilities-gated dual-mode (SQLite + Null fallback).
+      - useReadTracking + discriminated-union ReadKey feeds per-type ProgressBadge.
+
+  - id: JS-018
+    title: GitHub Pages static deployment (Tier S)
+    status: done
+    priority: P1
+    milestone: M3
+    area: frontend/operations
+    source: DECISIONS.md#2026-05-02-js-018-github-pages-static-deployment-scope
+    completed_at: "2026-05-02"
+    notes:
+      - Public URL https://screenleon.github.io/japanese-site/ live (read-only content).
+      - make bake-static bakes corpus to per-level rollups; VITE_DEPLOY_MODE=static switches to staticApi at build time.
+      - GitHub Actions deploys Pages artifact on main pushes.
+
+  - id: JS-023
+    title: Cross-level grammar slug global uniqueness
+    status: done
+    priority: P2
+    milestone: content
+    area: content
+    source: pr:#34
+    completed_at: "2026-05-05"
+    notes:
+      - Adopted descriptor convention; lower level keeps bare slug, higher level adds controlled descriptor (N2 monono-formal, dokoroka-formal).
+      - GrammarPoint gained nuance_note and related_slugs.
+      - lint-grammar enforces global slug uniqueness and non-dangling related slugs.
+      - Static examples dump flattened to <slug>.jsonl; getGrammarExamples lost level parameter.
+
+  - id: JS-024
+    title: Corpus shrink detection in dump pipeline
+    status: todo
+    priority: P2
+    milestone: content
+    area: operations
+    source: pr:#34
+    notes:
+      - dump-grammar-examples.sh has no detection for per-slug example zeroing or whole-level disappearance.
+      - Needs floor / golden snapshot or per-slug count manifest checked against previous run.
+      - Source - PR #34 risk-reviewer (medium).
+
+  - id: JS-025
+    title: Sub-resource errors no longer break main view
+    status: done
+    priority: P2
+    milestone: M3
+    area: frontend
+    source: pr:#38
+    completed_at: "2026-05-06"
+    related: [JS-025c]
+    notes:
+      - GrammarTab examples sub-resource failures degrade silently; main grammar content still renders.
+
+  - id: JS-025c
+    title: PR #38 round-2 polish bundle (staticApi fault model)
+    status: todo
+    priority: P2
+    milestone: M3
+    area: arch/frontend
+    source: pr:#38, critic+qa-tester round-2 2026-05-06
+    related: [JS-025, JS-027]
+    notes:
+      - "callers pass GrammarExample[] as T to fetchJSONL<T> — array-as-T 對讀者不直覺；考慮拆 overload 命名（fetchJSONLOrThrow / fetchJSONLOrEmpty）或把 element 型別當泛型參數，保留 on404=empty-array 行為（web/src/staticApi.ts:60-68）."
+      - "@ts-expect-error 型別測試從 if(false) block 搬到 *.test-d.ts (web/src/staticApi.ts:230-235)."
+      - staticApiTestHooks 測試 export 改 import.meta.env.MODE 守護或挪到 staticApi.internal.ts.
+      - "parse_error 目前帶 response.status（典型 200），語意上不是 HTTP 失敗；改用 sentinel status 區分。注意 status=0 已被 network_error 佔用（web/src/staticApi.ts:131），請挑不衝突的值（建議 -1 或 422），並在 apiTypes.ts 註解標明各 sentinel 對應 code."
+      - "inline caption 加 role=\"status\" a11y (web/src/tabs/GrammarTab.tsx:253)."
+      - "skipExamplesForInitialSlug ref 加 invariant 註解 (web/src/tabs/GrammarTab.tsx:41/76/123)."
+      - "404 negative-cache 加說明 doc-comment (web/src/staticApi.ts:54,80)."
+      - "既有 500 測試（web/src/staticApi.test.ts:223-235）已斷言 code === 'http_error'；503 retry 測試（web/src/staticApi.test.ts:101-129, line 122）只查 status === 503，補上 code === 'http_error' 斷言以對齊 invariant."
+
+  - id: JS-026
+    title: Integrate dump-grammar-examples into bake-static
+    status: todo
+    priority: P3
+    milestone: M3
+    area: architecture
+    source: pr:#34
+    notes:
+      - bake-static and dump-grammar-examples both write web/public/data — split write paths blur source of truth.
+      - Inline dump invocation into bake-static recipe (or extract bake jq into its own script).
+      - Source - PR #34 architecture-reviewer (medium).
+
+  - id: JS-027
+    title: Unified staticApi fault model
+    status: done
+    priority: P2
+    milestone: M3
+    area: architecture
+    source: pr:#38
+    completed_at: "2026-05-06"
+    related: [JS-025c]
+    notes:
+      - fetchJSON / fetchJSONL gained opt-in 404-empty behaviour; non-404 HTTP errors propagate as ApiError.
+
+  - id: JS-028
+    title: CC-BY-SA attribution preserved through dump pipeline
+    status: todo
+    priority: P2
+    milestone: content
+    area: content
+    source: pr:#34
+    notes:
+      - dump-grammar-examples.sh jq projection drops the license field; corpus is CC-BY-SA-4.0.
+      - Confirm ATTRIBUTION.md policy and either keep license in dump or footer-attribute.
+      - Source - PR #34 security-reviewer (informational).
+
+  - id: JS-029
+    title: HomePage flag binary convergence (build-mode vs capabilities)
+    status: todo
+    priority: P3
+    milestone: content
+    area: frontend
+    source: pr:#34
+    notes:
+      - HomePage.tsx mixes VITE_DEPLOY_MODE (build-time tree-shake) and quizCapable (runtime gate).
+      - Decide between converging to quizCapable (loses bundle elision), extending capabilities with srsCapable, or documenting status quo.
+      - "Note 2026-05-05: JS-023 已移除 getGrammarExamples(slug, level?) 的 optional level 參數；PR #34 的 level leak 其中一個 load-bearing case 已解決。HomePage build-time flag vs runtime capability 收斂仍獨立保留待評估。"
+      - Source - PR #34 critic + architecture-reviewer (low).
+
+  - id: JS-030
+    title: Cloud subtitle mode-aware copy
+    status: done
+    priority: P3
+    milestone: content
+    area: frontend
+    source: pr:#34
+    completed_at: "2026-05-05"
+    notes:
+      - HomePage subtitle restored to mode-aware text; cloud no longer promises quiz feature it cannot run.
+
+  - id: JS-031
+    title: build-static parallel-make race
+    status: todo
+    priority: P3
+    milestone: M3
+    area: operations
+    source: pr:#34
+    depends_on: [JS-026]
+    notes:
+      - bake-static and dump-grammar-examples are peer prereqs without ordering; make -j can race rm vs mkdir on web/public/data.
+      - Add ordering, inline dump into bake-static (overlap with JS-026), or set .NOTPARALLEL.
+      - Source - PR #34 round-2 critic (medium).
+
+  - id: JS-032
+    title: Document rollup vs per-item layout convention in ARCHITECTURE.md
+    status: todo
+    priority: P3
+    milestone: content
+    area: docs
+    source: pr:#34
+    notes:
+      - web/public/data uses both flat rollup (<type>/<level>.<ext>) and nested per-item (<type>/<level>/<slug>.<ext>) layouts.
+      - Add ARCHITECTURE.md "Data layers" subsection so future resources pick layout from access pattern.
+      - Source - PR #34 round-2 architecture-reviewer (low).
+
+  - id: JS-033
+    title: GrammarTab examples slice-cap=5 boundary tests
+    status: todo
+    priority: P3
+    milestone: M3
+    area: frontend
+    source: pr:#34
+    notes:
+      - GrammarTab.tsx slices examples at 5 but tests cover neither length=0 nor length>5.
+      - Add boundary cases (0 / 1 / 6 examples) so cap is pinned.
+      - Source - PR #34 round-2 qa-tester (low, boundary-coverage gap).
+
+  - id: JS-034
+    title: HomePage dev-mode quizCapable=false CTA dead-end
+    status: done
+    priority: P2
+    milestone: M3
+    area: frontend
+    source: pr:#35
+    completed_at: "2026-05-05"
+    notes:
+      - showQuizControls converged to !isStaticBuild && quizCapable; CTA hidden when capability unresolved or quiz disabled.
+      - 3-card NavCard grid gives independent grammar/vocab/kanji entry; App.test.tsx updated.
+
+  - id: JS-035
+    title: Restore App auto-fallback effect test coverage
+    status: todo
+    priority: P3
+    milestone: M3
+    area: frontend
+    source: pr:#35
+    notes:
+      - PR #35 changed App.test.tsx test 3 trigger to NavCard, removing coverage of App.tsx auto-fallback effect when active tab gets filtered out.
+      - Either drive capabilities re-resolve in test, or extract computeNextActiveTab as pure function and unit test.
+      - Source - PR #35 round-1 critic (medium).
+
+  - id: JS-036
+    title: lint-grammar reciprocity + level-dir match invariants
+    status: todo
+    priority: P3
+    milestone: content
+    area: content
+    source: pr:#36
+    notes:
+      - lint-grammar.sh missing two invariants - jlpt_level must equal parent dir name; related_slugs must be bidirectional.
+      - Add jq pass for level-dir match and edge-set check for reciprocity; extend test-lint-grammar.sh fixtures.
+      - Source - PR #36 round-1 critic (medium).
+
+  - id: JS-037
+    title: nuance_note rendering visual upgrade
+    status: todo
+    priority: P3
+    milestone: content
+    area: frontend
+    source: pr:#36
+    notes:
+      - GrammarTab renders nuance_note as text-xs italic slate-500 immediately under title-zh subtitle so it visually disappears.
+      - Try text-sm slate-600, bordered block, or icon prefix; verify with learner-facing review.
+      - Source - PR #36 round-1 critic (low).
+
+  - id: JS-038
+    title: GitHub Pages deploy cache transition window
+    status: todo
+    priority: P3
+    milestone: M3
+    area: operations
+    source: pr:#36
+    notes:
+      - PR #36 flattened dump path; users with old JS bundle still in an open tab hit 404 after deploy.
+      - staticApi.getGrammarExamples swallows errors as empty, so user cannot tell missing from broken.
+      - Evaluate two-step deploy (dual-path then flat), document risk, or surface inline reload prompt on 404.
+      - Source - PR #36 round-1 risk-reviewer (medium).
+      - Generalise on404 to recoverEmpty / emptyOn list per architecture-reviewer 2026-05-06 (no on500/on410 siblings).
+
+  - id: JS-039
+    title: staticApi slug encodeURIComponent consistency
+    status: todo
+    priority: P3
+    milestone: M3
+    area: frontend
+    source: pr:#36
+    notes:
+      - api.ts encodes grammar slug; staticApi.ts interpolates raw slug.
+      - Apply encodeURIComponent in staticApi getGrammar / getGrammarExamples, or assert /^[a-z0-9-]+$/ on entry.
+      - Source - PR #36 round-1 security-reviewer (low, defense-in-depth).
+
   - id: JS-040
     title: Add nested annotations schema spike
     status: doing
@@ -250,6 +517,21 @@ items:
       - Schema spike landed via PR #TBD; full content rollout follows.
       - Add nested annotations object across vocab and grammar with six allowed kinds.
       - Keep grammar mental_model and nuance_note flat fields during transition; frontend reads nested first and flat fields as fallback.
+
+  - id: JS-040b
+    title: PR #39 round-2 polish bundle (annotations spike)
+    status: todo
+    priority: P2
+    milestone: content
+    area: arch/content/ops
+    source: pr:#39, critic+qa-tester round-2 2026-05-06
+    related: [JS-040]
+    notes:
+      - 移除 web/src/__tests__/annotations-invariant.test.ts 的 @ts-nocheck，改 import.meta.url + fileURLToPath.
+      - "scripts/annotations-kinds.txt 仍是第二 SoT，但 invariant test (web/src/__tests__/annotations-invariant.test.ts:15-28) 已把它鎖為 derived artifact。二擇一收斂：(a) 加 npm script 從 ANNOTATION_KINDS 生成 annotations-kinds.txt 並在 CI 跑 diff，把 .txt 變成 generated artifact；(b) 保留 invariant test 為唯一 enforcement，移除 SoT 標籤、改寫為 documentation mirror."
+      - 加 lint-vocab.sh（或擴 lint）對 vocab JSONL 做 annotation-kind allowlist 檢查.
+      - normalizeAnnotations 加 server-side allowlist 過濾（defense-in-depth）.
+      - mergeGrammarAnnotations mutate 行為加說明 comment.
 
   - id: JS-041
     title: Add grammar mental_model MVP
@@ -304,39 +586,74 @@ items:
       - Blocked by JS-040 annotations schema decision, especially flat repeated fields vs nested annotations object.
       - Do not author the remaining entries until the annotation shape is settled.
 
-  - id: JS-025c
-    title: PR #38 round-2 polish bundle (staticApi fault model)
+  - id: JS-043
+    title: lint-backlog-parity check (BACKLOG.md vs backlog.yml)
     status: todo
     priority: P2
-    milestone: M3
-    area: arch/frontend
-    source: pr:#38, critic+qa-tester round-2 2026-05-06
-    related: [JS-025, JS-027]
+    milestone: ops
+    area: ops
+    source: pr-gate:2026-05-06
+    related: [JS-044]
     notes:
-      - "callers pass GrammarExample[] as T to fetchJSONL<T> — array-as-T 對讀者不直覺；考慮拆 overload 命名（fetchJSONLOrThrow / fetchJSONLOrEmpty）或把 element 型別當泛型參數，保留 on404=empty-array 行為（web/src/staticApi.ts:60-68）."
-      - "@ts-expect-error 型別測試從 if(false) block 搬到 *.test-d.ts (web/src/staticApi.ts:230-235)."
-      - staticApiTestHooks 測試 export 改 import.meta.env.MODE 守護或挪到 staticApi.internal.ts.
-      - "parse_error 目前帶 response.status（典型 200），語意上不是 HTTP 失敗；改用 sentinel status 區分。注意 status=0 已被 network_error 佔用（web/src/staticApi.ts:131），請挑不衝突的值（建議 -1 或 422），並在 apiTypes.ts 註解標明各 sentinel 對應 code."
-      - "inline caption 加 role=\"status\" a11y (web/src/tabs/GrammarTab.tsx:253)."
-      - "skipExamplesForInitialSlug ref 加 invariant 註解 (web/src/tabs/GrammarTab.tsx:41/76/123)."
-      - "404 negative-cache 加說明 doc-comment (web/src/staticApi.ts:54,80)."
-      - "既有 500 測試（web/src/staticApi.test.ts:223-235）已斷言 code === 'http_error'；503 retry 測試（web/src/staticApi.test.ts:101-129, line 122）只查 status === 503，補上 code === 'http_error' 斷言以對齊 invariant."
+      - Add make lint-backlog-parity (or npm script) to assert (a) id sets align across BACKLOG.md and backlog.yml, (b) status matches per id, (c) every status=done has completed_at.
+      - Run in CI. Short-term stop-gap, superseded by JS-044 once yml is generated.
+      - Source - pr-gate critic MISSED finding.
 
-  - id: JS-040b
-    title: PR #39 round-2 polish bundle (annotations spike)
+  - id: JS-044
+    title: derive backlog.yml from BACKLOG.md (generated artifact)
     status: todo
     priority: P2
-    milestone: content
-    area: arch/content/ops
-    source: pr:#39, critic+qa-tester round-2 2026-05-06
-    related: [JS-040]
+    milestone: ops
+    area: ops/architecture
+    source: pr-gate:2026-05-06
+    related: [JS-043]
     notes:
-      - 移除 web/src/__tests__/annotations-invariant.test.ts 的 @ts-nocheck，改 import.meta.url + fileURLToPath.
-      - "scripts/annotations-kinds.txt 仍是第二 SoT，但 invariant test (web/src/__tests__/annotations-invariant.test.ts:15-28) 已把它鎖為 derived artifact。二擇一收斂：(a) 加 npm script 從 ANNOTATION_KINDS 生成 annotations-kinds.txt 並在 CI 跑 diff，把 .txt 變成 generated artifact；(b) 保留 invariant test 為唯一 enforcement，移除 SoT 標籤、改寫為 documentation mirror."
-      - 加 lint-vocab.sh（或擴 lint）對 vocab JSONL 做 annotation-kind allowlist 檢查.
-      - normalizeAnnotations 加 server-side allowlist 過濾（defense-in-depth）.
-      - mergeGrammarAnnotations mutate 行為加說明 comment.
+      - Hand-maintained dual SoTs drift; this PR is the second drift, not the first.
+      - Add make backlog-yml that parses BACKLOG.md index table + sections and emits project/backlog.yml. CI runs diff to enforce sync.
+      - Once landed, supersedes the JS-043 parity lint.
+      - Source - pr-gate architecture-reviewer advisory.
 
+  - id: JS-045
+    title: resolve milestone dual semantics before pm-schema v1 freeze
+    status: todo
+    priority: P2
+    milestone: ops
+    area: architecture
+    source: pr-gate:2026-05-06
+    notes:
+      - milestone field currently mixes release-bucket values (M3/M4/DX) and topic-tag values (content). Same-shape entries get opposite milestones (JS-024 ops -> content; JS-031 ops -> M3).
+      - Decide (a) milestone = release-bucket only; lift content to new theme or track field; or (b) document milestone as free-form tag and stop using M3/M4 alongside it. Then retag all entries.
+      - Source - pr-gate architecture-reviewer MEDIUM.
+
+  - id: JS-046
+    title: normalise area vocabulary across backlog entries
+    status: todo
+    priority: P3
+    milestone: ops
+    area: content/architecture
+    source: pr-gate:2026-05-06
+    notes:
+      - area field uses inconsistent abbreviations (arch vs architecture, ops vs operations) across new and existing entries.
+      - Normalise to long forms (architecture / operations / frontend / backend / content / docs); add lint to enforce vocabulary.
+      - Coordinate with JS-045 if both run together.
+      - Source - pr-gate architecture-reviewer LOW.
+
+  - id: JS-047
+    title: reconcile stale yml status & source-field drift in JS-001..JS-015
+    status: todo
+    priority: P3
+    milestone: ops
+    area: ops
+    source: pr-gate:2026-05-06
+    notes:
+      - BACKLOG.md marks JS-009 / JS-012 / JS-013 as closed (2026-05-02 / 2026-05-03), yml still has them as doing/todo with no completed_at.
+      - Source-field drift JS-014 / JS-015 / JS-017 use dash form (user-feedback-2026-04-30 / feedback-2026-05-02), BACKLOG.md table uses colon form (feedback:YYYY-MM-DD).
+      - All pre-existing drift on main (not introduced by D4 backfill PR), surfaced by qa-tester LOW + critic round-2 residual nits.
+      - Update yml entries status to done with completed_at; normalise source to colon form.
+      - Source - pr-gate qa-tester LOW + critic round-2.
+
+# done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
+# Post-v1 closures stay in items[] with status: done + completed_at.
 done:
   - id: JS-D001
     title: Bootstrap layered agent rules and project manifest
