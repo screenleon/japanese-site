@@ -308,18 +308,19 @@ items:
     title: PR #38 round-2 polish bundle (staticApi fault model)
     status: todo
     priority: P2
-    milestone: content
+    milestone: M3
     area: arch/frontend
     source: pr:#38, critic+qa-tester round-2 2026-05-06
+    related: [JS-025, JS-027]
     notes:
-      - fetchJSONL generic arity 統一為 <Item>:Promise<Item[]>，不依 options 變化.
-      - "@ts-expect-error 型別測試從 if(false) block 搬到 *.test-d.ts."
+      - "callers pass GrammarExample[] as T to fetchJSONL<T> — array-as-T 對讀者不直覺；考慮拆 overload 命名（fetchJSONLOrThrow / fetchJSONLOrEmpty）或把 element 型別當泛型參數，保留 on404=empty-array 行為（web/src/staticApi.ts:60-68）."
+      - "@ts-expect-error 型別測試從 if(false) block 搬到 *.test-d.ts (web/src/staticApi.ts:230-235)."
       - staticApiTestHooks 測試 export 改 import.meta.env.MODE 守護或挪到 staticApi.internal.ts.
-      - parse_error 用 status=0 / sentinel（不是 200）.
-      - inline caption 加 role="status" a11y.
-      - skipExamplesForInitialSlug ref 加 invariant 註解.
-      - 404 negative-cache 加說明 doc-comment.
-      - randomGrammar 503 test 補 code='http_error' 斷言.
+      - "parse_error 目前帶 response.status（典型 200），語意上不是 HTTP 失敗；改用 sentinel status 區分。注意 status=0 已被 network_error 佔用（web/src/staticApi.ts:131），請挑不衝突的值（建議 -1 或 422），並在 apiTypes.ts 註解標明各 sentinel 對應 code."
+      - "inline caption 加 role=\"status\" a11y (web/src/tabs/GrammarTab.tsx:253)."
+      - "skipExamplesForInitialSlug ref 加 invariant 註解 (web/src/tabs/GrammarTab.tsx:41/76/123)."
+      - "404 negative-cache 加說明 doc-comment (web/src/staticApi.ts:54,80)."
+      - "既有 500 測試（web/src/staticApi.test.ts:223-235）已斷言 code === 'http_error'；503 retry 測試（web/src/staticApi.test.ts:101-129, line 122）只查 status === 503，補上 code === 'http_error' 斷言以對齊 invariant."
 
   - id: JS-040b
     title: PR #39 round-2 polish bundle (annotations spike)
@@ -328,9 +329,10 @@ items:
     milestone: content
     area: arch/content/ops
     source: pr:#39, critic+qa-tester round-2 2026-05-06
+    related: [JS-040]
     notes:
       - 移除 web/src/__tests__/annotations-invariant.test.ts 的 @ts-nocheck，改 import.meta.url + fileURLToPath.
-      - 消除 scripts/annotations-kinds.txt 第二 SoT — lint-grammar.sh 直接 grep apiTypes.ts as const 陣列.
+      - "scripts/annotations-kinds.txt 仍是第二 SoT，但 invariant test (web/src/__tests__/annotations-invariant.test.ts:15-28) 已把它鎖為 derived artifact。二擇一收斂：(a) 加 npm script 從 ANNOTATION_KINDS 生成 annotations-kinds.txt 並在 CI 跑 diff，把 .txt 變成 generated artifact；(b) 保留 invariant test 為唯一 enforcement，移除 SoT 標籤、改寫為 documentation mirror."
       - 加 lint-vocab.sh（或擴 lint）對 vocab JSONL 做 annotation-kind allowlist 檢查.
       - normalizeAnnotations 加 server-side allowlist 過濾（defense-in-depth）.
       - mergeGrammarAnnotations mutate 行為加說明 comment.

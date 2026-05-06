@@ -183,6 +183,7 @@
 
 **Outcome**: GrammarTab 的 examples 子資源失敗改為靜默空陣列，不再污染 page-level err；主文法內容可正常渲染。
 **See**: pr:#38
+**Related**: JS-025c（round-2 polish bundle）
 
 ## JS-025c — PR #38 round-2 polish bundle (staticApi fault model)
 
@@ -192,16 +193,17 @@
 
 **Requirement**: Complete the round-2 polish package:
 
-1. fetchJSONL generic arity 統一為 `<Item>:Promise<Item[]>`，不依 options 變化
-2. `@ts-expect-error` 型別測試從 `if(false)` block 搬到 `*.test-d.ts`
+1. callers pass `GrammarExample[]` as `T` to `fetchJSONL<T>` — array-as-T 形式對讀者不直覺；考慮拆 overload 命名（如 `fetchJSONLOrThrow` / `fetchJSONLOrEmpty`）或把 element 型別當泛型參數，保留 on404=empty-array 行為（`web/src/staticApi.ts:60-68`）
+2. `@ts-expect-error` 型別測試從 `if(false)` block 搬到 `*.test-d.ts`（`web/src/staticApi.ts:230-235`）
 3. `staticApiTestHooks` 測試 export 改 `import.meta.env.MODE` 守護或挪到 `staticApi.internal.ts`
-4. `parse_error` 用 `status=0` / sentinel（不是 200）
-5. inline caption 加 `role="status"` a11y
-6. `skipExamplesForInitialSlug` ref 加 invariant 註解
-7. 404 negative-cache 加說明 doc-comment
-8. `randomGrammar` 503 test 補 `code='http_error'` 斷言
+4. `parse_error` 目前帶 `response.status`（典型 200），語意上不是 HTTP 失敗；改用 sentinel status 區分。注意 `status=0` 已被 `network_error` 佔用（`web/src/staticApi.ts:131`），請挑不衝突的值（建議 `-1` 或 `422`），並在 `apiTypes.ts` 註解標明各 sentinel 對應 code
+5. inline caption 加 `role="status"` a11y（`web/src/tabs/GrammarTab.tsx:253`）
+6. `skipExamplesForInitialSlug` ref 加 invariant 註解（`web/src/tabs/GrammarTab.tsx:41/76/123`）
+7. 404 negative-cache 加說明 doc-comment（`web/src/staticApi.ts:54,80`）
+8. 既有 500 測試（`web/src/staticApi.test.ts:223-235`）已斷言 `code === 'http_error'`；503 retry 測試（`web/src/staticApi.test.ts:101-129`，特別是 line 122）只查 `status === 503`，補上 `code === 'http_error'` 斷言以對齊 invariant
 
 **Tags**: P2, arch, frontend
+**Related**: JS-025（parent — 子資源錯誤靜默化），JS-027（parent — staticApi 統一 fault model）
 **Source**: pr:#38, critic+qa-tester round-2 2026-05-06
 <!-- 首次記錄: 2026-05-06 -->
 
@@ -221,6 +223,7 @@
 
 **Outcome**: staticApi 的 fetchJSON/fetchJSONL 統一支援 opt-in 404 empty 行為；非 404 HTTP 錯誤保留為 ApiError 並向上傳遞。
 **See**: pr:#38
+**Related**: JS-025c（round-2 polish bundle）
 
 ## JS-028 — CC-BY-SA attribution 落地
 
@@ -385,7 +388,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Tags**: P2, content
 **Status note (2026-05-06)**: in_progress — schema spike landed via PR #TBD; full content rollout follows. See ADR-0001 (`docs/adr/0001-vocab-annotations-schema.md`).
 **Source**: user feedback 2026-05-05 — 「單字的用法 其實用法不一樣 那個後續接的內容也會不一樣 這部分也需要特別說明」
-**Related**: ADR-0001（nested annotations schema）；JS-023（grammar 端 nuance_note 同類問題）；PR-B（agent-generated 例句擴充，可共用 generation pipeline）
+**Related**: ADR-0001（nested annotations schema）；JS-023（grammar 端 nuance_note 同類問題）；PR-B（agent-generated 例句擴充，可共用 generation pipeline）；JS-040b（round-2 polish bundle）
 <!-- 首次記錄: 2026-05-05 -->
 
 ## JS-040b — PR #39 round-2 polish bundle (annotations spike)
@@ -397,12 +400,13 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Requirement**: Complete the round-2 polish package:
 
 1. 移除 `web/src/__tests__/annotations-invariant.test.ts` 的 `@ts-nocheck`，改 `import.meta.url` + `fileURLToPath`
-2. 消除 `scripts/annotations-kinds.txt` 第二 SoT — `lint-grammar.sh` 直接 grep `apiTypes.ts` `as const` 陣列
+2. `scripts/annotations-kinds.txt` 仍是第二 SoT，但 invariant test（`web/src/__tests__/annotations-invariant.test.ts:15-28`）已把它鎖為 derived artifact。二擇一收斂：(a) 加 npm script 從 `ANNOTATION_KINDS` 生成 `annotations-kinds.txt` 並在 CI 跑 diff，把 `.txt` 變成 generated artifact；(b) 保留 invariant test 為唯一 enforcement，移除 SoT 標籤、改寫為 documentation mirror
 3. 加 `lint-vocab.sh`（或擴 lint）對 vocab JSONL 做 annotation-kind allowlist 檢查
 4. `normalizeAnnotations` 加 server-side allowlist 過濾（defense-in-depth）
 5. `mergeGrammarAnnotations` mutate 行為加說明 comment
 
 **Tags**: P2, arch, content, ops
+**Related**: JS-040（parent — vocab annotations schema spike）
 **Source**: pr:#39, critic+qa-tester round-2 2026-05-06
 <!-- 首次記錄: 2026-05-06 -->
 
