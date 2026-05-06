@@ -7,7 +7,7 @@
 
 | # | Status | 主題 | 影響面 | 首次記錄 | Refs |
 |---|--------|------|--------|----------|------|
-| JS-001 | ✅ closed 2026-04-30 | 題目資料與評分 | backend | 2026-04-30 | DECISIONS.md#2026-04-28-pr-3-questionpayload-column--grader-port-refactor |
+| JS-001 | ✅ closed 2026-04-30 | 題目資料與評分 | backend | 2026-04-30 | DECISIONS.md#2026-04-28-pr-3--questionpayload-column--grader-port-refactor |
 | JS-002 | ✅ closed 2026-04-30 | 練習統計介面 | frontend | 2026-04-30 | ROADMAP.md#quiz--content-depth |
 | JS-003 | ✅ closed 2026-04-30 | 失效題目復原 | frontend | 2026-04-30 | ROADMAP.md#operational--dx |
 | JS-004 | ✅ closed 2026-04-30 | 介面測試覆蓋 | backend | 2026-04-30 | ROADMAP.md#architectural-improvements |
@@ -60,6 +60,15 @@
 | JS-051 | 🔵 active | lint-vocab.sh 錯誤訊息列出違規 headword + shell quoting 修正 | operations | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-052 | 🔵 active | make lint 聚合 target 補入 lint-grammar；defense-in-depth comment 集中化 | operations | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-053 | 🔵 active | annotations 未知 kind 的 observability（log / metric） | backend | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-054 | 🔵 active | unify Refs column source value shape (short vs long form) | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-055 | 🔵 active | backfill 首次記錄 HTML comment in legacy sections (JS-001..JS-018) | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-056 | 🔵 active | lint-backlog-render write-order — diff before write or atomic-rename | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-057 | 🔵 active | replace hand-rolled YAML parser in scripts/generate-backlog-md.mjs | arch/operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-058 | 🔵 active | extend test-generate-backlog-md fixtures | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-059 | 🔵 active | lint-backlog-render use mktemp for backup file | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-060 | 🔵 active | CI use diff -u instead of diff -q for backlog drift visibility | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-061 | 🔵 active | re-evaluate yml notes field after generator scope narrowing | arch/operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-062 | 🔵 active | tighten JS-046 closure scope vs JS-045 milestone field boundary | operations | 2026-05-06 | pr-gate:2026-05-06 |
 
 ---
 
@@ -509,29 +518,14 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 
 ## JS-046 — normalise `area:` vocabulary across backlog entries ✅ 2026-05-06
 
-**Problem**: `area:` 欄位用 `/` 串接 free-form tags，存在縮寫不一致：`arch` vs `architecture`、`ops` vs `operations`，新舊條目混用。
-
-**Why**: 純 cosmetic 漂移，但一旦有 filter UI / report script / hook keys off 此欄位，就變 coupling bug。
-
-**Requirement**: 統一為長格式（`architecture` / `operations` / `frontend` / `backend` / `content` / `docs`），retag 所有條目，加 lint 檢查 vocabulary。可與 JS-045 一併執行。
-
-**Tags**: P3, content, arch
-**Source**: pr-gate:2026-05-06 architecture-reviewer LOW
+**Outcome**: yml `area:` 欄位將 `arch` / `ops` 縮寫統一為 `architecture` / `operations`；md 由 JS-044 generator 自動投影。`milestone:` 欄位同類問題由 JS-045 處理（不在本範疇）。
+**See**: pr-gate:2026-05-06 architecture-reviewer LOW
 <!-- 首次記錄: 2026-05-06 -->
 
 ## JS-047 — reconcile stale yml status & source-field drift in JS-001..JS-015 ✅ 2026-05-06
 
-**Problem**: `project/backlog.yml` 中 JS-009 / JS-012 / JS-013 status 仍為 `doing` / `todo`，但 BACKLOG.md 已將它們標為 `✅ closed`（closure 日期 2026-05-02 / 2026-05-03）。同時 source 欄位也有格式漂移：JS-014 / JS-015 / JS-017 yml 用 `user-feedback-2026-04-30` / `feedback-2026-05-02`（dash），但 BACKLOG.md table 統一為 `feedback:YYYY-MM-DD`（colon）。本 PR 的 D4 backfill 範圍只含 JS-016..JS-039，未觸碰 JS-001..JS-015，僅修了 JS-016 source。
-
-**Why**: 雙寫漂移，違反 pm-schema v1 dual-write 規則。雖在 main 既存非本 PR 引入，但已可見、應修。
-
-**Requirement**:
-1. 將 yml 中 JS-009 / JS-012 / JS-013 的 status 改為 `done` 並加 `completed_at`（日期參照 BACKLOG.md）。
-2. 將 yml 中 JS-014 / JS-015 / JS-017 的 source 從 dash 形式改為 colon 形式（`feedback:2026-04-30` / `feedback:2026-05-02`）。
-3. 確認 dual-write parity 完整。可一併在 JS-043 parity lint 落地時自動偵測。
-
-**Tags**: P3, ops
-**Source**: pr-gate:2026-05-06 qa-tester LOW (pre-existing main drift)
+**Outcome**: yml JS-009 / JS-012 / JS-013 status 補為 `done` + `completed_at`；JS-014 / JS-015 / JS-017 source 由 dash 改 colon。md 經 generator 重新投影，恢復 ✅ 收斂日期 suffix。
+**See**: pr-gate:2026-05-06 qa-tester LOW (pre-existing main drift)
 <!-- 首次記錄: 2026-05-06 -->
 
 ## JS-048 — replace hand-maintained Go allowedAnnotationKinds with go:generate / init()
@@ -606,4 +600,112 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Tags**: P3, backend
 **Related**: JS-048（一併決策 silent-drop 語意）
 **Source**: pr-gate:2026-05-06 architecture LOW
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-054 — unify Refs column source value shape (short vs long form)
+
+**Problem**: JS-044 generator 渲染 Refs 欄位時直接照抄 yml `source:`，但既有 yml 同時存在長形（`DECISIONS.md#…`、`ROADMAP.md#…`）與短形（`pr:#36`、`feedback:YYYY-MM-DD`、`pr-gate:YYYY-MM-DD`），index 表呈現不一致。
+
+**Why**: 視覺一致性 + 未來 lint/parser 解析 source 形式時不會踩到雙形。
+
+**Requirement**: 擇一為 canonical（建議短形：`pr:#`、`decisions:#anchor`、`feedback:YYYY-MM-DD`），文件化於 pm-schema v1，全表 retag。
+
+**Tags**: P3, operations
+**Source**: pr-gate:2026-05-06 critic MED #2
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-055 — backfill 首次記錄 HTML comment in legacy sections (JS-001..JS-018)
+
+**Problem**: 19 個 sections（JS-001..JS-009、JS-012..JS-018）缺 `<!-- 首次記錄: YYYY-MM-DD -->` HTML comment；JS-044 generator 暫退到 index table 既存日期當 fallback。
+
+**Why**: 該 fallback 是 single-shot — 若日後對乾淨 md 重新 render，generator 會 fail()。
+
+**Requirement**: 從現行 index table 抽日期，回填 HTML comment 到 19 個 sections。落地後 generator 不再依賴 table-as-fallback。
+
+**Tags**: P3, operations
+**Source**: pr-gate:2026-05-06 critic LOW #3
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-056 — lint-backlog-render write-order — diff before write or atomic-rename
+
+**Problem**: `make lint-backlog-render` 先寫 BACKLOG.md 再 diff；若 generator 中途 crash，working tree 已被改、restore 分支只在 diff mismatch 時觸發。
+
+**Why**: dev 本機殘留半寫 md，CI 雖 ephemeral 但行為契約隱晦。
+
+**Requirement**: generator 寫至 temp file → diff → 僅在 `backlog-render` target 時 atomic mv 至 BACKLOG.md。
+
+**Tags**: P3, operations
+**Source**: pr-gate:2026-05-06 critic LOW #4 + risk LOW #1
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-057 — replace hand-rolled YAML parser in scripts/generate-backlog-md.mjs
+
+**Problem**: generator 內手寫 YAML parser：(a) inline array 用 `,` split 不解 quotes，含逗號的字串會被切；(b) 寫入 plain object，未來 refactor 用 Object.assign / merge 可能 prototype pollution；(c) dialect coupling — 嚴格依賴 2/4-space 縮排與固定 `^  - id:` 形狀，多文件 / 註解 / 多行 scalar 會靜默 mis-parse。
+
+**Why**: 多個 reviewer 同向 LOW finding，根因相同。換真正的 parser（js-yaml）成本低、消除 footgun。
+
+**Requirement**: 換 `js-yaml` 並用 `safeLoad`，或 `Object.create(null)` + key allowlist；補負向測試 fixture（quoted-list、prototype keys、多行）。
+
+**Tags**: P2, arch, operations
+**Source**: pr-gate:2026-05-06 critic LOW #5 + sec LOW #2 + arch LOW #1 + risk LOW #3
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-058 — extend test-generate-backlog-md fixtures
+
+**Problem**: 既有 fixtures 涵蓋 idempotency / missing-id / status mapping / bootstrap skip / orphan-md / duplicate-sections。仍缺：(a) status=done without completed_at；(b) 缺 `首次記錄` 且無 fallback；(c) empty items[]；(d) suffix ids（JS-040b/041a/041b/025c）排序與 heading round-trip；(e) legacy section comment-fallback 路徑；(f) YAML quoted-list parser 語意。
+
+**Why**: 三條 explicit fail() 在生產上沒被觸發過，coverage gap 即未驗證。
+
+**Requirement**: 新增 6 個 fixture cases，每條對應 generator 的 fail() 分支，斷言 exit non-zero + error message 字串。
+
+**Tags**: P3, operations
+**Source**: pr-gate:2026-05-06 qa-tester LOW
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-059 — lint-backlog-render use mktemp for backup file
+
+**Problem**: `/tmp/backlog.before.md` 為固定路徑，多用戶主機上有 symlink hazard；同機並發兩次 lint 也會互踩。
+
+**Why**: defense-in-depth；CI 雖 ephemeral safe，dev 工作站可能多人。
+
+**Requirement**: 改 `tmpfile=$(mktemp)`，加 `trap` cleanup；recipe 端引用該變數。
+
+**Tags**: P3, operations
+**Source**: pr-gate:2026-05-06 sec LOW #1
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-060 — CI use diff -u instead of diff -q for backlog drift visibility
+
+**Problem**: lint-backlog-render fail 時 CI log 只有 "Files differ" 加「Run: make backlog-render」提示，看不到實際 delta。
+
+**Why**: 觸發者要 pull branch + 本地跑才能看出哪邊漂移，每次 +2–5 分鐘。
+
+**Requirement**: 改用 `diff -u` 或 `git --no-pager diff --no-index`，CI log 直接呈現 unified diff。
+
+**Tags**: P3, operations
+**Source**: pr-gate:2026-05-06 risk LOW #2
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-061 — re-evaluate yml notes field after generator scope narrowing
+
+**Problem**: JS-044 落地後 md 敘述為唯一 narrative SoT，但 yml `notes:` 欄位仍各條目存在；尚無 reader 程式化消費，等於閒置 + drift 風險。
+
+**Why**: hybrid SoT 模型若不收斂，`notes:` 可能成為下一個漂移來源（同 JS-047 模式）。
+
+**Requirement**: 評估 (a) 移除 `notes:` 欄位（若無 reader 直接砍）、(b) 從 md 敘述衍生 `notes:`、(c) 強制 `notes:` 為空對於有 md section 的 items。
+
+**Tags**: P3, arch, operations
+**Source**: pr-gate:2026-05-06 arch LOW #2
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-062 — tighten JS-046 closure scope vs JS-045 milestone field boundary
+
+**Problem**: JS-046 在本 PR 已修正 closure 措辭為 area 範圍；但與 JS-045（milestone 雙語意）的工作範圍邊界仍隱晦。
+
+**Why**: JS-045 啟動時若沒清楚範疇宣告，可能重複處理 area（JS-046 做過）或忽略 milestone normalisation 的細節。
+
+**Requirement**: 在 JS-045 brief / notes 顯式註明：milestone 欄位 normalisation 由 JS-045 唯一負責；area 已由 JS-046 完成、不再涉。
+
+**Tags**: P3, operations
+**Source**: pr-gate:2026-05-06 critic LOW #2
 <!-- 首次記錄: 2026-05-06 -->

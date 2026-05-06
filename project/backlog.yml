@@ -18,7 +18,7 @@ items:
     priority: P0
     milestone: M3
     area: backend
-    source: DECISIONS.md#2026-04-28-pr-3-questionpayload-column--grader-port-refactor
+    source: DECISIONS.md#2026-04-28-pr-3--questionpayload-column--grader-port-refactor
     completed_at: "2026-04-30"
     notes:
       - Validate the current dirty worktree as one coherent M3-C2 change.
@@ -599,7 +599,6 @@ items:
     source: pr-gate:2026-05-06
     completed_at: "2026-05-06"
     related: [JS-044]
-    superseded_by: JS-044
     notes:
       - Add make lint-backlog-parity (or npm script) to assert (a) id sets align across BACKLOG.md and backlog.yml, (b) status matches per id, (c) every status=done has completed_at.
       - Run in CI. Short-term stop-gap, superseded by JS-044 once yml is generated.
@@ -741,6 +740,116 @@ items:
       - Contradicts 2026-05-06 fail-loudly observability decision (inverse application — silent filter without observability is silent failure).
       - If JS-048 picks fail-fast, this ticket becomes closed-by JS-048; if silent-drop is retained, emit log.Printf or counter so ops can see lint bypasses.
       - Source - pr-gate architecture LOW.
+
+  - id: JS-054
+    title: unify Refs column source value shape (short vs long form)
+    status: todo
+    priority: P3
+    milestone: ops
+    area: operations
+    source: pr-gate:2026-05-06
+    notes:
+      - JS-044 generator now renders Refs column from yml source verbatim; mixed long-form (DECISIONS.md#..., ROADMAP.md#...) and short-form (pr:#36, feedback:YYYY-MM-DD) shapes co-exist.
+      - Pick one canonical form, document in pm-schema, normalise existing values.
+      - Source - pr-gate critic MED #2.
+
+  - id: JS-055
+    title: backfill 首次記錄 HTML comment in legacy sections (JS-001..JS-018)
+    status: todo
+    priority: P3
+    milestone: ops
+    area: operations
+    source: pr-gate:2026-05-06
+    notes:
+      - 19 sections (JS-001..JS-009, JS-012..JS-018) lack <!-- 首次記錄: YYYY-MM-DD --> HTML comment; generator falls back to existing index-table date.
+      - Single-shot fallback — if md regenerated against fresh table, fail() halts.
+      - Backfill comments from current index table dates so generator no longer depends on table-as-fallback.
+      - Source - pr-gate critic LOW #3.
+
+  - id: JS-056
+    title: lint-backlog-render write-order — diff before write or atomic-rename
+    status: todo
+    priority: P3
+    milestone: ops
+    area: operations
+    source: pr-gate:2026-05-06
+    notes:
+      - lint-backlog-render writes BACKLOG.md before diffing; if generator crashes mid-run, working tree mutated; restore branch only on diff mismatch.
+      - Restructure to write generator output to temp file, then diff, only mv on backlog-render target.
+      - Source - pr-gate critic LOW #4 + risk LOW #1.
+
+  - id: JS-057
+    title: replace hand-rolled YAML parser in scripts/generate-backlog-md.mjs
+    status: todo
+    priority: P2
+    milestone: ops
+    area: arch/operations
+    source: pr-gate:2026-05-06
+    notes:
+      - Hand-rolled parser splits inline arrays on comma without honouring quotes; foot-gun for future structured fields.
+      - Latent prototype pollution risk on plain-object parser target.
+      - Dialect coupled to current 2/4-space yml shape; structural drift would silently mis-parse.
+      - Replace with js-yaml or strict allowlist with Object.create(null) guard.
+      - Source - pr-gate critic LOW #5 + sec LOW #2 + arch LOW #1 + risk LOW #3.
+
+  - id: JS-058
+    title: extend test-generate-backlog-md fixtures
+    status: todo
+    priority: P3
+    milestone: ops
+    area: operations
+    source: pr-gate:2026-05-06
+    notes:
+      - Missing fixtures - status=done without completed_at, missing 首次記錄 with no fallback, empty items[], suffix ids (JS-040b/041a/041b/025c) sort + heading round-trip, legacy section comment-fallback path, YAML quoted-list parser semantics.
+      - Source - pr-gate qa-tester LOW.
+
+  - id: JS-059
+    title: lint-backlog-render use mktemp for backup file
+    status: todo
+    priority: P3
+    milestone: ops
+    area: operations
+    source: pr-gate:2026-05-06
+    notes:
+      - /tmp/backlog.before.md predictable path; symlink hazard on multi-user host; concurrency-racy.
+      - Use mktemp; trap-clean.
+      - Source - pr-gate sec LOW #1.
+
+  - id: JS-060
+    title: CI use diff -u instead of diff -q for backlog drift visibility
+    status: todo
+    priority: P3
+    milestone: ops
+    area: operations
+    source: pr-gate:2026-05-06
+    notes:
+      - lint-backlog-render fails with only "Files differ"; contributor must pull branch + run locally to see what changed.
+      - Replace diff -q with diff -u (or git --no-pager diff --no-index) so CI logs show actual delta.
+      - Source - pr-gate risk LOW #2.
+
+  - id: JS-061
+    title: re-evaluate yml notes field after generator scope narrowing
+    status: todo
+    priority: P3
+    milestone: ops
+    area: arch/operations
+    source: pr-gate:2026-05-06
+    notes:
+      - JS-044 made md narrative authoritative; yml notes mirror is now drift-prone.
+      - Decide if yml notes is still pulling weight - drop if no programmatic reader, or render notes from md to make md unambiguous SoT.
+      - Source - pr-gate arch LOW #2.
+
+  - id: JS-062
+    title: tighten JS-046 closure scope vs JS-045 milestone field boundary
+    status: todo
+    priority: P3
+    milestone: ops
+    area: operations
+    source: pr-gate:2026-05-06
+    notes:
+      - JS-046 closure originally claimed normalisation across "all yml entries" but milestone:ops left untouched on 11 entries; that field is JS-045 territory.
+      - Closure has been tightened in this PR to acknowledge area-only scope; document in JS-045 brief that milestone normalisation is its responsibility.
+      - Source - pr-gate critic LOW #2.
 
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.

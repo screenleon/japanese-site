@@ -167,6 +167,17 @@ function parseSections(sectionsBlock) {
   const matches = [...sectionsBlock.matchAll(/^## (JS-[0-9]+[a-z]?) — .*$/gm)];
   if (matches.length === 0) fail("BACKLOG.md has no JS entry sections");
 
+  const ids = matches.map((m) => m[1]);
+  const seen = new Set();
+  const dupes = new Set();
+  for (const id of ids) {
+    if (seen.has(id)) dupes.add(id);
+    seen.add(id);
+  }
+  if (dupes.size > 0) {
+    fail(`duplicate sections in BACKLOG.md: ${[...dupes].sort().join(", ")}`);
+  }
+
   const sections = new Map();
   for (let i = 0; i < matches.length; i += 1) {
     const start = matches[i].index;
