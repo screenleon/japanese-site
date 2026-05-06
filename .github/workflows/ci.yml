@@ -34,6 +34,9 @@ jobs:
       - name: Lint layered rules
         run: make lint-rules
 
+      - name: Lint backlog render
+        run: make lint-backlog-render
+
       - name: go vet
         run: make vet
 
