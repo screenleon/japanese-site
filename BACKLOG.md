@@ -15,15 +15,15 @@
 | JS-006 | ✅ closed 2026-04-30 | 分類規則語料化 | backend | 2026-04-30 | ROADMAP.md#architectural-improvements |
 | JS-007 | ✅ closed 2026-04-30 | 複習排程輕量化 | product | 2026-04-30 | ROADMAP.md#quiz--content-depth |
 | JS-008 | ✅ closed 2026-04-30 | 日文優先解說 | product | 2026-04-30 | DECISIONS.md#2026-04-30-japanese-first-explanations-with-chinese-reveal |
-| JS-009 | 🟡 in_progress | 學習語料擴充 | content | 2026-04-30 | ROADMAP.md#quiz--content-depth |
+| JS-009 | ✅ closed 2026-05-02 | 學習語料擴充 | content | 2026-04-30 | ROADMAP.md#quiz--content-depth |
 | JS-010 | 🔵 active | 連接器抽取規劃 | connector | 2026-05-01 | DECISIONS.md#2026-04-27-extract-connector-to-its-own-repository-at-m4 |
 | JS-011 | 🔵 active | 例句翻譯匯入 | content | 2026-05-01 | ROADMAP.md#content-quality |
-| JS-012 | 🔵 active | 單字日文優先 | product | 2026-05-01 | DECISIONS.md#2026-04-30-japanese-first-explanations-with-chinese-reveal |
-| JS-013 | 🔵 active | 語料儲存重評 | architecture | 2026-05-01 | ROADMAP.md#content-storage--scale |
-| JS-014 | ✅ closed 2026-04-30 | 等級導向學習 | product | 2026-04-30 | user-feedback-2026-04-30 |
-| JS-015 | ✅ closed 2026-04-30 | 移除英文備援 | product | 2026-04-30 | user-feedback-2026-04-30 |
+| JS-012 | ✅ closed 2026-05-03 | 單字日文優先 | product | 2026-05-01 | DECISIONS.md#2026-04-30-japanese-first-explanations-with-chinese-reveal |
+| JS-013 | ✅ closed 2026-05-03 | 語料儲存重評 | architecture | 2026-05-01 | ROADMAP.md#content-storage--scale |
+| JS-014 | ✅ closed 2026-04-30 | 等級導向學習 | product | 2026-04-30 | feedback:2026-04-30 |
+| JS-015 | ✅ closed 2026-04-30 | 移除英文備援 | product | 2026-04-30 | feedback:2026-04-30 |
 | JS-016 | ✅ closed 2026-05-03 | JLPT 等級來源切換 | content | 2026-05-02 | feedback:2026-05-02 |
-| JS-017 | ✅ closed 2026-05-02 | 已讀內容追蹤 | backend/frontend | 2026-05-02 | feedback-2026-05-02 |
+| JS-017 | ✅ closed 2026-05-02 | 已讀內容追蹤 | backend/frontend | 2026-05-02 | feedback:2026-05-02 |
 | JS-018 | ✅ closed 2026-05-02 | github.io 靜態部署 | frontend/operations | 2026-05-02 | DECISIONS.md#2026-05-02-js-018-github-pages-static-deployment-scope |
 | JS-023 | ✅ closed 2026-05-05 | 跨等級 slug 唯一性 | content | 2026-05-05 | pr:#34 |
 | JS-024 | 🔵 active | corpus 縮水偵測 | operations | 2026-05-05 | pr:#34 |
@@ -53,7 +53,7 @@
 | JS-044 | ✅ closed 2026-05-06 | derive backlog.yml from BACKLOG.md (generated artifact) | operations/architecture | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-045 | 🔵 active | resolve `milestone:` dual semantics before pm-schema v1 freeze | architecture | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-046 | ✅ closed 2026-05-06 | normalise `area:` vocabulary across backlog entries | content/architecture | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-047 | 🔵 active | reconcile stale yml status & source-field drift in JS-001..JS-015 | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-047 | ✅ closed 2026-05-06 | reconcile stale yml status & source-field drift in JS-001..JS-015 | operations | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-048 | 🔵 active | replace hand-maintained Go allowedAnnotationKinds with go:generate / init() | architecture/backend | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-049 | 🔵 active | normalizeAnnotations 補 empty-raw / malformed-JSON 分支測試 | backend | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-050 | 🔵 active | annotations-kinds generator 加 CI smoke / pre-commit hook | operations | 2026-05-06 | pr-gate:2026-05-06 |
@@ -103,7 +103,7 @@
 **Outcome**: 已採用日文優先、繁中按需揭示的解說流程，並更新既有文法內容支援此契約。
 **See**: DECISIONS.md#2026-04-30-japanese-first-explanations-with-chinese-reveal
 
-## JS-009 — 學習語料擴充
+## JS-009 — 學習語料擴充 ✅ 2026-05-02
 
 **Outcome**: 文法 floor 100 達標、克漏字 494（500 目標退場）、N4–N2 kanji 中段補齊 40/40/40、N1 vocab 擴至 120；後續內容擴充改以批次 PR 直接追蹤，不再經此項。
 **See**: pr:#9, pr:#12, pr:#14
@@ -131,12 +131,12 @@
 **Tags**: P3
 <!-- 首次記錄: backfilled 2026-05-01 -->
 
-## JS-012 — 單字日文優先
+## JS-012 — 單字日文優先 ✅ 2026-05-03
 
 **Outcome**: 隨機單字卡改為 japanese-first 揭示契約：`gloss_zh` 預設隱藏，「顯示中文說明」toggle 按鈕按需揭示，切換新單字時自動收起；字幕與 GrammarTab 一致。
 **See**: pr:#22
 
-## JS-013 — 語料儲存重評
+## JS-013 — 語料儲存重評 ✅ 2026-05-03
 
 **Outcome**: 決定維持 flat JSONL per level。JS-012 完成後確認 `gloss_ja`/`gloss_zh` schema 不需要 per-word 延伸結構；觸發重評的前提條件（vocab 需要 per-word examples）目前不存在，故關閉。若未來需要 per-word examples，屆時重開評估。
 
@@ -519,7 +519,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: pr-gate:2026-05-06 architecture-reviewer LOW
 <!-- 首次記錄: 2026-05-06 -->
 
-## JS-047 — reconcile stale yml status & source-field drift in JS-001..JS-015
+## JS-047 — reconcile stale yml status & source-field drift in JS-001..JS-015 ✅ 2026-05-06
 
 **Problem**: `project/backlog.yml` 中 JS-009 / JS-012 / JS-013 status 仍為 `doing` / `todo`，但 BACKLOG.md 已將它們標為 `✅ closed`（closure 日期 2026-05-02 / 2026-05-03）。同時 source 欄位也有格式漂移：JS-014 / JS-015 / JS-017 yml 用 `user-feedback-2026-04-30` / `feedback-2026-05-02`（dash），但 BACKLOG.md table 統一為 `feedback:YYYY-MM-DD`（colon）。本 PR 的 D4 backfill 範圍只含 JS-016..JS-039，未觸碰 JS-001..JS-015，僅修了 JS-016 source。
 

@@ -130,11 +130,12 @@ items:
 
   - id: JS-009
     title: Scale learner corpus depth
-    status: doing
+    status: done
     priority: P1
     milestone: content
     area: content
     source: ROADMAP.md#quiz--content-depth
+    completed_at: "2026-05-02"
     notes:
       - Scale floor is at least 1000 JLPT-tagged learner-usable vocab rows and 100 grammar points.
       - Current seeded state after make seed-corpus: 22552 vocab rows, 6524 JLPT-tagged vocab rows, 66 grammar points, 324 cloze questions, 470 vocab support overlays.
@@ -182,22 +183,24 @@ items:
 
   - id: JS-012
     title: Extend Japanese-first progressive disclosure to vocabulary study
-    status: todo
+    status: done
     priority: P2
     milestone: content
     area: product
     source: DECISIONS.md#2026-04-30-japanese-first-explanations-with-chinese-reveal
+    completed_at: "2026-05-03"
     notes:
       - Vocabulary detail should prefer Japanese definition or example context first.
       - Chinese gloss stays available as learner support, not as the default first read.
 
   - id: JS-013
     title: Re-evaluate corpus storage format for large content scale
-    status: todo
+    status: done
     priority: P1
     milestone: content
     area: architecture
     source: ROADMAP.md#content-storage--scale
+    completed_at: "2026-05-03"
     notes:
       - Target scale is at least 1000+ JLPT-tagged learner-usable vocabulary rows and 100+ grammar points.
       - Review whether JSON-per-grammar-point remains the right authoring format at that size.
@@ -212,7 +215,7 @@ items:
     priority: P1
     milestone: content
     area: product
-    source: user-feedback-2026-04-30
+    source: feedback:2026-04-30
     completed_at: "2026-04-30"
     notes:
       - Grammar and vocabulary tabs now start from JLPT level selection before expanding level content.
@@ -229,7 +232,7 @@ items:
     priority: P0
     milestone: content
     area: product
-    source: user-feedback-2026-04-30
+    source: feedback:2026-04-30
     completed_at: "2026-04-30"
     notes:
       - Learner-facing content should show Japanese first and Traditional Chinese as support.
@@ -260,7 +263,7 @@ items:
     priority: P1
     milestone: M3
     area: backend/frontend
-    source: feedback-2026-05-02
+    source: feedback:2026-05-02
     completed_at: "2026-05-02"
     notes:
       - ProgressStore capabilities-gated dual-mode (SQLite + Null fallback).
@@ -647,11 +650,12 @@ items:
 
   - id: JS-047
     title: reconcile stale yml status & source-field drift in JS-001..JS-015
-    status: todo
+    status: done
     priority: P3
     milestone: ops
     area: operations
     source: pr-gate:2026-05-06
+    completed_at: "2026-05-06"
     notes:
       - BACKLOG.md marks JS-009 / JS-012 / JS-013 as closed (2026-05-02 / 2026-05-03), yml still has them as doing/todo with no completed_at.
       - Source-field drift JS-014 / JS-015 / JS-017 use dash form (user-feedback-2026-04-30 / feedback-2026-05-02), BACKLOG.md table uses colon form (feedback:YYYY-MM-DD).
