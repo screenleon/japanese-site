@@ -41,8 +41,8 @@ if VOCAB_ROOT="$unknown_root" bash "$LINT" >/tmp/test-lint-vocab-unknown.out 2>/
 	echo "test-lint-vocab: unknown kind fixture unexpectedly passed" >&2
 	exit 1
 fi
-grep -F "annotations has unsupported kind 'bogus_kind'" /tmp/test-lint-vocab-unknown.err >/dev/null
-echo "test-lint-vocab: unknown kind fixture correctly rejected"
+grep -F "headword='テストN3' annotations has unsupported kind 'bogus_kind'" /tmp/test-lint-vocab-unknown.err >/dev/null
+echo "test-lint-vocab: unknown kind fixture correctly rejected (headword named)"
 
 # Negative case: annotations not an object (string instead).
 nonobj_root="$tmp_root/nonobj/server/data/corpus/vocab"

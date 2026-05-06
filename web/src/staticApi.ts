@@ -281,7 +281,7 @@ export const staticApi: Api = {
 
   async getGrammarExamples(slug: string) {
     const examples = await fetchJSONL<GrammarExample[]>(
-      `grammar-examples/${slug}.jsonl`,
+      `grammar-examples/${encodeURIComponent(slug)}.jsonl`,
       { on404: "empty-array" }
     );
     return { examples, count: examples.length };

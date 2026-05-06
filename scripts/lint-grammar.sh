@@ -46,7 +46,7 @@ related="$tmpdir/related.tsv"
 touch "$slugs" "$related"
 
 while IFS= read -r -d '' file; do
-	rel="${file#$GRAMMAR_ROOT/}"
+	rel="${file#"$GRAMMAR_ROOT"/}"
 	slug=$(jq -er '.slug | select(type == "string" and length > 0)' "$file") || {
 		echo "lint-grammar: $rel has missing or invalid slug" >&2
 		EXIT_CODE=1
@@ -81,13 +81,19 @@ while IFS= read -r -d '' file; do
 		echo "lint-grammar: $rel annotations must be an object when present" >&2
 		EXIT_CODE=1
 	fi
-	while IFS= read -r kind; do
-		[[ -z "$kind" ]] && continue
-		if ! is_annotation_kind "$kind"; then
-			echo "lint-grammar: $rel annotations has unsupported kind '$kind'" >&2
-			EXIT_CODE=1
-		fi
-	done < <(jq -r 'select(.annotations | type == "object") | .annotations | keys_unsorted[]' "$file")
+	# Per-row TSV (slug, kinds-csv) so error messages can name the offending
+	# slug, mirroring lint-vocab.sh per JS-051.
+	while IFS=$'\t' read -r slug kinds_csv; do
+		[[ -z "$kinds_csv" ]] && continue
+		IFS=',' read -ra kinds <<< "$kinds_csv"
+		for kind in "${kinds[@]}"; do
+			[[ -z "$kind" ]] && continue
+			if ! is_annotation_kind "$kind"; then
+				echo "lint-grammar: $rel slug='$slug' annotations has unsupported kind '$kind'" >&2
+				EXIT_CODE=1
+			fi
+		done
+	done < <(jq -r 'select(.annotations | type == "object") | [(.slug // "?"), (.annotations | keys_unsorted | join(","))] | @tsv' "$file")
 	if ! jq -e '(.annotations == null) or (.annotations | type != "object") or (.annotations | all(.[]; type == "string" and (gsub("\\s"; "") | length > 0)))' "$file" >/dev/null; then
 		echo "lint-grammar: $rel annotations values must be non-empty strings" >&2
 		EXIT_CODE=1

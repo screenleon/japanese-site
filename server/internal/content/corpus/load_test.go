@@ -361,6 +361,23 @@ func TestNormalizeAnnotations_MixedKnownAndUnknownKeepsKnown(t *testing.T) {
 	assertRawMessageMapEqual(t, got, want)
 }
 
+func TestNormalizeAnnotations_EmptyRawReturnsEmptyObject(t *testing.T) {
+	body, err := normalizeAnnotations(nil)
+	if err != nil {
+		t.Fatalf("normalize: %v", err)
+	}
+	if body != "{}" {
+		t.Fatalf("empty raw normalized to %q, want %q", body, "{}")
+	}
+}
+
+func TestNormalizeAnnotations_MalformedJSONReturnsError(t *testing.T) {
+	_, err := normalizeAnnotations(json.RawMessage(`{not-json}`))
+	if err == nil {
+		t.Fatal("malformed JSON did not return an error")
+	}
+}
+
 func TestMergeGrammarAnnotations_UnknownKindIsFiltered(t *testing.T) {
 	gp := &GrammarPoint{
 		Slug:        "test-slug",
