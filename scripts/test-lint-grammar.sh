@@ -82,7 +82,7 @@ if GRAMMAR_ROOT="$unknown_annotation_root" bash scripts/lint-grammar.sh >/tmp/te
 	echo "test-lint-grammar: unknown annotation kind fixture unexpectedly passed" >&2
 	exit 1
 fi
-grep -F "annotations has unsupported kind 'foo'" /tmp/test-lint-grammar-unknown-annotation.err >/dev/null
+grep -F "slug='monono' annotations has unsupported kind 'foo'" /tmp/test-lint-grammar-unknown-annotation.err >/dev/null
 
 empty_annotation_root="$tmp_root/empty-annotation"
 cp -R "$grammar_root" "$empty_annotation_root"
