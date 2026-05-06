@@ -518,13 +518,16 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: pr-gate:2026-05-06 architecture-reviewer LOW
 <!-- 首次記錄: 2026-05-06 -->
 
-## JS-047 — reconcile stale yml status for JS-009 / JS-012 / JS-013
+## JS-047 — reconcile stale yml status & source-field drift in JS-001..JS-015
 
-**Problem**: `project/backlog.yml` 中 JS-009 / JS-012 / JS-013 status 仍為 `doing` / `todo`，但 BACKLOG.md 已將它們標為 `✅ closed`（closure 日期 2026-05-02 / 2026-05-03）。本 PR 的 D4 backfill 範圍只含 JS-016..JS-039，未觸碰 JS-001..JS-015。
+**Problem**: `project/backlog.yml` 中 JS-009 / JS-012 / JS-013 status 仍為 `doing` / `todo`，但 BACKLOG.md 已將它們標為 `✅ closed`（closure 日期 2026-05-02 / 2026-05-03）。同時 source 欄位也有格式漂移：JS-014 / JS-015 / JS-017 yml 用 `user-feedback-2026-04-30` / `feedback-2026-05-02`（dash），但 BACKLOG.md table 統一為 `feedback:YYYY-MM-DD`（colon）。本 PR 的 D4 backfill 範圍只含 JS-016..JS-039，未觸碰 JS-001..JS-015，僅修了 JS-016 source。
 
 **Why**: 雙寫漂移，違反 pm-schema v1 dual-write 規則。雖在 main 既存非本 PR 引入，但已可見、應修。
 
-**Requirement**: 將 yml 中 JS-009 / JS-012 / JS-013 的 status 改為 `done` 並加 `completed_at`（日期參照 BACKLOG.md），確認 dual-write parity 完整。
+**Requirement**:
+1. 將 yml 中 JS-009 / JS-012 / JS-013 的 status 改為 `done` 並加 `completed_at`（日期參照 BACKLOG.md）。
+2. 將 yml 中 JS-014 / JS-015 / JS-017 的 source 從 dash 形式改為 colon 形式（`feedback:2026-04-30` / `feedback:2026-05-02`）。
+3. 確認 dual-write parity 完整。可一併在 JS-043 parity lint 落地時自動偵測。
 
 **Tags**: P3, ops
 **Source**: pr-gate:2026-05-06 qa-tester LOW (pre-existing main drift)

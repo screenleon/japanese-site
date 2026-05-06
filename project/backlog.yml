@@ -639,7 +639,7 @@ items:
       - Source - pr-gate architecture-reviewer LOW.
 
   - id: JS-047
-    title: reconcile stale yml status for JS-009 / JS-012 / JS-013
+    title: reconcile stale yml status & source-field drift in JS-001..JS-015
     status: todo
     priority: P3
     milestone: ops
@@ -647,9 +647,10 @@ items:
     source: pr-gate:2026-05-06
     notes:
       - BACKLOG.md marks JS-009 / JS-012 / JS-013 as closed (2026-05-02 / 2026-05-03), yml still has them as doing/todo with no completed_at.
-      - Pre-existing drift on main (not introduced by D4 backfill PR), surfaced by qa-tester LOW finding.
-      - Update yml entries to status: done with matching completed_at.
-      - Source - pr-gate qa-tester LOW.
+      - Source-field drift JS-014 / JS-015 / JS-017 use dash form (user-feedback-2026-04-30 / feedback-2026-05-02), BACKLOG.md table uses colon form (feedback:YYYY-MM-DD).
+      - All pre-existing drift on main (not introduced by D4 backfill PR), surfaced by qa-tester LOW + critic round-2 residual nits.
+      - Update yml entries status to done with completed_at; normalise source to colon form.
+      - Source - pr-gate qa-tester LOW + critic round-2.
 
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.
