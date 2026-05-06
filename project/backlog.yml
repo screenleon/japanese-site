@@ -304,6 +304,37 @@ items:
       - Blocked by JS-040 annotations schema decision, especially flat repeated fields vs nested annotations object.
       - Do not author the remaining entries until the annotation shape is settled.
 
+  - id: JS-025c
+    title: PR #38 round-2 polish bundle (staticApi fault model)
+    status: todo
+    priority: P2
+    milestone: content
+    area: arch/frontend
+    source: pr:#38, critic+qa-tester round-2 2026-05-06
+    notes:
+      - fetchJSONL generic arity 統一為 <Item>:Promise<Item[]>，不依 options 變化.
+      - "@ts-expect-error 型別測試從 if(false) block 搬到 *.test-d.ts."
+      - staticApiTestHooks 測試 export 改 import.meta.env.MODE 守護或挪到 staticApi.internal.ts.
+      - parse_error 用 status=0 / sentinel（不是 200）.
+      - inline caption 加 role="status" a11y.
+      - skipExamplesForInitialSlug ref 加 invariant 註解.
+      - 404 negative-cache 加說明 doc-comment.
+      - randomGrammar 503 test 補 code='http_error' 斷言.
+
+  - id: JS-040b
+    title: PR #39 round-2 polish bundle (annotations spike)
+    status: todo
+    priority: P2
+    milestone: content
+    area: arch/content/ops
+    source: pr:#39, critic+qa-tester round-2 2026-05-06
+    notes:
+      - 移除 web/src/__tests__/annotations-invariant.test.ts 的 @ts-nocheck，改 import.meta.url + fileURLToPath.
+      - 消除 scripts/annotations-kinds.txt 第二 SoT — lint-grammar.sh 直接 grep apiTypes.ts as const 陣列.
+      - 加 lint-vocab.sh（或擴 lint）對 vocab JSONL 做 annotation-kind allowlist 檢查.
+      - normalizeAnnotations 加 server-side allowlist 過濾（defense-in-depth）.
+      - mergeGrammarAnnotations mutate 行為加說明 comment.
+
 done:
   - id: JS-D001
     title: Bootstrap layered agent rules and project manifest

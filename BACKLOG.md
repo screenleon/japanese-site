@@ -26,6 +26,7 @@
 | JS-023 | ✅ closed 2026-05-05 | 跨等級 slug 唯一性 | content | 2026-05-05 | pr:#34 |
 | JS-024 | 🔵 active | corpus 縮水偵測 | ops | 2026-05-05 | pr:#34 |
 | JS-025 | ✅ closed 2026-05-06 | 子資源錯誤不該打掛主視圖 | frontend | 2026-05-05 | pr:#38 |
+| JS-025c | 🔵 active | PR #38 round-2 polish bundle (staticApi fault model) | arch/frontend | 2026-05-06 | pr:#38 |
 | JS-026 | 🔵 active | dump pipeline 整合進 bake-static | arch | 2026-05-05 | pr:#34 |
 | JS-027 | ✅ closed 2026-05-06 | staticApi 統一 fault model | arch | 2026-05-05 | pr:#38 |
 | JS-028 | 🔵 active | CC-BY-SA attribution 落地 | content | 2026-05-05 | pr:#34 |
@@ -41,6 +42,7 @@
 | JS-038 | 🔵 active | GitHub Pages 部署 cache 過渡視窗 | ops | 2026-05-05 | pr:#36 |
 | JS-039 | 🔵 active | staticApi slug encodeURIComponent 一致性 | frontend | 2026-05-05 | pr:#36 |
 | JS-040 | 🟡 in_progress | vocab usage / collocation / 助詞 / 近義差別標註 | content | 2026-05-05 | feedback:2026-05-05, ADR-0001 |
+| JS-040b | 🔵 active | PR #39 round-2 polish bundle (annotations spike) | arch/content/ops | 2026-05-06 | pr:#39 |
 | JS-041 | ✅ closed 2026-05-06 | grammar mental_model MVP | content/frontend | 2026-05-06 | feedback:2026-05-06 |
 | JS-041a | 🔵 active | lint-grammar mental_model negative fixtures | content/ops | 2026-05-06 | pr:#37 |
 | JS-041b | 🔵 active | JS-041 tier-2 coverage hardening | backend/frontend | 2026-05-06 | pr:#37 |
@@ -181,6 +183,27 @@
 
 **Outcome**: GrammarTab 的 examples 子資源失敗改為靜默空陣列，不再污染 page-level err；主文法內容可正常渲染。
 **See**: pr:#38
+
+## JS-025c — PR #38 round-2 polish bundle (staticApi fault model)
+
+**Problem**: PR #38 round-2 critic + qa-tester review captured staticApi fault-model polish items that were not yet recorded in the project tracker.
+
+**Why**: These are known follow-up bugs / hardening tasks for the static API boundary and should stay visible until resolved.
+
+**Requirement**: Complete the round-2 polish package:
+
+1. fetchJSONL generic arity 統一為 `<Item>:Promise<Item[]>`，不依 options 變化
+2. `@ts-expect-error` 型別測試從 `if(false)` block 搬到 `*.test-d.ts`
+3. `staticApiTestHooks` 測試 export 改 `import.meta.env.MODE` 守護或挪到 `staticApi.internal.ts`
+4. `parse_error` 用 `status=0` / sentinel（不是 200）
+5. inline caption 加 `role="status"` a11y
+6. `skipExamplesForInitialSlug` ref 加 invariant 註解
+7. 404 negative-cache 加說明 doc-comment
+8. `randomGrammar` 503 test 補 `code='http_error'` 斷言
+
+**Tags**: P2, arch, frontend
+**Source**: pr:#38, critic+qa-tester round-2 2026-05-06
+<!-- 首次記錄: 2026-05-06 -->
 
 ## JS-026 — dump pipeline 整合進 bake-static
 
@@ -364,6 +387,24 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: user feedback 2026-05-05 — 「單字的用法 其實用法不一樣 那個後續接的內容也會不一樣 這部分也需要特別說明」
 **Related**: ADR-0001（nested annotations schema）；JS-023（grammar 端 nuance_note 同類問題）；PR-B（agent-generated 例句擴充，可共用 generation pipeline）
 <!-- 首次記錄: 2026-05-05 -->
+
+## JS-040b — PR #39 round-2 polish bundle (annotations spike)
+
+**Problem**: PR #39 round-2 critic + qa-tester review captured annotations-spike polish items that were not yet recorded in the project tracker.
+
+**Why**: The annotations schema and lint path are becoming source-of-truth infrastructure; unresolved polish should remain explicit before larger content rollout depends on it.
+
+**Requirement**: Complete the round-2 polish package:
+
+1. 移除 `web/src/__tests__/annotations-invariant.test.ts` 的 `@ts-nocheck`，改 `import.meta.url` + `fileURLToPath`
+2. 消除 `scripts/annotations-kinds.txt` 第二 SoT — `lint-grammar.sh` 直接 grep `apiTypes.ts` `as const` 陣列
+3. 加 `lint-vocab.sh`（或擴 lint）對 vocab JSONL 做 annotation-kind allowlist 檢查
+4. `normalizeAnnotations` 加 server-side allowlist 過濾（defense-in-depth）
+5. `mergeGrammarAnnotations` mutate 行為加說明 comment
+
+**Tags**: P2, arch, content, ops
+**Source**: pr:#39, critic+qa-tester round-2 2026-05-06
+<!-- 首次記錄: 2026-05-06 -->
 
 ## JS-041 — grammar mental_model MVP ✅ 2026-05-06
 
