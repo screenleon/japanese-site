@@ -1,3 +1,5 @@
+schema_version: v1
+
 # Development backlog for japanese-site.
 #
 # Purpose:
@@ -245,7 +247,7 @@ items:
     priority: P1
     milestone: content
     area: content
-    source: feedback-2026-05-02
+    source: feedback:2026-05-02
     completed_at: "2026-05-03"
     notes:
       - Phase 1 Jisho audit (671 entries, 81 differences = 12.07%) decided full switch to Jisho.
@@ -379,6 +381,7 @@ items:
     notes:
       - HomePage.tsx mixes VITE_DEPLOY_MODE (build-time tree-shake) and quizCapable (runtime gate).
       - Decide between converging to quizCapable (loses bundle elision), extending capabilities with srsCapable, or documenting status quo.
+      - "Note 2026-05-05: JS-023 已移除 getGrammarExamples(slug, level?) 的 optional level 參數；PR #34 的 level leak 其中一個 load-bearing case 已解決。HomePage build-time flag vs runtime capability 收斂仍獨立保留待評估。"
       - Source - PR #34 critic + architecture-reviewer (low).
 
   - id: JS-030
@@ -399,6 +402,7 @@ items:
     milestone: M3
     area: operations
     source: pr:#34
+    depends_on: [JS-026]
     notes:
       - bake-static and dump-grammar-examples are peer prereqs without ordering; make -j can race rm vs mkdir on web/public/data.
       - Add ordering, inline dump into bake-static (overlap with JS-026), or set .NOTPARALLEL.
@@ -582,6 +586,73 @@ items:
       - Blocked by JS-040 annotations schema decision, especially flat repeated fields vs nested annotations object.
       - Do not author the remaining entries until the annotation shape is settled.
 
+  - id: JS-043
+    title: lint-backlog-parity check (BACKLOG.md vs backlog.yml)
+    status: todo
+    priority: P2
+    milestone: ops
+    area: ops
+    source: pr-gate:2026-05-06
+    related: [JS-044]
+    notes:
+      - Add make lint-backlog-parity (or npm script) to assert (a) id sets align across BACKLOG.md and backlog.yml, (b) status matches per id, (c) every status=done has completed_at.
+      - Run in CI. Short-term stop-gap, superseded by JS-044 once yml is generated.
+      - Source - pr-gate critic MISSED finding.
+
+  - id: JS-044
+    title: derive backlog.yml from BACKLOG.md (generated artifact)
+    status: todo
+    priority: P2
+    milestone: ops
+    area: ops/architecture
+    source: pr-gate:2026-05-06
+    related: [JS-043]
+    notes:
+      - Hand-maintained dual SoTs drift; this PR is the second drift, not the first.
+      - Add make backlog-yml that parses BACKLOG.md index table + sections and emits project/backlog.yml. CI runs diff to enforce sync.
+      - Once landed, supersedes the JS-043 parity lint.
+      - Source - pr-gate architecture-reviewer advisory.
+
+  - id: JS-045
+    title: resolve milestone dual semantics before pm-schema v1 freeze
+    status: todo
+    priority: P2
+    milestone: ops
+    area: architecture
+    source: pr-gate:2026-05-06
+    notes:
+      - milestone field currently mixes release-bucket values (M3/M4/DX) and topic-tag values (content). Same-shape entries get opposite milestones (JS-024 ops -> content; JS-031 ops -> M3).
+      - Decide (a) milestone = release-bucket only; lift content to new theme or track field; or (b) document milestone as free-form tag and stop using M3/M4 alongside it. Then retag all entries.
+      - Source - pr-gate architecture-reviewer MEDIUM.
+
+  - id: JS-046
+    title: normalise area vocabulary across backlog entries
+    status: todo
+    priority: P3
+    milestone: ops
+    area: content/architecture
+    source: pr-gate:2026-05-06
+    notes:
+      - area field uses inconsistent abbreviations (arch vs architecture, ops vs operations) across new and existing entries.
+      - Normalise to long forms (architecture / operations / frontend / backend / content / docs); add lint to enforce vocabulary.
+      - Coordinate with JS-045 if both run together.
+      - Source - pr-gate architecture-reviewer LOW.
+
+  - id: JS-047
+    title: reconcile stale yml status for JS-009 / JS-012 / JS-013
+    status: todo
+    priority: P3
+    milestone: ops
+    area: ops
+    source: pr-gate:2026-05-06
+    notes:
+      - BACKLOG.md marks JS-009 / JS-012 / JS-013 as closed (2026-05-02 / 2026-05-03), yml still has them as doing/todo with no completed_at.
+      - Pre-existing drift on main (not introduced by D4 backfill PR), surfaced by qa-tester LOW finding.
+      - Update yml entries to status: done with matching completed_at.
+      - Source - pr-gate qa-tester LOW.
+
+# done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
+# Post-v1 closures stay in items[] with status: done + completed_at.
 done:
   - id: JS-D001
     title: Bootstrap layered agent rules and project manifest

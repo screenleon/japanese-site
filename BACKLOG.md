@@ -47,6 +47,11 @@
 | JS-041a | 🔵 active | lint-grammar mental_model negative fixtures | content/ops | 2026-05-06 | pr:#37 |
 | JS-041b | 🔵 active | JS-041 tier-2 coverage hardening | backend/frontend | 2026-05-06 | pr:#37 |
 | JS-042 | 🔵 active | full grammar mental_model rollout | content | 2026-05-06 | feedback:2026-05-06 |
+| JS-043 | 🔵 active | lint-backlog-parity check (BACKLOG.md ↔ backlog.yml) | ops | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-044 | 🔵 active | derive backlog.yml from BACKLOG.md (generated artifact) | ops | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-045 | 🔵 active | resolve `milestone:` dual semantics before pm-schema v1 freeze | arch | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-046 | 🔵 active | normalise `area:` vocabulary across backlog entries | content | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-047 | 🔵 active | reconcile stale yml status for JS-009 / JS-012 / JS-013 | ops | 2026-05-06 | pr-gate:2026-05-06 |
 
 ---
 
@@ -345,6 +350,8 @@
 
 **Requirement**: 評估 (a) 兩次部署過渡（先寫 dual-path 一次部署，再純 flat 一次部署）；或 (b) 接受並文件化過渡風險；或 (c) staticApi 看到 404 顯示 inline 提示「請重新載入頁面」。
 
+**Note 2026-05-06 (architecture-reviewer)**: 若選 (c)，將 `on404` 一般化為 `recoverEmpty` / `emptyOn` list（不要做 `on500` / `on410` 等個別 sibling）。
+
 **Tags**: P3, ops
 **Source**: PR #36 round-1 risk-reviewer (medium)
 <!-- 首次記錄: 2026-05-05 -->
@@ -459,4 +466,66 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 
 **Tags**: P2, content, blocked-by:JS-040
 **Source**: user feedback 2026-05-06 — 「目前有的單字或者文法 都需要增加這部分」
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-043 — lint-backlog-parity check (BACKLOG.md ↔ backlog.yml)
+
+**Problem**: pm-schema v1 dual-write 規則要求 BACKLOG.md 與 `project/backlog.yml` 上每個 id 都對齊，但目前無自動檢查；前兩次 PR-gate 都抓到 drift（JS-016..JS-039 未 backfill；本 PR 又抓到 JS-029/JS-031/JS-038 內容漂移）。
+
+**Why**: 沒有機械化檢查，drift 只能靠 reviewer 手動發現，會持續累積。
+
+**Requirement**: 加 `make lint-backlog-parity`（或 npm script）做以下檢查：(a) 兩處 id set 對齊；(b) 同 id 的 status 在兩處一致（done/active/in_progress）；(c) closed item 必有 `completed_at`。CI 中跑。短期止血方案，長期由 JS-044 取代。
+
+**Tags**: P2, ops
+**Related**: JS-044（長期解法 — yml 改為 generated artifact）
+**Source**: pr-gate:2026-05-06 critic MISSED finding
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-044 — derive backlog.yml from BACKLOG.md (generated artifact)
+
+**Problem**: `project/backlog.yml` 目前是手動維護的雙寫鏡像，每次 BACKLOG.md 更新都要記得同步，drift 會反覆發生。
+
+**Why**: 兩個 SoT 結構上不可永續；應有一個權威來源、另一個 derive。BACKLOG.md 較人類友好（敘述、原文記錄），yml 較機器友好（可 query），合理方向是 md 為 SoT，yml 自 md 衍生。
+
+**Requirement**: 寫 `make backlog-yml`（或同等 script），parse BACKLOG.md index table + 條目區段，輸出 `project/backlog.yml`。CI 跑 diff，修改 md 後 yml 必同步。落地後 supersede JS-043 的 lint-parity check。
+
+**Tags**: P2, ops, arch
+**Related**: JS-043（短期止血 — parity lint）
+**Source**: pr-gate:2026-05-06 architecture-reviewer advisory
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-045 — resolve `milestone:` dual semantics before pm-schema v1 freeze
+
+**Problem**: `milestone:` 欄位目前同時承載兩種抽象 — release-bucket（M3/M4/DX）與 topic-tag（content）。同形狀條目 milestone 不一致：JS-024（ops）→ content；JS-031（ops）→ M3。
+
+**Why**: 雙重語意會讓未來 filter / report / hook 行為不可預期；schema v1 freeze 前必須擇一。
+
+**Requirement**: 決策 (a) `milestone:` 僅承載 release bucket，把 content 移到新欄位 `theme:` 或 `track:`；或 (b) 文件化 `milestone:` 為 free-form tag，停止與 M3/M4 並用。決策後 retag 所有條目。
+
+**Tags**: P2, arch
+**Source**: pr-gate:2026-05-06 architecture-reviewer MEDIUM
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-046 — normalise `area:` vocabulary across backlog entries
+
+**Problem**: `area:` 欄位用 `/` 串接 free-form tags，存在縮寫不一致：`arch` vs `architecture`、`ops` vs `operations`，新舊條目混用。
+
+**Why**: 純 cosmetic 漂移，但一旦有 filter UI / report script / hook keys off 此欄位，就變 coupling bug。
+
+**Requirement**: 統一為長格式（`architecture` / `operations` / `frontend` / `backend` / `content` / `docs`），retag 所有條目，加 lint 檢查 vocabulary。可與 JS-045 一併執行。
+
+**Tags**: P3, content, arch
+**Source**: pr-gate:2026-05-06 architecture-reviewer LOW
+<!-- 首次記錄: 2026-05-06 -->
+
+## JS-047 — reconcile stale yml status for JS-009 / JS-012 / JS-013
+
+**Problem**: `project/backlog.yml` 中 JS-009 / JS-012 / JS-013 status 仍為 `doing` / `todo`，但 BACKLOG.md 已將它們標為 `✅ closed`（closure 日期 2026-05-02 / 2026-05-03）。本 PR 的 D4 backfill 範圍只含 JS-016..JS-039，未觸碰 JS-001..JS-015。
+
+**Why**: 雙寫漂移，違反 pm-schema v1 dual-write 規則。雖在 main 既存非本 PR 引入，但已可見、應修。
+
+**Requirement**: 將 yml 中 JS-009 / JS-012 / JS-013 的 status 改為 `done` 並加 `completed_at`（日期參照 BACKLOG.md），確認 dual-write parity 完整。
+
+**Tags**: P3, ops
+**Source**: pr-gate:2026-05-06 qa-tester LOW (pre-existing main drift)
 <!-- 首次記錄: 2026-05-06 -->
