@@ -589,30 +589,35 @@ items:
 
   - id: JS-043
     title: lint-backlog-parity check (BACKLOG.md vs backlog.yml)
-    status: todo
+    status: done
     priority: P2
     milestone: ops
     area: ops
     source: pr-gate:2026-05-06
+    completed_at: "2026-05-06"
     related: [JS-044]
+    superseded_by: JS-044
     notes:
       - Add make lint-backlog-parity (or npm script) to assert (a) id sets align across BACKLOG.md and backlog.yml, (b) status matches per id, (c) every status=done has completed_at.
       - Run in CI. Short-term stop-gap, superseded by JS-044 once yml is generated.
       - Source - pr-gate critic MISSED finding.
+      - Superseded by JS-044 (yml-as-source-of-truth for structured fields; lint-backlog-render replaces lint-backlog-parity).
 
   - id: JS-044
     title: derive backlog.yml from BACKLOG.md (generated artifact)
-    status: todo
+    status: done
     priority: P2
     milestone: ops
     area: ops/architecture
     source: pr-gate:2026-05-06
+    completed_at: "2026-05-06"
     related: [JS-043]
     notes:
       - Hand-maintained dual SoTs drift; this PR is the second drift, not the first.
       - Add make backlog-yml that parses BACKLOG.md index table + sections and emits project/backlog.yml. CI runs diff to enforce sync.
       - Once landed, supersedes the JS-043 parity lint.
       - Source - pr-gate architecture-reviewer advisory.
+      - Landed as the inverse generator: project/backlog.yml owns structured fields; BACKLOG.md generated blocks are rendered by lint-backlog-render.
 
   - id: JS-045
     title: resolve milestone dual semantics before pm-schema v1 freeze

@@ -1,4 +1,4 @@
-.PHONY: help lint lint-rules lint-grammar lint-vocab corpus-scale vet test test-dump-grammar-examples test-lint-grammar test-lint-vocab clean bake-static dump-grammar-examples build-static \
+.PHONY: help lint lint-rules lint-grammar lint-vocab backlog-render lint-backlog-render corpus-scale vet test test-dump-grammar-examples test-lint-grammar test-lint-vocab clean bake-static dump-grammar-examples build-static \
         bootstrap dev start build dist dist-update \
         run web-dev web-build \
         seed-jmdict seed-kanjidic2 seed-jlpt seed-tatoeba seed-derive seed-corpus seed-all \
@@ -18,6 +18,8 @@ help:
 	@echo "  test          Go unit tests"
 	@echo "  vet           Go static analysis"
 	@echo "  lint-rules    Layered-rule lint"
+	@echo "  backlog-render Regenerate BACKLOG.md index + status headings"
+	@echo "  lint-backlog-render Verify BACKLOG.md generated sections are current"
 	@echo "  corpus-scale  Report corpus scale against current learning-content floors"
 	@echo "  clean         Remove build artifacts and dev SQLite"
 	@echo "  seed-all      Re-run full corpus pipeline (incl. external data download)"
@@ -152,6 +154,19 @@ lint-grammar:
 
 lint-vocab:
 	bash scripts/lint-vocab.sh
+
+backlog-render:
+	node scripts/generate-backlog-md.mjs
+
+lint-backlog-render:
+	@cp BACKLOG.md /tmp/backlog.before.md
+	@node scripts/generate-backlog-md.mjs
+	@if ! diff -q /tmp/backlog.before.md BACKLOG.md > /dev/null; then \
+		echo "BACKLOG.md is out of date with project/backlog.yml. Run: make backlog-render"; \
+		mv /tmp/backlog.before.md BACKLOG.md; \
+		exit 1; \
+	fi
+	@rm -f /tmp/backlog.before.md
 
 corpus-scale:
 	bash scripts/check-corpus-scale.sh

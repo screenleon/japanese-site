@@ -3,55 +3,57 @@
 
 ## Index
 
-| #  | Status | 主題 | 影響面 | 首次記錄 | Refs |
-|----|--------|------|--------|----------|------|
-| JS-001 | ✅ closed 2026-04-30 | 題目資料與評分 | backend | 2026-04-30 | decisions:#2026-04-28-pr-3--questionpayload-column--grader-port-refactor |
-| JS-002 | ✅ closed 2026-04-30 | 練習統計介面 | frontend | 2026-04-30 | roadmap:#quiz--content-depth |
-| JS-003 | ✅ closed 2026-04-30 | 失效題目復原 | frontend | 2026-04-30 | roadmap:#operational--dx |
-| JS-004 | ✅ closed 2026-04-30 | 介面測試覆蓋 | backend | 2026-04-30 | roadmap:#architectural-improvements |
-| JS-005 | ✅ closed 2026-04-30 | 驗證流程自動化 | ops | 2026-04-30 | roadmap:#operational--dx |
-| JS-006 | ✅ closed 2026-04-30 | 分類規則語料化 | backend | 2026-04-30 | roadmap:#architectural-improvements |
-| JS-007 | ✅ closed 2026-04-30 | 複習排程輕量化 | product | 2026-04-30 | roadmap:#quiz--content-depth |
-| JS-008 | ✅ closed 2026-04-30 | 日文優先解說 | product | 2026-04-30 | decisions:#2026-04-30-japanese-first-explanations-with-chinese-reveal |
-| JS-009 | ✅ closed 2026-05-02 | 學習語料擴充 | content | 2026-04-30 | roadmap:#quiz--content-depth |
-| JS-010 | 🔵 active | 連接器抽取規劃 | connector | 2026-05-01 | decisions:#2026-04-27-extract-connector-to-its-own-repository-at-m4 |
-| JS-011 | 🔵 active | 例句翻譯匯入 | content | 2026-05-01 | roadmap:#content-quality |
-| JS-012 | ✅ closed 2026-05-03 | 單字日文優先 | product | 2026-05-01 | decisions:#2026-04-30-japanese-first-explanations-with-chinese-reveal |
-| JS-013 | ✅ closed 2026-05-03 | 語料儲存重評 | arch | 2026-05-01 | roadmap:#content-storage--scale |
-| JS-014 | ✅ closed 2026-04-30 | 等級導向學習 | product | 2026-04-30 | feedback:2026-04-30 |
-| JS-015 | ✅ closed 2026-04-30 | 移除英文備援 | product | 2026-04-30 | feedback:2026-04-30 |
+<!-- JS-D001..JS-D003 bootstrap entries live in project/backlog.yml `done:` only; not surfaced here. -->
+
+| # | Status | 主題 | 影響面 | 首次記錄 | Refs |
+|---|--------|------|--------|----------|------|
+| JS-001 | ✅ closed 2026-04-30 | 題目資料與評分 | backend | 2026-04-30 | DECISIONS.md#2026-04-28-pr-3-questionpayload-column--grader-port-refactor |
+| JS-002 | ✅ closed 2026-04-30 | 練習統計介面 | frontend | 2026-04-30 | ROADMAP.md#quiz--content-depth |
+| JS-003 | ✅ closed 2026-04-30 | 失效題目復原 | frontend | 2026-04-30 | ROADMAP.md#operational--dx |
+| JS-004 | ✅ closed 2026-04-30 | 介面測試覆蓋 | backend | 2026-04-30 | ROADMAP.md#architectural-improvements |
+| JS-005 | ✅ closed 2026-04-30 | 驗證流程自動化 | operations | 2026-04-30 | ROADMAP.md#operational--dx |
+| JS-006 | ✅ closed 2026-04-30 | 分類規則語料化 | backend | 2026-04-30 | ROADMAP.md#architectural-improvements |
+| JS-007 | ✅ closed 2026-04-30 | 複習排程輕量化 | product | 2026-04-30 | ROADMAP.md#quiz--content-depth |
+| JS-008 | ✅ closed 2026-04-30 | 日文優先解說 | product | 2026-04-30 | DECISIONS.md#2026-04-30-japanese-first-explanations-with-chinese-reveal |
+| JS-009 | 🟡 in_progress | 學習語料擴充 | content | 2026-04-30 | ROADMAP.md#quiz--content-depth |
+| JS-010 | 🔵 active | 連接器抽取規劃 | connector | 2026-05-01 | DECISIONS.md#2026-04-27-extract-connector-to-its-own-repository-at-m4 |
+| JS-011 | 🔵 active | 例句翻譯匯入 | content | 2026-05-01 | ROADMAP.md#content-quality |
+| JS-012 | 🔵 active | 單字日文優先 | product | 2026-05-01 | DECISIONS.md#2026-04-30-japanese-first-explanations-with-chinese-reveal |
+| JS-013 | 🔵 active | 語料儲存重評 | architecture | 2026-05-01 | ROADMAP.md#content-storage--scale |
+| JS-014 | ✅ closed 2026-04-30 | 等級導向學習 | product | 2026-04-30 | user-feedback-2026-04-30 |
+| JS-015 | ✅ closed 2026-04-30 | 移除英文備援 | product | 2026-04-30 | user-feedback-2026-04-30 |
 | JS-016 | ✅ closed 2026-05-03 | JLPT 等級來源切換 | content | 2026-05-02 | feedback:2026-05-02 |
-| JS-017 | ✅ closed 2026-05-02 | 已讀內容追蹤 | backend/frontend | 2026-05-02 | feedback:2026-05-02 |
-| JS-018 | ✅ closed 2026-05-02 | github.io 靜態部署 | frontend/ops | 2026-05-02 | decisions:#2026-05-02-js-018-github-pages-static-deployment-scope |
+| JS-017 | ✅ closed 2026-05-02 | 已讀內容追蹤 | backend/frontend | 2026-05-02 | feedback-2026-05-02 |
+| JS-018 | ✅ closed 2026-05-02 | github.io 靜態部署 | frontend/operations | 2026-05-02 | DECISIONS.md#2026-05-02-js-018-github-pages-static-deployment-scope |
 | JS-023 | ✅ closed 2026-05-05 | 跨等級 slug 唯一性 | content | 2026-05-05 | pr:#34 |
-| JS-024 | 🔵 active | corpus 縮水偵測 | ops | 2026-05-05 | pr:#34 |
+| JS-024 | 🔵 active | corpus 縮水偵測 | operations | 2026-05-05 | pr:#34 |
 | JS-025 | ✅ closed 2026-05-06 | 子資源錯誤不該打掛主視圖 | frontend | 2026-05-05 | pr:#38 |
-| JS-025c | 🔵 active | PR #38 round-2 polish bundle (staticApi fault model) | arch/frontend | 2026-05-06 | pr:#38 |
-| JS-026 | 🔵 active | dump pipeline 整合進 bake-static | arch | 2026-05-05 | pr:#34 |
-| JS-027 | ✅ closed 2026-05-06 | staticApi 統一 fault model | arch | 2026-05-05 | pr:#38 |
+| JS-025c | 🔵 active | PR #38 round-2 polish bundle (staticApi fault model) | arch/frontend | 2026-05-06 | pr:#38, critic+qa-tester round-2 2026-05-06 |
+| JS-026 | 🔵 active | dump pipeline 整合進 bake-static | architecture | 2026-05-05 | pr:#34 |
+| JS-027 | ✅ closed 2026-05-06 | staticApi 統一 fault model | architecture | 2026-05-05 | pr:#38 |
 | JS-028 | 🔵 active | CC-BY-SA attribution 落地 | content | 2026-05-05 | pr:#34 |
 | JS-029 | 🔵 active | HomePage flag 二元收斂評估 | frontend | 2026-05-05 | pr:#34 |
 | JS-030 | ✅ closed 2026-05-05 | Cloud 副標 mode-aware | frontend | 2026-05-05 | pr:#34 |
-| JS-031 | 🔵 active | build-static parallel-make race | ops | 2026-05-05 | pr:#34 |
+| JS-031 | 🔵 active | build-static parallel-make race | operations | 2026-05-05 | pr:#34 |
 | JS-032 | 🔵 active | ARCHITECTURE.md rollup vs per-item 慣例 | docs | 2026-05-05 | pr:#34 |
 | JS-033 | 🔵 active | examples slice cap=5 邊界測試 | frontend | 2026-05-05 | pr:#34 |
 | JS-034 | ✅ closed 2026-05-05 | dev-mode `quizCapable=false` HomePage CTA dead-end | frontend | 2026-05-05 | pr:#35 |
 | JS-035 | 🔵 active | App auto-fallback effect 失去測試覆蓋 | frontend | 2026-05-05 | pr:#35 |
 | JS-036 | 🔵 active | lint-grammar reciprocity + level-dir match | content | 2026-05-05 | pr:#36 |
 | JS-037 | 🔵 active | nuance_note 渲染樣式提升 | frontend | 2026-05-05 | pr:#36 |
-| JS-038 | 🔵 active | GitHub Pages 部署 cache 過渡視窗 | ops | 2026-05-05 | pr:#36 |
+| JS-038 | 🔵 active | GitHub Pages 部署 cache 過渡視窗 | operations | 2026-05-05 | pr:#36 |
 | JS-039 | 🔵 active | staticApi slug encodeURIComponent 一致性 | frontend | 2026-05-05 | pr:#36 |
-| JS-040 | 🟡 in_progress | vocab usage / collocation / 助詞 / 近義差別標註 | content | 2026-05-05 | feedback:2026-05-05, ADR-0001 |
-| JS-040b | ✅ closed 2026-05-06 | PR #39 round-2 polish bundle (annotations spike) | arch/content/ops | 2026-05-06 | pr:#39 |
-| JS-041 | ✅ closed 2026-05-06 | grammar mental_model MVP | content/frontend | 2026-05-06 | feedback:2026-05-06 |
-| JS-041a | 🔵 active | lint-grammar mental_model negative fixtures | content/ops | 2026-05-06 | pr:#37 |
-| JS-041b | 🔵 active | JS-041 tier-2 coverage hardening | backend/frontend | 2026-05-06 | pr:#37 |
-| JS-042 | 🔵 active | full grammar mental_model rollout | content | 2026-05-06 | feedback:2026-05-06 |
-| JS-043 | 🔵 active | lint-backlog-parity check (BACKLOG.md ↔ backlog.yml) | ops | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-044 | 🔵 active | derive backlog.yml from BACKLOG.md (generated artifact) | ops | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-045 | 🔵 active | resolve `milestone:` dual semantics before pm-schema v1 freeze | arch | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-046 | 🔵 active | normalise `area:` vocabulary across backlog entries | content | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-047 | 🔵 active | reconcile stale yml status for JS-009 / JS-012 / JS-013 | ops | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-040 | 🟡 in_progress | vocab usage / collocation / 助詞 / 近義差別標註 | content/backend/frontend | 2026-05-05 | ADR-0001 |
+| JS-040b | ✅ closed 2026-05-06 | PR #39 round-2 polish bundle (annotations spike) | arch/content/ops | 2026-05-06 | pr:#39, critic+qa-tester round-2 2026-05-06 |
+| JS-041 | ✅ closed 2026-05-06 | grammar mental_model MVP | content/frontend | 2026-05-06 | user-feedback-2026-05-06 |
+| JS-041a | 🔵 active | lint-grammar mental_model negative fixtures | content/operations | 2026-05-06 | PR-37-pr-gate-2026-05-06 |
+| JS-041b | 🔵 active | JS-041 tier-2 coverage hardening | backend/frontend | 2026-05-06 | PR-37-pr-gate-2026-05-06 |
+| JS-042 | 🔵 active | full grammar mental_model rollout | content | 2026-05-06 | user-feedback-2026-05-06 |
+| JS-043 | ✅ closed 2026-05-06 | lint-backlog-parity check (BACKLOG.md ↔ backlog.yml) | ops | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-044 | ✅ closed 2026-05-06 | derive backlog.yml from BACKLOG.md (generated artifact) | ops/architecture | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-045 | 🔵 active | resolve `milestone:` dual semantics before pm-schema v1 freeze | architecture | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-046 | 🔵 active | normalise `area:` vocabulary across backlog entries | content/architecture | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-047 | 🔵 active | reconcile stale yml status & source-field drift in JS-001..JS-015 | ops | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-048 | 🔵 active | replace hand-maintained Go allowedAnnotationKinds with go:generate / init() | arch/backend | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-049 | 🔵 active | normalizeAnnotations 補 empty-raw / malformed-JSON 分支測試 | backend | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-050 | 🔵 active | annotations-kinds generator 加 CI smoke / pre-commit hook | ops | 2026-05-06 | pr-gate:2026-05-06 |
@@ -101,7 +103,7 @@
 **Outcome**: 已採用日文優先、繁中按需揭示的解說流程，並更新既有文法內容支援此契約。
 **See**: DECISIONS.md#2026-04-30-japanese-first-explanations-with-chinese-reveal
 
-## JS-009 — 學習語料擴充 ✅ 2026-05-02
+## JS-009 — 學習語料擴充
 
 **Outcome**: 文法 floor 100 達標、克漏字 494（500 目標退場）、N4–N2 kanji 中段補齊 40/40/40、N1 vocab 擴至 120；後續內容擴充改以批次 PR 直接追蹤，不再經此項。
 **See**: pr:#9, pr:#12, pr:#14
@@ -129,12 +131,12 @@
 **Tags**: P3
 <!-- 首次記錄: backfilled 2026-05-01 -->
 
-## JS-012 — 單字日文優先 ✅ 2026-05-03
+## JS-012 — 單字日文優先
 
 **Outcome**: 隨機單字卡改為 japanese-first 揭示契約：`gloss_zh` 預設隱藏，「顯示中文說明」toggle 按鈕按需揭示，切換新單字時自動收起；字幕與 GrammarTab 一致。
 **See**: pr:#22
 
-## JS-013 — 語料儲存重評 ✅ 2026-05-03
+## JS-013 — 語料儲存重評
 
 **Outcome**: 決定維持 flat JSONL per level。JS-012 完成後確認 `gloss_ja`/`gloss_zh` schema 不需要 per-word 延伸結構；觸發重評的前提條件（vocab 需要 per-word examples）目前不存在，故關閉。若未來需要 per-word examples，屆時重開評估。
 
@@ -404,7 +406,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Related**: ADR-0001（nested annotations schema）；JS-023（grammar 端 nuance_note 同類問題）；PR-B（agent-generated 例句擴充，可共用 generation pipeline）；JS-040b（round-2 polish bundle）
 <!-- 首次記錄: 2026-05-05 -->
 
-## JS-040b — PR #39 round-2 polish bundle (annotations spike)
+## JS-040b — PR #39 round-2 polish bundle (annotations spike) ✅ 2026-05-06
 
 **Problem**: PR #39 round-2 critic + qa-tester review captured annotations-spike polish items that were not yet recorded in the project tracker.
 
@@ -474,26 +476,19 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: user feedback 2026-05-06 — 「目前有的單字或者文法 都需要增加這部分」
 <!-- 首次記錄: 2026-05-06 -->
 
-## JS-043 — lint-backlog-parity check (BACKLOG.md ↔ backlog.yml)
+## JS-043 — lint-backlog-parity check (BACKLOG.md ↔ backlog.yml) ✅ 2026-05-06
 
-**Problem**: pm-schema v1 dual-write 規則要求 BACKLOG.md 與 `project/backlog.yml` 上每個 id 都對齊，但目前無自動檢查；前兩次 PR-gate 都抓到 drift（JS-016..JS-039 未 backfill；本 PR 又抓到 JS-029/JS-031/JS-038 內容漂移）。
-
-**Why**: 沒有機械化檢查，drift 只能靠 reviewer 手動發現，會持續累積。
-
-**Requirement**: 加 `make lint-backlog-parity`（或 npm script）做以下檢查：(a) 兩處 id set 對齊；(b) 同 id 的 status 在兩處一致（done/active/in_progress）；(c) closed item 必有 `completed_at`。CI 中跑。短期止血方案，長期由 JS-044 取代。
+**Outcome**: Superseded by JS-044. lint-backlog-render now enforces md ↔ yml parity by regenerating md from yml.
 
 **Tags**: P2, ops
 **Related**: JS-044（長期解法 — yml 改為 generated artifact）
+**See**: JS-044
 **Source**: pr-gate:2026-05-06 critic MISSED finding
 <!-- 首次記錄: 2026-05-06 -->
 
-## JS-044 — derive backlog.yml from BACKLOG.md (generated artifact)
+## JS-044 — derive backlog.yml from BACKLOG.md (generated artifact) ✅ 2026-05-06
 
-**Problem**: `project/backlog.yml` 目前是手動維護的雙寫鏡像，每次 BACKLOG.md 更新都要記得同步，drift 會反覆發生。
-
-**Why**: 兩個 SoT 結構上不可永續；應有一個權威來源、另一個 derive。BACKLOG.md 較人類友好（敘述、原文記錄），yml 較機器友好（可 query），合理方向是 md 為 SoT，yml 自 md 衍生。
-
-**Requirement**: 寫 `make backlog-yml`（或同等 script），parse BACKLOG.md index table + 條目區段，輸出 `project/backlog.yml`。CI 跑 diff，修改 md 後 yml 必同步。落地後 supersede JS-043 的 lint-parity check。
+**Outcome**: Landed hybrid source-of-truth rendering: `project/backlog.yml` now owns structured backlog fields, while BACKLOG.md owns narrative section bodies and the user-facing 主題 text. `make backlog-render` regenerates the index table and status heading suffixes, and `make lint-backlog-render` fails CI on drift.
 
 **Tags**: P2, ops, arch
 **Related**: JS-043（短期止血 — parity lint）
