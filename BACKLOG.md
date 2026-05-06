@@ -42,7 +42,7 @@
 | JS-038 | 🔵 active | GitHub Pages 部署 cache 過渡視窗 | ops | 2026-05-05 | pr:#36 |
 | JS-039 | 🔵 active | staticApi slug encodeURIComponent 一致性 | frontend | 2026-05-05 | pr:#36 |
 | JS-040 | 🟡 in_progress | vocab usage / collocation / 助詞 / 近義差別標註 | content | 2026-05-05 | feedback:2026-05-05, ADR-0001 |
-| JS-040b | 🔵 active | PR #39 round-2 polish bundle (annotations spike) | arch/content/ops | 2026-05-06 | pr:#39 |
+| JS-040b | ✅ closed 2026-05-06 | PR #39 round-2 polish bundle (annotations spike) | arch/content/ops | 2026-05-06 | pr:#39 |
 | JS-041 | ✅ closed 2026-05-06 | grammar mental_model MVP | content/frontend | 2026-05-06 | feedback:2026-05-06 |
 | JS-041a | 🔵 active | lint-grammar mental_model negative fixtures | content/ops | 2026-05-06 | pr:#37 |
 | JS-041b | 🔵 active | JS-041 tier-2 coverage hardening | backend/frontend | 2026-05-06 | pr:#37 |

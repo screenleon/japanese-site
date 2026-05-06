@@ -324,6 +324,43 @@ func TestLoad_StoresAnnotationsTransitionFields(t *testing.T) {
 	}
 }
 
+func TestNormalizeAnnotations_AllKnownKindsPassThrough(t *testing.T) {
+	raw := json.RawMessage(`{
+		"usage": "usage text",
+		"collocations": "collocations text",
+		"particle_pairing": "particle text",
+		"synonym_diff": "synonym text",
+		"mental_model": "model text",
+		"nuance_note": "nuance text"
+	}`)
+
+	got := decodeNormalizedAnnotations(t, raw)
+	want := map[string]json.RawMessage{
+		"usage":            json.RawMessage(`"usage text"`),
+		"collocations":     json.RawMessage(`"collocations text"`),
+		"particle_pairing": json.RawMessage(`"particle text"`),
+		"synonym_diff":     json.RawMessage(`"synonym text"`),
+		"mental_model":     json.RawMessage(`"model text"`),
+		"nuance_note":      json.RawMessage(`"nuance text"`),
+	}
+	assertRawMessageMapEqual(t, got, want)
+}
+
+func TestNormalizeAnnotations_UnknownKindIsFiltered(t *testing.T) {
+	got := decodeNormalizedAnnotations(t, json.RawMessage(`{"typo_kind": "drop me"}`))
+	if len(got) != 0 {
+		t.Fatalf("normalized annotations = %#v, want empty map", got)
+	}
+}
+
+func TestNormalizeAnnotations_MixedKnownAndUnknownKeepsKnown(t *testing.T) {
+	got := decodeNormalizedAnnotations(t, json.RawMessage(`{"usage": "keep me", "typo_kind": "drop me"}`))
+	want := map[string]json.RawMessage{
+		"usage": json.RawMessage(`"keep me"`),
+	}
+	assertRawMessageMapEqual(t, got, want)
+}
+
 func TestLoad_RejectsGrammarAnnotationConflict(t *testing.T) {
 	tmpRoot := t.TempDir()
 	dbPath := filepath.Join(tmpRoot, "test.sqlite")
@@ -623,4 +660,33 @@ func singleQuestionID(t *testing.T, db *sql.DB) string {
 		t.Fatalf("expected exactly one curated question, got %d", len(ids))
 	}
 	return ids[0]
+}
+
+func decodeNormalizedAnnotations(t *testing.T, raw json.RawMessage) map[string]json.RawMessage {
+	t.Helper()
+	body, err := normalizeAnnotations(raw)
+	if err != nil {
+		t.Fatalf("normalize annotations: %v", err)
+	}
+	var got map[string]json.RawMessage
+	if err := json.Unmarshal([]byte(body), &got); err != nil {
+		t.Fatalf("decode normalized annotations: %v", err)
+	}
+	return got
+}
+
+func assertRawMessageMapEqual(t *testing.T, got, want map[string]json.RawMessage) {
+	t.Helper()
+	if len(got) != len(want) {
+		t.Fatalf("normalized annotations = %#v, want %#v", got, want)
+	}
+	for key, wantValue := range want {
+		gotValue, ok := got[key]
+		if !ok {
+			t.Fatalf("normalized annotations missing key %q in %#v", key, got)
+		}
+		if string(gotValue) != string(wantValue) {
+			t.Fatalf("normalized annotations[%q] = %s, want %s", key, gotValue, wantValue)
+		}
+	}
 }

@@ -1,15 +1,18 @@
-// @ts-nocheck
 import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { ANNOTATION_KINDS } from "../apiTypes";
 import { LABELS } from "../components/EntryAnnotations";
 
+const testDir = dirname(fileURLToPath(import.meta.url));
+const repoRoot = resolve(testDir, "../../..");
+
 function readKindsFile() {
-  return readFileSync(resolve(process.cwd(), "../scripts/annotations-kinds.txt"), "utf8")
+  return readFileSync(resolve(repoRoot, "scripts/annotations-kinds.txt"), "utf8")
     .split(/\r?\n/)
     .map((line) => line.trim())
-    .filter(Boolean);
+    .filter((line) => line && !line.startsWith("#"));
 }
 
 describe("annotation kind invariants", () => {
@@ -19,7 +22,7 @@ describe("annotation kind invariants", () => {
     expect(Object.keys(LABELS)).toEqual(kinds);
 
     const adr = readFileSync(
-      resolve(process.cwd(), "../docs/adr/0001-vocab-annotations-schema.md"),
+      resolve(repoRoot, "docs/adr/0001-vocab-annotations-schema.md"),
       "utf8"
     );
     for (const kind of kinds) {

@@ -520,7 +520,8 @@ items:
 
   - id: JS-040b
     title: PR #39 round-2 polish bundle (annotations spike)
-    status: todo
+    status: done
+    completed_at: "2026-05-06"
     priority: P2
     milestone: content
     area: arch/content/ops

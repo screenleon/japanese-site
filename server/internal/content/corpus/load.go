@@ -34,6 +34,15 @@ const (
 	GrammarValidatorID = "import-corpus-v1"
 )
 
+var allowedAnnotationKinds = map[string]struct{}{
+	"usage":            {},
+	"collocations":     {},
+	"particle_pairing": {},
+	"synonym_diff":     {},
+	"mental_model":     {},
+	"nuance_note":      {},
+}
+
 type GrammarPoint struct {
 	Slug            string          `json:"slug"`
 	TitleJA         string          `json:"title_ja"`
@@ -678,6 +687,12 @@ func normalizeAnnotations(raw json.RawMessage) (string, error) {
 	if obj == nil {
 		return "{}", nil
 	}
+	for kind := range obj {
+		if _, ok := allowedAnnotationKinds[kind]; !ok {
+			// Defense in depth: corpus lint should catch typos, but the loader must not persist unknown kinds.
+			delete(obj, kind)
+		}
+	}
 	body, err := json.Marshal(obj)
 	if err != nil {
 		return "", err
@@ -685,6 +700,11 @@ func normalizeAnnotations(raw json.RawMessage) (string, error) {
 	return string(body), nil
 }
 
+// mergeGrammarAnnotations intentionally has two effects for one loader pass:
+// it returns the JSON annotations body to persist, and mutates gp.MentalModel /
+// gp.NuanceNote when the nested annotations map has a value and the flat field
+// is empty. This keeps transition fields converged while the loader normalizes
+// flat and nested grammar annotation shapes in a single pass.
 func mergeGrammarAnnotations(gp *GrammarPoint) (string, error) {
 	raw := gp.Annotations
 	if len(raw) == 0 {
@@ -696,6 +716,12 @@ func mergeGrammarAnnotations(gp *GrammarPoint) (string, error) {
 	}
 	if obj == nil {
 		obj = map[string]string{}
+	}
+	for kind := range obj {
+		if _, ok := allowedAnnotationKinds[kind]; !ok {
+			// Defense in depth: corpus lint should catch typos, but the loader must not persist unknown kinds.
+			delete(obj, kind)
+		}
 	}
 
 	if err := mergeGrammarAnnotationField(gp.Slug, "mental_model", gp.MentalModel, obj); err != nil {
