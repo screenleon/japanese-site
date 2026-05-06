@@ -509,15 +509,17 @@ items:
 
   - id: JS-039
     title: staticApi slug encodeURIComponent consistency
-    status: todo
+    status: done
     priority: P3
     milestone: M3
     area: frontend
     source: pr:#36
+    completed_at: "2026-05-06"
     notes:
       - api.ts encodes grammar slug; staticApi.ts interpolates raw slug.
       - Apply encodeURIComponent in staticApi getGrammar / getGrammarExamples, or assert /^[a-z0-9-]+$/ on entry.
       - Source - PR #36 round-1 security-reviewer (low, defense-in-depth).
+      - Closed 2026-05-06 — staticApi getGrammarExamples now encodes the slug via encodeURIComponent (parity with httpApi); new staticApi.test.ts case pins the invariant.
 
   - id: JS-040
     title: Add nested annotations schema spike
@@ -690,15 +692,17 @@ items:
 
   - id: JS-049
     title: normalizeAnnotations 補 empty-raw / malformed-JSON 分支測試
-    status: todo
+    status: done
     priority: P3
     milestone: ops
     area: backend
     source: pr-gate:2026-05-06
+    completed_at: "2026-05-06"
     notes:
       - JS-040b added 3 normalizeAnnotations test cases (happy / unknown-only / mixed) but skipped len(raw)==0 returning "{}" and json.Unmarshal-error branches.
       - Two-line additions; integration tests cover them indirectly today.
       - Source - pr-gate qa-tester LOW.
+      - Closed 2026-05-06 — Added TestNormalizeAnnotations_EmptyRawReturnsEmptyObject and _MalformedJSONReturnsError to load_test.go.
 
   - id: JS-050
     title: annotations-kinds generator 加 CI smoke / pre-commit hook
@@ -715,16 +719,18 @@ items:
 
   - id: JS-051
     title: lint-vocab.sh 錯誤訊息列出違規 headword + shell quoting 修正
-    status: todo
+    status: done
     priority: P3
     milestone: ops
     area: operations
     source: pr-gate:2026-05-06
+    completed_at: "2026-05-06"
     notes:
       - lint-vocab.sh reports filename only on unknown kind; finding the bad row needs manual grep.
       - rel="${file#$ROOT_DIR/}" has unquoted $ROOT_DIR inside parameter expansion pattern (works today, fragile).
       - Switch to per-row jq parsing emitting (headword, kinds-list) tsv; quote $ROOT_DIR in expansion.
       - Source - pr-gate critic LOW + qa-tester LOW.
+      - Closed 2026-05-06 — lint-vocab.sh now per-row jq emits (headword, kinds-tsv); error names the violating headword. Shell quoting fixed (rel="${file#"$ROOT_DIR"/}"). Test fixture updated to assert headword-bearing error.
 
   - id: JS-052
     title: make lint 聚合 target 補入 lint-grammar 與 defense-in-depth 註解集中化

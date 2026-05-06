@@ -40,7 +40,7 @@ for level in N1 N2 N3 N4 N5; do
 done
 
 for file in "${files[@]}"; do
-	rel="${file#$ROOT_DIR/}"
+	rel="${file#"$ROOT_DIR"/}"
 	if [[ ! -f "$file" ]]; then
 		echo "lint-vocab: missing vocab file: $rel" >&2
 		EXIT_CODE=1
@@ -53,13 +53,21 @@ for file in "${files[@]}"; do
 		continue
 	fi
 
-	while IFS= read -r kind; do
-		[[ -z "$kind" ]] && continue
-		if ! is_annotation_kind "$kind"; then
-			echo "lint-vocab: $rel annotations has unsupported kind '$kind'" >&2
-			EXIT_CODE=1
-		fi
-	done < <(jq -r 'select(.annotations | type == "object") | .annotations | keys_unsorted[]' "$file")
+	# Emit one TSV row per entry that has annotations: headword + comma-joined kinds.
+	# Per-row parsing lets the error message name the offending headword instead
+	# of just the file (JS-051). Tab-separated to survive headwords that contain
+	# commas or other punctuation safely.
+	while IFS=$'\t' read -r headword kinds_csv; do
+		[[ -z "$kinds_csv" ]] && continue
+		IFS=',' read -ra kinds <<< "$kinds_csv"
+		for kind in "${kinds[@]}"; do
+			[[ -z "$kind" ]] && continue
+			if ! is_annotation_kind "$kind"; then
+				echo "lint-vocab: $rel headword='$headword' annotations has unsupported kind '$kind'" >&2
+				EXIT_CODE=1
+			fi
+		done
+	done < <(jq -r 'select(.annotations | type == "object") | [(.headword // "?"), (.annotations | keys_unsorted | join(","))] | @tsv' "$file")
 done
 
 if [[ $EXIT_CODE -ne 0 ]]; then

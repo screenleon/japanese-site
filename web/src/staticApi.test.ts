@@ -288,6 +288,24 @@ describe("staticApi", () => {
     });
   });
 
+  it("getGrammarExamples encodes the slug for the URL path", async () => {
+    // Defense-in-depth: lint-grammar enforces /^[a-z0-9-]+$/ slug shape, so
+    // production slugs need no encoding. This test pins the invariant that
+    // staticApi still encodes per JS-039 (parity with httpApi).
+    const requested: string[] = [];
+    const origFetch = globalThis.fetch;
+    globalThis.fetch = ((url: string) => {
+      requested.push(url);
+      return Promise.resolve(new Response("", { status: 404 }));
+    }) as typeof fetch;
+    try {
+      await staticApi.getGrammarExamples?.("foo/bar");
+      expect(requested).toEqual(["/data/grammar-examples/foo%2Fbar.jsonl"]);
+    } finally {
+      globalThis.fetch = origFetch;
+    }
+  });
+
   it("getGrammarExamples returns an empty result on 404", async () => {
     await expect(staticApi.getGrammarExamples?.("missing")).resolves.toEqual({
       examples: [],

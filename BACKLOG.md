@@ -42,7 +42,7 @@
 | JS-036 | 🔵 active | lint-grammar reciprocity + level-dir match | content | 2026-05-05 | pr:#36 |
 | JS-037 | ✅ closed 2026-05-06 | nuance_note 渲染樣式提升 | frontend | 2026-05-05 | pr:#36 |
 | JS-038 | 🔵 active | GitHub Pages 部署 cache 過渡視窗 | operations | 2026-05-05 | pr:#36 |
-| JS-039 | 🔵 active | staticApi slug encodeURIComponent 一致性 | frontend | 2026-05-05 | pr:#36 |
+| JS-039 | ✅ closed 2026-05-06 | staticApi slug encodeURIComponent 一致性 | frontend | 2026-05-05 | pr:#36 |
 | JS-040 | 🟡 in_progress | vocab usage / collocation / 助詞 / 近義差別標註 | content/backend/frontend | 2026-05-05 | ADR-0001 |
 | JS-040b | ✅ closed 2026-05-06 | PR #39 round-2 polish bundle (annotations spike) | architecture/content/operations | 2026-05-06 | pr:#39, critic+qa-tester round-2 2026-05-06 |
 | JS-041 | ✅ closed 2026-05-06 | grammar mental_model MVP | content/frontend | 2026-05-06 | user-feedback-2026-05-06 |
@@ -55,9 +55,9 @@
 | JS-046 | ✅ closed 2026-05-06 | normalise `area:` vocabulary across backlog entries | content/architecture | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-047 | ✅ closed 2026-05-06 | reconcile stale yml status & source-field drift in JS-001..JS-015 | operations | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-048 | 🔵 active | replace hand-maintained Go allowedAnnotationKinds with go:generate / init() | architecture/backend | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-049 | 🔵 active | normalizeAnnotations 補 empty-raw / malformed-JSON 分支測試 | backend | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-049 | ✅ closed 2026-05-06 | normalizeAnnotations 補 empty-raw / malformed-JSON 分支測試 | backend | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-050 | 🔵 active | annotations-kinds generator 加 CI smoke / pre-commit hook | operations | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-051 | 🔵 active | lint-vocab.sh 錯誤訊息列出違規 headword + shell quoting 修正 | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-051 | ✅ closed 2026-05-06 | lint-vocab.sh 錯誤訊息列出違規 headword + shell quoting 修正 | operations | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-052 | ✅ closed 2026-05-06 | make lint 聚合 target 補入 lint-grammar；defense-in-depth comment 集中化 | operations | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-053 | ✅ closed 2026-05-06 | annotations 未知 kind 的 observability（log / metric） | backend | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-054 | 🔵 active | unify Refs column source value shape (short vs long form) | operations | 2026-05-06 | pr-gate:2026-05-06 |
@@ -335,18 +335,11 @@
 **Source**: PR #36 round-1 risk-reviewer (medium)
 <!-- 首次記錄: 2026-05-05 -->
 
-## JS-039 — staticApi slug encodeURIComponent 一致性
+## JS-039 — staticApi slug encodeURIComponent 一致性 ✅ 2026-05-06
 
-**Problem**: `web/src/api.ts` httpApi 的 grammar slug 路徑用 `encodeURIComponent(slug)`，但 `web/src/staticApi.ts` 的 getGrammarExamples 直接 `${slug}` 插值，沒 encode。今天因為 corpus 是 repo-controlled 且 lint-grammar 強制 `[a-z0-9-]+` shape 沒有 attacker reach，但 defense-in-depth 應收齊。
-
-**Why**: 若未來有 caller 傳非受控 slug，staticApi 路徑就有 path-traversal / URL injection 風險；兩端應 posture 一致。
-
-**Requirement**: staticApi.getGrammarExamples 與 getGrammar 都用 `encodeURIComponent(slug)` 包；或在進入 staticApi 前 assert `/^[a-z0-9-]+$/.test(slug)`。
-
-**Tags**: P3, frontend
-**Source**: PR #36 round-1 security-reviewer (low, defense-in-depth)
+**Outcome**: Closed 2026-05-06 — staticApi getGrammarExamples now encodes the slug via encodeURIComponent (parity with httpApi); staticApi.test.ts gains an invariant test that mutation-bites if encoding is removed.
+**See**: PR #36 round-1 security-reviewer (low, defense-in-depth)
 <!-- 首次記錄: 2026-05-05 -->
-
 ## JS-040 — vocab usage / collocation / 助詞 / 近義差別標註
 
 **Problem**: vocab JSON 目前有 `gloss_ja` / `gloss_zh`，但缺乏「**怎麼用**」這層 meta-knowledge。學習者看到近義詞（例：〜について vs 〜に関して、〜ように vs 〜ために）gloss 相近但實際用法、後接內容、適用情境、register 都不同，現在的 schema 無法表達。動詞的助詞要求（が vs を）、慣用搭配（雨が降る ≠ ＊雨を降る）、近義詞差別也都沒有結構化記錄。
@@ -505,18 +498,11 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: pr-gate:2026-05-06 critic MEDIUM #1 + architecture MEDIUM
 <!-- 首次記錄: 2026-05-06 -->
 
-## JS-049 — normalizeAnnotations 補 empty-raw / malformed-JSON 分支測試
+## JS-049 — normalizeAnnotations 補 empty-raw / malformed-JSON 分支測試 ✅ 2026-05-06
 
-**Problem**: JS-040b 加了 3 個 normalizeAnnotations test case（happy / unknown-only / mixed），但跳過 (a) `len(raw)==0` 回 `"{}"` 與 (b) `json.Unmarshal` 失敗回 error 兩個分支。
-
-**Why**: 本來只有 integration test 間接覆蓋，現在已有 focused unit test 表面，補上邊界與 error path 是兩行的事。
-
-**Requirement**: 加 `TestNormalizeAnnotations_EmptyRawReturnsEmptyObject` 與 `TestNormalizeAnnotations_MalformedJSONReturnsError`。
-
-**Tags**: P3, backend
-**Source**: pr-gate:2026-05-06 qa-tester LOW
+**Outcome**: Closed 2026-05-06 — load_test.go gained TestNormalizeAnnotations_EmptyRawReturnsEmptyObject and _MalformedJSONReturnsError, closing the empty-raw and malformed-JSON branch coverage gaps from JS-040b round-2.
+**See**: pr-gate:2026-05-06 qa-tester LOW
 <!-- 首次記錄: 2026-05-06 -->
-
 ## JS-050 — annotations-kinds generator 加 CI smoke / pre-commit hook
 
 **Problem**: JS-040b 把 `scripts/annotations-kinds.txt` 變成 generated artifact，但沒 hook 在 commit 或 CI 自動跑 generator；漂移仍要靠 invariant test 事後抓。
@@ -529,18 +515,11 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: pr-gate:2026-05-06 critic LOW + architecture LOW
 <!-- 首次記錄: 2026-05-06 -->
 
-## JS-051 — lint-vocab.sh 錯誤訊息列出違規 headword + shell quoting 修正
+## JS-051 — lint-vocab.sh 錯誤訊息列出違規 headword + shell quoting 修正 ✅ 2026-05-06
 
-**Problem**: `scripts/lint-vocab.sh` 偵測到未知 annotation kind 時錯誤訊息只列檔案名（`lint-vocab: vocab/N3.jsonl annotations has unsupported kind 'foo'`），不含 headword；數百筆 entry 中要找錯位需手動 grep。`rel="${file#$ROOT_DIR/}"` 內 `$ROOT_DIR` 未引號，理論上對含特殊字元的路徑脆弱。
-
-**Why**: 提升 dev ergonomics + shell hardening；同類問題 lint-grammar.sh 也有，可一併處理。
-
-**Requirement**: 改 `jq -r 'select(.annotations) | [(.headword // "?"), (.annotations | keys_unsorted | join(","))] | @tsv'` per-row 解析；錯誤訊息含 headword。修 `${file#"$ROOT_DIR"/}` quoting。
-
-**Tags**: P3, ops
-**Source**: pr-gate:2026-05-06 critic LOW + qa-tester LOW
+**Outcome**: Closed 2026-05-06 — lint-vocab.sh switched to per-row jq with TSV (headword, kinds_csv); error message now names the offending headword. rel="${file#"$ROOT_DIR"/}" fix removes unquoted-pattern fragility. test-lint-vocab.sh fixture asserts the new headword-bearing message.
+**See**: pr-gate:2026-05-06 critic LOW + qa-tester LOW
 <!-- 首次記錄: 2026-05-06 -->
-
 ## JS-052 — make lint 聚合 target 補入 lint-grammar；defense-in-depth comment 集中化 ✅ 2026-05-06
 
 **Outcome**: Closed 2026-05-06 — downgraded to advisory; tidy at next make-target touch.
