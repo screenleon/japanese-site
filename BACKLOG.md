@@ -28,7 +28,7 @@
 | JS-023 | ✅ closed 2026-05-05 | 跨等級 slug 唯一性 | content | 2026-05-05 | pr:#34 |
 | JS-024 | 🔵 active | corpus 縮水偵測 | operations | 2026-05-05 | pr:#34 |
 | JS-025 | ✅ closed 2026-05-06 | 子資源錯誤不該打掛主視圖 | frontend | 2026-05-05 | pr:#38 |
-| JS-025c | 🔵 active | PR #38 round-2 polish bundle (staticApi fault model) | arch/frontend | 2026-05-06 | pr:#38, critic+qa-tester round-2 2026-05-06 |
+| JS-025c | 🔵 active | PR #38 round-2 polish bundle (staticApi fault model) | architecture/frontend | 2026-05-06 | pr:#38, critic+qa-tester round-2 2026-05-06 |
 | JS-026 | 🔵 active | dump pipeline 整合進 bake-static | architecture | 2026-05-05 | pr:#34 |
 | JS-027 | ✅ closed 2026-05-06 | staticApi 統一 fault model | architecture | 2026-05-05 | pr:#38 |
 | JS-028 | 🔵 active | CC-BY-SA attribution 落地 | content | 2026-05-05 | pr:#34 |
@@ -44,21 +44,21 @@
 | JS-038 | 🔵 active | GitHub Pages 部署 cache 過渡視窗 | operations | 2026-05-05 | pr:#36 |
 | JS-039 | 🔵 active | staticApi slug encodeURIComponent 一致性 | frontend | 2026-05-05 | pr:#36 |
 | JS-040 | 🟡 in_progress | vocab usage / collocation / 助詞 / 近義差別標註 | content/backend/frontend | 2026-05-05 | ADR-0001 |
-| JS-040b | ✅ closed 2026-05-06 | PR #39 round-2 polish bundle (annotations spike) | arch/content/ops | 2026-05-06 | pr:#39, critic+qa-tester round-2 2026-05-06 |
+| JS-040b | ✅ closed 2026-05-06 | PR #39 round-2 polish bundle (annotations spike) | architecture/content/operations | 2026-05-06 | pr:#39, critic+qa-tester round-2 2026-05-06 |
 | JS-041 | ✅ closed 2026-05-06 | grammar mental_model MVP | content/frontend | 2026-05-06 | user-feedback-2026-05-06 |
 | JS-041a | 🔵 active | lint-grammar mental_model negative fixtures | content/operations | 2026-05-06 | PR-37-pr-gate-2026-05-06 |
 | JS-041b | 🔵 active | JS-041 tier-2 coverage hardening | backend/frontend | 2026-05-06 | PR-37-pr-gate-2026-05-06 |
 | JS-042 | 🔵 active | full grammar mental_model rollout | content | 2026-05-06 | user-feedback-2026-05-06 |
-| JS-043 | ✅ closed 2026-05-06 | lint-backlog-parity check (BACKLOG.md ↔ backlog.yml) | ops | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-044 | ✅ closed 2026-05-06 | derive backlog.yml from BACKLOG.md (generated artifact) | ops/architecture | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-043 | ✅ closed 2026-05-06 | lint-backlog-parity check (BACKLOG.md ↔ backlog.yml) | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-044 | ✅ closed 2026-05-06 | derive backlog.yml from BACKLOG.md (generated artifact) | operations/architecture | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-045 | 🔵 active | resolve `milestone:` dual semantics before pm-schema v1 freeze | architecture | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-046 | 🔵 active | normalise `area:` vocabulary across backlog entries | content/architecture | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-047 | 🔵 active | reconcile stale yml status & source-field drift in JS-001..JS-015 | ops | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-048 | 🔵 active | replace hand-maintained Go allowedAnnotationKinds with go:generate / init() | arch/backend | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-046 | ✅ closed 2026-05-06 | normalise `area:` vocabulary across backlog entries | content/architecture | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-047 | 🔵 active | reconcile stale yml status & source-field drift in JS-001..JS-015 | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-048 | 🔵 active | replace hand-maintained Go allowedAnnotationKinds with go:generate / init() | architecture/backend | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-049 | 🔵 active | normalizeAnnotations 補 empty-raw / malformed-JSON 分支測試 | backend | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-050 | 🔵 active | annotations-kinds generator 加 CI smoke / pre-commit hook | ops | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-051 | 🔵 active | lint-vocab.sh 錯誤訊息列出違規 headword + shell quoting 修正 | ops | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-052 | 🔵 active | make lint 聚合 target 補入 lint-grammar；defense-in-depth comment 集中化 | ops | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-050 | 🔵 active | annotations-kinds generator 加 CI smoke / pre-commit hook | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-051 | 🔵 active | lint-vocab.sh 錯誤訊息列出違規 headword + shell quoting 修正 | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-052 | 🔵 active | make lint 聚合 target 補入 lint-grammar；defense-in-depth comment 集中化 | operations | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-053 | 🔵 active | annotations 未知 kind 的 observability（log / metric） | backend | 2026-05-06 | pr-gate:2026-05-06 |
 
 ---
@@ -507,7 +507,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: pr-gate:2026-05-06 architecture-reviewer MEDIUM
 <!-- 首次記錄: 2026-05-06 -->
 
-## JS-046 — normalise `area:` vocabulary across backlog entries
+## JS-046 — normalise `area:` vocabulary across backlog entries ✅ 2026-05-06
 
 **Problem**: `area:` 欄位用 `/` 串接 free-form tags，存在縮寫不一致：`arch` vs `architecture`、`ops` vs `operations`，新舊條目混用。
 

@@ -322,7 +322,7 @@ items:
     status: todo
     priority: P2
     milestone: M3
-    area: arch/frontend
+    area: architecture/frontend
     source: pr:#38, critic+qa-tester round-2 2026-05-06
     related: [JS-025, JS-027]
     notes:
@@ -524,7 +524,7 @@ items:
     completed_at: "2026-05-06"
     priority: P2
     milestone: content
-    area: arch/content/ops
+    area: architecture/content/operations
     source: pr:#39, critic+qa-tester round-2 2026-05-06
     related: [JS-040]
     notes:
@@ -592,7 +592,7 @@ items:
     status: done
     priority: P2
     milestone: ops
-    area: ops
+    area: operations
     source: pr-gate:2026-05-06
     completed_at: "2026-05-06"
     related: [JS-044]
@@ -608,7 +608,7 @@ items:
     status: done
     priority: P2
     milestone: ops
-    area: ops/architecture
+    area: operations/architecture
     source: pr-gate:2026-05-06
     completed_at: "2026-05-06"
     related: [JS-043]
@@ -633,15 +633,16 @@ items:
 
   - id: JS-046
     title: normalise area vocabulary across backlog entries
-    status: todo
+    status: done
     priority: P3
     milestone: ops
     area: content/architecture
     source: pr-gate:2026-05-06
+    completed_at: "2026-05-06"
     notes:
       - area field uses inconsistent abbreviations (arch vs architecture, ops vs operations) across new and existing entries.
-      - Normalise to long forms (architecture / operations / frontend / backend / content / docs); add lint to enforce vocabulary.
-      - Coordinate with JS-045 if both run together.
+      - Normalised to long forms (architecture / operations) across all yml entries; md auto-derived via JS-044 generator.
+      - Lint to enforce vocabulary not added in this PR — defer; current usage is small and reviewer can spot abbreviated forms in PR-gate.
       - Source - pr-gate architecture-reviewer LOW.
 
   - id: JS-047
@@ -649,7 +650,7 @@ items:
     status: todo
     priority: P3
     milestone: ops
-    area: ops
+    area: operations
     source: pr-gate:2026-05-06
     notes:
       - BACKLOG.md marks JS-009 / JS-012 / JS-013 as closed (2026-05-02 / 2026-05-03), yml still has them as doing/todo with no completed_at.
@@ -663,7 +664,7 @@ items:
     status: todo
     priority: P2
     milestone: ops
-    area: arch/backend
+    area: architecture/backend
     source: pr-gate:2026-05-06
     related: [JS-053]
     notes:
@@ -689,7 +690,7 @@ items:
     status: todo
     priority: P3
     milestone: ops
-    area: ops
+    area: operations
     source: pr-gate:2026-05-06
     notes:
       - JS-040b made scripts/annotations-kinds.txt a generated artifact but no commit-time or CI hook auto-runs the generator.
@@ -702,7 +703,7 @@ items:
     status: todo
     priority: P3
     milestone: ops
-    area: ops
+    area: operations
     source: pr-gate:2026-05-06
     notes:
       - lint-vocab.sh reports filename only on unknown kind; finding the bad row needs manual grep.
@@ -715,7 +716,7 @@ items:
     status: todo
     priority: P3
     milestone: ops
-    area: ops
+    area: operations
     source: pr-gate:2026-05-06
     notes:
       - JS-040b's `lint:` target only lists lint-rules lint-vocab; lint-grammar is invoked transitively via lint-rules — coverage is incidental.
