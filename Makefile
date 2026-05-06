@@ -1,4 +1,4 @@
-.PHONY: help lint-rules lint-grammar corpus-scale vet test test-dump-grammar-examples test-lint-grammar clean bake-static dump-grammar-examples build-static \
+.PHONY: help lint lint-rules lint-grammar lint-vocab corpus-scale vet test test-dump-grammar-examples test-lint-grammar test-lint-vocab clean bake-static dump-grammar-examples build-static \
         bootstrap dev start build dist dist-update \
         run web-dev web-build \
         seed-jmdict seed-kanjidic2 seed-jlpt seed-tatoeba seed-derive seed-corpus seed-all \
@@ -108,7 +108,7 @@ web-build:
 vet:
 	cd server && go vet ./...
 
-test: test-dump-grammar-examples test-lint-grammar
+test: test-dump-grammar-examples test-lint-grammar test-lint-vocab
 	cd server && go test ./...
 
 test-dump-grammar-examples:
@@ -116,6 +116,9 @@ test-dump-grammar-examples:
 
 test-lint-grammar:
 	bash scripts/test-lint-grammar.sh
+
+test-lint-vocab:
+	bash scripts/test-lint-vocab.sh
 
 bake-static:
 	@command -v jq >/dev/null || { echo "bake-static: jq is required (install via apt/brew)"; exit 1; }
@@ -138,12 +141,17 @@ dump-grammar-examples:
 build-static: bake-static dump-grammar-examples
 	cd web && VITE_DEPLOY_MODE=static VITE_DEPLOY_BASE=/japanese-site/ npm run build
 
+lint: lint-rules lint-vocab
+
 lint-rules:
 	bash scripts/lint-rules.sh
 	bash scripts/lint-grammar.sh
 
 lint-grammar:
 	bash scripts/lint-grammar.sh
+
+lint-vocab:
+	bash scripts/lint-vocab.sh
 
 corpus-scale:
 	bash scripts/check-corpus-scale.sh

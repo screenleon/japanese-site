@@ -520,7 +520,8 @@ items:
 
   - id: JS-040b
     title: PR #39 round-2 polish bundle (annotations spike)
-    status: todo
+    status: done
+    completed_at: "2026-05-06"
     priority: P2
     milestone: content
     area: arch/content/ops
@@ -651,6 +652,85 @@ items:
       - All pre-existing drift on main (not introduced by D4 backfill PR), surfaced by qa-tester LOW + critic round-2 residual nits.
       - Update yml entries status to done with completed_at; normalise source to colon form.
       - Source - pr-gate qa-tester LOW + critic round-2.
+
+  - id: JS-048
+    title: replace hand-maintained Go allowedAnnotationKinds with go:generate or init()
+    status: todo
+    priority: P2
+    milestone: ops
+    area: arch/backend
+    source: pr-gate:2026-05-06
+    related: [JS-053]
+    notes:
+      - JS-040b introduced allowedAnnotationKinds Go map — 4th SoT after TS const, .txt, ADR-0001.
+      - Contract test (allowlist_contract_test.go) locks the invariant short-term, but root fix is to derive Go map from scripts/annotations-kinds.txt via go:generate, init() at runtime, or //go:embed.
+      - Decide silent-drop vs fail-fast semantics with JS-053 — recommend fail-fast at loader with lint pre-flight as primary gate.
+      - Source - pr-gate critic MEDIUM #1 + architecture MEDIUM.
+
+  - id: JS-049
+    title: normalizeAnnotations 補 empty-raw / malformed-JSON 分支測試
+    status: todo
+    priority: P3
+    milestone: ops
+    area: backend
+    source: pr-gate:2026-05-06
+    notes:
+      - JS-040b added 3 normalizeAnnotations test cases (happy / unknown-only / mixed) but skipped len(raw)==0 returning "{}" and json.Unmarshal-error branches.
+      - Two-line additions; integration tests cover them indirectly today.
+      - Source - pr-gate qa-tester LOW.
+
+  - id: JS-050
+    title: annotations-kinds generator 加 CI smoke / pre-commit hook
+    status: todo
+    priority: P3
+    milestone: ops
+    area: ops
+    source: pr-gate:2026-05-06
+    notes:
+      - JS-040b made scripts/annotations-kinds.txt a generated artifact but no commit-time or CI hook auto-runs the generator.
+      - Drift only caught after-the-fact by invariant test.
+      - Add make verify-generated (re-run generator + git diff --exit-code) and wire into CI; coordinate with JS-044 generator framework.
+      - Source - pr-gate critic LOW + architecture LOW.
+
+  - id: JS-051
+    title: lint-vocab.sh 錯誤訊息列出違規 headword + shell quoting 修正
+    status: todo
+    priority: P3
+    milestone: ops
+    area: ops
+    source: pr-gate:2026-05-06
+    notes:
+      - lint-vocab.sh reports filename only on unknown kind; finding the bad row needs manual grep.
+      - rel="${file#$ROOT_DIR/}" has unquoted $ROOT_DIR inside parameter expansion pattern (works today, fragile).
+      - Switch to per-row jq parsing emitting (headword, kinds-list) tsv; quote $ROOT_DIR in expansion.
+      - Source - pr-gate critic LOW + qa-tester LOW.
+
+  - id: JS-052
+    title: make lint 聚合 target 補入 lint-grammar 與 defense-in-depth 註解集中化
+    status: todo
+    priority: P3
+    milestone: ops
+    area: ops
+    source: pr-gate:2026-05-06
+    notes:
+      - JS-040b's `lint:` target only lists lint-rules lint-vocab; lint-grammar is invoked transitively via lint-rules — coverage is incidental.
+      - normalizeAnnotations and mergeGrammarAnnotations each carry their own defense-in-depth comment; centralise at allowedAnnotationKinds var to avoid drift.
+      - Make lint explicit dependency list; move comment to var declaration; call sites just reference the var.
+      - Source - pr-gate critic LOW.
+
+  - id: JS-053
+    title: annotations 未知 kind 的 observability (log / metric)
+    status: todo
+    priority: P3
+    milestone: ops
+    area: backend
+    source: pr-gate:2026-05-06
+    related: [JS-048]
+    notes:
+      - normalizeAnnotations / mergeGrammarAnnotations silent-drop unknown kinds; no log/metric emitted.
+      - Contradicts 2026-05-06 fail-loudly observability decision (inverse application — silent filter without observability is silent failure).
+      - If JS-048 picks fail-fast, this ticket becomes closed-by JS-048; if silent-drop is retained, emit log.Printf or counter so ops can see lint bypasses.
+      - Source - pr-gate architecture LOW.
 
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.
