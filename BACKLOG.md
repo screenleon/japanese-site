@@ -17,7 +17,7 @@
 | JS-008 | ✅ closed 2026-04-30 | 日文優先解說 | product | 2026-04-30 | DECISIONS.md#2026-04-30-japanese-first-explanations-with-chinese-reveal |
 | JS-009 | ✅ closed 2026-05-02 | 學習語料擴充 | content | 2026-04-30 | ROADMAP.md#quiz--content-depth |
 | JS-010 | 🔵 active | 連接器抽取規劃 | connector | 2026-05-01 | DECISIONS.md#2026-04-27-extract-connector-to-its-own-repository-at-m4 |
-| JS-011 | 🔵 active | 例句翻譯匯入 | content | 2026-05-01 | ROADMAP.md#content-quality |
+| JS-011 | ✅ closed 2026-05-07 | 例句翻譯匯入 | content | 2026-05-01 | ROADMAP.md#content-quality |
 | JS-012 | ✅ closed 2026-05-03 | 單字日文優先 | product | 2026-05-01 | DECISIONS.md#2026-04-30-japanese-first-explanations-with-chinese-reveal |
 | JS-013 | ✅ closed 2026-05-03 | 語料儲存重評 | architecture | 2026-05-01 | ROADMAP.md#content-storage--scale |
 | JS-014 | ✅ closed 2026-04-30 | 等級導向學習 | product | 2026-04-30 | feedback:2026-04-30 |
@@ -46,8 +46,8 @@
 | JS-040 | 🟡 in_progress | vocab usage / collocation / 助詞 / 近義差別標註 | content/backend/frontend | 2026-05-05 | ADR-0001 |
 | JS-040b | ✅ closed 2026-05-06 | PR #39 round-2 polish bundle (annotations spike) | architecture/content/operations | 2026-05-06 | pr:#39, critic+qa-tester round-2 2026-05-06 |
 | JS-041 | ✅ closed 2026-05-06 | grammar mental_model MVP | content/frontend | 2026-05-06 | user-feedback-2026-05-06 |
-| JS-041a | 🔵 active | lint-grammar mental_model negative fixtures | content/operations | 2026-05-06 | PR-37-pr-gate-2026-05-06 |
-| JS-041b | 🔵 active | JS-041 tier-2 coverage hardening | backend/frontend | 2026-05-06 | PR-37-pr-gate-2026-05-06 |
+| JS-041a | ✅ closed 2026-05-07 | lint-grammar mental_model negative fixtures | content/operations | 2026-05-06 | PR-37-pr-gate-2026-05-06 |
+| JS-041b | ✅ closed 2026-05-07 | JS-041 tier-2 coverage hardening | backend/frontend | 2026-05-06 | PR-37-pr-gate-2026-05-06 |
 | JS-042 | 🔵 active | full grammar mental_model rollout | content | 2026-05-06 | user-feedback-2026-05-06 |
 | JS-043 | ✅ closed 2026-05-06 | lint-backlog-parity check (BACKLOG.md ↔ backlog.yml) | operations | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-044 | ✅ closed 2026-05-06 | derive backlog.yml from BACKLOG.md (generated artifact) | operations/architecture | 2026-05-06 | pr-gate:2026-05-06 |
@@ -129,7 +129,7 @@
 **Status note (2026-04-30)**: 阻塞中 — 等待 M3 deterministic quiz loop 完整交付後再啟動。
 <!-- 首次記錄: backfilled 2026-05-01 -->
 
-## JS-011 — 例句翻譯匯入
+## JS-011 — 例句翻譯匯入 ✅ 2026-05-07
 
 **Problem**: 例句翻譯尚未完整串接，導致句子池目前不容易作為學習支援使用。
 
@@ -404,7 +404,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Related**: JS-040（vocab usage annotation spike）
 <!-- 首次記錄: 2026-05-06 -->
 
-## JS-041a — lint-grammar mental_model negative fixtures
+## JS-041a — lint-grammar mental_model negative fixtures ✅ 2026-05-07
 
 **Problem**: `scripts/lint-grammar.sh` accepts the new `mental_model` / existing `nuance_note` shape, but the negative-path fixture coverage does not yet prove that invalid annotation values fail.
 
@@ -416,7 +416,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: PR #37 PR-gate critic + qa-tester soft advisories 2026-05-06
 <!-- 首次記錄: 2026-05-06 -->
 
-## JS-041b — JS-041 tier-2 coverage hardening
+## JS-041b — JS-041 tier-2 coverage hardening ✅ 2026-05-07
 
 **Problem**: JS-041 covers the MVP path, but deeper end-to-end invariants are still implicit across API serialization, real seed loading, and static deployment artifacts.
 

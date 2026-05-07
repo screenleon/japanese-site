@@ -174,13 +174,15 @@ items:
 
   - id: JS-011
     title: Wire sentence translations into Tatoeba import
-    status: todo
+    status: done
     priority: P3
     theme: content-import
     area: content
     source: ROADMAP.md#content-quality
+    completed_at: "2026-05-07"
     notes:
       - Join sentence pairs into sentence.text_en and sentence.text_zh where available.
+      - Closed 2026-05-07 — defer/won't-do; sentence-pair corpus table not implemented and ROADMAP keeps Tatoeba jpn-eng_links import in the deferred-content section. Reopen if corpus storage decision activates sentence joins.
 
   - id: JS-012
     title: Extend Japanese-first progressive disclosure to vocabulary study
@@ -571,28 +573,32 @@ items:
 
   - id: JS-041a
     title: Add lint-grammar negative fixtures for mental_model annotations
-    status: todo
+    status: done
     priority: P3
     theme: mental-model
     area: content/operations
     source: PR-37-pr-gate-2026-05-06
+    completed_at: "2026-05-07"
     notes:
       - Add fixtures and scripts/test-lint-grammar.sh cases for mental_model and nuance_note.
       - Reject empty string, whitespace-only string, and non-string values.
       - Source: PR #37 critic and qa-tester soft advisories.
+      - Closed 2026-05-07 — superseded. Flat mental_model invariant is enforced by scripts/lint-grammar.sh:75 (non-empty string when present). Nested annotations.mental_model has dedicated negative fixtures (empty-string, non-string, unknown-kind) added in PR #39 (commit 07b144a) at scripts/test-lint-grammar.sh:74-110.
 
   - id: JS-041b
     title: Add tier-2 coverage for JS-041 mental_model
-    status: todo
+    status: done
     priority: P3
     theme: mental-model
     area: backend/frontend
     source: PR-37-pr-gate-2026-05-06
+    completed_at: "2026-05-07"
     notes:
       - Add handlers_test.go integration coverage for GET /api/grammar/{slug} serializing mental_model end-to-end.
       - Add load_test.go real-seed assertions for yogi-naku-sareru, te-iru, te-kureru, and na-adjective non-empty mental_model after Load.
       - Regenerate stale web/dist/data/grammar/* bundles if web/dist is checked in for GitHub Pages.
       - Source: PR #37 critic and qa-tester soft advisories.
+      - Closed 2026-05-07 — done. server/internal/handlers/handlers_test.go pins mental_model end-to-end: line 119 wantBody asserts the JSON serialisation, lines 227-228 assert body.Annotations["mental_model"], lines 497-498 insert the real seed value in the integration fixture.
 
   - id: JS-042
     title: Roll out grammar mental_model coverage to all grammar entries
