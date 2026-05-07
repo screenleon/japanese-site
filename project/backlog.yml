@@ -165,6 +165,7 @@ items:
     status: blocked
     priority: P2
     milestone: M4
+    theme: connector-extraction
     area: connector
     source: DECISIONS.md#2026-04-27-extract-connector-to-its-own-repository-at-m4
     notes:
@@ -175,7 +176,7 @@ items:
     title: Wire sentence translations into Tatoeba import
     status: todo
     priority: P3
-    milestone: content
+    theme: content-import
     area: content
     source: ROADMAP.md#content-quality
     notes:
@@ -300,7 +301,7 @@ items:
     title: Corpus shrink detection in dump pipeline
     status: todo
     priority: P2
-    milestone: content
+    theme: corpus-quality
     area: operations
     source: pr:#34
     notes:
@@ -325,6 +326,7 @@ items:
     status: todo
     priority: P2
     milestone: M3
+    theme: static-fault-model
     area: architecture/frontend
     source: pr:#38, critic+qa-tester round-2 2026-05-06
     related: [JS-025, JS-027]
@@ -343,6 +345,7 @@ items:
     status: todo
     priority: P3
     milestone: M3
+    theme: bake-pipeline
     area: architecture
     source: pr:#34
     notes:
@@ -366,7 +369,7 @@ items:
     title: CC-BY-SA attribution preserved through dump pipeline
     status: todo
     priority: P2
-    milestone: content
+    theme: attribution
     area: content
     source: pr:#34
     notes:
@@ -460,6 +463,7 @@ items:
     status: todo
     priority: P3
     milestone: M3
+    theme: static-deploy
     area: frontend
     source: pr:#35
     notes:
@@ -471,7 +475,7 @@ items:
     title: lint-grammar reciprocity + level-dir match invariants
     status: todo
     priority: P3
-    milestone: content
+    theme: lint-grammar
     area: content
     source: pr:#36
     notes:
@@ -498,6 +502,7 @@ items:
     status: todo
     priority: P3
     milestone: M3
+    theme: static-deploy
     area: operations
     source: pr:#36
     notes:
@@ -525,7 +530,7 @@ items:
     title: Add nested annotations schema spike
     status: doing
     priority: P2
-    milestone: content
+    theme: annotations-schema
     area: content/backend/frontend
     source: ADR-0001
     notes:
@@ -568,7 +573,7 @@ items:
     title: Add lint-grammar negative fixtures for mental_model annotations
     status: todo
     priority: P3
-    milestone: content
+    theme: mental-model
     area: content/operations
     source: PR-37-pr-gate-2026-05-06
     notes:
@@ -580,7 +585,7 @@ items:
     title: Add tier-2 coverage for JS-041 mental_model
     status: todo
     priority: P3
-    milestone: content
+    theme: mental-model
     area: backend/frontend
     source: PR-37-pr-gate-2026-05-06
     notes:
@@ -593,7 +598,7 @@ items:
     title: Roll out grammar mental_model coverage to all grammar entries
     status: blocked
     priority: P2
-    milestone: content
+    theme: mental-model
     area: content
     source: user-feedback-2026-05-06
     notes:
@@ -635,11 +640,13 @@ items:
 
   - id: JS-045
     title: resolve milestone dual semantics before pm-schema v1 freeze
-    status: todo
+    status: done
     priority: P2
-    milestone: ops
+    milestone: DX
+    theme: pm-schema
     area: architecture
     source: pr-gate:2026-05-06
+    completed_at: "2026-05-07"
     notes:
       - milestone field currently mixes release-bucket values (M3/M4/DX) and topic-tag values (content). Same-shape entries get opposite milestones (JS-024 ops -> content; JS-031 ops -> M3).
       - Decide (a) milestone = release-bucket only; lift content to new theme or track field; or (b) document milestone as free-form tag and stop using M3/M4 alongside it. Then retag all entries.
@@ -679,7 +686,8 @@ items:
     title: replace hand-maintained Go allowedAnnotationKinds with go:generate or init()
     status: todo
     priority: P2
-    milestone: ops
+    milestone: DX
+    theme: annotations-schema
     area: architecture/backend
     source: pr-gate:2026-05-06
     related: [JS-053]
@@ -708,7 +716,8 @@ items:
     title: annotations-kinds generator 加 CI smoke / pre-commit hook
     status: todo
     priority: P3
-    milestone: ops
+    milestone: DX
+    theme: annotations-schema
     area: operations
     source: pr-gate:2026-05-06
     notes:
@@ -767,7 +776,8 @@ items:
     title: unify Refs column source value shape (short vs long form)
     status: todo
     priority: P3
-    milestone: ops
+    milestone: DX
+    theme: pm-schema
     area: operations
     source: pr-gate:2026-05-06
     notes:
@@ -794,7 +804,8 @@ items:
     title: lint-backlog-render write-order — diff before write or atomic-rename
     status: todo
     priority: P3
-    milestone: ops
+    milestone: DX
+    theme: pm-schema
     area: operations
     source: pr-gate:2026-05-06
     notes:
@@ -807,7 +818,8 @@ items:
     title: replace hand-rolled YAML parser in scripts/generate-backlog-md.mjs
     status: todo
     priority: P2
-    milestone: ops
+    milestone: DX
+    theme: pm-schema
     area: arch/operations
     source: pr-gate:2026-05-06
     notes:
@@ -863,7 +875,8 @@ items:
     title: re-evaluate yml notes field after generator scope narrowing
     status: todo
     priority: P3
-    milestone: ops
+    milestone: DX
+    theme: pm-schema
     area: arch/operations
     source: pr-gate:2026-05-06
     notes:

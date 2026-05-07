@@ -1,4 +1,4 @@
-.PHONY: help lint lint-rules lint-grammar lint-vocab backlog-render lint-backlog-render corpus-scale vet test test-dump-grammar-examples test-lint-grammar test-lint-vocab clean bake-static dump-grammar-examples build-static \
+.PHONY: help lint lint-rules lint-grammar lint-vocab backlog-render lint-backlog-render corpus-scale vet test test-dump-grammar-examples test-lint-grammar test-lint-vocab test-validate-backlog-schema clean bake-static dump-grammar-examples build-static \
         bootstrap dev start build dist dist-update \
         run web-dev web-build \
         seed-jmdict seed-kanjidic2 seed-jlpt seed-tatoeba seed-derive seed-corpus seed-all \
@@ -16,6 +16,7 @@ help:
 	@echo "  dist-update   Stage into dist/ — build + seed-corpus only (fast, content update)"
 	@echo "  db-update     Reload curated corpus into local dev DB (vocab + grammar questions)"
 	@echo "  test          Go unit tests"
+	@echo "  test-validate-backlog-schema Backlog schema validator fixtures"
 	@echo "  vet           Go static analysis"
 	@echo "  lint-rules    Layered-rule lint"
 	@echo "  backlog-render Regenerate BACKLOG.md index + status headings"
@@ -110,7 +111,7 @@ web-build:
 vet:
 	cd server && go vet ./...
 
-test: test-dump-grammar-examples test-lint-grammar test-lint-vocab
+test: test-dump-grammar-examples test-lint-grammar test-lint-vocab test-validate-backlog-schema
 	cd server && go test ./...
 
 test-dump-grammar-examples:
@@ -121,6 +122,9 @@ test-lint-grammar:
 
 test-lint-vocab:
 	bash scripts/test-lint-vocab.sh
+
+test-validate-backlog-schema:
+	bash scripts/test-validate-backlog-schema.sh
 
 bake-static:
 	@command -v jq >/dev/null || { echo "bake-static: jq is required (install via apt/brew)"; exit 1; }
@@ -159,6 +163,7 @@ backlog-render:
 	node scripts/generate-backlog-md.mjs
 
 lint-backlog-render:
+	@node scripts/validate-backlog-schema.mjs
 	@cp BACKLOG.md /tmp/backlog.before.md
 	@node scripts/generate-backlog-md.mjs
 	@if ! diff -q /tmp/backlog.before.md BACKLOG.md > /dev/null; then \

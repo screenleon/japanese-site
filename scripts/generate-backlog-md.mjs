@@ -8,8 +8,8 @@ import process from "node:process";
  *
  * Hybrid source-of-truth model:
  * - project/backlog.yml owns structured fields:
- *   status / priority / milestone / area / completed_at / depends_on / related /
- *   source / title.
+ *   status / priority / milestone / theme / area / completed_at /
+ *   depends_on / related / source / title.
  * - BACKLOG.md owns narrative bodies and the user-facing 主題 text in each
  *   `## JS-XXX — 主題` heading.
  * - BACKLOG.md also owns 首次記錄 dates. This renderer reads them from each

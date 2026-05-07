@@ -51,7 +51,7 @@
 | JS-042 | 🔵 active | full grammar mental_model rollout | content | 2026-05-06 | user-feedback-2026-05-06 |
 | JS-043 | ✅ closed 2026-05-06 | lint-backlog-parity check (BACKLOG.md ↔ backlog.yml) | operations | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-044 | ✅ closed 2026-05-06 | derive backlog.yml from BACKLOG.md (generated artifact) | operations/architecture | 2026-05-06 | pr-gate:2026-05-06 |
-| JS-045 | 🔵 active | resolve `milestone:` dual semantics before pm-schema v1 freeze | architecture | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-045 | ✅ closed 2026-05-07 | resolve `milestone:` dual semantics before pm-schema v1 freeze | architecture | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-046 | ✅ closed 2026-05-06 | normalise `area:` vocabulary across backlog entries | content/architecture | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-047 | ✅ closed 2026-05-06 | reconcile stale yml status & source-field drift in JS-001..JS-015 | operations | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-048 | 🔵 active | replace hand-maintained Go allowedAnnotationKinds with go:generate / init() | architecture/backend | 2026-05-06 | pr-gate:2026-05-06 |
@@ -459,7 +459,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: pr-gate:2026-05-06 architecture-reviewer advisory
 <!-- 首次記錄: 2026-05-06 -->
 
-## JS-045 — resolve `milestone:` dual semantics before pm-schema v1 freeze
+## JS-045 — resolve `milestone:` dual semantics before pm-schema v1 freeze ✅ 2026-05-07
 
 **Problem**: `milestone:` 欄位目前同時承載兩種抽象 — release-bucket（M3/M4/DX）與 topic-tag（content）。同形狀條目 milestone 不一致：JS-024（ops）→ content；JS-031（ops）→ M3。
 
@@ -468,6 +468,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Requirement**: 決策 (a) `milestone:` 僅承載 release bucket，把 content 移到新欄位 `theme:` 或 `track:`；或 (b) 文件化 `milestone:` 為 free-form tag，停止與 M3/M4 並用。決策後 retag 所有條目。
 
 **Absorbs**: JS-062 (folded 2026-05-06) — boundary clarification: milestone normalisation is JS-045 territory; area was JS-046.
+**Status note (2026-05-07)**: Completed by pm-schema v1 freeze decision. See DECISIONS.md#2026-05-07-pm-schema-v1-milestone-theme-split.
 **Tags**: P2, arch
 **Source**: pr-gate:2026-05-06 architecture-reviewer MEDIUM
 <!-- 首次記錄: 2026-05-06 -->

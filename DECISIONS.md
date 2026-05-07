@@ -3,6 +3,23 @@
 This file records active architectural and behavioral decisions for this repository.
 Agents must read it before planning or implementation tasks.
 
+## 2026-05-07-pm-schema-v1-milestone-theme-split
+
+**Context**: JS-045 — pm-schema v1 had `milestone:` overloaded with two orthogonal axes: release-bucket (`M3`, `M4`, `DX`) and topic-tag values such as content or ops. Same-shape items therefore took inconsistent values.
+
+**Decision** (japanese-site, pm-schema v1):
+- `milestone:` is release-bucket only, closed enum `{M1, M3, M4, DX}`. It is optional. Omit the line entirely when the item carries no release commitment; never write a placeholder value.
+- `theme:` is free-form lowercase-kebab-case, a single ASCII token with no `/` and no spaces. It is optional and open-ended by design; new themes do not need schema changes.
+- Both fields are validated only on active items (`status: todo`, `doing`, or `blocked`). Closed/dropped items keep historical `milestone:` values unchanged, and `theme:` is not backfilled.
+
+**Constraints introduced**:
+- Adding a release bucket beyond `{M1, M3, M4, DX}` requires a new `DECISIONS.md` entry that updates the validator allowlist.
+- `theme:` MUST stay free-form; do not silently freeze its vocabulary.
+
+**Validator**: `scripts/validate-backlog-schema.mjs`, run via `make lint-backlog-render` and `make test`.
+
+**Closes**: JS-045.
+
 ## 2026-05-05 — Grammar slug uniqueness via descriptor convention
 
 **Context**: Grammar points sharing the same kana reading at different JLPT levels (e.g., ものの at N3 vs 〜ものの at N2) had colliding slugs. PR #34's defensive level-namespace in the dump pipeline kept files from clobbering but left slug-as-PK semantically broken. Long-term maintainability requires globally unique slugs.
