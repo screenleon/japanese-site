@@ -116,7 +116,7 @@ function main() {
 
     if (
       Object.prototype.hasOwnProperty.call(item, "theme") &&
-      !THEME_RE.test(item.theme)
+      (item.theme === null || item.theme === "" || !THEME_RE.test(item.theme))
     ) {
       errors.push(`E-THEME-SYNTAX: ${item.id} theme='${item.theme}' not lowercase-kebab-case`);
     }

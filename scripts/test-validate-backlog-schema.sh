@@ -14,16 +14,11 @@ mkdir -p "$tmp_root/project"
 
 write_fixture() {
 	local body="$1"
-	local milestone_key="milestone"
 	body="${body//__MILESTONE__/milestone}"
 	cat > "$tmp_root/project/backlog.yml" <<YAML
 schema_version: v1
 items:
 $body
-done:
-  - id: JS-D999
-    title: Bootstrap archive
-    $milestone_key: content
 YAML
 }
 
@@ -68,6 +63,21 @@ run_bad() {
 	done
 }
 
+run_bad_exit2() {
+	local name="$1"; shift
+	local stderr_file="$tmp_root/$name.err"
+	set +e
+	ROOT_DIR="$tmp_root" "$@" 2>"$stderr_file"
+	local status=$?
+	set -e
+	if [ "$status" -ne 2 ]; then
+		echo "FAIL $name: expected exit 2, got $status" >&2
+		cat "$stderr_file" >&2
+		exit 1
+	fi
+	echo "PASS $name"
+}
+
 run_ok "ok-active-with-both-fields" '  - id: JS-900
     title: fixture
     status: todo
@@ -109,7 +119,8 @@ run_ok "ok-closed-with-legacy-milestone" '  - id: JS-904
     source: test:fixture
     completed_at: "2026-05-07"'
 
-run_ok "ok-bootstrap-done-block" '  - id: JS-905
+# Active items with milestone=DX are valid.
+run_ok "ok-active-milestone-dx" '  - id: JS-905
     title: fixture
     status: todo
     priority: P3
@@ -148,6 +159,15 @@ run_bad "bad-theme-uppercase" '  - id: JS-909
     theme: Foo-Bar
     area: operations
     source: test:fixture' "E-THEME-SYNTAX" "JS-909"
+
+run_bad "bad-theme-empty-value" '  - id: JS-917
+    title: empty-theme-test
+    status: todo
+    priority: P3
+    milestone: M3
+    theme:
+    area: operations
+    source: test:fixture' "E-THEME-SYNTAX" "JS-917"
 
 run_bad "bad-theme-slash" '  - id: JS-910
     title: fixture
@@ -204,6 +224,22 @@ run_bad "multi-error-aggregated" '  - id: JS-915
     area: operations
     source: test:fixture' "E-MILESTONE-ENUM" "JS-915" "E-THEME-SYNTAX" "JS-916"
 
-node "$VALIDATOR"
+run_bad_exit2 bad-missing-file node "$VALIDATOR" "$tmp_root/does-not-exist.yml"
+if ! grep -F "cannot read" "$tmp_root/bad-missing-file.err" >/dev/null; then
+	echo "test-validate-backlog-schema: bad-missing-file missing stderr substring: cannot read" >&2
+	cat "$tmp_root/bad-missing-file.err" >&2
+	exit 1
+fi
+
+cat > "$tmp_root/project/backlog.yml" <<YAML
+schema_version: v1
+items:
+YAML
+run_bad_exit2 bad-empty-items node "$VALIDATOR"
+if ! grep -F "no items[] entries" "$tmp_root/bad-empty-items.err" >/dev/null; then
+	echo "test-validate-backlog-schema: bad-empty-items missing stderr substring: no items[] entries" >&2
+	cat "$tmp_root/bad-empty-items.err" >&2
+	exit 1
+fi
 
 echo "test-validate-backlog-schema: fixtures passed"
