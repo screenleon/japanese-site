@@ -72,6 +72,8 @@
 | JS-063 | 🔵 active | 二段式 audit 格式 codify 與 JS-042 audit 用詞清整 | operations | 2026-05-09 | pr-gate:2026-05-08 |
 | JS-064 | 🔵 active | lint-grammar.sh 強制 mental_model dual-write byte-identity | operations | 2026-05-09 | pr-gate:2026-05-08 |
 | JS-065 | 🔵 active | 4 條 pre-N3 seed 文法 annotations.mental_model 補寫 | content | 2026-05-09 | pr-gate:2026-05-08 |
+| JS-066 | 🔵 active | Furigana spike：ADR-0001 furigana kind + vocab UI reading 渲染修復 + N3 grammar PoC | frontend | 2026-05-09 | feedback:2026-05-09 |
+| JS-067 | 🔵 active | Grammar furigana 全量 rollout（title_ja + key_terms，N3→N2→N1→N4→N5） | content | 2026-05-09 | feedback:2026-05-09 |
 
 ---
 
@@ -645,4 +647,29 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 
 **Tags**: P3, mental-model, content
 **Source**: pr-gate:2026-05-08 critic MISSED #1
+<!-- 首次記錄: 2026-05-09 -->
+
+## JS-066 — Furigana spike：ADR-0001 furigana kind + vocab UI reading 渲染修復 + N3 grammar PoC
+
+**Problem**: grammar corpus 中漢字無讀音輔助（63 條 `title_ja` / 200 條 `explanation_ja` / 44 條 `mental_model` 含漢字），N3-N2 學習者讀到不熟漢字無從拼讀。同時 vocab corpus 的 `reading` 欄位已存在但 UI 未渲染成 furigana，~2600 個有漢字頭字的 vocab 顯示但無假名輔助。
+
+**Why**: 使用者直接回饋 2026-05-09。Vocab UI 修復是 quick win（純前端、立即受益）；grammar furigana 需先決定 schema，沿用 ADR-0001 annotations 慣例新增 `furigana` kind 是 PM scoping 結論。
+
+**Requirement**: (a) 更新 ADR-0001 文件加 `furigana` annotation kind 章節；(b) 把 `furigana` 加入 scripts/annotations-kinds.txt + web/src/apiTypes.ts ANNOTATION_KINDS + web/src/components/EntryAnnotations.tsx LABELS；(c) 修 vocab detail view 把 corpus 的 `reading` 欄位渲染成 furigana；(d) 在 1 條 N3 grammar entry 寫入 `annotations.furigana.title_ja` 作 proof-of-concept，整條鍊路（corpus → lint-grammar → loader → API → UI）打通。形狀 `annotations.furigana: {title_ja?: [{kanji, reading}], key_terms?: [{kanji, reading}]}`，不逐字標 explanation_ja 散文。
+
+**Tags**: P2, furigana, frontend
+**Source**: feedback:2026-05-09 + PM scoping 2026-05-09
+<!-- 首次記錄: 2026-05-09 -->
+
+## JS-067 — Grammar furigana 全量 rollout（title_ja + key_terms，N3→N2→N1→N4→N5）
+
+**Problem**: grammar 全 200 條中 63 條 `title_ja` 含漢字、200 條 `explanation_ja` 含關鍵術語，目前無讀音輔助。JS-066 spike 落地後須有規模化的 authoring + audit pipeline 才能把 200 條全量補上。
+
+**Why**: 使用者回饋 2026-05-09 — 「文法及單字都需要補充」。N3-N2 學習者依優先級切片可逐步消化。
+
+**Requirement**: 透過 Kuromoji / Mecab 形態素解析 pipeline 自動生成 `annotations.furigana.title_ja`（63 條漢字 title）+ `annotations.furigana.key_terms`（每條 entry 從 explanation_ja 抽出關鍵術語），human spot-check audit 採二段式 audit 格式（codex pre-pass + native-reviewer second-pass，依 JS-063 codify 之後的 README 規範）。切片順序 N3 → N2 → N1 → N4 → N5；可一個 PR 全推或分等級切。依 ADR-0001 dual-write 過渡政策同步 flat / nested（待 JS-066 確定 furigana 是否需 dual-write）。
+
+**Tags**: P2, furigana, content
+**Source**: feedback:2026-05-09 + PM scoping 2026-05-09
+**Blocked by**: JS-066
 <!-- 首次記錄: 2026-05-09 -->
