@@ -20,6 +20,24 @@ Agents must read it before planning or implementation tasks.
 
 **Closes**: JS-045.
 
+## 2026-05-08 — N3+ mental_model canonical register: polite-form
+
+**Context**: JS-042 first slice rolled out `mental_model` annotations to 40 N3 grammar entries. PR-gate critic flagged a systemic register mismatch: all 40 N3 entries used polite-form (です/ます), while the 4 reference seeds cited as tone anchors in the rollout brief (te-iru, na-adjective, te-kureru, yogi-naku-sareru) use plain-form (だ/する).
+
+**Decision**: Polite-form (です/ます) is the canonical register for `mental_model` prose on N3 and higher entries (N3, N2, N1). The 4 pre-N3 seeds keep plain-form as historical authoring; they are no longer the tone anchor for forward slices.
+
+**Rationale**:
+- The 4 seeds are pre-N3 reference content from an earlier authoring period; their register reflects that period, not a deliberate corpus norm.
+- N3+ learners benefit from a slightly warmer pedagogical register that signals teacher-to-student framing without overshooting into childish copy.
+- Diverging retroactively from seeds is acceptable when the divergence is documented and the seeds remain valid for their level.
+
+**Constraints introduced**:
+- Forward `mental_model` authoring on N4 / N2 / N1 / N5 slices MUST use polite-form (です/ます) sentence endings.
+- The 4 pre-N3 seeds remain in plain-form; do not retroactively rewrite them under this ruling.
+- Future seed-tier reference content (if any) authored after 2026-05-08 follows the polite-form rule.
+
+**Closes**: clears OV-1 from JS-042 PR-gate (2026-05-08).
+
 ## 2026-05-05 — Grammar slug uniqueness via descriptor convention
 
 **Context**: Grammar points sharing the same kana reading at different JLPT levels (e.g., ものの at N3 vs 〜ものの at N2) had colliding slugs. PR #34's defensive level-namespace in the dump pipeline kept files from clobbering but left slug-as-PK semantically broken. Long-term maintainability requires globally unique slugs.
