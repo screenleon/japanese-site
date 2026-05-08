@@ -602,7 +602,7 @@ items:
 
   - id: JS-042
     title: Roll out grammar mental_model coverage to all grammar entries
-    status: blocked
+    status: doing
     priority: P2
     theme: mental-model
     area: content
@@ -612,6 +612,7 @@ items:
       - Likely requires an LLM-pipeline plus human-review effort similar to JS-040 vocab usage annotations.
       - Blocked by JS-040 annotations schema decision, especially flat repeated fields vs nested annotations object.
       - Do not author the remaining entries until the annotation shape is settled.
+      - First slice (N3, 40 entries) landed via this PR; N4 / N2 / N1 / N5 remaining.
 
   - id: JS-043
     title: lint-backlog-parity check (BACKLOG.md vs backlog.yml)
