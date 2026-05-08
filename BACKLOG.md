@@ -48,7 +48,7 @@
 | JS-041 | ✅ closed 2026-05-06 | grammar mental_model MVP | content/frontend | 2026-05-06 | user-feedback-2026-05-06 |
 | JS-041a | ✅ closed 2026-05-07 | lint-grammar mental_model negative fixtures | content/operations | 2026-05-06 | PR-37-pr-gate-2026-05-06 |
 | JS-041b | ✅ closed 2026-05-07 | JS-041 tier-2 coverage hardening | backend/frontend | 2026-05-06 | PR-37-pr-gate-2026-05-06 |
-| JS-042 | 🔵 active | full grammar mental_model rollout | content | 2026-05-06 | user-feedback-2026-05-06 |
+| JS-042 | 🟡 in_progress | full grammar mental_model rollout | content | 2026-05-06 | user-feedback-2026-05-06 |
 | JS-043 | ✅ closed 2026-05-06 | lint-backlog-parity check (BACKLOG.md ↔ backlog.yml) | operations | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-044 | ✅ closed 2026-05-06 | derive backlog.yml from BACKLOG.md (generated artifact) | operations/architecture | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-045 | ✅ closed 2026-05-07 | resolve `milestone:` dual semantics before pm-schema v1 freeze | architecture | 2026-05-06 | pr-gate:2026-05-06 |
@@ -69,6 +69,9 @@
 | JS-060 | ✅ closed 2026-05-06 | CI use diff -u instead of diff -q for backlog drift visibility | operations | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-061 | 🔵 active | re-evaluate yml notes field after generator scope narrowing | arch/operations | 2026-05-06 | pr-gate:2026-05-06 |
 | JS-062 | ✅ closed 2026-05-06 | tighten JS-046 closure scope vs JS-045 milestone field boundary | operations | 2026-05-06 | pr-gate:2026-05-06 |
+| JS-063 | 🔵 active | 二段式 audit 格式 codify 與 JS-042 audit 用詞清整 | operations | 2026-05-09 | pr-gate:2026-05-08 |
+| JS-064 | 🔵 active | lint-grammar.sh 強制 mental_model dual-write byte-identity | operations | 2026-05-09 | pr-gate:2026-05-08 |
+| JS-065 | 🔵 active | 4 條 pre-N3 seed 文法 annotations.mental_model 補寫 | content | 2026-05-09 | pr-gate:2026-05-08 |
 
 ---
 
@@ -606,3 +609,40 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Outcome**: Closed 2026-05-06 — folded into JS-045 notes (boundary clarification belongs in JS-045 brief, not as an independent ticket).
 **See**: pr-gate:2026-05-06 critic LOW #2
 <!-- 首次記錄: 2026-05-06 -->
+
+
+## JS-063 — 二段式 audit 格式 codify 與 JS-042 audit 用詞清整
+
+**Problem**: JS-042 N3 mental_model rollout 採用新的二段式 audit 文件（codex 自評 + native-reviewer second-pass），arch-reviewer 認可為合理 pattern，但尚未 codify 至 audits/README.md 或 AGENTS.md；後續 N4/N2/N1/N5 slice 可能各自重新發明格式。同時 audit 本身有 LOW/MEDIUM 用詞瑕疵：「Sample-5 OK re-check」section 含 kawari-ni（後在 native pass 被改）造成內部矛盾；count split 用「revised-to-native」這個非標準 confidence tier 詞；ni-chigainai 的 audit 描述與 final 文字略有差異。
+
+**Why**: LLM-pipeline content PR 數量會持續增加（N4/N2/N1/N5 + vocab annotations），audit 文件格式若無 canonical 約束會迅速漂移；用詞瑕疵會誤導未來 reviewer。
+
+**Requirement**: (a) audits/README.md 或 AGENTS.md codify 二段式格式（codex pre-pass section + native-reviewer second-pass section + per-row reassessment 表）為 LLM-pipeline content PR 必備；(b) 修 JS-042 audit 三點瑕疵：retitle/supersede Sample-5 section、改寫 count split 用「unchanged-high / revised / reassessed-high / low」、ni-chigainai note 對齊 final 檔案文字。
+
+**Tags**: P3, documentation, operations
+**Source**: pr-gate:2026-05-08 critic LOW/MEDIUM + arch-reviewer LOW
+<!-- 首次記錄: 2026-05-09 -->
+
+## JS-064 — lint-grammar.sh 強制 mental_model dual-write byte-identity
+
+**Problem**: ADR-0001 過渡期 read-either-write-both 政策要求 grammar entry 同時持有 flat `mental_model` 與 nested `annotations.mental_model` 時兩字串必須 byte-identical；目前 `scripts/lint-grammar.sh` 只獨立驗證每個欄位（非空、字串型），不檢查兩者是否相等。Mutation test：將任一條目的 `annotations.mental_model` 改成不同字串、保留 flat 不動，lint exits 0——mutation 存活，no automated 防線。
+
+**Why**: JS-042 N3 rollout 已寫入 40 條 dual-write，後續 N4/N2/N1/N5 + seed backfill 將再寫入 ~160 條。任何作者修一邊忘另一邊，loader（依 DECISIONS.md 2026-05-06 衝突政策應 error-on-mismatch）會看到分歧但 lint 不擋；目前 invariant 僅由 audit 文件記錄，不算 enforcement。
+
+**Requirement**: (a) `scripts/lint-grammar.sh` 加 jq assertion `(.mental_model == null) or (.annotations.mental_model == null) or (.mental_model == .annotations.mental_model)`，對每個 grammar JSON 檔案；不過時報錯訊息須點名檔案與欄位。(b) `scripts/test-lint-grammar.sh` 加負向 fixture：將 `annotations.mental_model` 改成與 flat 不同字串，斷言 lint exits 1 + 新訊息出現。(c) flat 欄位最終 drop 後（ADR-0001 migration step 3）此檢查可移除。
+
+**Tags**: P2, mental-model, operations
+**Source**: pr-gate:2026-05-08 qa-tester HIGH (block-soft, deferred)
+<!-- 首次記錄: 2026-05-09 -->
+
+## JS-065 — 4 條 pre-N3 seed 文法 annotations.mental_model 補寫
+
+**Problem**: 4 條 reference seed 中只有 te-iru.json 同時持有 flat 與 nested `annotations.mental_model`；na-adjective.json / te-kureru.json / yogi-naku-sareru.json 仍只有 flat，沒有 nested。ADR-0001 dual-write 政策對所有 grammar entry 適用，不僅限 JS-042 first slice 範圍。
+
+**Why**: JS-042 PR-gate critic MISSED finding 揭示的 pre-existing 不一致；JS-064 lint enforcement 一旦上線，這 3 條 seed 會立刻 fail（除非 lint 把 nested-missing 視為合法跳過——但若如此 invariant 會留洞）。先補回再上 enforcement 是合理順序。
+
+**Requirement**: 對 N5/na-adjective.json、N4/te-kureru.json、N1/yogi-naku-sareru.json 各檔案，將既有 flat `mental_model` 字串原文 byte-identical 複寫入 `annotations.mental_model`。不重寫 prose——seed 保留 plain-form 原樣（依 DECISIONS.md 2026-05-08 N3+ polite-form 決策，pre-N3 seed 不回填改寫）。
+
+**Tags**: P3, mental-model, content
+**Source**: pr-gate:2026-05-08 critic MISSED #1
+<!-- 首次記錄: 2026-05-09 -->
