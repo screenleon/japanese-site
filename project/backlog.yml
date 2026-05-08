@@ -905,6 +905,51 @@ items:
       - Source - pr-gate critic LOW #2.
       - Closed 2026-05-06 — folded into JS-045 notes (boundary clarification belongs in JS-045 brief, not as an independent ticket).
 
+  - id: JS-063
+    title: codify two-section audit format + clean JS-042 audit terminology
+    status: todo
+    priority: P3
+    theme: documentation
+    area: operations
+    source: pr-gate:2026-05-08
+    notes:
+      - PR-gate critic LOW/MEDIUM findings on audits/js-042-n3-mental-model-review-2026-05-08.md.
+      - Retitle or supersede the "Sample-5 OK re-check" section (codex pre-pass), or add a note that it was superseded by the native review pass; specifically kawari-ni was listed as held in that section but later revised in native pass.
+      - Normalise audit terminology in the count split — replace "revised-to-native" with consistent vocabulary, e.g. "35 unchanged-high / 5 revised / 4 reassessed-high / 0 low".
+      - Update the ni-chigainai audit note to reflect the actual final file text instead of the intermediate edit description.
+      - Codify the two-section audit format (codex pre-pass + native-reviewer second-pass + per-row reassessment table) in audits/README.md or AGENTS.md, before N4 / N2 / N1 / N5 mental_model slices ship.
+      - Source — pr-gate critic 2026-05-08 + arch-reviewer 2026-05-08.
+
+  - id: JS-064
+    title: lint-grammar.sh assert mental_model byte-identity for dual-write entries
+    status: todo
+    priority: P2
+    theme: mental-model
+    area: operations
+    source: pr-gate:2026-05-08
+    notes:
+      - PR-gate qa-tester HIGH (block-soft, deferred at PM discretion).
+      - The dual-write byte-identity invariant — when both flat `mental_model` and nested `annotations.mental_model` are present on a grammar entry they MUST hold the same string — is currently authoring-discipline only; lint-grammar.sh validates each field independently and would NOT catch a future divergence. Mutation test confirms — change `annotations.mental_model` on one entry while leaving flat intact and lint exits 0.
+      - Add a per-file jq assertion to scripts/lint-grammar.sh of the form `(.mental_model == null) or (.annotations.mental_model == null) or (.mental_model == .annotations.mental_model)` returning true for every grammar JSON file; fail with a precise message naming the file and field on mismatch.
+      - Add a matching negative fixture to scripts/test-lint-grammar.sh that mutates annotations.mental_model on a fixture entry to a different string and asserts lint exits 1 with the new message.
+      - Per ADR-0001 transition policy. Once the flat field is dropped (post full-deploy migration step), the assertion can be removed.
+      - Source — pr-gate qa-tester 2026-05-08.
+
+  - id: JS-065
+    title: backfill annotations.mental_model on 4 pre-N3 seed grammar entries
+    status: todo
+    priority: P3
+    theme: mental-model
+    area: content
+    source: pr-gate:2026-05-08
+    notes:
+      - PR-gate critic MISSED finding 2026-05-08.
+      - The 4 reference seeds — server/data/corpus/grammar/N4/te-iru.json (already dual-write), N5/na-adjective.json, N4/te-kureru.json, N1/yogi-naku-sareru.json — only te-iru.json carries both flat and nested annotations.mental_model; the other 3 have flat-only mental_model with annotations.mental_model = null or missing.
+      - ADR-0001 dual-write transition policy applies to all grammar entries, not just JS-042 first-slice scope.
+      - Backfill: copy the existing flat mental_model value into `annotations.mental_model` byte-identical on the 3 seed entries that lack it. No content rewrite — they remain in plain-form per the 2026-05-08 register decision.
+      - Out of scope for JS-042 first slice — this is pre-existing inconsistency surfaced during the N3 batch review.
+      - Source — pr-gate critic 2026-05-08.
+
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.
 done:
