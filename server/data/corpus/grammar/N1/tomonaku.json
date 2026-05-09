@@ -5,6 +5,9 @@
   "jlpt_level": "N1",
   "explanation_ja": "「〜ともなく」は、はっきり意識してそうしたわけではないが、自然にその動作が起こることを表す書面体の表現である。動詞の辞書形に付く場合は「見るともなく外を見る」「聞くともなく会話を聞く」のように、目的意識の弱い動作を示す。疑問詞とともに用いる場合は「どこからともなく音が聞こえる」「誰ともなく拍手が起こる」のように、出どころや主体がはっきりしないことを表す。",
   "explanation_zh": "「〜ともなく」表示並非有意識地做某事，或與疑問詞一起表示來源、主體不明，如「不知從哪裡」。語氣正式，常見於敘述文。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"意識","reading":"いしき"},{"kanji":"動作","reading":"どうさ"},{"kanji":"目的","reading":"もくてき"},{"kanji":"疑問詞","reading":"ぎもんし"},{"kanji":"音","reading":"おと"},{"kanji":"主体","reading":"しゅたい"},{"kanji":"拍手","reading":"はくしゅ"},{"kanji":"会話","reading":"かいわ"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

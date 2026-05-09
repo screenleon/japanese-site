@@ -5,6 +5,9 @@
   "jlpt_level": "N1",
   "explanation_ja": "「〜てやまない」は、願う・愛する・惜しむ・期待するなどの感情や評価が非常に強く、ずっと続いていることを表す硬い表現である。「成功を願ってやまない」「恩師を敬愛してやまない」のように、好意・祈り・惜別などを改まった調子で述べる。日常の一時的な感情よりも、文章や挨拶で深い気持ちを示す場合に用いられる。",
   "explanation_zh": "「〜てやまない」表示某種情感非常強烈且持續不止，如「衷心祈願、深愛、深感惋惜」。多用於正式文章或致詞。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"願","reading":"ねが"},{"kanji":"愛","reading":"あい"},{"kanji":"惜","reading":"お"},{"kanji":"期待","reading":"きたい"},{"kanji":"感情","reading":"かんじょう"},{"kanji":"評価","reading":"ひょうか"},{"kanji":"成功","reading":"せいこう"},{"kanji":"敬愛","reading":"けいあい"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
