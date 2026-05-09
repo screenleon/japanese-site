@@ -5,6 +5,9 @@
   "jlpt_level": "N2",
   "explanation_ja": "「〜をはじめ」は、代表例を一つ挙げ、そのほかにも同じ種類のものがあることを表す。例として「社長をはじめ全社員が参加した」「京都をはじめ多くの都市で行われた」のように使う。後件には複数の人・物・場所の広がりが続く。",
   "explanation_zh": "「〜をはじめ」表示舉出代表例，意思是「以…為首、包括…在內」，後面通常接一個範圍或群體。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"代表","reading":"だいひょう"},{"kanji":"種類","reading":"しゅるい"},{"kanji":"社長","reading":"しゃちょう"},{"kanji":"社員","reading":"しゃいん"},{"kanji":"京都","reading":"きょうと"},{"kanji":"都市","reading":"とし"},{"kanji":"複数","reading":"ふくすう"},{"kanji":"場所","reading":"ばしょ"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

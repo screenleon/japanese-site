@@ -5,6 +5,9 @@
   "jlpt_level": "N2",
   "explanation_ja": "「〜ないことには」は、前件が実現しなければ後件も実現しない、という必要条件を表す。例として「実物を見ないことには判断できない」「本人に聞かないことには分からない」のように、後件には否定的な表現が来る。必要な前提を強調する硬めの表現である。",
   "explanation_zh": "「〜ないことには」表示若前項條件不成立，後項就無法成立，後面多接否定或困難的內容。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"実現","reading":"じつげん"},{"kanji":"実物","reading":"じつぶつ"},{"kanji":"判断","reading":"はんだん"},{"kanji":"本人","reading":"ほんにん"},{"kanji":"前提","reading":"ぜんてい"},{"kanji":"否定","reading":"ひてい"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

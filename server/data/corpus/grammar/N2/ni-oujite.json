@@ -5,6 +5,9 @@
   "jlpt_level": "N2",
   "explanation_ja": "「〜に応じて」は、相手・状況・量などに合わせて対応や内容が変わることを表す。例として「経験に応じて仕事を任せる」「人数に応じて資料を用意する」のように、基準に合わせた調整を述べる。公式な説明や制度の記述でもよく使われる。",
   "explanation_zh": "「〜に応じて」表示依照條件、狀況、數量或需求來調整做法或內容。",
+  "annotations": {
+    "furigana": {"title_ja":[{"kanji":"応","reading":"おう"}],"key_terms":[{"kanji":"相手","reading":"あいて"},{"kanji":"状況","reading":"じょうきょう"},{"kanji":"対応","reading":"たいおう"},{"kanji":"内容","reading":"ないよう"},{"kanji":"経験","reading":"けいけん"},{"kanji":"人数","reading":"にんずう"},{"kanji":"基準","reading":"きじゅん"},{"kanji":"調整","reading":"ちょうせい"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

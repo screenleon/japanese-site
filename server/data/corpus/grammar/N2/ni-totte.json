@@ -5,6 +5,9 @@
   "jlpt_level": "N2",
   "explanation_ja": "「Nにとって」は、その人や立場から見た評価や意味を表します。\n\n- 私にとって家族は大切です\n- 学生にとって時間は貴重です\n\n後ろには「大切」「必要」「難しい」のような判断や評価がよく来ます。",
   "explanation_zh": "「Nにとって」表示從某人、某立場來看，意思是「對...來說」。後面常接評價或判斷。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"立場","reading":"たちば"},{"kanji":"評価","reading":"ひょうか"},{"kanji":"家族","reading":"かぞく"},{"kanji":"大切","reading":"たいせつ"},{"kanji":"学生","reading":"がくせい"},{"kanji":"貴重","reading":"きちょう"},{"kanji":"判断","reading":"はんだん"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
