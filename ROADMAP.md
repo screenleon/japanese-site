@@ -19,6 +19,8 @@ Order roughly reflects priority, not strict dependency.
 
 ## M4 — LLM connector (the big one)
 
+**Indefinitely deferred (2026-05-09)** — foundational UX not yet sufficient (user decision). Section retained for context; do not pick up M4 items without explicit user re-authorization.
+
 Current grading is deterministic — it can only say "right" or "wrong" against
 an exact expected fill. Free-form answers (translation, sentence production)
 need an LLM.

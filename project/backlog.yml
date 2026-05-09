@@ -1020,6 +1020,290 @@ items:
       - Hands-on validation moves to JS-067 prep — a separate PR will install Kuromoji, run the spike against the ADR's test fragments, and produce `audits/js-067-tokenizer-spike-YYYY-MM-DD.md`. If the results fail the acceptance criteria, the prep PR supersedes ADR-0002 with a Mecab-revised entry.
       - See — docs/adr/0002-furigana-pipeline.md.
 
+  - id: JS-071
+    title: N2 mental_model rollout (40 條, JS-042 two-section audit pattern, polite-form canonical)
+    status: todo
+    priority: P2
+    theme: mental-model
+    area: content
+    source: planning:2026-05-09
+    related: [JS-042, JS-072, JS-063]
+    notes:
+      - Estimate — 中.
+      - Roll out mental_model coverage to 40 N2 grammar entries using the JS-042 two-section audit pattern.
+      - Authoring must follow the 2026-05-08 polite-form canonical register decision for N3+ mental_model prose.
+      - Coordinate audit format with JS-063 and the broader full-rollout line tracked by JS-042.
+
+  - id: JS-072
+    title: N1 mental_model rollout (40 條; audit 比 N3/N2 嚴格因古典語體多)
+    status: todo
+    priority: P2
+    theme: mental-model
+    area: content
+    source: planning:2026-05-09
+    related: [JS-042, JS-071, JS-063]
+    notes:
+      - Estimate — 中.
+      - Roll out mental_model coverage to 40 N1 grammar entries with stricter audit than N3/N2 because N1 includes more classical and literary register.
+      - Authoring must follow the 2026-05-08 polite-form canonical register decision for N3+ mental_model prose while preserving accurate register notes.
+      - Coordinate audit format with JS-063 and the broader full-rollout line tracked by JS-042.
+
+  - id: JS-073
+    title: N3 keigo 基礎組 (お〜になる / お〜する / 7 大不規則動詞替換表 + 5-8 條 entry)
+    status: todo
+    priority: P2
+    theme: keigo
+    area: content
+    source: planning:2026-05-09
+    related: [JS-084, JS-085]
+    notes:
+      - Estimate — 中.
+      - Seed the existing grammar corpus with N3 keigo basics: お〜になる, お〜する, the 7 major irregular verb replacements, and 5-8 entries.
+      - This lives in the existing grammar corpus and is explicitly NOT blocked on JS-084, which evaluates a separate keigo module.
+      - Use this as a near-term learner-support bridge while JS-084/JS-085 explore a dedicated module shape.
+
+  - id: JS-074
+    title: 授受動詞系 N3 補強 (あげる/くれる/もらう 3 條 + てV 形 3 條, 含 mental_model)
+    status: todo
+    priority: P2
+    theme: grammar-n3
+    area: content
+    source: planning:2026-05-09
+    related: [JS-042, JS-071]
+    notes:
+      - Estimate — 小.
+      - Add N3 giving/receiving reinforcement for あげる, くれる, もらう and their てV forms.
+      - Include mental_model guidance focused on benefit direction and learner perspective.
+      - Keep entries consistent with existing grammar corpus source/license/validated_by discipline.
+
+  - id: JS-075
+    title: 自他動詞 N3 dedicated entry (開く/開ける、閉まる/閉める、始まる/始める + pattern list)
+    status: todo
+    priority: P2
+    theme: grammar-n3
+    area: content
+    source: planning:2026-05-09
+    related: [JS-042]
+    notes:
+      - Estimate — 小.
+      - Add a dedicated N3 transitive/intransitive verb entry covering 開く/開ける, 閉まる/閉める, 始まる/始める, and a pattern list.
+      - Include mental_model guidance that separates event/state focus from actor-controlled action.
+      - Keep examples level-appropriate and aligned with existing grammar corpus validation rules.
+
+  - id: JS-076
+    title: 受身 (含迷惑被動) N3 entry
+    status: todo
+    priority: P2
+    theme: grammar-n3
+    area: content
+    source: planning:2026-05-09
+    related: [JS-042]
+    notes:
+      - Estimate — 小.
+      - Add an N3 passive voice entry including 迷惑被動.
+      - Include mental_model guidance for affected-person perspective and unwanted impact.
+      - Keep examples and explanations within N3 learner support boundaries.
+
+  - id: JS-077
+    title: conditional 「と」N3 entry + 4 兄弟 (ば/たら/なら/と) 比較表
+    status: todo
+    priority: P2
+    theme: grammar-n3
+    area: content
+    source: planning:2026-05-09
+    notes:
+      - Estimate — 小.
+      - Add an N3 conditional と entry plus a comparison table for ば, たら, なら, and と.
+      - Emphasize natural-condition, sequence, assumption, and topic-basis differences.
+      - Keep comparison examples compact enough for learner-facing grammar study.
+
+  - id: JS-078
+    title: register tag schema spike — annotations 加 register? + N2/N1 全條目補標
+    status: todo
+    priority: P2
+    theme: register
+    area: architecture
+    source: planning:2026-05-09
+    related: [JS-079, JS-040]
+    notes:
+      - Estimate — 中.
+      - Spike whether register belongs under annotations and how N2/N1 entries should be tagged.
+      - Apply feedback_shared_schema_briefs.md discipline: day-1 full-surface consumer audit, per-row shape check, and max-strength invariants before rollout.
+      - Decide authoring and lint strategy before broad N2/N1 register backfill.
+
+  - id: JS-079
+    title: N1 現代向度補充 (新聞語體 / 商務正式表現 5-8 條, 平衡 archaic 偏重)
+    status: todo
+    priority: P2
+    theme: content
+    area: content
+    source: planning:2026-05-09
+    related: [JS-072, JS-078]
+    notes:
+      - Estimate — 中.
+      - Add 5-8 modern N1 entries focused on newspaper style and formal business expressions to balance archaic-heavy coverage.
+      - Natural pairing with JS-078 register schema: register tags would improve presentation, but this content can ship without being blocked by JS-078.
+      - Keep examples useful for modern reading and workplace/formal contexts.
+
+  - id: JS-080
+    title: N1+ tier schema spike — 等級值 / lint allowlist / UI 等級切換器 / staticApi rollup / JLPT enum 擴張
+    status: todo
+    priority: P3
+    theme: n1-plus
+    area: architecture
+    source: planning:2026-05-09
+    related: [JS-081, JS-082, JS-083]
+    notes:
+      - Estimate — 中.
+      - Spike N1+ support across level values, lint allowlists, UI level switchers, staticApi rollups, and JLPT enum expansion.
+      - Apply feedback_shared_schema_briefs.md discipline: day-1 full-surface consumer audit, per-row shape check, and max-strength invariants before rollout.
+      - Treat JS-081, JS-082, and JS-083 as dependent content/schema work.
+
+  - id: JS-081
+    title: N1+ 慣用句 / 諺 / 四字熟語 seed 30 條 (含現代度註記 archaic / 仍活躍)
+    status: todo
+    priority: P3
+    theme: n1-plus
+    area: content
+    source: planning:2026-05-09
+    blocked_by: [JS-080]
+    related: [JS-080]
+    notes:
+      - Estimate — 中.
+      - Seed 30 N1+ idioms, proverbs, and four-character compounds.
+      - Include modernity notes such as archaic or still active.
+      - Blocked on JS-080 because N1+ level representation must be settled first.
+
+  - id: JS-082
+    title: N1+ オノマトペ進階 seed 50 條 (擬態語為主)
+    status: todo
+    priority: P3
+    theme: n1-plus
+    area: content
+    source: planning:2026-05-09
+    blocked_by: [JS-080]
+    related: [JS-080]
+    notes:
+      - Estimate — 中.
+      - Seed 50 advanced N1+ onomatopoeia entries, mainly mimetic expressions.
+      - Include learner-facing usage notes that distinguish similar sound-symbolic forms.
+      - Blocked on JS-080 because N1+ level representation must be settled first.
+
+  - id: JS-083
+    title: N1+ 読解 meta-skill 5 條 — 新 content type spike (reading_strategy 表 or grammar 變體)
+    status: todo
+    priority: P3
+    theme: n1-plus
+    area: architecture
+    source: planning:2026-05-09
+    blocked_by: [JS-080]
+    related: [JS-080]
+    notes:
+      - Estimate — 大.
+      - Spike 5 N1+ reading meta-skill entries and decide whether they belong in a new reading_strategy table or as a grammar variant.
+      - Include schema, lint, and rendering implications in the spike.
+      - Blocked on JS-080 because N1+ level representation must be settled first.
+
+  - id: JS-084
+    title: Keigo module schema + UI spike (B 方案 — 新 corpus type / 新 NavCard tab / lint / staticApi)
+    status: todo
+    priority: P2
+    theme: keigo
+    area: architecture
+    source: planning:2026-05-09
+    related: [JS-073, JS-085, JS-086, JS-087, JS-088]
+    notes:
+      - Estimate — 大.
+      - Spike a dedicated keigo module using option B: new corpus type, new NavCard tab, lint coverage, and staticApi support.
+      - Apply feedback_shared_schema_briefs.md discipline: day-1 full-surface consumer audit, per-row shape check, and max-strength invariants before rollout.
+      - Keep existing grammar-corpus keigo support from JS-073 distinct from this module decision.
+
+  - id: JS-085
+    title: Keigo Tier 1 content seed (10 條 — です・ます 規則化、お〜になる、お〜する、7 大不規則替換)
+    status: todo
+    priority: P2
+    theme: keigo
+    area: content
+    source: planning:2026-05-09
+    blocked_by: [JS-084]
+    related: [JS-084]
+    notes:
+      - Estimate — 中.
+      - Seed 10 Tier 1 keigo items covering です・ます regularization, お〜になる, お〜する, and the 7 major irregular replacements.
+      - Align with JS-084 module shape once the dedicated keigo corpus path is accepted.
+      - Blocked on JS-084 because this targets the dedicated module rather than the existing grammar corpus.
+
+  - id: JS-086
+    title: Keigo Tier 2 商務組 15 條 (内外感、二重敬語反例、接客標準句、メール基礎)
+    status: todo
+    priority: P2
+    theme: keigo
+    area: content
+    source: planning:2026-05-09
+    blocked_by: [JS-084]
+    related: [JS-084]
+    notes:
+      - Estimate — 中.
+      - Seed 15 Tier 2 business keigo items covering 内外感, double-keigo counterexamples, standard customer-service phrases, and email basics.
+      - Keep examples practical for business/formal contexts.
+      - Blocked on JS-084 because this targets the dedicated module.
+
+  - id: JS-087
+    title: Keigo Tier 3 avoid-pitfalls 10 條 (バイト敬語、過度敬語、register 誤用反例)
+    status: todo
+    priority: P2
+    theme: keigo
+    area: content
+    source: planning:2026-05-09
+    blocked_by: [JS-084]
+    related: [JS-084, JS-078]
+    notes:
+      - Estimate — 中.
+      - Seed 10 Tier 3 avoid-pitfalls keigo items covering バイト敬語, over-keigo, and register misuse counterexamples.
+      - Natural pairing with JS-078 register schema: register tags would improve misuse labeling, but this content can ship without being blocked by JS-078.
+      - Blocked on JS-084 because this targets the dedicated module.
+
+  - id: JS-088
+    title: Keigo cross-tier 三分 mental model (尊敬/謙譲/丁寧) + 對誰用什麼 flowchart entry
+    status: todo
+    priority: P2
+    theme: keigo
+    area: content
+    source: planning:2026-05-09
+    blocked_by: [JS-084]
+    related: [JS-084, JS-085, JS-086, JS-087]
+    notes:
+      - Estimate — 小.
+      - Add a cross-tier mental model for 尊敬, 謙譲, and 丁寧 plus a flowchart-style entry for choosing what to use with whom.
+      - Coordinate examples with the Tier 1-3 keigo seeds.
+      - Blocked on JS-084 because this targets the dedicated module.
+
+  - id: JS-089
+    title: Audit kanji corpus 現況 + 評估是否值得加 kanji quiz tab (痛點 — 同音/近形混淆)
+    status: todo
+    priority: P3
+    theme: kanji
+    area: content
+    source: planning:2026-05-09
+    notes:
+      - Estimate — 小.
+      - Audit current kanji corpus state and learner pain around same-sound or visually similar kanji confusion.
+      - Evaluate whether a kanji quiz tab is worth adding or whether existing study surfaces should absorb the support.
+      - Preserve the backlog boundary: no learner-facing PM surfaces.
+
+  - id: JS-090
+    title: Tatoeba audio + dictation cloze MVP (重用 question table, 加 audio_url 欄, 不擴大 quiz tab 數量)
+    status: todo
+    priority: P3
+    theme: listening
+    area: infra
+    source: planning:2026-05-09
+    notes:
+      - Estimate — 中.
+      - Build a Tatoeba audio plus dictation cloze MVP by reusing the existing question table and adding an audio_url field.
+      - Explicitly NOT a new quiz tab; preserve UX consolidation discipline by keeping listening practice within the existing quiz surface.
+      - Keep source/license/validated_by and external dataset boundaries intact.
+
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.
 done:
