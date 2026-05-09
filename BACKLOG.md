@@ -97,7 +97,7 @@
 | JS-088 | 🔵 active | Keigo cross-tier 三分 mental model (尊敬/謙譲/丁寧) + 對誰用什麼 flowchart entry | content | 2026-05-09 | planning:2026-05-09 |
 | JS-089 | 🔵 active | Audit kanji corpus 現況 + 評估是否值得加 kanji quiz tab (痛點 — 同音/近形混淆) | content | 2026-05-09 | planning:2026-05-09 |
 | JS-090 | 🔵 active | Tatoeba audio + dictation cloze MVP (重用 question table, 加 audio_url 欄, 不擴大 quiz tab 數量) | infra | 2026-05-09 | planning:2026-05-09 |
-| JS-091 | 🔵 active | JS-067 audit doc native-reviewer Section 2 closure for MEDIUM 76 條 | audit | 2026-05-09 | pr-gate:2026-05-09 critic block-soft |
+| JS-091 | 🔵 active | JS-067 audit doc native-reviewer Section 2 closure for MEDIUM 76 條 | audit | 2026-05-09 | pr-gate:2026-05-09 critic block-soft + re-gate advise |
 | JS-092 | 🔵 active | `to-ina-ya / ya-inaya` 命名一致性與 否/いな 確認 | content | 2026-05-09 | pr-gate:2026-05-09 critic medium |
 | JS-093 | 🔵 active | `他/た` 系列讀音 context 全 corpus sweep + tooling | tooling | 2026-05-09 | pr-gate:2026-05-09 critic low |
 | JS-094 | 🔵 active | `test-lint-grammar.sh` 加 `key_terms`-only happy-path fixture | testing | 2026-05-09 | pr-gate:2026-05-09 qa-tester medium |

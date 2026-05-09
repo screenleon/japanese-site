@@ -1304,18 +1304,19 @@ items:
       - Explicitly NOT a new quiz tab; preserve UX consolidation discipline by keeping listening practice within the existing quiz surface.
       - Keep source/license/validated_by and external dataset boundaries intact.
   - id: JS-091
-    title: JS-067 audit doc native-reviewer Section 2 closure for MEDIUM 76 條
+    title: JS-067 audit doc native-reviewer Section 2 closure (HIGH 38 + MEDIUM 76)
     status: todo
     priority: P3
     theme: furigana
     area: audit
-    source: pr-gate:2026-05-09 critic block-soft
+    source: pr-gate:2026-05-09 critic block-soft + re-gate advise
     related: [JS-067]
     notes:
-      - audits/js-067-native-review-candidates-2026-05-09.md 含 codex pre-pass 建議答案 38 HIGH + 79 MEDIUM；JS-067 PR 合併時 Section 2 已就 M034/M066/M077 三條收尾，但其餘 76 條 MEDIUM 的 native-verdict 欄目前以 codex confidence 通過，未經人類完整逐條確認。
-      - feedback_native_perspective.md 要求 LLM-pipeline 內容變動經 native-reviewer 第二輪審查；本 PR 因 codex 覆蓋率高、scope 集中於機械 stem 修復而以 sample 信任為憑，留下未被人類掃完的 MEDIUM 殘量。
-      - Requirement — 由日語母語使用者逐條掃 audit doc Section 1.2..1.6 MEDIUM 表，於 Section 2 native-verdict 欄填 ✓/✗/note。發現任何 codex 建議錯誤者，產出 follow-up corpus 修正 commit (`fix(annotations): JS-091 — ...`)。
-      - Source — pr-gate:2026-05-09 critic block-soft + feedback_native_perspective.
+      - audits/js-067-native-review-candidates-2026-05-09.md 含 codex pre-pass 建議答案 38 HIGH + 79 MEDIUM。JS-067 PR 合併時 Section 2 僅 4 條 PM-provisional 收尾（M034/M066/M077 + H038 反轉），其餘 37 條 HIGH（codex 機械 lexeme-completion，已 commit 65c336f）+ 76 條 MEDIUM 的 native-verdict 欄空白。
+      - feedback_native_perspective.md 要求 LLM-pipeline 內容變動經 native-reviewer 第二輪審查；本 PR 因 codex 覆蓋率高、scope 集中於機械 stem 修復而以 sample 信任為憑。
+      - H038 真實案例 — F2-HIGH 機械修對 `N5/counter-basic.json` title 「数え方（つ・人・枚）」的 `人/にん` 過度修正為 `人います/にんいます`（從 explanation 例句拉的詞），title 中根本無此 token；critic re-gate 抽中後人工反轉。該案例證明即使 HIGH 機械修也存在 citation-context 誤判風險，native sample 仍需執行。
+      - Requirement — 由日語母語使用者逐條掃 audit doc Section 1.1（HIGH 38）+ Section 1.2..1.6（MEDIUM 76）表，於 Section 2 native-verdict 欄填 ✓/✗/note。發現任何 codex 建議錯誤者（如 H038 類），產出 follow-up corpus 修正 commit (`fix(annotations): JS-091 — ...`)。Citation-form 類（如 H038 / M077）需特別注意 title 是引用形而非 inflected form。
+      - Source — pr-gate:2026-05-09 critic block-soft + re-gate advise + feedback_native_perspective.
 
   - id: JS-092
     title: ya-inaya 命名一致性與 否/いな 確認
