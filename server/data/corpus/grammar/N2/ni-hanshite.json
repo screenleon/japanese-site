@@ -6,14 +6,65 @@
   "explanation_ja": "「〜に反して」は、予想・期待・規則などと反対の結果や行動になることを表す。例として「予想に反して試合は静かに終わった」「親の期待に反して音楽の道へ進んだ」のように使う。硬い表現で、前件には期待・意思・規則などが来やすい。",
   "explanation_zh": "「〜に反して」表示與預想、期待、意志或規則相反，也可表示違反。",
   "annotations": {
-    "furigana": {"title_ja":[{"kanji":"反","reading":"はん"}],"key_terms":[{"kanji":"予想","reading":"よそう"},{"kanji":"期待","reading":"きたい"},{"kanji":"規則","reading":"きそく"},{"kanji":"反対","reading":"はんたい"},{"kanji":"結果","reading":"けっか"},{"kanji":"行動","reading":"こうどう"},{"kanji":"試合","reading":"しあい"},{"kanji":"音楽","reading":"おんがく"}]}
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "反して",
+          "reading": "はんして"
+        }
+      ],
+      "key_terms": [
+        {
+          "kanji": "予想",
+          "reading": "よそう"
+        },
+        {
+          "kanji": "期待",
+          "reading": "きたい"
+        },
+        {
+          "kanji": "規則",
+          "reading": "きそく"
+        },
+        {
+          "kanji": "反対",
+          "reading": "はんたい"
+        },
+        {
+          "kanji": "結果",
+          "reading": "けっか"
+        },
+        {
+          "kanji": "行動",
+          "reading": "こうどう"
+        },
+        {
+          "kanji": "試合",
+          "reading": "しあい"
+        },
+        {
+          "kanji": "音楽",
+          "reading": "おんがく"
+        }
+      ]
+    }
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
+  "validator_score": 1,
   "classifier_rules": [
-    {"if_answer_contains_any": ["違って"], "error_class": "used-chigatte"},
-    {"if_answer_not_contains_any": ["反して"], "error_class": "missing-hanshite"}
+    {
+      "if_answer_contains_any": [
+        "違って"
+      ],
+      "error_class": "used-chigatte"
+    },
+    {
+      "if_answer_not_contains_any": [
+        "反して"
+      ],
+      "error_class": "missing-hanshite"
+    }
   ]
 }

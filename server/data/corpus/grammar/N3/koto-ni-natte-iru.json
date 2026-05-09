@@ -8,11 +8,54 @@
   "mental_model": "「ことになっている」は、規則・予定・取り決めとして、そう決まっている状態を表します。自分が今決めるのではなく、外部の制度や約束がすでにあり、その決定に従うことになっていると見る表現です。",
   "annotations": {
     "mental_model": "「ことになっている」は、規則・予定・取り決めとして、そう決まっている状態を表します。自分が今決めるのではなく、外部の制度や約束がすでにあり、その決定に従うことになっていると見る表現です。",
-    "furigana": {"key_terms":[{"kanji":"規則","reading":"きそく"},{"kanji":"予定","reading":"よてい"},{"kanji":"取","reading":"と"},{"kanji":"決","reading":"き"},{"kanji":"行為","reading":"こうい"},{"kanji":"状態","reading":"じょうたい"},{"kanji":"個人","reading":"こじん"},{"kanji":"意志","reading":"いし"},{"kanji":"外部","reading":"がいぶ"},{"kanji":"制度","reading":"せいど"}]}
+    "furigana": {
+      "key_terms": [
+        {
+          "kanji": "規則",
+          "reading": "きそく"
+        },
+        {
+          "kanji": "予定",
+          "reading": "よてい"
+        },
+        {
+          "kanji": "取り",
+          "reading": "とり"
+        },
+        {
+          "kanji": "決",
+          "reading": "き"
+        },
+        {
+          "kanji": "行為",
+          "reading": "こうい"
+        },
+        {
+          "kanji": "状態",
+          "reading": "じょうたい"
+        },
+        {
+          "kanji": "個人",
+          "reading": "こじん"
+        },
+        {
+          "kanji": "意志",
+          "reading": "いし"
+        },
+        {
+          "kanji": "外部",
+          "reading": "がいぶ"
+        },
+        {
+          "kanji": "制度",
+          "reading": "せいど"
+        }
+      ]
+    }
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
+  "validator_score": 1,
   "classifier_rules": []
 }

@@ -6,14 +6,65 @@
   "explanation_ja": "「〜について」と「〜に関して」は、どちらも「〜をテーマにして」という意味です。\n\n形：名詞＋について／に関して\n- 日本文化について話す\n- 環境問題に関して報告する\n\n「について」は会話でも文章でもよく使えます。「に関して」はより硬く、正式な文章や説明で使われやすいです。\n\n「にとって」は立場、「に対して」は行為の相手、「にかけては」は得意な分野を表すので、意味で区別します。",
   "explanation_zh": "兩者都是「關於、就…而論」，N4 開始接觸 〜について，N2 才正式區辨 〜に関して 的書面性與形式性。\n\n**形態**：名詞＋について／に関して\n- 修飾名詞時：〜についての N、〜に関する N\n  - 日本文化についての本、日本文化に関する本\n\n**語感差別**：\n| | について | に関して |\n|---|---|---|\n| 場合 | 口語、書面均可 | **書面為主、正式** |\n| 範圍 | 較窄、聚焦於主題本身 | 較廣、含相關事項 |\n| 例 | 環境問題について議論する | 環境問題に関する報告書 |\n\n**家族成員**：\n- 〜にとって：「對…來說（立場/觀點）」 子供にとって、これは難しい（×子供について）\n- 〜に対して：「對於…（行為對象）」客に対して失礼な態度（×客について失礼）\n- 〜にかけては：「在…方面（強項）」料理にかけては誰にも負けない\n\n**N2 易錯點**：題目常測試 について／に関して／にとって／に対して 四選一，要看「主題」「立場」「對象」哪個語意成立。",
   "annotations": {
-    "furigana": {"title_ja":[{"kanji":"関","reading":"かん"}],"key_terms":[{"kanji":"文化","reading":"ぶんか"},{"kanji":"環境","reading":"かんきょう"},{"kanji":"問題","reading":"もんだい"},{"kanji":"報告","reading":"ほうこく"},{"kanji":"会話","reading":"かいわ"},{"kanji":"文章","reading":"ぶんしょう"},{"kanji":"正式","reading":"せいしき"},{"kanji":"立場","reading":"たちば"}]}
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "関して",
+          "reading": "かんして"
+        }
+      ],
+      "key_terms": [
+        {
+          "kanji": "文化",
+          "reading": "ぶんか"
+        },
+        {
+          "kanji": "環境",
+          "reading": "かんきょう"
+        },
+        {
+          "kanji": "問題",
+          "reading": "もんだい"
+        },
+        {
+          "kanji": "報告",
+          "reading": "ほうこく"
+        },
+        {
+          "kanji": "会話",
+          "reading": "かいわ"
+        },
+        {
+          "kanji": "文章",
+          "reading": "ぶんしょう"
+        },
+        {
+          "kanji": "正式",
+          "reading": "せいしき"
+        },
+        {
+          "kanji": "立場",
+          "reading": "たちば"
+        }
+      ]
+    }
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
+  "validator_score": 1,
   "classifier_rules": [
-    {"if_answer_contains_any": ["とって"], "error_class": "used-nitotte"},
-    {"if_answer_contains_any": ["対して"], "error_class": "used-nitaishite"}
+    {
+      "if_answer_contains_any": [
+        "とって"
+      ],
+      "error_class": "used-nitotte"
+    },
+    {
+      "if_answer_contains_any": [
+        "対して"
+      ],
+      "error_class": "used-nitaishite"
+    }
   ]
 }

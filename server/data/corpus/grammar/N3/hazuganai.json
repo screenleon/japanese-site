@@ -8,13 +8,46 @@
   "mental_model": "「はずがない」は、持っている理由から考えて、その可能性はないと強く否定する表現です。単なる「ない」よりも、状況や常識に照らして「そうなる道筋が考えられない」と判断する感覚があります。",
   "annotations": {
     "mental_model": "「はずがない」は、持っている理由から考えて、その可能性はないと強く否定する表現です。単なる「ない」よりも、状況や常識に照らして「そうなる道筋が考えられない」と判断する感覚があります。",
-    "furigana": {"key_terms":[{"kanji":"理由","reading":"りゆう"},{"kanji":"可能","reading":"かのう"},{"kanji":"性","reading":"せい"},{"kanji":"話","reading":"はな"},{"kanji":"手","reading":"て"},{"kanji":"確信","reading":"かくしん"}]}
+    "furigana": {
+      "key_terms": [
+        {
+          "kanji": "理由",
+          "reading": "りゆう"
+        },
+        {
+          "kanji": "可能",
+          "reading": "かのう"
+        },
+        {
+          "kanji": "性",
+          "reading": "せい"
+        },
+        {
+          "kanji": "話し",
+          "reading": "はなし"
+        },
+        {
+          "kanji": "手",
+          "reading": "て"
+        },
+        {
+          "kanji": "確信",
+          "reading": "かくしん"
+        }
+      ]
+    }
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
+  "validator_score": 1,
   "classifier_rules": [
-    {"if_answer_equals_any": ["はずだ", "かもしれない"], "error_class": "certainty-pattern"}
+    {
+      "if_answer_equals_any": [
+        "はずだ",
+        "かもしれない"
+      ],
+      "error_class": "certainty-pattern"
+    }
   ]
 }

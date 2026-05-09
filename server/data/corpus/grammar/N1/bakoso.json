@@ -6,14 +6,59 @@
   "explanation_ja": "「〜ばこそ」は、「まさにAだからBだ」と理由を強く示す表現です。普通の理由より、Aを特に強調します。\n\n形：動詞・い形容詞は「ば形＋こそ」。名詞やな形容詞は「であればこそ」を使います。\n- 信頼していればこそ、厳しく言う\n- 大切であればこそ、慎重に扱う\n- 親友であればこそ、遠慮なく言える\n\n「からこそ」と近いですが、「ばこそ」はより硬く、強調された論理的な言い方です。",
   "explanation_zh": "「〜ばこそ」表示「正因為 A 才 B」，強調理由。語氣比一般「から」更強，也偏正式。\n\n**形態**：\n- 動詞ば形＋こそ\n- い形容詞ば形＋こそ\n- 名詞・な形容詞：であればこそ\n\n**例**：\n- 信頼していればこそ、厳しく言う。\n- 大切であればこそ、慎重に扱う。\n\n**比較**：\n- 〜から：普通理由\n- 〜からこそ：強調理由，較常用\n- 〜ばこそ：更硬、更書面，強調「正因為如此」",
   "annotations": {
-    "furigana": {"key_terms":[{"kanji":"理由","reading":"りゆう"},{"kanji":"強調","reading":"きょうちょう"},{"kanji":"信頼","reading":"しんらい"},{"kanji":"厳","reading":"きび"},{"kanji":"大切","reading":"たいせつ"},{"kanji":"慎重","reading":"しんちょう"},{"kanji":"親友","reading":"しんゆう"},{"kanji":"論理","reading":"ろんり"}]}
+    "furigana": {
+      "key_terms": [
+        {
+          "kanji": "理由",
+          "reading": "りゆう"
+        },
+        {
+          "kanji": "強調",
+          "reading": "きょうちょう"
+        },
+        {
+          "kanji": "信頼",
+          "reading": "しんらい"
+        },
+        {
+          "kanji": "厳しく",
+          "reading": "きびしく"
+        },
+        {
+          "kanji": "大切",
+          "reading": "たいせつ"
+        },
+        {
+          "kanji": "慎重",
+          "reading": "しんちょう"
+        },
+        {
+          "kanji": "親友",
+          "reading": "しんゆう"
+        },
+        {
+          "kanji": "論理",
+          "reading": "ろんり"
+        }
+      ]
+    }
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
+  "validator_score": 1,
   "classifier_rules": [
-    {"if_answer_contains_any": ["から"], "error_class": "used-kara"},
-    {"if_answer_not_contains_any": ["こそ"], "error_class": "missing-koso"}
+    {
+      "if_answer_contains_any": [
+        "から"
+      ],
+      "error_class": "used-kara"
+    },
+    {
+      "if_answer_not_contains_any": [
+        "こそ"
+      ],
+      "error_class": "missing-koso"
+    }
   ]
 }

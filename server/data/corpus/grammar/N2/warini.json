@@ -6,14 +6,59 @@
   "explanation_ja": "「〜わりに」は、前件から期待される程度と後件の実際の程度が合わないことを表す。例として「忙しいわりに元気だ」「値段のわりに品質がいい」のように、性質・量・値段などと結果を比べる。話し手の評価を含み、予想より上でも下でも使える。",
   "explanation_zh": "「〜わりに」表示相對於前項條件，後項程度與預期不一致，可用於正面或負面的評價。",
   "annotations": {
-    "furigana": {"key_terms":[{"kanji":"期待","reading":"きたい"},{"kanji":"程度","reading":"ていど"},{"kanji":"実際","reading":"じっさい"},{"kanji":"忙","reading":"いそが"},{"kanji":"値段","reading":"ねだん"},{"kanji":"品質","reading":"ひんしつ"},{"kanji":"性質","reading":"せいしつ"},{"kanji":"結果","reading":"けっか"}]}
+    "furigana": {
+      "key_terms": [
+        {
+          "kanji": "期待",
+          "reading": "きたい"
+        },
+        {
+          "kanji": "程度",
+          "reading": "ていど"
+        },
+        {
+          "kanji": "実際",
+          "reading": "じっさい"
+        },
+        {
+          "kanji": "忙しいわりに",
+          "reading": "いそがしいわりに"
+        },
+        {
+          "kanji": "値段",
+          "reading": "ねだん"
+        },
+        {
+          "kanji": "品質",
+          "reading": "ひんしつ"
+        },
+        {
+          "kanji": "性質",
+          "reading": "せいしつ"
+        },
+        {
+          "kanji": "結果",
+          "reading": "けっか"
+        }
+      ]
+    }
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
+  "validator_score": 1,
   "classifier_rules": [
-    {"if_answer_contains_any": ["にしては"], "error_class": "used-nishitewa"},
-    {"if_answer_not_contains_any": ["わり"], "error_class": "missing-warini"}
+    {
+      "if_answer_contains_any": [
+        "にしては"
+      ],
+      "error_class": "used-nishitewa"
+    },
+    {
+      "if_answer_not_contains_any": [
+        "わり"
+      ],
+      "error_class": "missing-warini"
+    }
   ]
 }

@@ -8,11 +8,46 @@
   "mental_model": "「せいで」は、望ましくない結果の原因を示し、その原因に責任や否定的な評価を置く表現です。「おかげで」がよい方向の理由を言うのに対し、「せいで」は困った結果を招いた理由として見ると分かりやすいです。",
   "annotations": {
     "mental_model": "「せいで」は、望ましくない結果の原因を示し、その原因に責任や否定的な評価を置く表現です。「おかげで」がよい方向の理由を言うのに対し、「せいで」は困った結果を招いた理由として見ると分かりやすいです。",
-    "furigana": {"key_terms":[{"kanji":"結果","reading":"けっか"},{"kanji":"原因","reading":"げんいん"},{"kanji":"普通","reading":"ふつう"},{"kanji":"形","reading":"がた"},{"kanji":"名詞","reading":"めいし"},{"kanji":"話","reading":"はな"},{"kanji":"手","reading":"て"},{"kanji":"責任","reading":"せきにん"}]}
+    "furigana": {
+      "key_terms": [
+        {
+          "kanji": "結果",
+          "reading": "けっか"
+        },
+        {
+          "kanji": "原因",
+          "reading": "げんいん"
+        },
+        {
+          "kanji": "普通",
+          "reading": "ふつう"
+        },
+        {
+          "kanji": "形",
+          "reading": "がた"
+        },
+        {
+          "kanji": "名詞",
+          "reading": "めいし"
+        },
+        {
+          "kanji": "話し",
+          "reading": "はなし"
+        },
+        {
+          "kanji": "手",
+          "reading": "て"
+        },
+        {
+          "kanji": "責任",
+          "reading": "せきにん"
+        }
+      ]
+    }
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
+  "validator_score": 1,
   "classifier_rules": []
 }

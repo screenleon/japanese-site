@@ -6,13 +6,59 @@
   "explanation_ja": "「Nに限り」は、対象をその範囲だけに限定する表現です。案内や規則でよく使われます。\n\n- 本日に限り半額です\n- 会員に限り利用できます\n\n硬めの表現で、「だけ」に近い意味です。",
   "explanation_zh": "「Nに限り」表示限定範圍，意思是「僅限」。常用於公告、規則或正式說明。",
   "annotations": {
-    "furigana": {"title_ja":[{"kanji":"限","reading":"かぎ"}],"key_terms":[{"kanji":"対象","reading":"たいしょう"},{"kanji":"範囲","reading":"はんい"},{"kanji":"限定","reading":"げんてい"},{"kanji":"案内","reading":"あんない"},{"kanji":"規則","reading":"きそく"},{"kanji":"本日","reading":"ほんじつ"},{"kanji":"半額","reading":"はんがく"},{"kanji":"会員","reading":"かいいん"}]}
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "限り",
+          "reading": "かぎり"
+        }
+      ],
+      "key_terms": [
+        {
+          "kanji": "対象",
+          "reading": "たいしょう"
+        },
+        {
+          "kanji": "範囲",
+          "reading": "はんい"
+        },
+        {
+          "kanji": "限定",
+          "reading": "げんてい"
+        },
+        {
+          "kanji": "案内",
+          "reading": "あんない"
+        },
+        {
+          "kanji": "規則",
+          "reading": "きそく"
+        },
+        {
+          "kanji": "本日",
+          "reading": "ほんじつ"
+        },
+        {
+          "kanji": "半額",
+          "reading": "はんがく"
+        },
+        {
+          "kanji": "会員",
+          "reading": "かいいん"
+        }
+      ]
+    }
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
+  "validator_score": 1,
   "classifier_rules": [
-    {"if_answer_equals_any": ["だけ"], "error_class": "plain-equivalent"}
+    {
+      "if_answer_equals_any": [
+        "だけ"
+      ],
+      "error_class": "plain-equivalent"
+    }
   ]
 }

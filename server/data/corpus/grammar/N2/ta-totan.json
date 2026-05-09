@@ -6,14 +6,59 @@
   "explanation_ja": "「〜たとたん」は、ある動作が終わった直後に予想外のことが起きることを表す。例として「外に出たとたん雨が降り出した」「立ち上がったとたんめまいがした」のように、後件には話し手が意図しない出来事が来る。自分の意志で計画して行う後件には使いにくい。",
   "explanation_zh": "「〜たとたん」表示某動作剛結束的瞬間，立刻發生意外或非意志性的事情。",
   "annotations": {
-    "furigana": {"key_terms":[{"kanji":"動作","reading":"どうさ"},{"kanji":"直後","reading":"ちょくご"},{"kanji":"予想","reading":"よそう"},{"kanji":"雨","reading":"あめ"},{"kanji":"話","reading":"はな"},{"kanji":"手","reading":"て"},{"kanji":"意志","reading":"いし"},{"kanji":"出来事","reading":"できごと"}]}
+    "furigana": {
+      "key_terms": [
+        {
+          "kanji": "動作",
+          "reading": "どうさ"
+        },
+        {
+          "kanji": "直後",
+          "reading": "ちょくご"
+        },
+        {
+          "kanji": "予想",
+          "reading": "よそう"
+        },
+        {
+          "kanji": "雨",
+          "reading": "あめ"
+        },
+        {
+          "kanji": "話し",
+          "reading": "はなし"
+        },
+        {
+          "kanji": "手",
+          "reading": "て"
+        },
+        {
+          "kanji": "意志",
+          "reading": "いし"
+        },
+        {
+          "kanji": "出来事",
+          "reading": "できごと"
+        }
+      ]
+    }
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
+  "validator_score": 1,
   "classifier_rules": [
-    {"if_answer_contains_any": ["ところ"], "error_class": "used-tatokoro"},
-    {"if_answer_not_contains_any": ["とたん"], "error_class": "missing-totan"}
+    {
+      "if_answer_contains_any": [
+        "ところ"
+      ],
+      "error_class": "used-tatokoro"
+    },
+    {
+      "if_answer_not_contains_any": [
+        "とたん"
+      ],
+      "error_class": "missing-totan"
+    }
   ]
 }

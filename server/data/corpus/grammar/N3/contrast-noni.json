@@ -8,15 +8,74 @@
   "mental_model": "「〜のに」は、実際にAなのに、期待した結果と違ってBになったという逆接です。単なる対比ではなく、話し手の意外さ・残念さ・不満が出やすいので、事実と気持ちのずれを表す表現として見るとよいです。",
   "annotations": {
     "mental_model": "「〜のに」は、実際にAなのに、期待した結果と違ってBになったという逆接です。単なる対比ではなく、話し手の意外さ・残念さ・不満が出やすいので、事実と気持ちのずれを表す表現として見るとよいです。",
-    "furigana": {"key_terms":[{"kanji":"期待","reading":"きたい"},{"kanji":"逆接","reading":"ぎゃくせつ"},{"kanji":"話","reading":"はな"},{"kanji":"手","reading":"て"},{"kanji":"不満","reading":"ふまん"},{"kanji":"意外","reading":"いがい"},{"kanji":"残念","reading":"ざんねん"},{"kanji":"普通","reading":"ふつう"},{"kanji":"形","reading":"がた"},{"kanji":"感情","reading":"かんじょう"}]}
+    "furigana": {
+      "key_terms": [
+        {
+          "kanji": "期待",
+          "reading": "きたい"
+        },
+        {
+          "kanji": "逆接",
+          "reading": "ぎゃくせつ"
+        },
+        {
+          "kanji": "話し",
+          "reading": "はなし"
+        },
+        {
+          "kanji": "手",
+          "reading": "て"
+        },
+        {
+          "kanji": "不満",
+          "reading": "ふまん"
+        },
+        {
+          "kanji": "意外",
+          "reading": "いがい"
+        },
+        {
+          "kanji": "残念",
+          "reading": "ざんねん"
+        },
+        {
+          "kanji": "普通",
+          "reading": "ふつう"
+        },
+        {
+          "kanji": "形",
+          "reading": "がた"
+        },
+        {
+          "kanji": "感情",
+          "reading": "かんじょう"
+        }
+      ]
+    }
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
+  "validator_score": 1,
   "classifier_rules": [
-    {"if_answer_contains_any": ["ても", "でも"], "error_class": "used-temo"},
-    {"if_answer_contains_any": ["けど"], "error_class": "used-kedo"},
-    {"if_answer_equals_any": ["が"], "error_class": "used-kedo"}
+    {
+      "if_answer_contains_any": [
+        "ても",
+        "でも"
+      ],
+      "error_class": "used-temo"
+    },
+    {
+      "if_answer_contains_any": [
+        "けど"
+      ],
+      "error_class": "used-kedo"
+    },
+    {
+      "if_answer_equals_any": [
+        "が"
+      ],
+      "error_class": "used-kedo"
+    }
   ]
 }

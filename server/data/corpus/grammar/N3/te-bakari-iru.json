@@ -8,11 +8,46 @@
   "mental_model": "「てばかりいる」は、同じ行為に偏っていて、他のことをしていない状態を表します。単に回数が多いだけでなく、話し手が「そればかりでよくない」と感じる批判や不満を伴いやすい表現です。",
   "annotations": {
     "mental_model": "「てばかりいる」は、同じ行為に偏っていて、他のことをしていない状態を表します。単に回数が多いだけでなく、話し手が「そればかりでよくない」と感じる批判や不満を伴いやすい表現です。",
-    "furigana": {"key_terms":[{"kanji":"行為","reading":"こうい"},{"kanji":"状態","reading":"じょうたい"},{"kanji":"動詞","reading":"どうし"},{"kanji":"話","reading":"はな"},{"kanji":"手","reading":"て"},{"kanji":"不満","reading":"ふまん"},{"kanji":"批判","reading":"ひはん"},{"kanji":"気持","reading":"きも"}]}
+    "furigana": {
+      "key_terms": [
+        {
+          "kanji": "行為",
+          "reading": "こうい"
+        },
+        {
+          "kanji": "状態",
+          "reading": "じょうたい"
+        },
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        },
+        {
+          "kanji": "話し",
+          "reading": "はなし"
+        },
+        {
+          "kanji": "手",
+          "reading": "て"
+        },
+        {
+          "kanji": "不満",
+          "reading": "ふまん"
+        },
+        {
+          "kanji": "批判",
+          "reading": "ひはん"
+        },
+        {
+          "kanji": "気持",
+          "reading": "きも"
+        }
+      ]
+    }
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
+  "validator_score": 1,
   "classifier_rules": []
 }

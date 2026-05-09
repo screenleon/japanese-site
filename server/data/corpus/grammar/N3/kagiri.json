@@ -8,11 +8,52 @@
   "mental_model": "「限り」は、ある条件や状態が続く範囲を区切って、その中では物事が成り立つと見る表現です。「知っている限り」のように、話し手が保証できる範囲や、条件が続く間だけ有効な判断を示します。",
   "annotations": {
     "mental_model": "「限り」は、ある条件や状態が続く範囲を区切って、その中では物事が成り立つと見る表現です。「知っている限り」のように、話し手が保証できる範囲や、条件が続く間だけ有効な判断を示します。",
-    "furigana": {"title_ja":[{"kanji":"限","reading":"かぎ"}],"key_terms":[{"kanji":"状態","reading":"じょうたい"},{"kanji":"条件","reading":"じょうけん"},{"kanji":"範囲","reading":"はんい"},{"kanji":"物事","reading":"ものごと"},{"kanji":"動詞","reading":"どうし"},{"kanji":"辞書","reading":"じしょ"},{"kanji":"形","reading":"がた"},{"kanji":"名詞","reading":"めいし"}]}
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "限り",
+          "reading": "かぎり"
+        }
+      ],
+      "key_terms": [
+        {
+          "kanji": "状態",
+          "reading": "じょうたい"
+        },
+        {
+          "kanji": "条件",
+          "reading": "じょうけん"
+        },
+        {
+          "kanji": "範囲",
+          "reading": "はんい"
+        },
+        {
+          "kanji": "物事",
+          "reading": "ものごと"
+        },
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        },
+        {
+          "kanji": "辞書",
+          "reading": "じしょ"
+        },
+        {
+          "kanji": "形",
+          "reading": "がた"
+        },
+        {
+          "kanji": "名詞",
+          "reading": "めいし"
+        }
+      ]
+    }
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
+  "validator_score": 1,
   "classifier_rules": []
 }

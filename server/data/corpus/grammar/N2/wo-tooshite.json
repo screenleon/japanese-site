@@ -6,13 +6,59 @@
   "explanation_ja": "「Nを通して」は、手段・媒介、または期間全体を表します。\n\n- 友人を通して知りました\n- 一年を通して暖かいです\n\n人や活動を媒介にする場合と、時間の範囲全体を言う場合があります。",
   "explanation_zh": "「Nを通して」可表示透過某媒介，也可表示整個期間。例：「友人を通して」「一年を通して」。",
   "annotations": {
-    "furigana": {"title_ja":[{"kanji":"通","reading":"とお"}],"key_terms":[{"kanji":"手段","reading":"しゅだん"},{"kanji":"媒介","reading":"ばいかい"},{"kanji":"期間","reading":"きかん"},{"kanji":"全体","reading":"ぜんたい"},{"kanji":"友人","reading":"ゆうじん"},{"kanji":"活動","reading":"かつどう"},{"kanji":"場合","reading":"ばあい"},{"kanji":"範囲","reading":"はんい"}]}
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "通して",
+          "reading": "とおして"
+        }
+      ],
+      "key_terms": [
+        {
+          "kanji": "手段",
+          "reading": "しゅだん"
+        },
+        {
+          "kanji": "媒介",
+          "reading": "ばいかい"
+        },
+        {
+          "kanji": "期間",
+          "reading": "きかん"
+        },
+        {
+          "kanji": "全体",
+          "reading": "ぜんたい"
+        },
+        {
+          "kanji": "友人",
+          "reading": "ゆうじん"
+        },
+        {
+          "kanji": "活動",
+          "reading": "かつどう"
+        },
+        {
+          "kanji": "場合",
+          "reading": "ばあい"
+        },
+        {
+          "kanji": "範囲",
+          "reading": "はんい"
+        }
+      ]
+    }
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
+  "validator_score": 1,
   "classifier_rules": [
-    {"if_answer_equals_any": ["で"], "error_class": "simple-means"}
+    {
+      "if_answer_equals_any": [
+        "で"
+      ],
+      "error_class": "simple-means"
+    }
   ]
 }
