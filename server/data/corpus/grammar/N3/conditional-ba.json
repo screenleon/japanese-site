@@ -8,7 +8,7 @@
   "mental_model": "「〜ば」は、Aという条件が成り立つならBになる、という論理的なつながりを見る表現です。条件と結果を落ち着いて結ぶ感じが強く、命令や依頼など相手にすぐ動いてほしい文では「たら」のほうが自然になりやすいです。",
   "annotations": {
     "mental_model": "「〜ば」は、Aという条件が成り立つならBになる、という論理的なつながりを見る表現です。条件と結果を落ち着いて結ぶ感じが強く、命令や依頼など相手にすぐ動いてほしい文では「たら」のほうが自然になりやすいです。",
-    "furigana": {"key_terms":[{"kanji":"条件","reading":"じょうけん"},{"kanji":"論理","reading":"ろんり"},{"kanji":"的","reading":"てき"},{"kanji":"一段","reading":"いちだん"},{"kanji":"動詞","reading":"どうし"},{"kanji":"五","reading":"ご"},{"kanji":"段","reading":"だん"},{"kanji":"形容詞","reading":"けいようし"},{"kanji":"否定","reading":"ひてい"},{"kanji":"比例","reading":"ひれい"},{"kanji":"意志","reading":"いし"}]}
+    "furigana": {"key_terms":[{"kanji":"条件","reading":"じょうけん"},{"kanji":"論理","reading":"ろんり"},{"kanji":"的","reading":"てき"},{"kanji":"一段","reading":"いちだん"},{"kanji":"五段","reading":"ごだん"},{"kanji":"動詞","reading":"どうし"},{"kanji":"形容詞","reading":"けいようし"},{"kanji":"否定","reading":"ひてい"},{"kanji":"比例","reading":"ひれい"},{"kanji":"意志","reading":"いし"}]}
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",

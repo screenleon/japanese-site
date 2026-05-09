@@ -8,7 +8,7 @@
   "mental_model": "「わけにはいかない」は、能力の問題ではなく、社会的・道徳的・状況上の理由でその行為ができない、またはしてはいけないという表現です。「したいが事情が許さない」と見ると意味がつかみやすいです。",
   "annotations": {
     "mental_model": "「わけにはいかない」は、能力の問題ではなく、社会的・道徳的・状況上の理由でその行為ができない、またはしてはいけないという表現です。「したいが事情が許さない」と見ると意味がつかみやすいです。",
-    "furigana": {"key_terms":[{"kanji":"社会","reading":"しゃかい"},{"kanji":"的","reading":"てき"},{"kanji":"道徳","reading":"どうとく"},{"kanji":"状況","reading":"じょうきょう"},{"kanji":"理由","reading":"りゆう"},{"kanji":"行為","reading":"こうい"},{"kanji":"辞書","reading":"じしょ"},{"kanji":"形","reading":"がた"},{"kanji":"能力","reading":"のうりょく"},{"kanji":"事情","reading":"じじょう"}]}
+    "furigana": {"key_terms":[{"kanji":"社会的","reading":"しゃかいてき"},{"kanji":"道徳的","reading":"どうとくてき"},{"kanji":"状況","reading":"じょうきょう"},{"kanji":"理由","reading":"りゆう"},{"kanji":"行為","reading":"こうい"},{"kanji":"辞書","reading":"じしょ"},{"kanji":"形","reading":"がた"},{"kanji":"能力","reading":"のうりょく"},{"kanji":"事情","reading":"じじょう"}]}
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
