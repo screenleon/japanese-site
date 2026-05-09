@@ -966,17 +966,18 @@ items:
 
   - id: JS-067
     title: Grammar furigana 全量 rollout — title_ja + key_terms（N3 → N2 → N1 → N4 → N5）
-    status: blocked
+    status: todo
     priority: P2
     theme: furigana
     area: content
     source: feedback:2026-05-09
-    related: [JS-066]
+    related: [JS-066, JS-069, JS-070]
     notes:
       - 全量 rollout — grammar 全 200 條的 `annotations.furigana.title_ja`（63 條有漢字需標）+ `annotations.furigana.key_terms`（200 條 explanation_ja 內關鍵術語）。不逐字標 explanation_ja 散文。
-      - 工作形狀：Kuromoji / Mecab 形態素解析自動生成（準確率 ≥95%）+ human spot-check audit；非純 LLM 工作，成本顯著低於 JS-042 mental_model rollout。
+      - 工作形狀：Kuromoji 形態素解析自動生成（per ADR-0002）+ human spot-check audit；非純 LLM 工作，成本顯著低於 JS-042 mental_model rollout。
       - 切片建議：N3 → N2 → N1 → N4 → N5（用戶 N3-N2 學習目標優先級）。可一個 PR 全推或分等級切，依 LLM-pipeline 容量決定。
-      - Blocked by JS-066 — schema 與 lint allowlist 上線、PoC 驗證通過後才啟動 rollout authoring。
+      - Prep tooling done 2026-05-09 — Kuromoji confirmed via `scripts/generate-furigana.mjs` + smoke test `scripts/test-generate-furigana.sh`; ADR-0002 accepted; full N3 sweep yielded 0/40 manual corrections. See `audits/js-067-tokenizer-spike-2026-05-09.md`.
+      - Remaining operational prerequisites — (a) PR #50-or-newer bundle deployed AND cached-client rotation window satisfied (or explicit risk acceptance), (b) native/content review plan exists for generated readings.
       - Source — user-feedback 2026-05-09 + PM scoping 2026-05-09.
 
   - id: JS-068
