@@ -979,6 +979,46 @@ items:
       - Blocked by JS-066 — schema 與 lint allowlist 上線、PoC 驗證通過後才啟動 rollout authoring。
       - Source — user-feedback 2026-05-09 + PM scoping 2026-05-09.
 
+  - id: JS-068
+    title: vocab JLPT level-distribution rebalance
+    status: todo
+    priority: P3
+    theme: content
+    area: content
+    source: decisions:2026-05-09
+    notes:
+      - Vocabulary coverage is large in aggregate, but the level distribution still needs a rebalance pass so study lists do not over- or under-represent specific JLPT levels after recent corpus and annotation work.
+      - JS-067 focuses on grammar furigana. The vocab-side distribution issue is known content debt and should stay visible without blocking the furigana rollout.
+      - Requirement — Audit vocab row counts and learner-support completeness per JLPT level, then rebalance or backfill the levels with the largest gaps while preserving source/license/validated_by metadata.
+      - Source — decisions:2026-05-09 (PM call after JS-066 audit).
+
+  - id: JS-069
+    title: Furigana rollout readiness audit
+    status: done
+    completed_at: 2026-05-09
+    priority: P2
+    theme: furigana
+    area: infra
+    source: audit:js-069
+    related: [JS-066, JS-067, JS-070]
+    notes:
+      - Outcome — Completed the JS-069 audit document covering downstream mixed-type `annotations` consumers, cached-client compatibility for live `annotations.furigana` emission, and Kuromoji/Mecab/LLM-only pipeline tradeoffs.
+      - See — audits/js-069-furigana-rollout-readiness-2026-05-09.md.
+
+  - id: JS-070
+    title: Kuromoji vs Mecab furigana pipeline spike
+    status: done
+    completed_at: 2026-05-09
+    priority: P2
+    theme: furigana
+    area: infra
+    source: audit:js-069
+    related: [JS-067, JS-069]
+    notes:
+      - Outcome — Plan delivered via ADR-0002 (`docs/adr/0002-furigana-pipeline.md`). Kuromoji selected as primary build-time pipeline with explicit fallback criteria for Mecab; LLM-only rejected as primary. ADR codifies test fragments, acceptance criteria (≤5% manual correction rate, dictionary license confirmation), output JSON shape, and integration as a `scripts/generate-furigana.mjs` build-time tool with Kuromoji as devDependency only.
+      - Hands-on validation moves to JS-067 prep — a separate PR will install Kuromoji, run the spike against the ADR's test fragments, and produce `audits/js-067-tokenizer-spike-YYYY-MM-DD.md`. If the results fail the acceptance criteria, the prep PR supersedes ADR-0002 with a Mecab-revised entry.
+      - See — docs/adr/0002-furigana-pipeline.md.
+
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.
 done:
