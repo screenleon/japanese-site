@@ -68,7 +68,36 @@ export function VocabTab() {
   function hasAnnotations(row: VocabRow) {
     return Boolean(
       row.annotations &&
-        Object.values(row.annotations).some((value) => value?.trim())
+        Object.entries(row.annotations).some(([kind, value]) => {
+          if (typeof value === "string") return value.trim().length > 0;
+          if (kind === "furigana" && value) {
+            const furigana = value as NonNullable<
+              NonNullable<VocabRow["annotations"]>["furigana"]
+            >;
+            return (
+              (furigana.title_ja?.length ?? 0) + (furigana.key_terms?.length ?? 0) > 0
+            );
+          }
+          return false;
+        })
+    );
+  }
+
+  function VocabHeadword({ row, size = "list" }: { row: VocabRow; size?: "card" | "list" }) {
+    const headword = row.headword.trim();
+    const reading = row.reading.trim();
+    const textClass = size === "card" ? "text-3xl font-semibold" : "text-lg font-medium";
+    const rtClass = size === "card" ? "text-base text-slate-500" : "text-sm text-slate-500";
+
+    if (!reading || headword === reading) {
+      return <div className={textClass}>{row.headword}</div>;
+    }
+
+    return (
+      <ruby className={textClass}>
+        {row.headword}
+        <rt className={rtClass}>{row.reading}</rt>
+      </ruby>
     );
   }
 
@@ -114,8 +143,7 @@ export function VocabTab() {
         {randomRow ? (
           <div className="grid gap-4 sm:grid-cols-[220px_1fr]">
             <div>
-              <div className="text-3xl font-semibold">{randomRow.headword}</div>
-              <div className="mt-1 text-base text-slate-500">{randomRow.reading}</div>
+              <VocabHeadword row={randomRow} size="card" />
             </div>
             <div className="text-sm leading-relaxed">
               <div>{japaneseGloss(randomRow)}</div>
@@ -183,8 +211,7 @@ export function VocabTab() {
           {rows.map((r) => (
             <li key={r.id} className="flex gap-4 p-4">
               <div className="w-32 flex-shrink-0">
-                <div className="text-lg font-medium">{r.headword}</div>
-                <div className="text-sm text-slate-500">{r.reading}</div>
+                <VocabHeadword row={r} />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="text-sm">{japaneseGloss(r)}</div>

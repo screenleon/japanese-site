@@ -219,13 +219,17 @@ func TestAPIAnnotationsRoundTrip(t *testing.T) {
 			t.Fatalf("status = %d, body=%s", rec.Code, rec.Body.String())
 		}
 		var body struct {
-			Annotations map[string]string `json:"annotations"`
+			Annotations map[string]json.RawMessage `json:"annotations"`
 		}
 		if err := json.NewDecoder(rec.Body).Decode(&body); err != nil {
 			t.Fatalf("decode grammar body: %v", err)
 		}
-		if body.Annotations["mental_model"] != "条件を先に置き、後件が成り立つ場面を考える。" {
-			t.Fatalf("annotations.mental_model = %q", body.Annotations["mental_model"])
+		var mentalModel string
+		if err := json.Unmarshal(body.Annotations["mental_model"], &mentalModel); err != nil {
+			t.Fatalf("decode annotations.mental_model: %v", err)
+		}
+		if mentalModel != "条件を先に置き、後件が成り立つ場面を考える。" {
+			t.Fatalf("annotations.mental_model = %q", mentalModel)
 		}
 	})
 
@@ -237,13 +241,17 @@ func TestAPIAnnotationsRoundTrip(t *testing.T) {
 			t.Fatalf("status = %d, body=%s", rec.Code, rec.Body.String())
 		}
 		var body struct {
-			Annotations map[string]string `json:"annotations"`
+			Annotations map[string]json.RawMessage `json:"annotations"`
 		}
 		if err := json.NewDecoder(rec.Body).Decode(&body); err != nil {
 			t.Fatalf("decode vocab body: %v", err)
 		}
-		if body.Annotations["usage"] != "「食べる」は日常の食事や食べ物を口に入れる動作に使う。" {
-			t.Fatalf("annotations.usage = %q", body.Annotations["usage"])
+		var usage string
+		if err := json.Unmarshal(body.Annotations["usage"], &usage); err != nil {
+			t.Fatalf("decode annotations.usage: %v", err)
+		}
+		if usage != "「食べる」は日常の食事や食べ物を口に入れる動作に使う。" {
+			t.Fatalf("annotations.usage = %q", usage)
 		}
 	})
 }

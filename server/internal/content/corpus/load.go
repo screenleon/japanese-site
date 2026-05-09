@@ -41,6 +41,7 @@ var allowedAnnotationKinds = map[string]struct{}{
 	"synonym_diff":     {},
 	"mental_model":     {},
 	"nuance_note":      {},
+	"furigana":         {},
 }
 
 type GrammarPoint struct {
@@ -710,12 +711,12 @@ func mergeGrammarAnnotations(gp *GrammarPoint) (string, error) {
 	if len(raw) == 0 {
 		raw = json.RawMessage(`{}`)
 	}
-	var obj map[string]string
+	var obj map[string]json.RawMessage
 	if err := json.Unmarshal(raw, &obj); err != nil {
 		return "", err
 	}
 	if obj == nil {
-		obj = map[string]string{}
+		obj = map[string]json.RawMessage{}
 	}
 	for kind := range obj {
 		if _, ok := allowedAnnotationKinds[kind]; !ok {
@@ -728,13 +729,21 @@ func mergeGrammarAnnotations(gp *GrammarPoint) (string, error) {
 		return "", err
 	}
 	if gp.MentalModel == "" {
-		gp.MentalModel = obj["mental_model"]
+		nested, err := rawAnnotationString(obj["mental_model"])
+		if err != nil {
+			return "", fmt.Errorf("grammar %s: mental_model nested annotation must be a string: %w", gp.Slug, err)
+		}
+		gp.MentalModel = nested
 	}
 	if err := mergeGrammarAnnotationField(gp.Slug, "nuance_note", gp.NuanceNote, obj); err != nil {
 		return "", err
 	}
 	if gp.NuanceNote == "" {
-		gp.NuanceNote = obj["nuance_note"]
+		nested, err := rawAnnotationString(obj["nuance_note"])
+		if err != nil {
+			return "", fmt.Errorf("grammar %s: nuance_note nested annotation must be a string: %w", gp.Slug, err)
+		}
+		gp.NuanceNote = nested
 	}
 
 	body, err := json.Marshal(obj)
@@ -744,15 +753,36 @@ func mergeGrammarAnnotations(gp *GrammarPoint) (string, error) {
 	return string(body), nil
 }
 
-func mergeGrammarAnnotationField(slug, kind, flat string, obj map[string]string) error {
-	nested := obj[kind]
+func mergeGrammarAnnotationField(slug, kind, flat string, obj map[string]json.RawMessage) error {
+	nested, err := rawAnnotationString(obj[kind])
+	if err != nil {
+		return fmt.Errorf("grammar %s: %s nested annotation must be a string: %w", slug, kind, err)
+	}
 	if flat != "" && nested != "" && flat != nested {
 		return fmt.Errorf("grammar %s: %s conflict — flat=%q nested=%q", slug, kind, flat, nested)
 	}
 	if flat != "" && nested == "" {
-		obj[kind] = flat
+		body, err := json.Marshal(flat)
+		if err != nil {
+			return err
+		}
+		obj[kind] = body
 	}
 	return nil
+}
+
+func rawAnnotationString(raw json.RawMessage) (string, error) {
+	if len(raw) == 0 {
+		return "", nil
+	}
+	if string(raw) == "null" {
+		return "", nil
+	}
+	var s string
+	if err := json.Unmarshal(raw, &s); err != nil {
+		return "", err
+	}
+	return s, nil
 }
 
 func validJLPTLevel(level string) bool {

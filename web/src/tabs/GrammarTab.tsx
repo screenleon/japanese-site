@@ -20,7 +20,14 @@ function mergeFromGrammarPoint(point: GrammarPoint): Annotations {
 }
 
 function hasAnnotations(annotations: Annotations) {
-  return Object.values(annotations).some((value) => value?.trim());
+  return Object.entries(annotations).some(([kind, value]) => {
+    if (typeof value === "string") return value.trim().length > 0;
+    if (kind === "furigana" && value) {
+      const furigana = value as NonNullable<Annotations["furigana"]>;
+      return (furigana.title_ja?.length ?? 0) + (furigana.key_terms?.length ?? 0) > 0;
+    }
+    return false;
+  });
 }
 
 export function GrammarTab({
@@ -239,7 +246,7 @@ export function GrammarTab({
                   <div className="mb-4">
                     <EntryAnnotations
                       annotations={mergeFromGrammarPoint(active)}
-                      kinds={["nuance_note", "mental_model"]}
+                      kinds={["furigana", "nuance_note", "mental_model"]}
                     />
                   </div>
                 )}

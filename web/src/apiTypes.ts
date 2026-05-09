@@ -29,10 +29,26 @@ export const ANNOTATION_KINDS = [
   "synonym_diff",
   "mental_model",
   "nuance_note",
+  "furigana",
 ] as const;
 
 export type AnnotationKind = typeof ANNOTATION_KINDS[number];
-export type Annotations = Partial<Record<AnnotationKind, string>>;
+export interface FuriganaPair {
+  kanji: string;
+  reading: string;
+}
+
+export interface FuriganaAnnotation {
+  title_ja?: FuriganaPair[];
+  key_terms?: FuriganaPair[];
+}
+
+export type AnnotationValue<K extends AnnotationKind = AnnotationKind> =
+  K extends "furigana" ? FuriganaAnnotation : string;
+
+export type Annotations = {
+  [K in AnnotationKind]?: AnnotationValue<K>;
+};
 
 export interface Kanji {
   id: number;

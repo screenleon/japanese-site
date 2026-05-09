@@ -44,8 +44,54 @@ interface Annotations {
   synonym_diff?: string;     // 近義詞辨析
   mental_model?: string;     // grammar (and future vocab) thinking-shape hint
   nuance_note?: string;      // existing grammar register/level differentiator
+  furigana?: {               // structured reading annotations
+    title_ja?: Array<{ kanji: string; reading: string }>;
+    key_terms?: Array<{ kanji: string; reading: string }>;
+  };
 }
 ```
+
+### Furigana annotation kind
+
+`annotations.furigana` is the structured-value exception to the otherwise
+string-valued annotation kinds. Its shape is:
+
+```ts
+{
+  title_ja?: Array<{ kanji: string; reading: string }>;
+  key_terms?: Array<{ kanji: string; reading: string }>;
+}
+```
+
+At least one of `title_ja` or `key_terms` must be present when `furigana` is
+present, and every pair must carry non-empty `kanji` and `reading` strings.
+`lint-grammar` therefore excludes `furigana` from the generic
+"annotations values must be non-empty strings" rule and validates this object
+shape separately.
+
+### Release notes — mixed-type contract
+
+`annotations[k]` is now a `string` for the existing six text kinds and a
+structured object for `furigana`; future annotation kinds may be either string
+or object depending on their rendering and validation needs.
+
+At-risk consumer patterns include TypeScript `Record<string, string>`, Go
+`map[string]string`, and jq predicates that assume `type == "string"` across
+the whole `annotations` object.
+
+Safe patterns used in this PR are the TypeScript discriminated union
+`AnnotationValue<K>`, Go `map[string]json.RawMessage` with per-key decoding,
+and jq predicates that allow structured furigana explicitly:
+`(.key == "furigana") or (.value | type == "string")`.
+
+This PR ships the schema, lint, loader, API types, and rendering
+infrastructure but **does not** emit `furigana` from any live corpus
+entry. `/api/version` advances from `M3-C2` to `M3-C3` to signal the
+additive contract widening per rule API-002. JS-067 owns the live
+rollout: it must complete a downstream non-repo consumer audit (export
+scripts, static bundles, third-party integrations) and gate cached
+client compatibility before any grammar or vocab entry begins emitting
+`annotations.furigana` objects in production responses.
 
 Storage:
 
