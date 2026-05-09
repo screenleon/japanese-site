@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「動詞て形 + おく」は、後で役に立つように前もって何かをすることを表します。また、「窓を開けておく」のように、ある状態をそのままにしておく意味でも使います。会話では「ておく」が「とく」になることもありますが、ここでは標準的な形を扱います。",
   "explanation_zh": "「動詞て形 + おく」表示為了之後的目的先做好某事，或讓某狀態保持不變。常譯為「先……好」「保持……」。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"状態","reading":"じょうたい"},{"kanji":"意味","reading":"いみ"},{"kanji":"会話","reading":"かいわ"},{"kanji":"標準","reading":"ひょうじゅん"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

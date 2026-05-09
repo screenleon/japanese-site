@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「名詞 + といえば」または「名詞 + といったら」は、ある話題を取り上げ、それに関係する事柄を続けて述べる表現である。「その話題から考えると」という意味で、会話の中で連想や代表例を導入する。",
   "explanation_zh": "「名詞 + といえば／といったら」表示「說到……」，用來提出某個話題，接著引出相關內容、聯想或代表例。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"名詞","reading":"めいし"},{"kanji":"表現","reading":"ひょうげん"},{"kanji":"意味","reading":"いみ"},{"kanji":"話題","reading":"わだい"},{"kanji":"関係","reading":"かんけい"},{"kanji":"事柄","reading":"ことがら"},{"kanji":"会話","reading":"かいわ"},{"kanji":"連想","reading":"れんそう"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

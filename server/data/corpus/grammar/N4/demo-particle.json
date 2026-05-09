@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "助詞の「でも」は、「名詞 + でも」の形で、例を一つ軽く示したり、やわらかい提案をしたりする表現である。また、「そのようなものでも」という意味で、意外な対象を含める場合にも用いられる。接続詞の「でも」（しかし）とは区別される。",
   "explanation_zh": "助詞「でも」接在名詞後，可表示「……之類的」作為輕微建議或例子，也可表示「連……也」。需和表示「但是」的接續詞「でも」區分。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"助詞","reading":"じょし"},{"kanji":"名詞","reading":"めいし"},{"kanji":"表現","reading":"ひょうげん"},{"kanji":"意味","reading":"いみ"},{"kanji":"一つ","reading":"ひとつ"},{"kanji":"提案","reading":"ていあん"},{"kanji":"意外","reading":"いがい"},{"kanji":"対象","reading":"たいしょう"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

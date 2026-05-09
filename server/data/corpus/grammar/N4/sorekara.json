@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「それから」は、前に述べた出来事の次に起こることを続けて言うときに使います。時間の順序をはっきり示す接続表現です。また、話題や項目を追加するときにも使えます。",
   "explanation_zh": "「それから」表示時間順序上的「然後、之後」，也可用來追加項目或話題。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"時間","reading":"じかん"},{"kanji":"接続","reading":"せつぞく"},{"kanji":"表現","reading":"ひょうげん"},{"kanji":"出来事","reading":"できごと"},{"kanji":"順序","reading":"じゅんじょ"},{"kanji":"話題","reading":"わだい"},{"kanji":"項目","reading":"こうもく"},{"kanji":"追加","reading":"ついか"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「わけだ」は、理由や状況を知って、結果が自然だと理解したことを表します。「だからそうなのだ」と納得するときに使います。動詞普通形、い形容詞、な形容詞 + な、名詞 + のに続きます。",
   "explanation_zh": "「わけだ」表示知道理由或情況後，理解某結果是自然的，常譯為「怪不得」「也就是說」。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"理由","reading":"りゆう"},{"kanji":"結果","reading":"けっか"},{"kanji":"動詞","reading":"どうし"},{"kanji":"普通","reading":"ふつう"},{"kanji":"形容詞","reading":"けいようし"},{"kanji":"名詞","reading":"めいし"},{"kanji":"状況","reading":"じょうきょう"},{"kanji":"自然","reading":"しぜん"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「うちに」は、状態や機会が変わる前に何かをすることを表します。「動詞ている形 + うちに」「形容詞 + うちに」「名詞 + の + うちに」の形で使います。時間や条件が続いている間に行う、という意味です。",
   "explanation_zh": "「うちに」表示趁某狀態或機會還沒有改變以前做某事。可接「V-ている」、形容詞或「名詞 + の」。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"状態","reading":"じょうたい"},{"kanji":"動詞","reading":"どうし"},{"kanji":"形容詞","reading":"けいようし"},{"kanji":"名詞","reading":"めいし"},{"kanji":"時間","reading":"じかん"},{"kanji":"条件","reading":"じょうけん"},{"kanji":"意味","reading":"いみ"},{"kanji":"機会","reading":"きかい"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

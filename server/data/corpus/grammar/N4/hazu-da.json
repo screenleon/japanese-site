@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「はずだ」は、知っている情報や理由から考えて、そうなると期待できることを表します。動詞普通形、い形容詞、な形容詞 + な、名詞 + のに続きます。単なる希望ではなく、理由に基づく判断です。",
   "explanation_zh": "「はずだ」表示根據已知資訊或理由推斷「照理應該如此」。不是單純希望，而是有根據的判斷。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"理由","reading":"りゆう"},{"kanji":"動詞","reading":"どうし"},{"kanji":"普通","reading":"ふつう"},{"kanji":"形容詞","reading":"けいようし"},{"kanji":"名詞","reading":"めいし"},{"kanji":"情報","reading":"じょうほう"},{"kanji":"期待","reading":"きたい"},{"kanji":"希望","reading":"きぼう"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「普通形 + と思う」は、話し手の考え、意見、予想を述べる表現である。文の内容を「と」で受け、「思う」でその判断が自分の考えであることを示す。断定を避け、やわらかく意見を述べるときにも用いられる。",
   "explanation_zh": "「普通形 + と思う」表示說話者的想法、意見或推測，常譯為「我想／我認為」。比直接斷定更柔和。",
+  "annotations": {
+    "furigana": {"title_ja":[{"kanji":"思う","reading":"おもう"}],"key_terms":[{"kanji":"普通","reading":"ふつう"},{"kanji":"話し手","reading":"はなして"},{"kanji":"表現","reading":"ひょうげん"},{"kanji":"意見","reading":"いけん"},{"kanji":"予想","reading":"よそう"},{"kanji":"内容","reading":"ないよう"},{"kanji":"判断","reading":"はんだん"},{"kanji":"自分","reading":"じぶん"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

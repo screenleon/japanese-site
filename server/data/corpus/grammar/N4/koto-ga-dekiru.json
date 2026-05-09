@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「動詞辞書形 + ことができる」は、能力や可能性を表します。\n\n- 日本語を話すことができます\n- ここで泳ぐことができます\n\n会話では可能形もよく使いますが、「ことができる」は説明や案内で使いやすい形です。",
   "explanation_zh": "「動詞辞書形 + ことができる」表示能力或可能性，相當於「能夠」。例如「日本語を話すことができます」。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"辞書","reading":"じしょ"},{"kanji":"能力","reading":"のうりょく"},{"kanji":"可能","reading":"かのう"},{"kanji":"日本語","reading":"にほんご"},{"kanji":"会話","reading":"かいわ"},{"kanji":"説明","reading":"せつめい"},{"kanji":"案内","reading":"あんない"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

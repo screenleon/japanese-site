@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「動詞て形 + もらう」は、話し手が相手に頼んで何かをしてもらうこと、または相手の行為から利益を受けることを表します。丁寧に言うときは「てもらいます」「てもらいました」を使います。",
   "explanation_zh": "「動詞て形 + もらう」表示請別人為自己做某事，或從別人的行為中得到幫助與好處。常譯為「請……做」「讓……幫忙」。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"話し手","reading":"はなして"},{"kanji":"相手","reading":"あいて"},{"kanji":"丁寧","reading":"ていねい"},{"kanji":"行為","reading":"こうい"},{"kanji":"利益","reading":"りえき"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

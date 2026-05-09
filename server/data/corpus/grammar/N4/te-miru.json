@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「動詞て形 + みる」は、試しに何かをすることを表します。例えば「この服を着てみます」は試しに着ることを表し、「先生に聞いてみます」は試しに聞くことを表します。丁寧にすすめるときは「てみてください」も使います。",
   "explanation_zh": "「動詞て形 + みる」表示先試著做某事，看看結果如何。常譯為「試著做」。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"丁寧","reading":"ていねい"},{"kanji":"試し","reading":"ためし"},{"kanji":"先生","reading":"せんせい"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

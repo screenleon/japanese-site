@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「AよりBのほうが〜」は、AとBを比べて、Bの程度が高いことを表します。\n\n- バスより電車のほうが速いです\n- 昨日より今日のほうが寒いです\n\n「より」は比べる基準を示します。",
   "explanation_zh": "「AよりBのほうが〜」表示和 A 相比，B 比較怎樣。「より」標示比較基準，例如「バスより電車のほうが速いです」。",
+  "annotations": {
+    "furigana": {"title_ja":[{"kanji":"比較","reading":"ひかく"}],"key_terms":[{"kanji":"基準","reading":"きじゅん"},{"kanji":"程度","reading":"ていど"},{"kanji":"電車","reading":"でんしゃ"},{"kanji":"昨日","reading":"きのう"},{"kanji":"今日","reading":"きょう"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
