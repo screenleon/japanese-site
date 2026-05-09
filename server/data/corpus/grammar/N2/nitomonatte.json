@@ -6,7 +6,7 @@
   "explanation_ja": "「〜に伴って」は、ある変化と同時に別の変化も起こることを表す。例として「人口の増加に伴って交通量も増えた」「気温が上がるに伴って売上が伸びる」のように、社会的・数量的な変化によく使われる。書き言葉で、二つの変化の連動を客観的に述べる。",
   "explanation_zh": "「〜に伴って」表示隨著某變化，另一個變化也一起發生，常用於書面或正式說明。",
   "annotations": {
-    "furigana": {"title_ja":[{"kanji":"伴","reading":"ともな"}],"key_terms":[{"kanji":"変化","reading":"へんか"},{"kanji":"同時","reading":"どうじ"},{"kanji":"人口","reading":"じんこう"},{"kanji":"増加","reading":"ぞうか"},{"kanji":"交通","reading":"こうつう"},{"kanji":"気温","reading":"きおん"},{"kanji":"売上","reading":"うりあげ"},{"kanji":"社会","reading":"しゃかい"}]}
+    "furigana": {"title_ja":[{"kanji":"伴って","reading":"ともなって"}],"key_terms":[{"kanji":"変化","reading":"へんか"},{"kanji":"同時","reading":"どうじ"},{"kanji":"人口","reading":"じんこう"},{"kanji":"増加","reading":"ぞうか"},{"kanji":"交通","reading":"こうつう"},{"kanji":"気温","reading":"きおん"},{"kanji":"売上","reading":"うりあげ"},{"kanji":"社会","reading":"しゃかい"}]}
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",

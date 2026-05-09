@@ -6,7 +6,7 @@
   "explanation_ja": "「〜たるもの」は、「〜という立場にある人なら、当然こうあるべきだ」と述べる硬い表現です。\n\n形：名詞＋たるもの。\n- 教師たるもの、学び続けるべきだ\n- リーダーたるもの、責任から逃げてはならない\n\n多くの場合、後ろには義務・心構え・あるべき姿が続きます。少し古風で、演説・論説・強い主張に向いています。",
   "explanation_zh": "「〜たるもの」表示「身為…者」，後面通常接應有的態度、責任或義務。語氣正式、偏書面或演說。\n\n**形態**：名詞＋たるもの\n- 教師たるもの、学び続けるべきだ。\n- リーダーたるもの、責任から逃げてはならない。\n\n重點是「既然具有這個身分，就理應如此」。",
   "annotations": {
-    "furigana": {"key_terms":[{"kanji":"立場","reading":"たちば"},{"kanji":"当然","reading":"とうぜん"},{"kanji":"教師","reading":"きょうし"},{"kanji":"姿","reading":"すがた"},{"kanji":"責任","reading":"せきにん"},{"kanji":"義務","reading":"ぎむ"},{"kanji":"心構","reading":"こころがま"},{"kanji":"主張","reading":"しゅちょう"}]}
+    "furigana": {"key_terms":[{"kanji":"立場","reading":"たちば"},{"kanji":"当然","reading":"とうぜん"},{"kanji":"教師","reading":"きょうし"},{"kanji":"姿","reading":"すがた"},{"kanji":"責任","reading":"せきにん"},{"kanji":"義務","reading":"ぎむ"},{"kanji":"心構え","reading":"こころがまえ"},{"kanji":"主張","reading":"しゅちょう"}]}
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
