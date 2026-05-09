@@ -76,7 +76,7 @@
 | JS-067 | 🔵 active | Grammar furigana 全量 rollout（title_ja + key_terms，N3→N2→N1→N4→N5） | content | 2026-05-09 | feedback:2026-05-09 |
 | JS-068 | 🔵 active | vocab JLPT level-distribution rebalance | content | 2026-05-09 | decisions:2026-05-09 |
 | JS-069 | ✅ closed 2026-05-09 | furigana rollout readiness audit | infra | 2026-05-09 | audit:js-069 |
-| JS-070 | 🔵 active | Kuromoji vs Mecab furigana pipeline spike | infra/content | 2026-05-09 | audit:js-069 |
+| JS-070 | ✅ closed 2026-05-09 | Kuromoji vs Mecab furigana pipeline spike | infra | 2026-05-09 | audit:js-069 |
 
 ---
 
@@ -694,7 +694,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Outcome**: Completed the JS-069 audit document covering downstream mixed-type `annotations` consumers, cached-client compatibility for live `annotations.furigana` emission, and Kuromoji/Mecab/LLM-only pipeline tradeoffs.
 **See**: audits/js-069-furigana-rollout-readiness-2026-05-09.md
 
-## JS-070 — Kuromoji vs Mecab furigana pipeline spike
+## JS-070 — Kuromoji vs Mecab furigana pipeline spike ✅ 2026-05-09
 
 **Problem**: JS-067 requires a deterministic furigana authoring pipeline, but Kuromoji vs Mecab accuracy and integration cost have not been tested against this repo's actual grammar fragments.
 
