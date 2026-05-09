@@ -1,9 +1,9 @@
 # ADR 0002 — Furigana authoring pipeline (Kuromoji preferred, build-time only)
 
-- Status: proposed (pending JS-067 prep validation)
+- Status: accepted (validated 2026-05-09; see `audits/js-067-tokenizer-spike-2026-05-09.md`)
 - Date: 2026-05-09
 - Deciders: project owner (screenleon), PM (Claude)
-- Related: ADR 0001 (annotations schema, furigana kind), JS-066 (spike infrastructure shipped via PR #50), JS-067 (live rollout, blocked on this ADR + cached-client rotation), JS-069 (rollout readiness audit)
+- Related: ADR 0001 (annotations schema, furigana kind), JS-066 (spike infrastructure shipped via PR #50), JS-067 (live rollout, blocked only on operational gates after this ADR + cached-client rotation), JS-069 (rollout readiness audit), JS-067 prep tokenizer spike (this PR)
 
 ## Context
 
