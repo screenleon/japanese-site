@@ -24,7 +24,12 @@ cat > "$grammar_root/N3/monono.json" <<'JSON'
   "nuance_note": "口語・くだけた逆接。",
   "mental_model": "前件を事実として置き、後件で予想外の結果を見る。",
   "annotations": {
-    "mental_model": "前件を事実として置き、後件で予想外の結果を見る。"
+    "mental_model": "前件を事実として置き、後件で予想外の結果を見る。",
+    "furigana": {
+      "title_ja": [
+        {"kanji": "物", "reading": "もの"}
+      ]
+    }
   },
   "related_slugs": ["monono-formal"],
   "explanation_zh": "雖然但是",
@@ -103,5 +108,87 @@ if GRAMMAR_ROOT="$non_string_annotation_root" bash scripts/lint-grammar.sh >/tmp
 	exit 1
 fi
 grep -F "annotations values must be non-empty strings" /tmp/test-lint-grammar-non-string-annotation.err >/dev/null
+
+missing_kanji_furigana_root="$tmp_root/missing-kanji-furigana"
+cp -R "$grammar_root" "$missing_kanji_furigana_root"
+jq 'del(.annotations.furigana.title_ja[0].kanji)' "$missing_kanji_furigana_root/N3/monono.json" > "$missing_kanji_furigana_root/N3/monono.tmp"
+mv "$missing_kanji_furigana_root/N3/monono.tmp" "$missing_kanji_furigana_root/N3/monono.json"
+if GRAMMAR_ROOT="$missing_kanji_furigana_root" bash scripts/lint-grammar.sh >/tmp/test-lint-grammar-missing-kanji-furigana.out 2>/tmp/test-lint-grammar-missing-kanji-furigana.err; then
+	echo "test-lint-grammar: missing kanji furigana fixture unexpectedly passed" >&2
+	exit 1
+fi
+grep -F "annotations.furigana must be an object" /tmp/test-lint-grammar-missing-kanji-furigana.err >/dev/null
+
+empty_reading_furigana_root="$tmp_root/empty-reading-furigana"
+cp -R "$grammar_root" "$empty_reading_furigana_root"
+jq '.annotations.furigana.title_ja[0].reading = ""' "$empty_reading_furigana_root/N3/monono.json" > "$empty_reading_furigana_root/N3/monono.tmp"
+mv "$empty_reading_furigana_root/N3/monono.tmp" "$empty_reading_furigana_root/N3/monono.json"
+if GRAMMAR_ROOT="$empty_reading_furigana_root" bash scripts/lint-grammar.sh >/tmp/test-lint-grammar-empty-reading-furigana.out 2>/tmp/test-lint-grammar-empty-reading-furigana.err; then
+	echo "test-lint-grammar: empty reading furigana fixture unexpectedly passed" >&2
+	exit 1
+fi
+grep -F "annotations.furigana must be an object" /tmp/test-lint-grammar-empty-reading-furigana.err >/dev/null
+
+whitespace_kanji_furigana_root="$tmp_root/whitespace-kanji-furigana"
+cp -R "$grammar_root" "$whitespace_kanji_furigana_root"
+jq '.annotations.furigana.title_ja[0] = {"kanji":"   ","reading":"ちが"}' "$whitespace_kanji_furigana_root/N3/monono.json" > "$whitespace_kanji_furigana_root/N3/monono.tmp"
+mv "$whitespace_kanji_furigana_root/N3/monono.tmp" "$whitespace_kanji_furigana_root/N3/monono.json"
+if GRAMMAR_ROOT="$whitespace_kanji_furigana_root" bash scripts/lint-grammar.sh >/tmp/test-lint-grammar-whitespace-kanji-furigana.out 2>/tmp/test-lint-grammar-whitespace-kanji-furigana.err; then
+	echo "test-lint-grammar: whitespace-only kanji furigana fixture unexpectedly passed" >&2
+	exit 1
+fi
+grep -F "annotations.furigana must be an object" /tmp/test-lint-grammar-whitespace-kanji-furigana.err >/dev/null
+echo "test-lint-grammar: whitespace-only kanji furigana expected failure mode triggered"
+
+whitespace_reading_furigana_root="$tmp_root/whitespace-reading-furigana"
+cp -R "$grammar_root" "$whitespace_reading_furigana_root"
+jq '.annotations.furigana.title_ja[0] = {"kanji":"違","reading":"   "}' "$whitespace_reading_furigana_root/N3/monono.json" > "$whitespace_reading_furigana_root/N3/monono.tmp"
+mv "$whitespace_reading_furigana_root/N3/monono.tmp" "$whitespace_reading_furigana_root/N3/monono.json"
+if GRAMMAR_ROOT="$whitespace_reading_furigana_root" bash scripts/lint-grammar.sh >/tmp/test-lint-grammar-whitespace-reading-furigana.out 2>/tmp/test-lint-grammar-whitespace-reading-furigana.err; then
+	echo "test-lint-grammar: whitespace-only reading furigana fixture unexpectedly passed" >&2
+	exit 1
+fi
+grep -F "annotations.furigana must be an object" /tmp/test-lint-grammar-whitespace-reading-furigana.err >/dev/null
+echo "test-lint-grammar: whitespace-only reading furigana expected failure mode triggered"
+
+non_object_furigana_root="$tmp_root/non-object-furigana"
+cp -R "$grammar_root" "$non_object_furigana_root"
+jq '.annotations.furigana = "bad furigana"' "$non_object_furigana_root/N3/monono.json" > "$non_object_furigana_root/N3/monono.tmp"
+mv "$non_object_furigana_root/N3/monono.tmp" "$non_object_furigana_root/N3/monono.json"
+if GRAMMAR_ROOT="$non_object_furigana_root" bash scripts/lint-grammar.sh >/tmp/test-lint-grammar-non-object-furigana.out 2>/tmp/test-lint-grammar-non-object-furigana.err; then
+	echo "test-lint-grammar: non-object furigana fixture unexpectedly passed" >&2
+	exit 1
+fi
+grep -F "annotations.furigana must be an object" /tmp/test-lint-grammar-non-object-furigana.err >/dev/null
+
+empty_title_furigana_root="$tmp_root/empty-title-furigana"
+cp -R "$grammar_root" "$empty_title_furigana_root"
+jq '.annotations = {"furigana":{"title_ja":[]}}' "$empty_title_furigana_root/N3/monono.json" > "$empty_title_furigana_root/N3/monono.tmp"
+mv "$empty_title_furigana_root/N3/monono.tmp" "$empty_title_furigana_root/N3/monono.json"
+if GRAMMAR_ROOT="$empty_title_furigana_root" bash scripts/lint-grammar.sh >/tmp/test-lint-grammar-empty-title-furigana.out 2>/tmp/test-lint-grammar-empty-title-furigana.err; then
+	echo "test-lint-grammar: empty title_ja furigana fixture unexpectedly passed" >&2
+	exit 1
+fi
+grep -F "annotations.furigana must be an object" /tmp/test-lint-grammar-empty-title-furigana.err >/dev/null
+
+empty_key_terms_furigana_root="$tmp_root/empty-key-terms-furigana"
+cp -R "$grammar_root" "$empty_key_terms_furigana_root"
+jq '.annotations = {"furigana":{"key_terms":[]}}' "$empty_key_terms_furigana_root/N3/monono.json" > "$empty_key_terms_furigana_root/N3/monono.tmp"
+mv "$empty_key_terms_furigana_root/N3/monono.tmp" "$empty_key_terms_furigana_root/N3/monono.json"
+if GRAMMAR_ROOT="$empty_key_terms_furigana_root" bash scripts/lint-grammar.sh >/tmp/test-lint-grammar-empty-key-terms-furigana.out 2>/tmp/test-lint-grammar-empty-key-terms-furigana.err; then
+	echo "test-lint-grammar: empty key_terms furigana fixture unexpectedly passed" >&2
+	exit 1
+fi
+grep -F "annotations.furigana must be an object" /tmp/test-lint-grammar-empty-key-terms-furigana.err >/dev/null
+
+empty_all_furigana_root="$tmp_root/empty-all-furigana"
+cp -R "$grammar_root" "$empty_all_furigana_root"
+jq '.annotations = {"furigana":{"title_ja":[],"key_terms":[]}}' "$empty_all_furigana_root/N3/monono.json" > "$empty_all_furigana_root/N3/monono.tmp"
+mv "$empty_all_furigana_root/N3/monono.tmp" "$empty_all_furigana_root/N3/monono.json"
+if GRAMMAR_ROOT="$empty_all_furigana_root" bash scripts/lint-grammar.sh >/tmp/test-lint-grammar-empty-all-furigana.out 2>/tmp/test-lint-grammar-empty-all-furigana.err; then
+	echo "test-lint-grammar: empty title_ja and key_terms furigana fixture unexpectedly passed" >&2
+	exit 1
+fi
+grep -F "annotations.furigana must be an object" /tmp/test-lint-grammar-empty-all-furigana.err >/dev/null
 
 echo "test-lint-grammar: fixture passed"

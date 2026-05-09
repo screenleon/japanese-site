@@ -94,8 +94,12 @@ while IFS= read -r -d '' file; do
 			fi
 		done
 	done < <(jq -r 'select(.annotations | type == "object") | [(.slug // "?"), (.annotations | keys_unsorted | join(","))] | @tsv' "$file")
-	if ! jq -e '(.annotations == null) or (.annotations | type != "object") or (.annotations | all(.[]; type == "string" and (gsub("\\s"; "") | length > 0)))' "$file" >/dev/null; then
+	if ! jq -e '(.annotations == null) or (.annotations | type != "object") or (.annotations | to_entries | all(.[]; (.key == "furigana") or (.value | type == "string" and (gsub("\\s"; "") | length > 0))))' "$file" >/dev/null; then
 		echo "lint-grammar: $rel annotations values must be non-empty strings" >&2
+		EXIT_CODE=1
+	fi
+	if ! jq -e '(.annotations.furigana == null) or (((.annotations.furigana | type) == "object") and (.annotations.furigana | (((.title_ja // []) + (.key_terms // [])) as $pairs | ($pairs | length > 0) and ($pairs | all(.[]; type == "object" and (.kanji | (type == "string" and (gsub("\\s"; "") | length > 0))) and (.reading | (type == "string" and (gsub("\\s"; "") | length > 0))))))))' "$file" >/dev/null; then
+		echo "lint-grammar: $rel annotations.furigana must be an object with title_ja/key_terms pairs containing non-empty kanji and reading" >&2
 		EXIT_CODE=1
 	fi
 done < <(find "$GRAMMAR_ROOT" -mindepth 2 -maxdepth 2 -type f -name '*.json' -print0 | sort -z)

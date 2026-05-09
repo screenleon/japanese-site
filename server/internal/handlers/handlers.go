@@ -360,7 +360,7 @@ func health(w http.ResponseWriter, _ *http.Request) {
 func version(w http.ResponseWriter, _ *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]string{
 		"name":      "japanese-site",
-		"milestone": "M3-C2",
+		"milestone": "M3-C3",
 	})
 }
 

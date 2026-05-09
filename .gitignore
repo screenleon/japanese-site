@@ -38,3 +38,5 @@ prompt-budget.local.yml
 
 .codex
 .agent-trace/
+.gate-results/
+.codex-briefs/

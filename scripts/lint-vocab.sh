@@ -68,6 +68,10 @@ for file in "${files[@]}"; do
 			fi
 		done
 	done < <(jq -r 'select(.annotations | type == "object") | [(.headword // "?"), (.annotations | keys_unsorted | join(","))] | @tsv' "$file")
+	if ! jq -se 'all(.[]; (.annotations.furigana == null) or (((.annotations.furigana | type) == "object") and (.annotations.furigana | (((.title_ja // []) + (.key_terms // [])) as $pairs | ($pairs | length > 0) and ($pairs | all(.[]; type == "object" and (.kanji | (type == "string" and (gsub("\\s"; "") | length > 0))) and (.reading | (type == "string" and (gsub("\\s"; "") | length > 0)))))))))' "$file" >/dev/null; then
+		echo "lint-vocab: $rel annotations.furigana must be an object with title_ja/key_terms pairs containing non-empty kanji and reading" >&2
+		EXIT_CODE=1
+	fi
 done
 
 if [[ $EXIT_CODE -ne 0 ]]; then

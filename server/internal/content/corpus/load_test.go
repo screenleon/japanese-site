@@ -304,23 +304,31 @@ func TestLoad_StoresAnnotationsTransitionFields(t *testing.T) {
 	if flat != mentalModel {
 		t.Fatalf("flat mental_model = %q, want %q", flat, mentalModel)
 	}
-	var grammarAnnotations map[string]string
+	var grammarAnnotations map[string]json.RawMessage
 	if err := json.Unmarshal([]byte(raw), &grammarAnnotations); err != nil {
 		t.Fatalf("decode grammar annotations: %v", err)
 	}
-	if grammarAnnotations["mental_model"] != mentalModel {
-		t.Fatalf("annotations.mental_model = %q, want %q", grammarAnnotations["mental_model"], mentalModel)
+	var nestedMentalModel string
+	if err := json.Unmarshal(grammarAnnotations["mental_model"], &nestedMentalModel); err != nil {
+		t.Fatalf("decode annotations.mental_model: %v", err)
+	}
+	if nestedMentalModel != mentalModel {
+		t.Fatalf("annotations.mental_model = %q, want %q", nestedMentalModel, mentalModel)
 	}
 
 	if err := db.QueryRow(`SELECT annotations FROM vocab WHERE headword = 'お喋り' AND reading = 'おしゃべり'`).Scan(&raw); err != nil {
 		t.Fatalf("select vocab annotations: %v", err)
 	}
-	var vocabAnnotations map[string]string
+	var vocabAnnotations map[string]json.RawMessage
 	if err := json.Unmarshal([]byte(raw), &vocabAnnotations); err != nil {
 		t.Fatalf("decode vocab annotations: %v", err)
 	}
-	if vocabAnnotations["usage"] != usage {
-		t.Fatalf("annotations.usage = %q, want %q", vocabAnnotations["usage"], usage)
+	var nestedUsage string
+	if err := json.Unmarshal(vocabAnnotations["usage"], &nestedUsage); err != nil {
+		t.Fatalf("decode annotations.usage: %v", err)
+	}
+	if nestedUsage != usage {
+		t.Fatalf("annotations.usage = %q, want %q", nestedUsage, usage)
 	}
 }
 
@@ -387,14 +395,18 @@ func TestMergeGrammarAnnotations_UnknownKindIsFiltered(t *testing.T) {
 	if err != nil {
 		t.Fatalf("merge: %v", err)
 	}
-	var got map[string]string
+	var got map[string]json.RawMessage
 	if err := json.Unmarshal([]byte(body), &got); err != nil {
 		t.Fatalf("unmarshal: %v", err)
 	}
 	if _, ok := got["typo_kind"]; ok {
 		t.Fatalf("unknown kind leaked through merge allowlist: %#v", got)
 	}
-	if got["usage"] != "keep me" {
+	var usage string
+	if err := json.Unmarshal(got["usage"], &usage); err != nil {
+		t.Fatalf("decode annotations.usage: %v", err)
+	}
+	if usage != "keep me" {
 		t.Fatalf("known kind dropped from merge: %#v", got)
 	}
 }

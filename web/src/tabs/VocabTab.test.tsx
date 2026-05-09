@@ -29,6 +29,18 @@ const vocab = {
   license: "CC-BY-SA-4.0",
 };
 
+const kanaOnlyVocab = {
+  id: 2,
+  headword: "ありがとう",
+  reading: "ありがとう",
+  pos: "",
+  gloss_ja: "感謝を表すことば。",
+  gloss_zh: "謝謝。",
+  jlpt_level: "N5",
+  source: "curated",
+  license: "CC-BY-SA-4.0",
+};
+
 const searchVocab = vi.mocked(api.searchVocab);
 const randomVocab = vi.mocked(api.randomVocab);
 
@@ -58,5 +70,46 @@ describe("VocabTab", () => {
       "「お喋り」は雑談にも、話しすぎる様子にも使う。"
     );
     expect(notes.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("renders kanji vocabulary readings with ruby", async () => {
+    /**
+     * Verifies vocab headwords with distinct readings render ruby reading markup.
+     * Steps:
+     * 1. Render the vocab tab with mocked kanji vocabulary API results.
+     * 2. Wait for the vocab card and row content to appear.
+     * 3. Assert the rendered ruby contains the headword and rt reading.
+     */
+    // Arrange / Act
+    const { container } = render(<VocabTab />);
+
+    await screen.findAllByText("よく話すこと。");
+
+    // Assert
+    const ruby = Array.from(container.querySelectorAll("ruby"));
+    expect(ruby.length).toBeGreaterThanOrEqual(2);
+    expect(ruby[0]).toHaveTextContent("お喋りおしゃべり");
+    expect(ruby[0].querySelector("rt")).toHaveTextContent("おしゃべり");
+  });
+
+  it("renders kana-only vocabulary without ruby", async () => {
+    /**
+     * Verifies vocab headwords with matching kana readings render without ruby markup.
+     * Steps:
+     * 1. Render the vocab tab with mocked kana-only vocabulary API results.
+     * 2. Wait for the vocab card and row content to appear.
+     * 3. Assert the rendered output does not contain ruby markup.
+     */
+    // Arrange
+    searchVocab.mockResolvedValue({ results: [kanaOnlyVocab], count: 1, total: 1 });
+    randomVocab.mockResolvedValue(kanaOnlyVocab);
+
+    // Act
+    const { container } = render(<VocabTab />);
+
+    await screen.findAllByText("ありがとう");
+
+    // Assert
+    expect(container.querySelector("ruby")).not.toBeInTheDocument();
   });
 });
