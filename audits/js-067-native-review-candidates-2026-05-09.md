@@ -461,7 +461,7 @@ Per the requested native-review workflow, this section is for a human native rev
 | M031 | N2/ue-wa.json | title_ja | 上/うえ |  |  |  |
 | M032 | N2/wo-chuushin-ni.json | key_terms | 駅/えき |  |  |  |
 | M033 | N3/conditional-ba.json | key_terms | 五/ご |  |  |  |
-| M034 | N3/conditional-ba.json | key_terms | 段/だん |  |  |  |
+| M034 | N3/conditional-ba.json | key_terms | 段/だん | ✓ confirmed (mechanical-equivalent) | 五段/ごだん | PM analysis 2026-05-09: same lexeme class as existing 一段/いちだん entry — mechanical merge per F1 pattern |
 | M035 | N3/conditional-ba.json | key_terms | 的/てき |  |  |  |
 | M036 | N3/contrast-noni.json | key_terms | 形/がた |  |  |  |
 | M037 | N3/contrast-noni.json | key_terms | 手/て |  |  |  |
@@ -493,7 +493,7 @@ Per the requested native-review workflow, this section is for a human native rev
 | M063 | N3/teiku-tekuru.json | key_terms | 手/て |  |  |  |
 | M064 | N3/tokoro.json | key_terms | 中/ちゅう |  |  |  |
 | M065 | N3/wake-niwa-ikanai.json | key_terms | 形/がた |  |  |  |
-| M066 | N3/wake-niwa-ikanai.json | key_terms | 的/てき |  |  |  |
+| M066 | N3/wake-niwa-ikanai.json | key_terms | 的/てき | ✓ confirmed (mechanical-equivalent) | 社会的/しゃかいてき + 道徳的/どうとくてき | PM analysis 2026-05-09: 的 suffix split from 漢語 + 的 compounds — same as F1 stem-truncation class |
 | M067 | N3/youda.json | key_terms | 書/か |  |  |  |
 | M068 | N3/youni-goal.json | key_terms | 形/がた |  |  |  |
 | M069 | N3/youni-naru.json | key_terms | 形/がた |  |  |  |
@@ -504,7 +504,7 @@ Per the requested native-review workflow, this section is for a human native rev
 | M074 | N5/masu-form.json | title_ja | 形/けい |  |  |  |
 | M075 | N5/nani-doko-dare.json | title_ja | 何/なに |  |  |  |
 | M076 | N5/nani-doko-dare.json | title_ja | 誰/だれ |  |  |  |
-| M077 | N5/number-counter-hon.json | title_ja | 本/ほん |  |  |  |
+| M077 | N5/number-counter-hon.json | title_ja | 本/ほん | ✓ confirmed (keep) | (keep ほん) | PM analysis 2026-05-09: ほん is the citation form for the bare counter title; prose explicitly enumerates ぽん/ぼん/ほん variants by numeral — current annotation is教材-standard |
 | M078 | N5/te-form.json | title_ja | 形/けい |  |  |  |
 | M079 | N5/verb-te-form-connection.json | title_ja | 形/けい |  |  |  |
 
