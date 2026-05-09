@@ -5,6 +5,9 @@
   "jlpt_level": "N5",
   "explanation_ja": "「から」は、理由を表して、前の文と後ろの文をつなぎます。「雨ですから、行きません」や「忙しいですから、休みません」のように使います。日常会話では、理由を先に言ってから結果を言うときによく使います。",
   "explanation_zh": "「から」表示原因或理由，相當於「因為……所以……」，語氣較直接。",
+  "annotations": {
+    "furigana": {"title_ja":[{"kanji":"理由","reading":"りゆう"}],"key_terms":[{"kanji":"理由","reading":"りゆう"},{"kanji":"結果","reading":"けっか"},{"kanji":"後ろ","reading":"うしろ"},{"kanji":"日常","reading":"にちじょう"},{"kanji":"会話","reading":"かいわ"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

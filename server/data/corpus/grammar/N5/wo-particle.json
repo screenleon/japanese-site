@@ -5,6 +5,9 @@
   "jlpt_level": "N5",
   "explanation_ja": "「を」は、動作の対象を示す助詞です。食べるもの、読むもの、見るもののように、「何をするか」を表します。\n\n「名詞 を 動詞」の形で使います。\n- 水を飲みます\n- 本を読みます\n\n発音は普通「お」と同じです。書くときは「を」と書きます。",
   "explanation_zh": "「を」標示動作的對象，也就是「做某個動作的東西」。例如「水を飲みます」是喝水，「本を読みます」是看書。發音通常和「お」相同，但書寫要用「を」。",
+  "annotations": {
+    "furigana": {"title_ja":[{"kanji":"目的語","reading":"もくてきご"}],"key_terms":[{"kanji":"動作","reading":"どうさ"},{"kanji":"助詞","reading":"じょし"},{"kanji":"名詞","reading":"めいし"},{"kanji":"動詞","reading":"どうし"},{"kanji":"普通","reading":"ふつう"},{"kanji":"対象","reading":"たいしょう"},{"kanji":"発音","reading":"はつおん"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

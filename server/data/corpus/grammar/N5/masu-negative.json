@@ -5,6 +5,9 @@
   "jlpt_level": "N5",
   "explanation_ja": "「ません」は、動詞のます形の否定をていねいに言う形です。「肉を食べません」や「今日は行きません」のように、しないことを表します。過去の否定は「ませんでした」で、「昨日は行きませんでした」のように使います。",
   "explanation_zh": "「ません」是動詞ます形的禮貌否定式，表示「不做、沒有做」的非過去否定。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"否定","reading":"ひてい"},{"kanji":"過去","reading":"かこ"},{"kanji":"今日","reading":"きょう"},{"kanji":"昨日","reading":"きのう"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

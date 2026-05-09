@@ -5,6 +5,9 @@
   "jlpt_level": "N5",
   "explanation_ja": "文の終わりに近い「が」は、前の内容と後ろの内容をやわらかく対比します。「日本語は難しいですが、おもしろいです」や「行きたいですが、時間がありません」のように使います。助詞の主語を示す「が」と形は同じですが、ここでは文と文をつなぎます。",
   "explanation_zh": "接續助詞「が」可連接兩個句子，表示「但是、可是」的轉折或委婉對比。",
+  "annotations": {
+    "furigana": {"title_ja":[{"kanji":"逆接","reading":"ぎゃくせつ"}],"key_terms":[{"kanji":"時間","reading":"じかん"},{"kanji":"助詞","reading":"じょし"},{"kanji":"主語","reading":"しゅご"},{"kanji":"内容","reading":"ないよう"},{"kanji":"後ろ","reading":"うしろ"},{"kanji":"対比","reading":"たいひ"},{"kanji":"日本語","reading":"にほんご"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

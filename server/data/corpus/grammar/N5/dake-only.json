@@ -5,6 +5,9 @@
   "jlpt_level": "N5",
   "explanation_ja": "「だけ」は、数や物や人を一つに限る表現です。「水だけ飲みます」や「日曜日だけ休みです」のように、「それ以外はない」という意味を表します。名詞の後ろにも、時間を表す言葉の後ろにも使えます。",
   "explanation_zh": "「だけ」表示限定，意思是「只有、僅僅」，用來指出範圍內沒有其他項目。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"表現","reading":"ひょうげん"},{"kanji":"意味","reading":"いみ"},{"kanji":"名詞","reading":"めいし"},{"kanji":"時間","reading":"じかん"},{"kanji":"一つ","reading":"ひとつ"},{"kanji":"日曜日","reading":"にちようび"},{"kanji":"後ろ","reading":"うしろ"},{"kanji":"言葉","reading":"ことば"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

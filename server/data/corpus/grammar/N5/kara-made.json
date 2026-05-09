@@ -5,6 +5,9 @@
   "jlpt_level": "N5",
   "explanation_ja": "「から」は始まり、「まで」は終わりを表します。時間にも場所にも使えます。\n\n- 9時から5時まで働きます\n- 駅から学校まで歩きます\n\nどちらか一つだけでも使えます。",
   "explanation_zh": "「から」表示起點，「まで」表示終點，可以用於時間或場所。例如「9時から5時まで」「駅から学校まで」。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"時間","reading":"じかん"},{"kanji":"場所","reading":"ばしょ"},{"kanji":"学校","reading":"がっこう"},{"kanji":"一つ","reading":"ひとつ"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

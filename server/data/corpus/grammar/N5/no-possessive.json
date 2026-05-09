@@ -5,6 +5,9 @@
   "jlpt_level": "N5",
   "explanation_ja": "「の」は、名詞と名詞をつないで、所有、所属、内容、関係を表します。\n\n「A の B」は「Aに関係するB」という意味です。\n- 私の本\n- 日本語の先生\n- 机の上\n\n日本語では「の」を使う関係が多いので、名詞を説明するときの基本になります。",
   "explanation_zh": "「の」連接兩個名詞，表示所有、所屬、內容或位置關係。「私の本」是我的書，「日本語の先生」是日文老師，「机の上」是桌子上面。",
+  "annotations": {
+    "furigana": {"title_ja":[{"kanji":"所有","reading":"しょゆう"},{"kanji":"所属","reading":"しょぞく"}],"key_terms":[{"kanji":"名詞","reading":"めいし"},{"kanji":"所有","reading":"しょゆう"},{"kanji":"所属","reading":"しょぞく"},{"kanji":"意味","reading":"いみ"},{"kanji":"内容","reading":"ないよう"},{"kanji":"関係","reading":"かんけい"},{"kanji":"日本語","reading":"にほんご"},{"kanji":"先生","reading":"せんせい"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

@@ -5,6 +5,9 @@
   "jlpt_level": "N5",
   "explanation_ja": "「ませんか」は、相手をていねいに誘う表現です。「いっしょに昼ご飯を食べませんか」や「明日、映画を見ませんか」のように使います。形は否定ですが、意味は「いっしょにしませんか」という誘いです。",
   "explanation_zh": "「ませんか」形式上是否定疑問，但常用來禮貌邀請對方一起做某事。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"相手","reading":"あいて"},{"kanji":"表現","reading":"ひょうげん"},{"kanji":"否定","reading":"ひてい"},{"kanji":"意味","reading":"いみ"},{"kanji":"ご飯","reading":"ごはん"},{"kanji":"明日","reading":"あした"},{"kanji":"映画","reading":"えいが"},{"kanji":"誘い","reading":"さそい"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
