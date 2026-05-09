@@ -5,6 +5,9 @@
   "jlpt_level": "N2",
   "explanation_ja": "「さえ」は、極端な例を出して「それも」という意味を表します。また「〜さえすれば」で、最低条件を表します。\n\n- 名前さえ忘れてしまった\n- 時間さえあれば行けます\n\n強調の表現です。",
   "explanation_zh": "「さえ」可表示極端例「連...都」，也可在「〜さえすれば」中表示最低條件「只要...就」。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"極端","reading":"きょくたん"},{"kanji":"名前","reading":"なまえ"},{"kanji":"時間","reading":"じかん"},{"kanji":"強調","reading":"きょうちょう"},{"kanji":"条件","reading":"じょうけん"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

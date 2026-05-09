@@ -5,6 +5,9 @@
   "jlpt_level": "N5",
   "explanation_ja": "「ました」は、動詞のます形の過去をていねいに言う形です。「昨日、映画を見ました」や「朝ご飯を食べました」のように、もう終わった動作に使います。現在やこれからのことは「行きます」、過去のことは「行きました」と言います。",
   "explanation_zh": "「ました」是動詞ます形的禮貌過去式，用來表示已經發生或完成的動作。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"過去","reading":"かこ"},{"kanji":"動作","reading":"どうさ"},{"kanji":"現在","reading":"げんざい"},{"kanji":"昨日","reading":"きのう"},{"kanji":"映画","reading":"えいが"},{"kanji":"ご飯","reading":"ごはん"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

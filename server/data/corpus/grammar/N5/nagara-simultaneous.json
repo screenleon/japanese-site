@@ -5,6 +5,9 @@
   "jlpt_level": "N5",
   "explanation_ja": "「ながら」は、二つの動作を同時にすることを表します。動詞のます形から「ます」を取って、「音楽を聞きながら勉強します」や「歩きながら話します」のように使います。主な動作は後ろの文に来ます。",
   "explanation_zh": "「ながら」接在動詞ます形去掉ます之後，表示同一主語同時做兩個動作。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"動作","reading":"どうさ"},{"kanji":"動詞","reading":"どうし"},{"kanji":"二つ","reading":"ふたつ"},{"kanji":"音楽","reading":"おんがく"},{"kanji":"勉強","reading":"べんきょう"},{"kanji":"後ろ","reading":"うしろ"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

@@ -5,6 +5,9 @@
   "jlpt_level": "N2",
   "explanation_ja": "「〜に基づいて」は、資料・事実・規則などを根拠として行動や判断をすることを表す。例として「調査結果に基づいて計画を立てる」「法律に基づいて判断する」のように使う。主観ではなく、根拠に支えられていることを示す硬い表現である。",
   "explanation_zh": "「〜に基づいて」表示根據資料、事實、規則等作判斷或行動，強調有依據。",
+  "annotations": {
+    "furigana": {"title_ja":[{"kanji":"基","reading":"もと"}],"key_terms":[{"kanji":"資料","reading":"しりょう"},{"kanji":"事実","reading":"じじつ"},{"kanji":"規則","reading":"きそく"},{"kanji":"根拠","reading":"こんきょ"},{"kanji":"行動","reading":"こうどう"},{"kanji":"判断","reading":"はんだん"},{"kanji":"調査","reading":"ちょうさ"},{"kanji":"法律","reading":"ほうりつ"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

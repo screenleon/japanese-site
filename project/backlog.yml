@@ -1303,6 +1303,93 @@ items:
       - Build a Tatoeba audio plus dictation cloze MVP by reusing the existing question table and adding an audio_url field.
       - Explicitly NOT a new quiz tab; preserve UX consolidation discipline by keeping listening practice within the existing quiz surface.
       - Keep source/license/validated_by and external dataset boundaries intact.
+  - id: JS-091
+    title: JS-067 audit doc native-reviewer Section 2 closure (HIGH 38 + MEDIUM 76)
+    status: todo
+    priority: P3
+    theme: furigana
+    area: audit
+    source: pr-gate:2026-05-09 critic block-soft + re-gate advise
+    related: [JS-067]
+    notes:
+      - audits/js-067-native-review-candidates-2026-05-09.md 含 codex pre-pass 建議答案 38 HIGH + 79 MEDIUM。JS-067 PR 合併時 Section 2 僅 4 條 PM-provisional 收尾（M034/M066/M077 + H038 反轉），其餘 37 條 HIGH（codex 機械 lexeme-completion，已 commit 65c336f）+ 76 條 MEDIUM 的 native-verdict 欄空白。
+      - feedback_native_perspective.md 要求 LLM-pipeline 內容變動經 native-reviewer 第二輪審查；本 PR 因 codex 覆蓋率高、scope 集中於機械 stem 修復而以 sample 信任為憑。
+      - H038 真實案例 — F2-HIGH 機械修對 `N5/counter-basic.json` title 「数え方（つ・人・枚）」的 `人/にん` 過度修正為 `人います/にんいます`（從 explanation 例句拉的詞），title 中根本無此 token；critic re-gate 抽中後人工反轉。該案例證明即使 HIGH 機械修也存在 citation-context 誤判風險，native sample 仍需執行。
+      - Requirement — 由日語母語使用者逐條掃 audit doc Section 1.1（HIGH 38）+ Section 1.2..1.6（MEDIUM 76）表，於 Section 2 native-verdict 欄填 ✓/✗/note。發現任何 codex 建議錯誤者（如 H038 類），產出 follow-up corpus 修正 commit (`fix(annotations): JS-091 — ...`)。Citation-form 類（如 H038 / M077）需特別注意 title 是引用形而非 inflected form。
+      - Source — pr-gate:2026-05-09 critic block-soft + re-gate advise + feedback_native_perspective.
+
+  - id: JS-092
+    title: ya-inaya 命名一致性與 否/いな 確認
+    status: todo
+    priority: P3
+    theme: content
+    area: content
+    source: pr-gate:2026-05-09 critic medium
+    related: [JS-067]
+    notes:
+      - PR-gate critic 提到 `to-ina-ya` entry，實際檔名為 `N1/ya-inaya.json`（去 hyphen 連寫）。命名 convention 有 drift（其他 entries 如 `ka-ina-ka` 用 hyphen 風格）。
+      - 同 entry 的 `否/いな` 讀音雖在 audit MEDIUM 表通過 codex confidence，但 critic 原意要求顯式記錄 native 確認。
+      - Requirement — (a) 評估 `N1/ya-inaya.json` 是否統一改為 `ya-ina-ya.json`（含 entry_id 引用、檔名硬編碼影響、loader 路徑、URL 影響）；(b) audit doc 對 `否/いな` 該條補 native ✓ 標記。改名作業若風險過高可記為 won't-fix 並寫入 DECISIONS.md。
+      - Source — pr-gate:2026-05-09 critic medium #8.
+
+  - id: JS-093
+    title: 他/た 系列 single-kanji on/kun ambiguity 全 corpus sweep + tooling
+    status: todo
+    priority: P3
+    theme: furigana
+    area: tooling
+    source: pr-gate:2026-05-09 critic low
+    related: [JS-067]
+    notes:
+      - PR-gate critic 警告 `他/た` 在獨立位置應為 `ほか`；F2 sweep 在 `N1/wo-oite.json` 抓到同類風險（M021）。
+      - 高風險字表 — 他/人/生/行/間/上/下/出/入/見/来/気/子/本/目/手/足/口/心/力/新/古/大/小/長/短/高/低/多/少/中/外/内/前/後/開/閉。
+      - codex pre-pass 對此類已給 confident 答案但未經 native sample；長期須有 reading-sanity sweep tooling 防 regression。
+      - Requirement — (a) 寫 `scripts/audit-onkun-ambiguity.sh` 掃所有 furigana key_terms，找 single-kanji + 落在 R3 高風險字表的 token；(b) 對輸出每條人工 spot-check + 修正；(c) 之後可選擇做為 lint pre-commit hook 或 weekly CI sweep。
+      - Source — pr-gate:2026-05-09 critic low #9 + audit M021.
+
+  - id: JS-094
+    title: test-lint-grammar.sh 加 key_terms-only happy-path fixture
+    status: todo
+    priority: P3
+    theme: infra
+    area: testing
+    source: pr-gate:2026-05-09 qa-tester medium
+    related: [JS-067, JS-064]
+    notes:
+      - 現行 `scripts/test-lint-grammar.sh` clean fixture（`monono.json`）只跑 `title_ja` happy path；無 `key_terms`-only valid fixture。
+      - Mutation — 把 `lint-grammar.sh` 中 key_terms 的 jq 表達式刪除，全 corpus 仍通過（因 key_terms data 都在），test fixture 也不會 catch 這個 regression。
+      - F2 audit doc 為 199 條 entries 引入大量 key_terms shape 依賴；schema 演化時 lint 必須有獨立可 mutate 的 fixture surface（同 JS-064 mutation-coverage 思路）。
+      - Requirement — 新增 clean fixture（例如 `monono-keigo.json` — 無 title_ja、有合法 `annotations.furigana.key_terms` pair），於 test-lint-grammar.sh expect lint exits 0；並加 mutation negative：刪除 lint 中 key_terms jq 行後 expect fixture 仍通過 — 用以證明缺乏 fixture 的 regression 風險已關閉。
+      - Source — pr-gate:2026-05-09 qa-tester medium.
+
+  - id: JS-095
+    title: ADR-0002 status closure with cross-ref to JS-067 PR
+    status: todo
+    priority: P3
+    theme: infra
+    area: docs
+    source: pr-gate:2026-05-09 architecture-reviewer medium
+    related: [JS-067, JS-070]
+    notes:
+      - ADR-0002（Kuromoji vs Mecab pipeline 決策）狀態目前為 "accepted (validated 2026-05-09)"，但 JS-067 PR 落地後該 ADR 的決策已被生產化驗證，需 close-out cross-ref 形成 chain-of-evidence。
+      - 架構審查（pr-gate:2026-05-09 architecture-reviewer medium）要求 ADR 與生產代碼之間有可追溯關聯，否則 audit trail 中斷；後續任何 furigana pipeline 變更需引用此 ADR 與其驗證 PR。
+      - Requirement — JS-067 PR merge 後（或同 PR 內 follow-up commit），將 `docs/adr/0002-furigana-pipeline.md` 的 status 從 `accepted` 改為 `closed/validated`；body 增加 `Validated by JS-067 PR #<N>` 字樣與該 PR 的 merge SHA。
+      - Source — pr-gate:2026-05-09 architecture-reviewer medium #2.
+
+  - id: JS-096
+    title: /api/version bump M3-C3 → M3-C4 on JS-067 live emission
+    status: todo
+    priority: P3
+    theme: backend
+    area: observability
+    source: pr-gate:2026-05-09 architecture-reviewer low
+    related: [JS-067, JS-066]
+    notes:
+      - `server/internal/handlers/handlers.go:363` 的 `/api/version` 回傳 `"M3-C3"`，由 JS-066 / PR #50 設定。
+      - JS-067 啟用 live furigana emission 是可觀察行為變更（infra-only → live），但 version 字串未更新，monitoring / 客戶端條件判斷無法區分兩個狀態。
+      - Observability gap，非 break；長期 milestone 字串應隨可觀察行為變更而 bump。
+      - Requirement — 將 version 字串改為 `"M3-C4"`（或下一個 milestone seq）並 commit；server tests / API smoke tests 同步更新。可隨 JS-067 PR 合併一併處理或開單獨小 PR。
+      - Source — pr-gate:2026-05-09 architecture-reviewer low #3.
 
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.

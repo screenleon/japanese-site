@@ -5,6 +5,9 @@
   "jlpt_level": "N5",
   "explanation_ja": "「と」は、名詞を並べるときや、一緒に何かをする相手を表すときに使います。\n\n- パンと牛乳\n- 友達と映画を見ます\n\n全部をはっきり並べるときに使います。例をいくつか出すだけなら「や」を使います。",
   "explanation_zh": "「と」可表示「和、跟」，用於完整列舉名詞或表示一起做事的對象。例如「パンと牛乳」「友達と映画を見ます」。",
+  "annotations": {
+    "furigana": {"title_ja":[{"kanji":"並列","reading":"へいれつ"},{"kanji":"相手","reading":"あいて"}],"key_terms":[{"kanji":"名詞","reading":"めいし"},{"kanji":"相手","reading":"あいて"},{"kanji":"一緒","reading":"いっしょ"},{"kanji":"牛乳","reading":"ぎゅうにゅう"},{"kanji":"友達","reading":"ともだち"},{"kanji":"映画","reading":"えいが"},{"kanji":"全部","reading":"ぜんぶ"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

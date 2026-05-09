@@ -5,6 +5,9 @@
   "jlpt_level": "N2",
   "explanation_ja": "「Nをめぐって」は、ある問題や話題を中心に、意見の対立や議論が起こることを表します。\n\n- 計画をめぐって議論が続いている\n- 土地をめぐって争いが起きた\n\nニュースや説明文でよく使われる硬めの表現です。",
   "explanation_zh": "「Nをめぐって」表示圍繞某議題、問題產生討論、爭執或對立。常見於新聞與正式文章。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"問題","reading":"もんだい"},{"kanji":"話題","reading":"わだい"},{"kanji":"中心","reading":"ちゅうしん"},{"kanji":"意見","reading":"いけん"},{"kanji":"対立","reading":"たいりつ"},{"kanji":"議論","reading":"ぎろん"},{"kanji":"計画","reading":"けいかく"},{"kanji":"土地","reading":"とち"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

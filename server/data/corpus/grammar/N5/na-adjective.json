@@ -6,6 +6,9 @@
   "explanation_ja": "な形容詞は、名詞を説明するときに「な」を入れます。\n\n- 静かな町\n- 便利な店\n\n文の最後では「静かです」「便利です」のように言い、「な」は使いません。",
   "explanation_zh": "な形容詞修飾名詞時要加「な」，如「静かな町」「便利な店」。放在句尾時說「静かです」「便利です」，不加「な」。",
   "mental_model": "な形容詞は、名詞の性質や状態を一つのまとまりとして表す。名詞を直接説明するときは、その性質を名詞につなぐために「な」を置き、「静かな部屋」のように言う。文の終わりで同じ性質を述べるときは「部屋は静かです」のように「です」で受けるため、「な」は出てこない。",
+  "annotations": {
+    "furigana": {"title_ja":[{"kanji":"形容詞","reading":"けいようし"}],"key_terms":[{"kanji":"形容詞","reading":"けいようし"},{"kanji":"名詞","reading":"めいし"},{"kanji":"説明","reading":"せつめい"},{"kanji":"静か","reading":"しずか"},{"kanji":"便利","reading":"べんり"},{"kanji":"最後","reading":"さいご"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

@@ -5,6 +5,9 @@
   "jlpt_level": "N5",
   "explanation_ja": "「は」は、文の話題を示す助詞です。書くときは「は」ですが、発音は「わ」です。\n\n「A は B です」は、「Aについて言うと、Bです」という形です。\n- 私は学生です\n- 今日は暑いです\n\n「が」との違いが大切です。「は」は話題やテーマを出します。「が」は主語そのものを強く示したり、新しい情報を出したりします。",
   "explanation_zh": "「は」(發音 wa) 是日語最重要的助詞，標示句子的主題（topic）——「我們現在要談的東西」。\n- A は B です：A 是 B（A 為主題）\n- 私は学生です：（談我的話）我是學生\n\n常見錯誤：\n- 跟「が」搞混：「が」標示主格（subject），用於「新資訊」或對比；「は」標示已知主題。\n  - 雨が降っている（強調是「雨」在下，不是別的）\n  - 雨は降っていない（談到雨，沒在下）\n- 寫 hiragana 時是 は，不是 わ。",
+  "annotations": {
+    "furigana": {"title_ja":[{"kanji":"主題助詞","reading":"しゅだいじょし"}],"key_terms":[{"kanji":"助詞","reading":"じょし"},{"kanji":"主語","reading":"しゅご"},{"kanji":"話題","reading":"わだい"},{"kanji":"発音","reading":"はつおん"},{"kanji":"学生","reading":"がくせい"},{"kanji":"今日","reading":"きょう"},{"kanji":"違い","reading":"ちがい"},{"kanji":"大切","reading":"たいせつ"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

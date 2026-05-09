@@ -7,13 +7,47 @@
   "explanation_zh": "「ていく」表示往未來延續的變化或離開說話者的動作；「てくる」表示到現在為止的變化或朝說話者靠近的動作。",
   "mental_model": "「ていく・てくる」は、話し手の立つ位置を基準に、動きや変化の向きを示す表現です。「ていく」は話し手の今から離れて先へ進む変化、「てくる」は過去から話し手のところへ近づいてきた変化や、外側から話し手側へ向かう動きを表します。",
   "annotations": {
-    "mental_model": "「ていく・てくる」は、話し手の立つ位置を基準に、動きや変化の向きを示す表現です。「ていく」は話し手の今から離れて先へ進む変化、「てくる」は過去から話し手のところへ近づいてきた変化や、外側から話し手側へ向かう動きを表します。"
+    "mental_model": "「ていく・てくる」は、話し手の立つ位置を基準に、動きや変化の向きを示す表現です。「ていく」は話し手の今から離れて先へ進む変化、「てくる」は過去から話し手のところへ近づいてきた変化や、外側から話し手側へ向かう動きを表します。",
+    "furigana": {
+      "key_terms": [
+        {
+          "kanji": "変化",
+          "reading": "へんか"
+        },
+        {
+          "kanji": "動",
+          "reading": "うご"
+        },
+        {
+          "kanji": "過去",
+          "reading": "かこ"
+        },
+        {
+          "kanji": "話し",
+          "reading": "はなし"
+        },
+        {
+          "kanji": "手",
+          "reading": "て"
+        },
+        {
+          "kanji": "日本語",
+          "reading": "にほんご"
+        }
+      ]
+    }
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
+  "validator_score": 1,
   "classifier_rules": [
-    {"if_answer_equals_any": ["ている", "てある"], "error_class": "state-pattern"}
+    {
+      "if_answer_equals_any": [
+        "ている",
+        "てある"
+      ],
+      "error_class": "state-pattern"
+    }
   ]
 }

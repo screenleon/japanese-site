@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「動詞て形 + ください」は、相手に何かをしてほしいと丁寧に頼む表現です。\n\n- 書いてください\n- 少し待ってください\n\n命令よりやわらかいですが、相手に行動を求める表現です。",
   "explanation_zh": "「動詞て形 + ください」表示禮貌請求，請對方做某事。例如「書いてください」「待ってください」。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"相手","reading":"あいて"},{"kanji":"丁寧","reading":"ていねい"},{"kanji":"表現","reading":"ひょうげん"},{"kanji":"命令","reading":"めいれい"},{"kanji":"行動","reading":"こうどう"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

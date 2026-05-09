@@ -125,3 +125,24 @@ Current repo fix needed before JS-067: no production code patch is required by c
 - JS-068: Rebalance vocabulary level distribution. Not blocking for JS-067; content quality/coverage follow-up. P3 content.
 - JS-069: This audit. Done by this document. P2 infra.
 - JS-070: Spike Kuromoji vs MeCab on real JS-067 grammar targets and decide the deterministic furigana authoring pipeline. Blocking for JS-067. P2 infra/content.
+
+## 6. Execution Evidence — Cached-Client Rotation Window (2026-05-09)
+
+The cached-client compatibility plan (§2) requires PR #50's hash-named Vite
+bundle to have served live before any `annotations.furigana` row reaches
+production. Verified satisfied:
+
+- **PR #50 (JS-066 schema infra)** merged 2026-05-09T04:28:03Z (commit `ade368c`),
+  Pages deploy succeeded at 2026-05-09T04:28:05Z (workflow run 25591687079, 30s).
+  Live bundle from this point onward includes the schema-tolerant client that
+  silently ignores unknown furigana fields and the new typed reader path.
+- **Two subsequent main-branch deploys** rotated the Vite asset hash before
+  JS-067 live emission landed, ensuring stale clients are forcibly cache-invalidated:
+  - 2026-05-09T04:53:54Z — PR #51 deploy (run 25592206829, 40s)
+  - 2026-05-09T05:31:28Z — PR #52 deploy (run 25592971160, 36s)
+- **Window between PR #50 deploy and JS-067 live-emission PR open**: > several
+  hours; covers two additional bundle rotations. Pages CDN edge cache TTL +
+  browser disk cache window are well within this rotation.
+
+**Verdict**: rotation gate cleared per §2 plan. Live `annotations.furigana`
+emission may proceed.

@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「けれども」は、前の内容と後ろの内容を対比してつなぐ表現です。「が」より少しやわらかい印象になることがあります。普通形にも丁寧形にも接続できます。会話では短い形の「けど」もよく使われます。",
   "explanation_zh": "「けれども」連接兩個相對或轉折的內容，語氣比「が」稍柔和。可接普通形或丁寧形。口語常用「けど」。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"表現","reading":"ひょうげん"},{"kanji":"普通","reading":"ふつう"},{"kanji":"丁寧","reading":"ていねい"},{"kanji":"接続","reading":"せつぞく"},{"kanji":"内容","reading":"ないよう"},{"kanji":"後ろ","reading":"うしろ"},{"kanji":"対比","reading":"たいひ"},{"kanji":"印象","reading":"いんしょう"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

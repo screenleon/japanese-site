@@ -5,12 +5,60 @@
   "jlpt_level": "N1",
   "explanation_ja": "「〜ずにはいられない」は、気持ちや状況が強くて、どうしてもAしてしまうという意味です。\n\n形：動詞ない形の「ない」を取って＋ずにはいられない。するは「せずにはいられない」になります。\n\n自分で決めて行動するというより、感情・良心・状況に押されて自然にそうしてしまう感じがあります。\n- 笑わずにはいられない\n- 心配せずにはいられない\n\n「〜ないわけにはいかない」は社会的な義務や事情で「しなければならない」意味が強く、「〜ずにはいられない」は内側から出る衝動や感情に近いです。",
   "explanation_zh": "「〜ずにはいられない」表示「忍不住不做 A／不能不 A」，常用於強烈情緒、良心、擔心、感動等讓人自然做出某行為。\n\n**形態**：動詞ない形去ない＋ずにはいられない\n- 笑う→笑わずにはいられない\n- 心配する→心配せずにはいられない（する例外：せず）\n\n**語感**：不是單純義務，而是心情或狀況強到無法克制。\n- 彼の話を聞いて、笑わずにはいられなかった。\n- あのニュースを見て、心配せずにはいられない。\n\n**比較**：\n- 〜ないわけにはいかない：因社會義務、責任或情勢而必須做\n- 〜ずにはいられない：情緒或內在衝動使然",
+  "annotations": {
+    "furigana": {
+      "key_terms": [
+        {
+          "kanji": "気持",
+          "reading": "きも"
+        },
+        {
+          "kanji": "状況",
+          "reading": "じょうきょう"
+        },
+        {
+          "kanji": "感情",
+          "reading": "かんじょう"
+        },
+        {
+          "kanji": "良心",
+          "reading": "りょうしん"
+        },
+        {
+          "kanji": "自然",
+          "reading": "しぜん"
+        },
+        {
+          "kanji": "笑わずにはいられない",
+          "reading": "わらわずにはいられない"
+        },
+        {
+          "kanji": "心配",
+          "reading": "しんぱい"
+        },
+        {
+          "kanji": "義務",
+          "reading": "ぎむ"
+        }
+      ]
+    }
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
+  "validator_score": 1,
   "classifier_rules": [
-    {"if_answer_contains_any": ["ないわけ"], "error_class": "used-duty-pattern"},
-    {"if_answer_not_contains_any": ["ず"], "error_class": "missing-zu"}
+    {
+      "if_answer_contains_any": [
+        "ないわけ"
+      ],
+      "error_class": "used-duty-pattern"
+    },
+    {
+      "if_answer_not_contains_any": [
+        "ず"
+      ],
+      "error_class": "missing-zu"
+    }
   ]
 }

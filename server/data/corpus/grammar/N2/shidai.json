@@ -5,6 +5,9 @@
   "jlpt_level": "N2",
   "explanation_ja": "「動詞ます形 + 次第」は、「〜したらすぐに」という意味です。連絡や案内でよく使う硬めの表現です。\n\n- 分かり次第、連絡します\n- 準備ができ次第、出発します\n\n「すぐに行う」という意味が含まれます。",
   "explanation_zh": "「動詞ます形 + 次第」表示「一...就立刻...」。常用於通知、商務與正式說明。",
+  "annotations": {
+    "furigana": {"title_ja":[{"kanji":"次第","reading":"しだい"}],"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"連絡","reading":"れんらく"},{"kanji":"案内","reading":"あんない"},{"kanji":"準備","reading":"じゅんび"},{"kanji":"出発","reading":"しゅっぱつ"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

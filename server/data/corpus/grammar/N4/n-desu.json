@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「んです」「のです」は、理由や事情を説明するとき、または相手に説明を求めるときに使います。普通形に続きますが、名詞とナ形容詞では「なのです」「なんです」になります。「のです」は「んです」より書き言葉的です。",
   "explanation_zh": "「んです／のです」用來說明原因、背景或情況，也可用來詢問對方的說明。接普通形，名詞與な形容詞要用「なのです／なんです」。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"理由","reading":"りゆう"},{"kanji":"相手","reading":"あいて"},{"kanji":"普通","reading":"ふつう"},{"kanji":"名詞","reading":"めいし"},{"kanji":"形容詞","reading":"けいようし"},{"kanji":"事情","reading":"じじょう"},{"kanji":"説明","reading":"せつめい"},{"kanji":"書き言葉","reading":"かきことば"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

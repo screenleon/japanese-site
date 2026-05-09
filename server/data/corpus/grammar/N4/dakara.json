@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「だから」は、前に述べた理由や状況から、後ろの結果や判断を導く接続表現です。前の文が理由、後ろの文が結果になります。書き言葉では「ですから」も使われます。",
   "explanation_zh": "「だから」連接理由與結果，意思是「所以、因此」。前句說明原因，後句說明結果或判斷。較丁寧或書面可用「ですから」。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"理由","reading":"りゆう"},{"kanji":"結果","reading":"けっか"},{"kanji":"接続","reading":"せつぞく"},{"kanji":"表現","reading":"ひょうげん"},{"kanji":"状況","reading":"じょうきょう"},{"kanji":"後ろ","reading":"うしろ"},{"kanji":"判断","reading":"はんだん"},{"kanji":"書き言葉","reading":"かきことば"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

@@ -5,13 +5,78 @@
   "jlpt_level": "N5",
   "explanation_ja": "日本語では、物や人を数えるときに数え方を使います。「りんごが三つあります」は一般的な物、「学生が二人います」は人、「紙が一枚あります」は薄い物です。数える言葉は名詞の後ろにも前にも置けますが、「本が二冊あります」のように動詞の前によく置きます。",
   "explanation_zh": "日文計數時常需搭配量詞；「つ」常用於一般物品，「人」用於人，「枚」用於薄片狀物。",
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "数え方",
+          "reading": "かぞえかた"
+        },
+        {
+          "kanji": "人",
+          "reading": "にん"
+        },
+        {
+          "kanji": "枚",
+          "reading": "まい"
+        }
+      ],
+      "key_terms": [
+        {
+          "kanji": "名詞",
+          "reading": "めいし"
+        },
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        },
+        {
+          "kanji": "日本語",
+          "reading": "にほんご"
+        },
+        {
+          "kanji": "三つ",
+          "reading": "みっつ"
+        },
+        {
+          "kanji": "一般",
+          "reading": "いっぱん"
+        },
+        {
+          "kanji": "学生",
+          "reading": "がくせい"
+        },
+        {
+          "kanji": "言葉",
+          "reading": "ことば"
+        },
+        {
+          "kanji": "後ろ",
+          "reading": "うしろ"
+        }
+      ]
+    }
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
+  "validator_score": 1,
   "classifier_rules": [
-    {"if_answer_contains_any": ["個"], "error_class": "used-ko"},
-    {"if_answer_contains_any": ["本"], "error_class": "wrong-counter"},
-    {"default": true, "error_class": "wrong-counter-form"}
+    {
+      "if_answer_contains_any": [
+        "個"
+      ],
+      "error_class": "used-ko"
+    },
+    {
+      "if_answer_contains_any": [
+        "本"
+      ],
+      "error_class": "wrong-counter"
+    },
+    {
+      "default": true,
+      "error_class": "wrong-counter-form"
+    }
   ]
 }

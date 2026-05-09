@@ -5,6 +5,9 @@
   "jlpt_level": "N5",
   "explanation_ja": "「たい」は、話し手がしたいことを表します。動詞のます形から「ます」を取って、「日本へ行きたいです」や「水を飲みたいです」のように使います。「たい」はい形容詞のように、「行きたくないです」「行きたかったです」と変化します。",
   "explanation_zh": "「たい」接在動詞ます形去掉ます之後，表示說話者想做某事。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"話し手","reading":"はなして"},{"kanji":"動詞","reading":"どうし"},{"kanji":"形容詞","reading":"けいようし"},{"kanji":"日本","reading":"にほん"},{"kanji":"変化","reading":"へんか"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

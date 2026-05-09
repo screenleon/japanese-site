@@ -5,6 +5,9 @@
   "jlpt_level": "N2",
   "explanation_ja": "「〜を中心に」は、ある人・場所・物事を中心として範囲や活動が広がることを表す。例として「駅を中心に店が集まっている」「若者を中心に人気がある」のように使う。中心点を示し、その周辺や関連するものまで含める表現である。",
   "explanation_zh": "「〜を中心に」表示以某人、地點或事物為中心，活動、範圍或影響向周圍展開。",
+  "annotations": {
+    "furigana": {"title_ja":[{"kanji":"中心","reading":"ちゅうしん"}],"key_terms":[{"kanji":"場所","reading":"ばしょ"},{"kanji":"物事","reading":"ものごと"},{"kanji":"中心","reading":"ちゅうしん"},{"kanji":"範囲","reading":"はんい"},{"kanji":"活動","reading":"かつどう"},{"kanji":"駅","reading":"えき"},{"kanji":"若者","reading":"わかもの"},{"kanji":"関連","reading":"かんれん"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

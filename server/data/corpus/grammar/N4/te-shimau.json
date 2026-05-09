@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「動詞て形 + しまう」は、動作が全部終わることや、残念な気持ちを表します。例えば「宿題をしてしまいました」は終わったことを表し、「かぎを忘れてしまいました」は困った気持ちを表します。丁寧な文では「てしまいます」「てしまいました」をよく使います。",
   "explanation_zh": "「動詞て形 + しまう」表示動作完成，或帶有遺憾、懊悔的語氣。常譯為「做完了」或「不小心／結果竟然」。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"動作","reading":"どうさ"},{"kanji":"丁寧","reading":"ていねい"},{"kanji":"全部","reading":"ぜんぶ"},{"kanji":"残念","reading":"ざんねん"},{"kanji":"気持ち","reading":"きもち"},{"kanji":"宿題","reading":"しゅくだい"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

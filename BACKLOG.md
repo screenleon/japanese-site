@@ -97,6 +97,12 @@
 | JS-088 | 🔵 active | Keigo cross-tier 三分 mental model (尊敬/謙譲/丁寧) + 對誰用什麼 flowchart entry | content | 2026-05-09 | planning:2026-05-09 |
 | JS-089 | 🔵 active | Audit kanji corpus 現況 + 評估是否值得加 kanji quiz tab (痛點 — 同音/近形混淆) | content | 2026-05-09 | planning:2026-05-09 |
 | JS-090 | 🔵 active | Tatoeba audio + dictation cloze MVP (重用 question table, 加 audio_url 欄, 不擴大 quiz tab 數量) | infra | 2026-05-09 | planning:2026-05-09 |
+| JS-091 | 🔵 active | JS-067 audit doc native-reviewer Section 2 closure for MEDIUM 76 條 | audit | 2026-05-09 | pr-gate:2026-05-09 critic block-soft + re-gate advise |
+| JS-092 | 🔵 active | `to-ina-ya / ya-inaya` 命名一致性與 否/いな 確認 | content | 2026-05-09 | pr-gate:2026-05-09 critic medium |
+| JS-093 | 🔵 active | `他/た` 系列讀音 context 全 corpus sweep + tooling | tooling | 2026-05-09 | pr-gate:2026-05-09 critic low |
+| JS-094 | 🔵 active | `test-lint-grammar.sh` 加 `key_terms`-only happy-path fixture | testing | 2026-05-09 | pr-gate:2026-05-09 qa-tester medium |
+| JS-095 | 🔵 active | ADR-0002 status closure with cross-ref to JS-067 PR | docs | 2026-05-09 | pr-gate:2026-05-09 architecture-reviewer medium |
+| JS-096 | 🔵 active | `/api/version` bump M3-C3 → M3-C4 on JS-067 live emission | observability | 2026-05-09 | pr-gate:2026-05-09 architecture-reviewer low |
 
 ---
 
@@ -988,4 +994,74 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 
 **Tags**: P3, listening, infra, 估計 — 中
 **Source**: planning:2026-05-09
+## JS-091 — JS-067 audit doc native-reviewer Section 2 closure for MEDIUM 76 條
+
+**Problem**: `audits/js-067-native-review-candidates-2026-05-09.md` 含 codex pre-pass 建議答案 38 HIGH + 79 MEDIUM；JS-067 PR 合併時 Section 2（native-reviewer second-pass）已就 M034/M066/M077 三條收尾，但其餘 76 條 MEDIUM 的 native-verdict 欄目前以 codex confidence 通過，未經人類完整逐條確認。
+
+**Why**: feedback_native_perspective.md 要求 LLM-pipeline 內容變動經 native-reviewer 第二輪審查；本 PR 因 codex 覆蓋率高、scope 集中於機械 stem 修復而以 sample 信任為憑，留下未被人類掃完的 MEDIUM 殘量。長期須補完以建立 audit baseline 與母語審查工序信心。
+
+**Requirement**: 由日語母語使用者逐條掃 audit doc Section 1.2..1.6 MEDIUM 表，於 Section 2 native-verdict 欄填 ✓/✗/note。發現任何 codex 建議錯誤者，產出 follow-up corpus 修正 commit，commit msg 遵循 `fix(annotations): JS-091 — ...` 格式。
+
+**Tags**: P3, furigana, audit
+**Source**: pr-gate:2026-05-09 critic block-soft + feedback_native_perspective
+<!-- 首次記錄: 2026-05-09 -->
+
+## JS-092 — `to-ina-ya / ya-inaya` 命名一致性與 否/いな 確認
+
+**Problem**: PR-gate critic 提到 `to-ina-ya` entry，實際檔名為 `N1/ya-inaya.json`（去 hyphen 連寫）。命名 convention 有 drift（其他 entries 如 `ka-ina-ka` 用 hyphen 風格、`ni-sakidatte` 也用 hyphen）。同 entry 的 `否/いな` 讀音雖在 audit MEDIUM 表通過 codex confidence，但 critic 原意要求顯式記錄 native 確認。
+
+**Why**: 命名一致影響 grep / audit cross-ref 與 entry id 推導；`否` 在 N1 兩條 entries 出現（`ka-ina-ka` 已 F1 階段確認、`ya-inaya` 由 audit doc 標 NEEDS-NATIVE 後 codex confident）。
+
+**Requirement**: (a) 評估 `N1/ya-inaya.json` 是否統一改為 `ya-ina-ya.json`（含 entry_id 引用、檔名硬編碼影響、loader 路徑、URL 影響）；(b) audit doc 對 `否/いな` 該條補 native ✓ 標記。改名作業若風險過高可記為 won't-fix 並寫入 DECISIONS.md。
+
+**Tags**: P3, content, naming
+**Source**: pr-gate:2026-05-09 critic medium #8
+<!-- 首次記錄: 2026-05-09 -->
+
+## JS-093 — `他/た` 系列讀音 context 全 corpus sweep + tooling
+
+**Problem**: PR-gate critic 警告 `他/た` 在獨立位置應為 `ほか`；F2 sweep 在 `N1/wo-oite.json` 抓到同類風險（M021）。需要 corpus-wide 確認所有 single-kanji + on/kun ambiguous 字（他/人/生/行/間/上/下/出/入/見/来/気/子/本/目/手/足/口/心/力/新/古/大/小/長/短/高/低/多/少/中/外/内/前/後/開/閉）的 reading 與 source context 相符。
+
+**Why**: 此類 ambiguity 為 R3 heuristic 範圍；codex pre-pass 對此類已給 confident 答案但未經 native sample；長期須有 reading-sanity sweep tooling 防 regression。
+
+**Requirement**: (a) 寫 `scripts/audit-onkun-ambiguity.sh`（jq + grep）掃所有 furigana key_terms，找 single-kanji + 落在 R3 高風險字表的 token，輸出 entry / kanji / reading / source-context-snippet 表；(b) 對輸出每條人工 spot-check + 修正；(c) 之後可選擇做為 lint pre-commit hook 或 weekly CI sweep。
+
+**Tags**: P3, furigana, tooling
+**Source**: pr-gate:2026-05-09 critic low #9 + audit M021
+<!-- 首次記錄: 2026-05-09 -->
+
+## JS-094 — `test-lint-grammar.sh` 加 `key_terms`-only happy-path fixture
+
+**Problem**: 現行 `scripts/test-lint-grammar.sh` clean fixture（`monono.json`）只跑 `title_ja` happy path；無 `key_terms`-only valid fixture。Mutation test：把 `lint-grammar.sh` 中 key_terms 的 jq 表達式刪除，全 corpus 仍通過（因 key_terms data 都在），test fixture 也不會 catch 這個 regression。
+
+**Why**: F2 audit doc 為 199 條 entries 引入大量 key_terms shape 依賴；schema 演化時 lint 必須有獨立可 mutate 的 fixture surface。同 JS-064 mutation-coverage 思路。
+
+**Requirement**: 新增 clean fixture（例如 `monono-keigo.json` — 無 title_ja、有合法 `annotations.furigana.key_terms` pair），於 test-lint-grammar.sh expect lint exits 0。並加 mutation negative：刪除 lint 中 key_terms jq 行後 expect fixture 仍通過 — 用以證明缺乏 fixture 的 regression 風險已關閉。
+
+**Tags**: P3, infra, testing
+**Source**: pr-gate:2026-05-09 qa-tester medium
+<!-- 首次記錄: 2026-05-09 -->
+
+## JS-095 — ADR-0002 status closure with cross-ref to JS-067 PR
+
+**Problem**: ADR-0002（Kuromoji vs Mecab pipeline 決策）狀態目前為 "accepted (validated 2026-05-09)"，但 JS-067 PR 落地後該 ADR 的決策已被生產化驗證，需 close-out cross-ref 形成 chain-of-evidence。
+
+**Why**: 架構審查（pr-gate:2026-05-09 architecture-reviewer medium）要求 ADR 與生產代碼之間有可追溯關聯，否則 audit trail 中斷；後續任何 furigana pipeline 變更需引用此 ADR 與其驗證 PR。
+
+**Requirement**: JS-067 PR merge 後（或同 PR 內 follow-up commit），將 `docs/adr/0002-furigana-pipeline.md` 的 status 從 `accepted` 改為 `closed/validated`；body 增加 `Validated by JS-067 PR #<N>` 字樣與該 PR 的 merge SHA。
+
+**Tags**: P3, infra, docs
+**Source**: pr-gate:2026-05-09 architecture-reviewer medium #2
+<!-- 首次記錄: 2026-05-09 -->
+
+## JS-096 — `/api/version` bump M3-C3 → M3-C4 on JS-067 live emission
+
+**Problem**: `server/internal/handlers/handlers.go:363` 的 `/api/version` 回傳 `"M3-C3"`，由 JS-066 / PR #50 設定。JS-067 啟用 live furigana emission 是可觀察行為變更（infra-only → live），但 version 字串未更新，monitoring / 客戶端條件判斷無法區分兩個狀態。
+
+**Why**: pr-gate:2026-05-09 architecture-reviewer low #3。Observability gap，非 break；長期 milestone 字串應隨可觀察行為變更而 bump。
+
+**Requirement**: 將 version 字串改為 `"M3-C4"`（或下一個 milestone seq）並 commit；server tests / API smoke tests 同步更新。可隨 JS-067 PR 合併一併處理或開單獨小 PR。
+
+**Tags**: P3, backend, observability
+**Source**: pr-gate:2026-05-09 architecture-reviewer low #3
 <!-- 首次記錄: 2026-05-09 -->

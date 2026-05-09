@@ -7,11 +7,53 @@
   "explanation_zh": "「に違いない」表示根據理由做出的強烈判斷，意為「一定是……／肯定……」。接續為普通形 + に違いない。",
   "mental_model": "「に違いない」は、根拠から考えて間違いなくそうだと強く結論づける表現です。直接の証明ではなくても、状況を踏まえると他の可能性は低いと判断し、話し手の確信を前に出します。",
   "annotations": {
-    "mental_model": "「に違いない」は、根拠から考えて間違いなくそうだと強く結論づける表現です。直接の証明ではなくても、状況を踏まえると他の可能性は低いと判断し、話し手の確信を前に出します。"
+    "mental_model": "「に違いない」は、根拠から考えて間違いなくそうだと強く結論づける表現です。直接の証明ではなくても、状況を踏まえると他の可能性は低いと判断し、話し手の確信を前に出します。",
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "違いない",
+          "reading": "ちがいない"
+        }
+      ],
+      "key_terms": [
+        {
+          "kanji": "根拠",
+          "reading": "こんきょ"
+        },
+        {
+          "kanji": "確信",
+          "reading": "かくしん"
+        },
+        {
+          "kanji": "判断",
+          "reading": "はんだん"
+        },
+        {
+          "kanji": "普通",
+          "reading": "ふつう"
+        },
+        {
+          "kanji": "形",
+          "reading": "がた"
+        },
+        {
+          "kanji": "話し",
+          "reading": "はなし"
+        },
+        {
+          "kanji": "手",
+          "reading": "て"
+        },
+        {
+          "kanji": "結論",
+          "reading": "けつろん"
+        }
+      ]
+    }
   },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
+  "validator_score": 1,
   "classifier_rules": []
 }

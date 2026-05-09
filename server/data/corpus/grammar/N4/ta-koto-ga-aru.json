@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「動詞た形 + ことがある」は、今までの経験を表します。例えば「京都へ行ったことがあります」は行った経験を表し、「すしを作ったことがあります」は作った経験を表します。否定では「たことがありません」を使います。",
   "explanation_zh": "「動詞た形 + ことがある」表示過去曾有某種經驗，意思是「曾經做過」。否定形是「たことがありません」。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"否定","reading":"ひてい"},{"kanji":"経験","reading":"けいけん"},{"kanji":"京都","reading":"きょうと"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

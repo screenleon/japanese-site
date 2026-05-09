@@ -5,6 +5,9 @@
   "jlpt_level": "N4",
   "explanation_ja": "「動詞ない形 + でください」は、相手にしないでほしいことを丁寧に伝える表現です。\n\n- ここで写真を撮らないでください\n- 忘れないでください\n\n禁止や注意をやわらかく言うときに使います。",
   "explanation_zh": "「動詞ない形 + でください」表示「請不要做某事」。例如「写真を撮らないでください」「忘れないでください」。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"相手","reading":"あいて"},{"kanji":"丁寧","reading":"ていねい"},{"kanji":"表現","reading":"ひょうげん"},{"kanji":"禁止","reading":"きんし"},{"kanji":"写真","reading":"しゃしん"},{"kanji":"注意","reading":"ちゅうい"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

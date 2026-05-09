@@ -5,6 +5,9 @@
   "jlpt_level": "N5",
   "explanation_ja": "「も」は、同じ種類の情報を追加するときに使います。「〜も」は「〜も同じように」という意味です。\n\n- 私も学生です\n- コーヒーも飲みます\n\n否定文では「誰も」「何も」のように使い、「一人もいない」「何も食べない」という意味になります。",
   "explanation_zh": "「も」表示「也、也都」，用來追加同類資訊。例如「私も学生です」是我也是學生。否定句中也常和疑問詞搭配，如「何も食べません」。",
+  "annotations": {
+    "furigana": {"title_ja":[{"kanji":"同類","reading":"どうるい"},{"kanji":"追加","reading":"ついか"}],"key_terms":[{"kanji":"意味","reading":"いみ"},{"kanji":"否定","reading":"ひてい"},{"kanji":"種類","reading":"しゅるい"},{"kanji":"情報","reading":"じょうほう"},{"kanji":"追加","reading":"ついか"},{"kanji":"学生","reading":"がくせい"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

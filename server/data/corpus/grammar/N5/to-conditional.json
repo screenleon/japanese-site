@@ -5,6 +5,9 @@
   "jlpt_level": "N5",
   "explanation_ja": "条件の「と」は、あることをすると、自然に次のことが起こる関係を表します。「このボタンを押すと、ドアが開きます」や「春になると、暖かくなります」のように使います。人に頼む文や意志の文には使いにくく、決まった結果を言うときに使います。",
   "explanation_zh": "條件的「と」表示某條件成立後自然或必然發生的結果，常用於規則、機械操作、自然現象。",
+  "annotations": {
+    "furigana": {"title_ja":[{"kanji":"条件","reading":"じょうけん"}],"key_terms":[{"kanji":"条件","reading":"じょうけん"},{"kanji":"結果","reading":"けっか"},{"kanji":"自然","reading":"しぜん"},{"kanji":"関係","reading":"かんけい"},{"kanji":"意志","reading":"いし"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

@@ -5,6 +5,9 @@
   "jlpt_level": "N2",
   "explanation_ja": "「〜たところ」は、ある行動をした結果として分かったことや起きたことを述べる。例として「調べたところ原因が分かった」「電話したところ留守だった」のように、後件には発見・結果が来やすい。偶然の結果を客観的に述べる、やや硬い表現である。",
   "explanation_zh": "「〜たところ」表示做了某動作之後，發現或產生了某個結果，語氣偏書面客觀。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"行動","reading":"こうどう"},{"kanji":"結果","reading":"けっか"},{"kanji":"後件","reading":"こうけん"},{"kanji":"発見","reading":"はっけん"},{"kanji":"偶然","reading":"ぐうぜん"},{"kanji":"客観","reading":"きゃっかん"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",

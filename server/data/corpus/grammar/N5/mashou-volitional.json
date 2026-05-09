@@ -5,6 +5,9 @@
   "jlpt_level": "N5",
   "explanation_ja": "「ましょう」は、相手といっしょに何かをする提案や、やさしい意志を表します。「行きましょう」は「いっしょに行こう」という意味で、「少し休みましょう」は提案です。「ませんか」より、話し手が一緒にする気持ちを強く出します。",
   "explanation_zh": "「ましょう」表示提議一起做某事，或溫和地表達「做吧」。",
+  "annotations": {
+    "furigana": {"key_terms":[{"kanji":"相手","reading":"あいて"},{"kanji":"意味","reading":"いみ"},{"kanji":"話し手","reading":"はなして"},{"kanji":"提案","reading":"ていあん"},{"kanji":"意志","reading":"いし"},{"kanji":"一緒","reading":"いっしょ"},{"kanji":"気持ち","reading":"きもち"}]}
+  },
   "source": "curated",
   "license": "CC-BY-SA-4.0",
   "validated_by": "import-curated-v1",
