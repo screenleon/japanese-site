@@ -3,17 +3,76 @@
   "title_ja": "〜くせに",
   "title_zh": "〜くせに（明明…卻…）",
   "jlpt_level": "N2",
-  "explanation_ja": "「〜くせに」は、前件の事実から考えると後件が不満・非難の対象になることを表す。例として「知っているくせに教えない」「子どものくせに大人びている」のように、話し手の批判的な気持ちが強い。目上の人や改まった場面では避けるべき表現である。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜くせに」は、前件の事実から考えると後件が不満・非難の対象になることを表す。例として「知っているくせに教えない」「子どものくせに大人びている」のように、話し手の批判的な気持ちが強い。目上の人や改まった場面では避けるべき表現である。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜くせに」表示「明明…卻…」，含有強烈責備或不滿，語氣較粗魯不適合正式場合。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"事実","reading":"じじつ"},{"kanji":"不満","reading":"ふまん"},{"kanji":"非難","reading":"ひなん"},{"kanji":"対象","reading":"たいしょう"},{"kanji":"批判","reading":"ひはん"},{"kanji":"場面","reading":"ばめん"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_contains_any": ["のに"], "error_class": "used-noni"},
-    {"if_answer_not_contains_any": ["くせ"], "error_class": "missing-kuseni"}
-  ]
+    {
+      "if_answer_contains_any": [
+        "のに"
+      ],
+      "error_class": "used-noni",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "くせ"
+      ],
+      "error_class": "missing-kuseni",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "事実",
+          "reading": "じじつ"
+        },
+        {
+          "kanji": "不満",
+          "reading": "ふまん"
+        },
+        {
+          "kanji": "非難",
+          "reading": "ひなん"
+        },
+        {
+          "kanji": "対象",
+          "reading": "たいしょう"
+        },
+        {
+          "kanji": "批判",
+          "reading": "ひはん"
+        },
+        {
+          "kanji": "場面",
+          "reading": "ばめん"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

@@ -3,11 +3,51 @@
   "title_ja": "〜ずじまい",
   "title_zh": "〜ずじまい（結果沒有…）",
   "jlpt_level": "N1",
-  "explanation_ja": "「〜ずじまい」は、しようと思っていたことや本来すべきことが、結局実現しないまま終わったことを表す表現である。「手紙を書かずじまいだった」「理由を聞けずじまいに終わった」のように、未完了への残念さや心残りを伴いやすい。接続は動詞ない形の「ない」を取って「ずじまい」とし、「する」は「せずじまい」となる。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜ずじまい」は、しようと思っていたことや本来すべきことが、結局実現しないまま終わったことを表す表現である。「手紙を書かずじまいだった」「理由を聞けずじまいに終わった」のように、未完了への残念さや心残りを伴いやすい。接続は動詞ない形の「ない」を取って「ずじまい」とし、「する」は「せずじまい」となる。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜ずじまい」表示原本想做或該做的事最後沒有做成，常帶有遺憾或未了的語感。接動詞ない形去ない，する變成「せずじまい」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_contains_any": [
+        "ないまま",
+        "なかった"
+      ],
+      "error_class": "used-plain-noncompletion",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "ずじまい"
+      ],
+      "error_class": "missing-zujimai",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "furigana": {
-      "key_terms": [
+      "vocabulary": [
         {
           "kanji": "手紙",
           "reading": "てがみ"
@@ -43,23 +83,5 @@
       ]
     }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1,
-  "classifier_rules": [
-    {
-      "if_answer_contains_any": [
-        "ないまま",
-        "なかった"
-      ],
-      "error_class": "used-plain-noncompletion"
-    },
-    {
-      "if_answer_not_contains_any": [
-        "ずじまい"
-      ],
-      "error_class": "missing-zujimai"
-    }
-  ]
+  "audit_status": "pre-redesign"
 }

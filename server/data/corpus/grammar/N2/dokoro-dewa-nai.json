@@ -3,11 +3,48 @@
   "title_ja": "〜どころではない",
   "title_zh": "〜どころではない（不是…的時候／遠非…）",
   "jlpt_level": "N2",
-  "explanation_ja": "意味核：状況が厳しく、前件をする余裕がない、または前件の程度では表せないほどであることを表す。\n\n接続：名詞・動詞辞書形などの句＋どころではない／どころじゃない。\n\n例：締切前で、休むどころではない。／熱が高くて、旅行どころではない。／被害は小さいどころではない、復旧に数か月かかる。\n\nレジスター／類義差別：標準的。話し言葉では「どころじゃない」も多い。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "意味核：状況が厳しく、前件をする余裕がない、または前件の程度では表せないほどであることを表す。\n\n接続：名詞・動詞辞書形などの句＋どころではない／どころじゃない。\n\n例：締切前で、休むどころではない。／熱が高くて、旅行どころではない。／被害は小さいどころではない、復旧に数か月かかる。\n\nレジスター／類義差別：標準的。話し言葉では「どころじゃない」も多い。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "〜どころではない 表示不是做 A 的時候，或實際程度遠非 A 可形容。\n\n**形態**：\n- 名詞／動詞辞書形等＋どころではない；口語可用「どころじゃない」。\n\n**例**：\n- 締切前で、休むどころではない。\n- 熱が高くて、旅行どころではない。\n\n**比較／差別**：\n- 和「どころか」不同，這裡強調沒有餘裕或程度不在同一層級。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_not_contains_any": [
+        "どころではない"
+      ],
+      "error_class": "missing-target-pattern",
+      "contrast": null
+    },
+    {
+      "default": true,
+      "error_class": "generic",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "furigana": {
-      "key_terms": [
+      "vocabulary": [
         {
           "kanji": "状況",
           "reading": "じょうきょう"
@@ -43,20 +80,5 @@
       ]
     }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1,
-  "classifier_rules": [
-    {
-      "if_answer_not_contains_any": [
-        "どころではない"
-      ],
-      "error_class": "missing-target-pattern"
-    },
-    {
-      "default": true,
-      "error_class": "generic"
-    }
-  ]
+  "audit_status": "pre-redesign"
 }

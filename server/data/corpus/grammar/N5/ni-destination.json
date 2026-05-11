@@ -3,16 +3,88 @@
   "title_ja": "に（到着点・存在場所）",
   "title_zh": "に（到達點／存在位置）",
   "jlpt_level": "N5",
-  "explanation_ja": "「に」は、行く先、入る場所、物や人が存在する場所を表します。\n\n- 学校に行きます\n- 部屋に入ります\n- 机の上に本があります\n\n動作をする場所を表す「で」と区別します。「図書館で勉強します」は勉強する場所、「図書館に行きます」は向かう場所です。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「に」は、行く先、入る場所、物や人が存在する場所を表します。\n\n- 学校に行きます\n- 部屋に入ります\n- 机の上に本があります\n\n動作をする場所を表す「で」と区別します。「図書館で勉強します」は勉強する場所、「図書館に行きます」は向かう場所です。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「に」可表示到達點或存在位置，例如「学校に行きます」「部屋に入ります」「机の上にあります」。和表示動作場所的「で」不同。",
-  "annotations": {
-    "furigana": {"title_ja":[{"kanji":"到着点","reading":"とうちゃくてん"},{"kanji":"存在場所","reading":"そんざいばしょ"}],"key_terms":[{"kanji":"場所","reading":"ばしょ"},{"kanji":"存在","reading":"そんざい"},{"kanji":"動作","reading":"どうさ"},{"kanji":"行く先","reading":"ゆくさき"},{"kanji":"学校","reading":"がっこう"},{"kanji":"部屋","reading":"へや"},{"kanji":"区別","reading":"くべつ"},{"kanji":"図書館","reading":"としょかん"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_equals_any": ["で", "を"], "error_class": "wrong-particle"}
-  ]
+    {
+      "if_answer_equals_any": [
+        "で",
+        "を"
+      ],
+      "error_class": "wrong-particle",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "到着点",
+          "reading": "とうちゃくてん"
+        },
+        {
+          "kanji": "存在場所",
+          "reading": "そんざいばしょ"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "場所",
+          "reading": "ばしょ"
+        },
+        {
+          "kanji": "存在",
+          "reading": "そんざい"
+        },
+        {
+          "kanji": "動作",
+          "reading": "どうさ"
+        },
+        {
+          "kanji": "行く先",
+          "reading": "ゆくさき"
+        },
+        {
+          "kanji": "学校",
+          "reading": "がっこう"
+        },
+        {
+          "kanji": "部屋",
+          "reading": "へや"
+        },
+        {
+          "kanji": "区別",
+          "reading": "くべつ"
+        },
+        {
+          "kanji": "図書館",
+          "reading": "としょかん"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

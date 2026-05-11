@@ -3,18 +3,94 @@
   "title_ja": "て形",
   "title_zh": "て形（連接形 / 動作連接）",
   "jlpt_level": "N5",
-  "explanation_ja": "「て形」は、動詞をほかの表現につなげるための大事な形です。\n\n使い方：\n- 動作をつなげる：朝ごはんを食べて、学校へ行きます\n- お願い：見てください\n- 進行：勉強しています\n- 許可：食べてもいいです\n\n一段動詞は「る」を取って「て」、五段動詞は最後の音によって「って・んで・いて・いで・して」などになります。行くは例外で「行って」です。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「て形」は、動詞をほかの表現につなげるための大事な形です。\n\n使い方：\n- 動作をつなげる：朝ごはんを食べて、学校へ行きます\n- お願い：見てください\n- 進行：勉強しています\n- 許可：食べてもいいです\n\n一段動詞は「る」を取って「て」、五段動詞は最後の音によって「って・んで・いて・いで・して」などになります。行くは例外で「行って」です。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "動詞的「て形」是 N5 最重要的活用之一。用來連接動作（A 然後 B）、請求（〜てください）、進行式（〜ています）、許可（〜てもいいです）等。\n\n變化規則（簡化版）：\n- 一段動詞（食べる・見る）：去る + て → 食べて、見て\n- 五段動詞依語尾：\n  - う/つ/る → って（買う→買って、待つ→待って、帰る→帰って）\n  - む/ぶ/ぬ → んで（飲む→飲んで、遊ぶ→遊んで、死ぬ→死んで）\n  - く → いて（書く→書いて）；行く是例外 → 行って\n  - ぐ → いで（泳ぐ→泳いで）\n  - す → して（話す→話して）\n- 不規則：する → して、来る → 来て(きて)",
-  "annotations": {
-    "furigana": {"title_ja":[{"kanji":"形","reading":"けい"}],"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"表現","reading":"ひょうげん"},{"kanji":"使い方","reading":"つかいかた"},{"kanji":"動作","reading":"どうさ"},{"kanji":"許可","reading":"きょか"},{"kanji":"大事","reading":"だいじ"},{"kanji":"学校","reading":"がっこう"},{"kanji":"お願い","reading":"おねがい"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_suffix_any": ["ます", "ました"], "error_class": "used-masu"},
-    {"if_answer_dictionary_form": true, "error_class": "used-dictionary"},
-    {"default": true, "error_class": "wrong-conjugation"}
-  ]
+    {
+      "if_answer_suffix_any": [
+        "ます",
+        "ました"
+      ],
+      "error_class": "used-masu",
+      "contrast": null
+    },
+    {
+      "if_answer_dictionary_form": true,
+      "error_class": "used-dictionary",
+      "contrast": null
+    },
+    {
+      "default": true,
+      "error_class": "wrong-conjugation",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "形",
+          "reading": "けい"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        },
+        {
+          "kanji": "表現",
+          "reading": "ひょうげん"
+        },
+        {
+          "kanji": "使い方",
+          "reading": "つかいかた"
+        },
+        {
+          "kanji": "動作",
+          "reading": "どうさ"
+        },
+        {
+          "kanji": "許可",
+          "reading": "きょか"
+        },
+        {
+          "kanji": "大事",
+          "reading": "だいじ"
+        },
+        {
+          "kanji": "学校",
+          "reading": "がっこう"
+        },
+        {
+          "kanji": "お願い",
+          "reading": "おねがい"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

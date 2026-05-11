@@ -3,17 +3,84 @@
   "title_ja": "〜にしては",
   "title_zh": "〜にしては（以…來說／就…而言）",
   "jlpt_level": "N2",
-  "explanation_ja": "「〜にしては」は、前に示した基準から考えると予想と違う、という評価を表す。例として「新人にしては落ち着いている」「六月にしては涼しい」のように、立場・年齢・時期などを基準にして述べる。客観的な基準とのずれを述べる表現で、単なる比較よりも意外さが含まれる。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜にしては」は、前に示した基準から考えると予想と違う、という評価を表す。例として「新人にしては落ち着いている」「六月にしては涼しい」のように、立場・年齢・時期などを基準にして述べる。客観的な基準とのずれを述べる表現で、単なる比較よりも意外さが含まれる。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜にしては」表示以某個身分、年齡或條件來看，後項結果和預期不同，帶有「就…而言」的評價感。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"基準","reading":"きじゅん"},{"kanji":"予想","reading":"よそう"},{"kanji":"評価","reading":"ひょうか"},{"kanji":"新人","reading":"しんじん"},{"kanji":"六月","reading":"ろくがつ"},{"kanji":"立場","reading":"たちば"},{"kanji":"年齢","reading":"ねんれい"},{"kanji":"時期","reading":"じき"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_contains_any": ["わりに"], "error_class": "used-warini"},
-    {"if_answer_not_contains_any": ["にしては"], "error_class": "missing-nishitewa"}
-  ]
+    {
+      "if_answer_contains_any": [
+        "わりに"
+      ],
+      "error_class": "used-warini",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "にしては"
+      ],
+      "error_class": "missing-nishitewa",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "基準",
+          "reading": "きじゅん"
+        },
+        {
+          "kanji": "予想",
+          "reading": "よそう"
+        },
+        {
+          "kanji": "評価",
+          "reading": "ひょうか"
+        },
+        {
+          "kanji": "新人",
+          "reading": "しんじん"
+        },
+        {
+          "kanji": "六月",
+          "reading": "ろくがつ"
+        },
+        {
+          "kanji": "立場",
+          "reading": "たちば"
+        },
+        {
+          "kanji": "年齢",
+          "reading": "ねんれい"
+        },
+        {
+          "kanji": "時期",
+          "reading": "じき"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

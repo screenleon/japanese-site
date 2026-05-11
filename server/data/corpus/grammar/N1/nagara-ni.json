@@ -3,17 +3,85 @@
   "title_ja": "〜ながらに（して）",
   "title_zh": "〜ながらに（して）（保持…狀態而）",
   "jlpt_level": "N1",
-  "explanation_ja": "意味核：もとの状態を保ったまま、別の動作や状態が成立することを表す。特に「生まれながらに」「昔ながらに」のように、自然な属性や昔からの状態がそのまま続くことを述べる。\n\n接続：形：動詞ます形語幹・名詞的語＋ながらに／ながらにして。慣用的には「生まれながらに」「昔ながらに」「涙ながらに」などが多い。\n\n例：生まれながらに才能を備える／昔ながらに製法を守る／涙ながらに訴える\n\nレジスター／類義差別：評論・報道・文学的叙述で使われ、日常会話では「〜のまま」「〜しながら」が自然な場合が多い。「〜ながら」は同時進行にも使うが、「〜ながらに」は状態の保持を文語的に示す。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "意味核：もとの状態を保ったまま、別の動作や状態が成立することを表す。特に「生まれながらに」「昔ながらに」のように、自然な属性や昔からの状態がそのまま続くことを述べる。\n\n接続：形：動詞ます形語幹・名詞的語＋ながらに／ながらにして。慣用的には「生まれながらに」「昔ながらに」「涙ながらに」などが多い。\n\n例：生まれながらに才能を備える／昔ながらに製法を守る／涙ながらに訴える\n\nレジスター／類義差別：評論・報道・文学的叙述で使われ、日常会話では「〜のまま」「〜しながら」が自然な場合が多い。「〜ながら」は同時進行にも使うが、「〜ながらに」は状態の保持を文語的に示す。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜ながらに／〜ながらにして」表示「保持 A 的狀態而…」，常見於「生まれながらに」「昔ながらに」「涙ながらに」等較固定、書面或文學性的用法。\n\n**形態**：\n- 動詞ます形語幹／名詞性表現＋ながらに\n- 動詞ます形語幹／名詞性表現＋ながらにして\n\n**例**：\n- 生まれながらに才能を備える。\n- 昔ながらに製法を守る。\n\n**比較／差別**：\n- 〜ながら：可表示一邊 A 一邊 B。\n- 〜のまま：較口語，表示狀態不變。\n- 〜ながらに：偏書面，強調某狀態自始或長期保持。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"状態","reading":"じょうたい"},{"kanji":"動作","reading":"どうさ"},{"kanji":"属性","reading":"ぞくせい"},{"kanji":"昔","reading":"むかし"},{"kanji":"自然","reading":"しぜん"},{"kanji":"才能","reading":"さいのう"},{"kanji":"製法","reading":"せいほう"},{"kanji":"涙","reading":"なみだ"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_contains_any": ["のまま", "ながら"], "error_class": "used-state-wrong-form"},
-    {"if_answer_not_contains_any": ["ながらに"], "error_class": "missing-nagara-ni"}
-  ]
+    {
+      "if_answer_contains_any": [
+        "のまま",
+        "ながら"
+      ],
+      "error_class": "used-state-wrong-form",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "ながらに"
+      ],
+      "error_class": "missing-nagara-ni",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "状態",
+          "reading": "じょうたい"
+        },
+        {
+          "kanji": "動作",
+          "reading": "どうさ"
+        },
+        {
+          "kanji": "属性",
+          "reading": "ぞくせい"
+        },
+        {
+          "kanji": "昔",
+          "reading": "むかし"
+        },
+        {
+          "kanji": "自然",
+          "reading": "しぜん"
+        },
+        {
+          "kanji": "才能",
+          "reading": "さいのう"
+        },
+        {
+          "kanji": "製法",
+          "reading": "せいほう"
+        },
+        {
+          "kanji": "涙",
+          "reading": "なみだ"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

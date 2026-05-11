@@ -3,18 +3,171 @@
   "title_ja": "はずだ",
   "title_zh": "はずだ（應該）",
   "jlpt_level": "N3",
-  "explanation_ja": "「はずだ」は、理由や情報から考えて、当然そうだと思うことを表します。名詞やな形容詞には「の」が入る形もあります。\n\n- 田中さんはもう着いたはずです\n- この店は今日休みのはずです",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "普通形＋はずだ",
+      "gloss_zh": "根據理由判斷應該如此",
+      "notes_zh": "名詞・な形容詞常接「のはずだ」"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「はずだ」は、予定・状況・知識などの根拠から考えると、当然そうだと判断できるときに使います。直接確認した事実ではなく、「この情報ならそう考えるのが自然だ」という推論です。"
+        }
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "否定するときは「はずがない」で、根拠から見てその可能性はない、という強い否定になります。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「はずだ」表示根據理由或資訊推測「照理應該如此」。",
-  "mental_model": "「はずだ」は、理由や情報をもとに考えると、当然そうなるはずだという判断です。直接見て確認した事実ではなく、予定・状況・知識から自然に出る結論として「そう考えるのが妥当だ」と見るとよいです。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "native-reviewer-v1-pending",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "はずがない"
+      ],
+      "error_class": "negative-certainty-pattern",
+      "contrast": {
+        "with_pattern": "はずがない",
+        "rule_ja_blocks": [
+          {
+            "kind": "paragraph",
+            "tokens": [
+              {
+                "t": "text",
+                "v": "「はずだ」は根拠から見て「そうだろう」と肯定的に判断します。「はずがない」は同じ根拠判断でも、「そうである可能性はない」と強く否定します。"
+              }
+            ]
+          }
+        ],
+        "rule_zh": "「はずだ」是照理應該；「はずがない」是照理不可能。",
+        "examples": [
+          {
+            "use_this": "田中さんはもう着いたはずです。",
+            "use_alt": "田中さんがもう着いたはずがありません。",
+            "gloss_zh": "前者表示照理已到；後者表示照理不可能已到。"
+          }
+        ]
+      }
+    },
+    {
+      "if_answer_equals_any": [
+        "わけだ"
+      ],
+      "error_class": "logical-conclusion-pattern",
+      "contrast": {
+        "with_pattern": "わけだ",
+        "with_slug": "wakeda",
+        "rule_ja_blocks": [
+          {
+            "kind": "paragraph",
+            "tokens": [
+              {
+                "t": "text",
+                "v": "「はずだ」は情報から予測して「当然そうだ」と見る表現です。「わけだ」は前に出た事情を受けて、「だからそういう結論になるのか」と納得する表現です。"
+              }
+            ]
+          }
+        ],
+        "rule_zh": "「はずだ」偏向推測應然；「わけだ」偏向理解原因後的邏輯結論。",
+        "examples": [
+          {
+            "use_this": "店の電気が消えているから、今日は休みのはずです。",
+            "use_alt": "店長が出張中です。だから今日は休みなわけです。",
+            "gloss_zh": "前者由跡象推測；後者由原因理解結論。"
+          }
+        ]
+      }
+    }
+  ],
   "annotations": {
     "mental_model": "「はずだ」は、理由や情報をもとに考えると、当然そうなるはずだという判断です。直接見て確認した事実ではなく、予定・状況・知識から自然に出る結論として「そう考えるのが妥当だ」と見るとよいです。",
-    "furigana": {"key_terms":[{"kanji":"理由","reading":"りゆう"},{"kanji":"情報","reading":"じょうほう"},{"kanji":"当然","reading":"とうぜん"},{"kanji":"名詞","reading":"めいし"},{"kanji":"形容詞","reading":"けいようし"}]}
-  },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": [
-    {"if_answer_equals_any": ["べき", "つもり"], "error_class": "expectation-pattern"}
-  ]
+    "nuance_note": "強い義務の「べき」ではなく、根拠にもとづく推量です。",
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "理由",
+          "reading": "りゆう"
+        },
+        {
+          "kanji": "情報",
+          "reading": "じょうほう"
+        },
+        {
+          "kanji": "当然",
+          "reading": "とうぜん"
+        },
+        {
+          "kanji": "根拠",
+          "reading": "こんきょ"
+        }
+      ]
+    },
+    "classifier": {
+      "rules": [
+        {
+          "with_pattern": "はずがない",
+          "rule_ja_blocks": [
+            {
+              "kind": "paragraph",
+              "tokens": [
+                {
+                  "t": "text",
+                  "v": "「はずだ」は根拠から見て「そうだろう」と肯定的に判断します。「はずがない」は同じ根拠判断でも、「そうである可能性はない」と強く否定します。"
+                }
+              ]
+            }
+          ],
+          "rule_zh": "「はずだ」是照理應該；「はずがない」是照理不可能。",
+          "examples": [
+            {
+              "use_this": "田中さんはもう着いたはずです。",
+              "use_alt": "田中さんがもう着いたはずがありません。",
+              "gloss_zh": "前者表示照理已到；後者表示照理不可能已到。"
+            }
+          ]
+        },
+        {
+          "with_pattern": "わけだ",
+          "with_slug": "wakeda",
+          "rule_ja_blocks": [
+            {
+              "kind": "paragraph",
+              "tokens": [
+                {
+                  "t": "text",
+                  "v": "「はずだ」は情報から予測して「当然そうだ」と見る表現です。「わけだ」は前に出た事情を受けて、「だからそういう結論になるのか」と納得する表現です。"
+                }
+              ]
+            }
+          ],
+          "rule_zh": "「はずだ」偏向推測應然；「わけだ」偏向理解原因後的邏輯結論。",
+          "examples": [
+            {
+              "use_this": "店の電気が消えているから、今日は休みのはずです。",
+              "use_alt": "店長が出張中です。だから今日は休みなわけです。",
+              "gloss_zh": "前者由跡象推測；後者由原因理解結論。"
+            }
+          ]
+        }
+      ]
+    }
+  }
 }

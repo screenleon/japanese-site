@@ -3,18 +3,50 @@
   "title_ja": "ばかり",
   "title_zh": "ばかり（光是／剛剛）",
   "jlpt_level": "N3",
-  "explanation_ja": "「ばかり」は、同じものや動作が多すぎることを表します。また「Vたばかり」で、動作が終わってすぐの意味になります。\n\n- 甘いものばかり食べています\n- 今帰ったばかりです",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ばかり」は、同じものや動作が多すぎることを表します。また「Vたばかり」で、動作が終わってすぐの意味になります。\n\n- 甘いものばかり食べています\n- 今帰ったばかりです"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「ばかり」可表示總是、光是某事，也可在「たばかり」中表示剛剛做完。",
-  "mental_model": "「ばかり」は、ある物や行為に偏っている感じを表します。同じものが多すぎるときは「そればかり」と見て、Vた形につくと「終わってから時間がほとんど経っていない」と考えると整理しやすいです。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "だけ"
+      ],
+      "error_class": "only-pattern",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "mental_model": "「ばかり」は、ある物や行為に偏っている感じを表します。同じものが多すぎるときは「そればかり」と見て、Vた形につくと「終わってから時間がほとんど経っていない」と考えると整理しやすいです。",
-    "furigana": {"key_terms":[{"kanji":"動作","reading":"どうさ"}]}
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "動作",
+          "reading": "どうさ"
+        }
+      ]
+    }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": [
-    {"if_answer_equals_any": ["だけ"], "error_class": "only-pattern"}
-  ]
+  "audit_status": "pre-redesign"
 }

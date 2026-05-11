@@ -22,11 +22,33 @@ describe("annotation kind invariants", () => {
     expect(Object.keys(LABELS)).toEqual(kinds);
 
     const adr = readFileSync(
-      resolve(repoRoot, "docs/adr/0001-vocab-annotations-schema.md"),
+      resolve(repoRoot, "docs/adr/0003-block-engine-and-pattern-and-classifier.md"),
       "utf8"
     );
     for (const kind of kinds) {
       expect(adr).toMatch(new RegExp(`\\b${kind}\\b`));
+    }
+  });
+
+  it("keeps top-level grammar fields disjoint from annotations", () => {
+    const topLevelKeys = new Set([
+      "slug",
+      "title_ja",
+      "title_zh",
+      "jlpt_level",
+      "schema_version",
+      "pattern",
+      "explanation_ja_blocks",
+      "explanation_zh",
+      "_meta",
+      "classifier_rules",
+      "related_slugs",
+      "annotations",
+      "audit_status",
+    ]);
+
+    for (const kind of ANNOTATION_KINDS) {
+      expect(topLevelKeys.has(kind), `${kind} must not overlap top-level keys`).toBe(false);
     }
   });
 });

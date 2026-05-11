@@ -3,18 +3,76 @@
   "title_ja": "そうだ（伝聞）",
   "title_zh": "そうだ（聽說）",
   "jlpt_level": "N3",
-  "explanation_ja": "「普通形 + そうだ」は、人から聞いた情報やニュースなどを伝える表現です。\n\n- 明日は雨が降るそうです\n- 田中さんは会社を辞めたそうです\n\n自分で見て判断した様子の「そうだ」と区別します。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「普通形 + そうだ」は、人から聞いた情報やニュースなどを伝える表現です。\n\n- 明日は雨が降るそうです\n- 田中さんは会社を辞めたそうです\n\n自分で見て判断した様子の「そうだ」と区別します。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「普通形 + そうだ」表示傳聞，意思是「聽說」。要和表示樣態的「ます形/形容詞語幹 + そうだ」區分。",
-  "mental_model": "「そうだ（伝聞）」は、人から聞いた情報やニュースを、自分の判断として断定せずに伝える表現です。見た目から判断する様態の「そうだ」と違い、普通形につけて「聞いたところではそうだ」と示します。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "らしい"
+      ],
+      "error_class": "similar-hearsay",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "mental_model": "「そうだ（伝聞）」は、人から聞いた情報やニュースを、自分の判断として断定せずに伝える表現です。見た目から判断する様態の「そうだ」と違い、普通形につけて「聞いたところではそうだ」と示します。",
-    "furigana": {"title_ja":[{"kanji":"伝聞","reading":"でんぶん"}],"key_terms":[{"kanji":"普通","reading":"ふつう"},{"kanji":"形","reading":"がた"},{"kanji":"情報","reading":"じょうほう"},{"kanji":"判断","reading":"はんだん"},{"kanji":"様子","reading":"ようす"},{"kanji":"区別","reading":"くべつ"}]}
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "伝聞",
+          "reading": "でんぶん"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "普通",
+          "reading": "ふつう"
+        },
+        {
+          "kanji": "形",
+          "reading": "がた"
+        },
+        {
+          "kanji": "情報",
+          "reading": "じょうほう"
+        },
+        {
+          "kanji": "判断",
+          "reading": "はんだん"
+        },
+        {
+          "kanji": "様子",
+          "reading": "ようす"
+        },
+        {
+          "kanji": "区別",
+          "reading": "くべつ"
+        }
+      ]
+    }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": [
-    {"if_answer_equals_any": ["らしい"], "error_class": "similar-hearsay"}
-  ]
+  "audit_status": "pre-redesign"
 }

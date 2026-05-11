@@ -3,25 +3,88 @@
   "title_ja": "〜か否か",
   "title_zh": "〜か否か（是否…）",
   "jlpt_level": "N1",
-  "explanation_ja": "意味核：ある事柄が成立するかしないかを、硬く二択として示す。判断・検討・可否の対象を明確にする。\n\n接続：動詞普通形＋か否か。い形容詞普通形＋か否か。な形容詞語幹＋であるか否か。名詞＋であるか否か。\n\n例：計画を続行するか否か、今週中に判断する。／この証拠が有効であるか否かが争点となった。／参加資格を満たしているか否か、事前に確認してください。\n\nレジスター／類義差別：硬い書き言葉。会話では「〜かどうか」が自然である。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "意味核：ある事柄が成立するかしないかを、硬く二択として示す。判断・検討・可否の対象を明確にする。\n\n接続：動詞普通形＋か否か。い形容詞普通形＋か否か。な形容詞語幹＋であるか否か。名詞＋であるか否か。\n\n例：計画を続行するか否か、今週中に判断する。／この証拠が有効であるか否かが争点となった。／参加資格を満たしているか否か、事前に確認してください。\n\nレジスター／類義差別：硬い書き言葉。会話では「〜かどうか」が自然である。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "〜か否か 表示正式地提出「是否 A」這個判斷對象。\n\n**形態**：\n- 普通形＋か否か；な形容詞／名詞多用「であるか否か」。\n\n**例**：\n- 計画を続行するか否か、今週中に判断する。\n- この証拠が有効であるか否かが争点となった。\n\n**比較／差別**：\n- 比「かどうか」更書面，常見於報告、審查、法律語境。",
-  "annotations": {
-    "furigana": {"title_ja":[{"kanji":"否","reading":"いな"}],"key_terms":[{"kanji":"事柄","reading":"ことがら"},{"kanji":"成立","reading":"せいりつ"},{"kanji":"二択","reading":"にたく"},{"kanji":"判断","reading":"はんだん"},{"kanji":"検討","reading":"けんとう"},{"kanji":"可否","reading":"かひ"},{"kanji":"対象","reading":"たいしょう"},{"kanji":"計画","reading":"けいかく"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
     {
       "if_answer_not_contains_any": [
         "か否か"
       ],
-      "error_class": "missing-target-pattern"
+      "error_class": "missing-target-pattern",
+      "contrast": null
     },
     {
       "default": true,
-      "error_class": "generic"
+      "error_class": "generic",
+      "contrast": null
     }
-  ]
+  ],
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "否",
+          "reading": "いな"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "事柄",
+          "reading": "ことがら"
+        },
+        {
+          "kanji": "成立",
+          "reading": "せいりつ"
+        },
+        {
+          "kanji": "二択",
+          "reading": "にたく"
+        },
+        {
+          "kanji": "判断",
+          "reading": "はんだん"
+        },
+        {
+          "kanji": "検討",
+          "reading": "けんとう"
+        },
+        {
+          "kanji": "可否",
+          "reading": "かひ"
+        },
+        {
+          "kanji": "対象",
+          "reading": "たいしょう"
+        },
+        {
+          "kanji": "計画",
+          "reading": "けいかく"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

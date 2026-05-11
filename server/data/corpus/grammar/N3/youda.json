@@ -3,18 +3,70 @@
   "title_ja": "ようだ",
   "title_zh": "ようだ（似乎／像）",
   "jlpt_level": "N3",
-  "explanation_ja": "「ようだ」は、状況から判断した推量や、何かに似ていることを表します。\n\n- 誰か来たようです\n- 夢のようです\n\n少し書き言葉寄りで、「みたいだ」より丁寧・硬めです。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ようだ」は、状況から判断した推量や、何かに似ていることを表します。\n\n- 誰か来たようです\n- 夢のようです\n\n少し書き言葉寄りで、「みたいだ」より丁寧・硬めです。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「ようだ」表示根據情況推測「似乎」，也可表示比喻「像」。比「みたいだ」稍正式。",
-  "mental_model": "「ようだ」は、状況から判断した推量や、何かに似ていることを表します。見聞きした手がかりから「そう見える」と述べる表現で、「みたいだ」より少し書き言葉寄りで丁寧な印象になります。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "そう"
+      ],
+      "error_class": "appearance-pattern",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "mental_model": "「ようだ」は、状況から判断した推量や、何かに似ていることを表します。見聞きした手がかりから「そう見える」と述べる表現で、「みたいだ」より少し書き言葉寄りで丁寧な印象になります。",
-    "furigana": {"key_terms":[{"kanji":"状況","reading":"じょうきょう"},{"kanji":"判断","reading":"はんだん"},{"kanji":"推量","reading":"すいりょう"},{"kanji":"書","reading":"か"},{"kanji":"言葉","reading":"ことば"},{"kanji":"丁寧","reading":"ていねい"}]}
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "状況",
+          "reading": "じょうきょう"
+        },
+        {
+          "kanji": "判断",
+          "reading": "はんだん"
+        },
+        {
+          "kanji": "推量",
+          "reading": "すいりょう"
+        },
+        {
+          "kanji": "書",
+          "reading": "か"
+        },
+        {
+          "kanji": "言葉",
+          "reading": "ことば"
+        },
+        {
+          "kanji": "丁寧",
+          "reading": "ていねい"
+        }
+      ]
+    }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": [
-    {"if_answer_equals_any": ["そう"], "error_class": "appearance-pattern"}
-  ]
+  "audit_status": "pre-redesign"
 }

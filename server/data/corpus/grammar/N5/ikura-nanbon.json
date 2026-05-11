@@ -1,1 +1,72 @@
-{"slug":"ikura-nanbon","title_ja":"いくら・何本","title_zh":"いくら・何本（多少錢／幾個）","jlpt_level":"N5","explanation_ja":"値段を尋ねるときは「いくら」を使う。数を尋ねるときは「何」に助数詞を付ける。細長い物を尋ねる場合は「何本」を使い、「ペンは何本ありますか」のように言う。助数詞は数える物の形や種類によって変わるため、値段の「いくら」と数量の「何〜」を区別することが大切である。","explanation_zh":"詢問價格用いくら。詢問數量時，用何加上合適量詞。細長物用何本，例如詢問有幾枝筆。要區分價格的いくら和數量的何〜。","annotations":{"furigana":{"title_ja":[{"kanji":"何本","reading":"なんぼん"}],"key_terms":[{"kanji":"助数詞","reading":"じょすうし"},{"kanji":"値段","reading":"ねだん"},{"kanji":"場合","reading":"ばあい"},{"kanji":"種類","reading":"しゅるい"},{"kanji":"数量","reading":"すうりょう"},{"kanji":"区別","reading":"くべつ"},{"kanji":"大切","reading":"たいせつ"}]}},"source":"curated","license":"CC-BY-SA-4.0","validated_by":"import-curated-v1","validator_score":1,"classifier_rules":[]}
+{
+  "slug": "ikura-nanbon",
+  "title_ja": "いくら・何本",
+  "title_zh": "いくら・何本（多少錢／幾個）",
+  "jlpt_level": "N5",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "値段を尋ねるときは「いくら」を使う。数を尋ねるときは「何」に助数詞を付ける。細長い物を尋ねる場合は「何本」を使い、「ペンは何本ありますか」のように言う。助数詞は数える物の形や種類によって変わるため、値段の「いくら」と数量の「何〜」を区別することが大切である。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "詢問價格用いくら。詢問數量時，用何加上合適量詞。細長物用何本，例如詢問有幾枝筆。要區分價格的いくら和數量的何〜。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "何本",
+          "reading": "なんぼん"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "助数詞",
+          "reading": "じょすうし"
+        },
+        {
+          "kanji": "値段",
+          "reading": "ねだん"
+        },
+        {
+          "kanji": "場合",
+          "reading": "ばあい"
+        },
+        {
+          "kanji": "種類",
+          "reading": "しゅるい"
+        },
+        {
+          "kanji": "数量",
+          "reading": "すうりょう"
+        },
+        {
+          "kanji": "区別",
+          "reading": "くべつ"
+        },
+        {
+          "kanji": "大切",
+          "reading": "たいせつ"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
+}

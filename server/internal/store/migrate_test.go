@@ -211,12 +211,6 @@ func TestMigrate_0018_GrammarVariants(t *testing.T) {
 	if err != nil {
 		t.Fatalf("GetGrammarPoint direct: %v", err)
 	}
-	if direct.NuanceNote != "test note" {
-		t.Fatalf("direct NuanceNote = %q, want test note", direct.NuanceNote)
-	}
-	if direct.MentalModel != "test model" {
-		t.Fatalf("direct MentalModel = %q, want test model", direct.MentalModel)
-	}
 	if want := []string{"foo", "bar"}; !reflect.DeepEqual(direct.RelatedSlugs, want) {
 		t.Fatalf("direct RelatedSlugs = %#v, want %#v", direct.RelatedSlugs, want)
 	}
@@ -232,14 +226,16 @@ func TestMigrate_0018_GrammarVariants(t *testing.T) {
 		"title_ja": "読込",
 		"title_zh": "讀取",
 		"jlpt_level": "N3",
-		"nuance_note": "loaded note",
-		"mental_model": "loaded model",
+		"schema_version": 2,
+		"pattern": [{"form": "読込", "gloss_zh": "讀取"}],
+		"explanation_ja_blocks": [{"kind": "paragraph", "tokens": [{"t": "text", "v": "説明"}]}],
 		"related_slugs": ["alpha", "beta"],
+		"annotations": {
+			"nuance_note": "loaded note",
+			"mental_model": "loaded model"
+		},
 		"explanation_zh": "loader json test",
-		"source": "curated",
-		"license": "CC0-1.0",
-		"validated_by": "test",
-		"validator_score": 1.0
+		"_meta": {"source": "curated", "license": "CC0-1.0", "validated_by": "test", "validator_score": 1.0}
 	}`
 	if err := os.WriteFile(filepath.Join(grammarDir, "variant-loaded.json"), []byte(gpJSON), 0o644); err != nil {
 		t.Fatalf("write gp json: %v", err)
@@ -250,12 +246,6 @@ func TestMigrate_0018_GrammarVariants(t *testing.T) {
 	loaded, err := GetGrammarPoint(context.Background(), db, "variant-loaded")
 	if err != nil {
 		t.Fatalf("GetGrammarPoint loaded: %v", err)
-	}
-	if loaded.NuanceNote != "loaded note" {
-		t.Fatalf("loaded NuanceNote = %q, want loaded note", loaded.NuanceNote)
-	}
-	if loaded.MentalModel != "loaded model" {
-		t.Fatalf("loaded MentalModel = %q, want loaded model", loaded.MentalModel)
 	}
 	if want := []string{"alpha", "beta"}; !reflect.DeepEqual(loaded.RelatedSlugs, want) {
 		t.Fatalf("loaded RelatedSlugs = %#v, want %#v", loaded.RelatedSlugs, want)
@@ -343,6 +333,70 @@ func TestMigrate_0020_BackfillsExistingRows(t *testing.T) {
 		if got != "{}" {
 			t.Fatalf("backfilled annotations = %q, want {}", got)
 		}
+	}
+}
+
+func TestMigrate_0021_LeavesLegacyRowsAtV1(t *testing.T) {
+	db := newMemoryDB(t)
+	defer db.Close()
+
+	migrateThrough(t, db, "0020_annotations.sql")
+
+	if _, err := db.Exec(`INSERT INTO grammar_point (slug, title_ja, title_zh, jlpt_level, explanation_zh, source, license)
+		VALUES ('legacy-gp', '旧', '舊', 'N3', 'legacy row', 'test', 'CC0')`); err != nil {
+		t.Fatalf("seed legacy grammar: %v", err)
+	}
+
+	if err := Migrate(db); err != nil {
+		t.Fatalf("migrate 0021: %v", err)
+	}
+
+	var schemaVersion int
+	var pattern, explanationJABlocks, auditStatus string
+	if err := db.QueryRow(`SELECT schema_version, pattern, explanation_ja_blocks, audit_status FROM grammar_point WHERE slug='legacy-gp'`).
+		Scan(&schemaVersion, &pattern, &explanationJABlocks, &auditStatus); err != nil {
+		t.Fatalf("read legacy grammar v2 columns: %v", err)
+	}
+	if schemaVersion != 1 {
+		t.Fatalf("legacy schema_version = %d, want 1", schemaVersion)
+	}
+	if pattern != "[]" {
+		t.Fatalf("legacy pattern = %q, want []", pattern)
+	}
+	if explanationJABlocks != "[]" {
+		t.Fatalf("legacy explanation_ja_blocks = %q, want []", explanationJABlocks)
+	}
+	if auditStatus != "" {
+		t.Fatalf("legacy audit_status = %q, want empty", auditStatus)
+	}
+
+	if _, err := db.Exec(`INSERT INTO grammar_point (
+			slug, title_ja, title_zh, jlpt_level, explanation_zh, source, license,
+			pattern, explanation_ja_blocks, audit_status, schema_version
+		) VALUES (
+			'loaded-gp', '読込', '讀取', 'N3', 'loaded row', 'test', 'CC0',
+			'[{"form":"Vば","gloss_zh":"條件形"}]',
+			'[{"kind":"paragraph","tokens":[{"t":"text","v":"説明"}]}]',
+			'pre-redesign', 2
+		)`); err != nil {
+		t.Fatalf("seed loaded grammar: %v", err)
+	}
+
+	if err := db.QueryRow(`SELECT schema_version, pattern, explanation_ja_blocks, audit_status FROM grammar_point WHERE slug='loaded-gp'`).
+		Scan(&schemaVersion, &pattern, &explanationJABlocks, &auditStatus); err != nil {
+		t.Fatalf("read loaded grammar v2 columns: %v", err)
+	}
+	if schemaVersion != 2 {
+		t.Fatalf("loaded schema_version = %d, want 2", schemaVersion)
+	}
+	if pattern != `[{"form":"Vば","gloss_zh":"條件形"}]` {
+		t.Fatalf("loaded pattern = %q", pattern)
+	}
+	if explanationJABlocks != `[{"kind":"paragraph","tokens":[{"t":"text","v":"説明"}]}]` {
+		t.Fatalf("loaded explanation_ja_blocks = %q", explanationJABlocks)
+	}
+	if auditStatus != "pre-redesign" {
+		t.Fatalf("loaded audit_status = %q, want pre-redesign", auditStatus)
 	}
 }
 

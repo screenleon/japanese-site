@@ -3,18 +3,96 @@
   "title_ja": "ようにする",
   "title_zh": "ようにする（努力做到）",
   "jlpt_level": "N3",
-  "explanation_ja": "「V辞書形/ない形 + ようにする」は、ある状態になるように努力したり、気をつけたりすることを表します。「毎日読むようにしています」のように、続けている心がけにも使います。\n\n- 忘れないようにします\n- 毎朝早く起きるようにしています",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "V辞書形／Vない形＋ようにする",
+      "gloss_zh": "努力做到／留意不要做"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「"
+        },
+        {
+          "t": "ruby",
+          "k": "努力",
+          "r": "どりょく"
+        },
+        {
+          "t": "text",
+          "v": "して、ある"
+        },
+        {
+          "t": "ruby",
+          "k": "状態",
+          "r": "じょうたい"
+        },
+        {
+          "t": "text",
+          "v": "に近づける」ことを表します。"
+        },
+        {
+          "t": "term",
+          "slug": "youni-naru",
+          "kind": "grammar",
+          "label": "ようになる"
+        },
+        {
+          "t": "text",
+          "v": " が変化した結果を述べるのに対して、「ようにする」は自分が心がけてその状態を目指す表現です。"
+        }
+      ]
+    },
+    {
+      "kind": "callout",
+      "tone": "tip",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "習慣として続けている場合は「毎日読むようにしています」のように「ようにしている」をよく使います。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「ようにする」表示努力做到、留意不要做，或持續維持某個習慣。",
-  "mental_model": "「ようにする」は、ある状態に近づくように努力したり、気をつけたりする表現です。「ようになる」が変化した結果を述べるのに対し、「ようにする」はその状態を目指して自分が心がける点に焦点があります。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "native-reviewer-v1-pending",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "ようになる"
+      ],
+      "error_class": "effort-vs-change-pattern",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "mental_model": "「ようにする」は、ある状態に近づくように努力したり、気をつけたりする表現です。「ようになる」が変化した結果を述べるのに対し、「ようにする」はその状態を目指して自分が心がける点に焦点があります。",
-    "furigana": {"key_terms":[{"kanji":"辞書","reading":"じしょ"},{"kanji":"形","reading":"がた"},{"kanji":"状態","reading":"じょうたい"},{"kanji":"努力","reading":"どりょく"},{"kanji":"心","reading":"こころ"}]}
-  },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": [
-    {"if_answer_equals_any": ["ようになる"], "error_class": "effort-vs-change-pattern"}
-  ]
+    "nuance_note": "意志的に心がける表現なので、自然に変わっただけの結果には「ようになる」を使います。",
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "努力",
+          "reading": "どりょく"
+        },
+        {
+          "kanji": "状態",
+          "reading": "じょうたい"
+        },
+        {
+          "kanji": "習慣",
+          "reading": "しゅうかん"
+        }
+      ]
+    }
+  }
 }

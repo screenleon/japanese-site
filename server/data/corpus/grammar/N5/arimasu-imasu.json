@@ -3,18 +3,77 @@
   "title_ja": "あります／います",
   "title_zh": "あります／います（存在）",
   "jlpt_level": "N5",
-  "explanation_ja": "「あります」と「います」は、物や人がある場所に存在することを表します。「机の上に本があります」は物、「教室に先生がいます」は人や動物に使います。場所は「に」で示し、「駅の前に店があります」のように言います。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「あります」と「います」は、物や人がある場所に存在することを表します。「机の上に本があります」は物、「教室に先生がいます」は人や動物に使います。場所は「に」で示し、「駅の前に店があります」のように言います。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「あります」用於無生命物的存在，「います」用於人或動物的存在，場所通常用「に」標示。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"場所","reading":"ばしょ"},{"kanji":"存在","reading":"そんざい"},{"kanji":"教室","reading":"きょうしつ"},{"kanji":"先生","reading":"せんせい"},{"kanji":"動物","reading":"どうぶつ"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_equals_any": ["います"], "error_class": "animate-for-thing"},
-    {"if_answer_equals_any": ["あります"], "error_class": "inanimate-for-person"},
-    {"default": true, "error_class": "wrong-existence-verb"}
-  ]
+    {
+      "if_answer_equals_any": [
+        "います"
+      ],
+      "error_class": "animate-for-thing",
+      "contrast": null
+    },
+    {
+      "if_answer_equals_any": [
+        "あります"
+      ],
+      "error_class": "inanimate-for-person",
+      "contrast": null
+    },
+    {
+      "default": true,
+      "error_class": "wrong-existence-verb",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "場所",
+          "reading": "ばしょ"
+        },
+        {
+          "kanji": "存在",
+          "reading": "そんざい"
+        },
+        {
+          "kanji": "教室",
+          "reading": "きょうしつ"
+        },
+        {
+          "kanji": "先生",
+          "reading": "せんせい"
+        },
+        {
+          "kanji": "動物",
+          "reading": "どうぶつ"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

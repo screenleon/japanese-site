@@ -17,12 +17,11 @@ const grammarPointJSON = `{
 	"title_ja": "テスト",
 	"title_zh": "測試",
 	"jlpt_level": "N3",
-	"explanation_ja": "日本語の説明",
+	"schema_version": 2,
+	"pattern": [{"form": "テスト", "gloss_zh": "測試"}],
+	"explanation_ja_blocks": [{"kind": "paragraph", "tokens": [{"t": "text", "v": "日本語の説明"}]}],
 	"explanation_zh": "for the orphan sweep test",
-	"source": "curated",
-	"license": "CC0-1.0",
-	"validated_by": "test",
-	"validator_score": 1.0
+	"_meta": {"source": "curated", "license": "CC0-1.0", "validated_by": "test", "validator_score": 1.0}
 }`
 
 const exampleA = `{"text_ja":"これは ___ です。","text_zh":"這是測試","blank":"テスト","is_correct":1,"source":"curated","license":"CC0-1.0"}` + "\n"
@@ -169,13 +168,13 @@ func TestLoad_StoresClassifierRules(t *testing.T) {
 		"title_ja": "テスト",
 		"title_zh": "測試",
 		"jlpt_level": "N3",
+		"schema_version": 2,
+		"pattern": [{"form": "テスト", "gloss_zh": "測試"}],
+		"explanation_ja_blocks": [{"kind": "paragraph", "tokens": [{"t": "text", "v": "説明"}]}],
 		"explanation_zh": "classifier rules test",
-		"source": "curated",
-		"license": "CC0-1.0",
-		"validated_by": "test",
-		"validator_score": 1.0,
+		"_meta": {"source": "curated", "license": "CC0-1.0", "validated_by": "test", "validator_score": 1.0},
 		"classifier_rules": [
-			{"if_answer_suffix_any": ["ば"], "error_class": "used-ba"}
+			{"if_answer_suffix_any": ["ば"], "error_class": "used-ba", "contrast": null}
 		]
 	}`
 	if err := os.WriteFile(filepath.Join(grammarDir, "test-gp.json"), []byte(gp), 0o644); err != nil {
@@ -259,15 +258,14 @@ func TestLoad_StoresAnnotationsTransitionFields(t *testing.T) {
 		"title_ja": "ている（進行・状態）",
 		"title_zh": "ている（正在／狀態）",
 		"jlpt_level": "N4",
-		"mental_model": "` + mentalModel + `",
+		"schema_version": 2,
+		"pattern": [{"form": "Vている", "gloss_zh": "正在／狀態"}],
+		"explanation_ja_blocks": [{"kind": "paragraph", "tokens": [{"t": "text", "v": "説明"}]}],
 		"annotations": {
 			"mental_model": "` + mentalModel + `"
 		},
 		"explanation_zh": "進行と結果状態を表す。",
-		"source": "curated",
-		"license": "CC0-1.0",
-		"validated_by": "test",
-		"validator_score": 1.0
+		"_meta": {"source": "curated", "license": "CC0-1.0", "validated_by": "test", "validator_score": 1.0}
 	}`
 	if err := os.WriteFile(filepath.Join(grammarDir, "te-iru.json"), []byte(gp), 0o644); err != nil {
 		t.Fatalf("write gp: %v", err)
@@ -297,12 +295,9 @@ func TestLoad_StoresAnnotationsTransitionFields(t *testing.T) {
 		t.Fatalf("load: %v", err)
 	}
 
-	var flat, raw string
-	if err := db.QueryRow(`SELECT mental_model, annotations FROM grammar_point WHERE slug = 'te-iru'`).Scan(&flat, &raw); err != nil {
+	var raw string
+	if err := db.QueryRow(`SELECT annotations FROM grammar_point WHERE slug = 'te-iru'`).Scan(&raw); err != nil {
 		t.Fatalf("select grammar annotations: %v", err)
-	}
-	if flat != mentalModel {
-		t.Fatalf("flat mental_model = %q, want %q", flat, mentalModel)
 	}
 	var grammarAnnotations map[string]json.RawMessage
 	if err := json.Unmarshal([]byte(raw), &grammarAnnotations); err != nil {
@@ -354,19 +349,16 @@ func TestNormalizeAnnotations_AllKnownKindsPassThrough(t *testing.T) {
 	assertRawMessageMapEqual(t, got, want)
 }
 
-func TestNormalizeAnnotations_UnknownKindIsFiltered(t *testing.T) {
-	got := decodeNormalizedAnnotations(t, json.RawMessage(`{"typo_kind": "drop me"}`))
-	if len(got) != 0 {
-		t.Fatalf("normalized annotations = %#v, want empty map", got)
+func TestNormalizeAnnotations_UnknownKindFails(t *testing.T) {
+	if _, err := normalizeAnnotations(json.RawMessage(`{"typo_kind": "drop me"}`)); err == nil {
+		t.Fatal("unknown annotation kind did not fail")
 	}
 }
 
-func TestNormalizeAnnotations_MixedKnownAndUnknownKeepsKnown(t *testing.T) {
-	got := decodeNormalizedAnnotations(t, json.RawMessage(`{"usage": "keep me", "typo_kind": "drop me"}`))
-	want := map[string]json.RawMessage{
-		"usage": json.RawMessage(`"keep me"`),
+func TestNormalizeAnnotations_MixedKnownAndUnknownFails(t *testing.T) {
+	if _, err := normalizeAnnotations(json.RawMessage(`{"usage": "keep me", "typo_kind": "drop me"}`)); err == nil {
+		t.Fatal("mixed unknown annotation kind did not fail")
 	}
-	assertRawMessageMapEqual(t, got, want)
 }
 
 func TestNormalizeAnnotations_EmptyRawReturnsEmptyObject(t *testing.T) {
@@ -386,28 +378,13 @@ func TestNormalizeAnnotations_MalformedJSONReturnsError(t *testing.T) {
 	}
 }
 
-func TestMergeGrammarAnnotations_UnknownKindIsFiltered(t *testing.T) {
+func TestMergeGrammarAnnotations_UnknownKindFails(t *testing.T) {
 	gp := &GrammarPoint{
 		Slug:        "test-slug",
 		Annotations: json.RawMessage(`{"usage": "keep me", "typo_kind": "drop me"}`),
 	}
-	body, err := mergeGrammarAnnotations(gp)
-	if err != nil {
-		t.Fatalf("merge: %v", err)
-	}
-	var got map[string]json.RawMessage
-	if err := json.Unmarshal([]byte(body), &got); err != nil {
-		t.Fatalf("unmarshal: %v", err)
-	}
-	if _, ok := got["typo_kind"]; ok {
-		t.Fatalf("unknown kind leaked through merge allowlist: %#v", got)
-	}
-	var usage string
-	if err := json.Unmarshal(got["usage"], &usage); err != nil {
-		t.Fatalf("decode annotations.usage: %v", err)
-	}
-	if usage != "keep me" {
-		t.Fatalf("known kind dropped from merge: %#v", got)
+	if _, err := mergeGrammarAnnotations(gp); err == nil {
+		t.Fatal("unknown annotation kind did not fail")
 	}
 }
 
@@ -424,13 +401,12 @@ func TestLoad_RejectsGrammarAnnotationConflict(t *testing.T) {
 		"title_ja": "ている",
 		"title_zh": "ている",
 		"jlpt_level": "N4",
-		"mental_model": "flat A",
-		"annotations": {"mental_model": "nested B"},
+		"schema_version": 2,
+		"pattern": [{"form": "Vている", "gloss_zh": "正在／狀態"}],
+		"explanation_ja_blocks": [{"kind": "paragraph", "tokens": [{"t": "text", "v": "説明"}]}],
+		"annotations": {"pattern": "nested B"},
 		"explanation_zh": "conflict test",
-		"source": "curated",
-		"license": "CC0-1.0",
-		"validated_by": "test",
-		"validator_score": 1.0
+		"_meta": {"source": "curated", "license": "CC0-1.0", "validated_by": "test", "validator_score": 1.0}
 	}`
 	if err := os.WriteFile(filepath.Join(grammarDir, "te-iru-conflict.json"), []byte(gp), 0o644); err != nil {
 		t.Fatalf("write gp: %v", err)
@@ -452,7 +428,7 @@ func TestLoad_RejectsGrammarAnnotationConflict(t *testing.T) {
 	if err == nil {
 		t.Fatal("expected conflicting flat/nested annotations to fail")
 	}
-	for _, want := range []string{"te-iru-conflict", "flat A", "nested B"} {
+	for _, want := range []string{"te-iru-conflict", "pattern"} {
 		if !strings.Contains(err.Error(), want) {
 			t.Fatalf("error %q does not contain %q", err.Error(), want)
 		}
@@ -475,11 +451,11 @@ func TestLoad_PreservesExistingAnnotationsWhenSourceOmitsThem(t *testing.T) {
 		"title_ja": "保存",
 		"title_zh": "保存",
 		"jlpt_level": "N4",
+		"schema_version": 2,
+		"pattern": [{"form": "保存", "gloss_zh": "保存"}],
+		"explanation_ja_blocks": [{"kind": "paragraph", "tokens": [{"t": "text", "v": "説明"}]}],
 		"explanation_zh": "preserve test",
-		"source": "curated",
-		"license": "CC0-1.0",
-		"validated_by": "test",
-		"validator_score": 1.0
+		"_meta": {"source": "curated", "license": "CC0-1.0", "validated_by": "test", "validator_score": 1.0}
 	}`
 	if err := os.WriteFile(filepath.Join(grammarDir, "annotation-preserve.json"), []byte(gp), 0o644); err != nil {
 		t.Fatalf("write gp: %v", err)
@@ -659,11 +635,11 @@ func TestLoad_RejectsMalformedClassifierRules(t *testing.T) {
 		"title_ja": "テスト",
 		"title_zh": "測試",
 		"jlpt_level": "N3",
+		"schema_version": 2,
+		"pattern": [{"form": "テスト", "gloss_zh": "測試"}],
+		"explanation_ja_blocks": [{"kind": "paragraph", "tokens": [{"t": "text", "v": "説明"}]}],
 		"explanation_zh": "classifier rules test",
-		"source": "curated",
-		"license": "CC0-1.0",
-		"validated_by": "test",
-		"validator_score": 1.0,
+		"_meta": {"source": "curated", "license": "CC0-1.0", "validated_by": "test", "validator_score": 1.0},
 		"classifier_rules": [
 			{"error_class": "matches-everything-by-accident"}
 		]

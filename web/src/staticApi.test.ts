@@ -18,13 +18,20 @@ function textResponse(body: string) {
   });
 }
 
-function grammarPoint(slug: string, level: string) {
+function grammarPoint(slug: string, level: string, overrides: Record<string, unknown> = {}) {
   return {
     slug,
     title_ja: slug,
     title_zh: slug,
     jlpt_level: level,
     explanation_zh: slug,
+    schema_version: 2 as const,
+    pattern: [{ form: "_TBD", gloss_zh: "待補" }],
+    explanation_ja_blocks: [
+      { kind: "paragraph", tokens: [{ t: "text", v: slug }] },
+    ],
+    _meta: { source: "test", license: "test" },
+    ...overrides,
   };
 }
 
@@ -79,13 +86,11 @@ describe("staticApi", () => {
     responses.set(
       "/data/grammar/N1.json",
       JSON.stringify([
-        {
-          slug: "aru-majiki",
+        grammarPoint("aru-majiki", "N1", {
           title_ja: "〜まじき",
           title_zh: "〜まじき",
-          jlpt_level: "N1",
           explanation_zh: "不該有的",
-        },
+        }),
       ])
     );
 
@@ -108,13 +113,11 @@ describe("staticApi", () => {
         )
         .mockResolvedValueOnce(
           jsonResponse([
-            {
-              slug: "aru-majiki",
+            grammarPoint("aru-majiki", "N1", {
               title_ja: "〜まじき",
               title_zh: "〜まじき",
-              jlpt_level: "N1",
               explanation_zh: "不該有的",
-            },
+            }),
           ])
         )
     );
@@ -132,13 +135,11 @@ describe("staticApi", () => {
     responses.set(
       "/data/grammar/N1.json",
       JSON.stringify([
-        {
-          slug: "aru-majiki",
+        grammarPoint("aru-majiki", "N1", {
           title_ja: "〜まじき",
           title_zh: "〜まじき",
-          jlpt_level: "N1",
           explanation_zh: "不該有的",
-        },
+        }),
       ])
     );
 

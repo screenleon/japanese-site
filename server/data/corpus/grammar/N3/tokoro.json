@@ -3,18 +3,70 @@
   "title_ja": "ところ",
   "title_zh": "ところ（正要／正在／剛剛）",
   "jlpt_level": "N3",
-  "explanation_ja": "「ところ」は、動作の段階を表します。\n\n- 今から出かけるところです\n- 今食べているところです\n- 今帰ったところです\n\n前につく形で、直前・進行中・直後が変わります。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ところ」は、動作の段階を表します。\n\n- 今から出かけるところです\n- 今食べているところです\n- 今帰ったところです\n\n前につく形で、直前・進行中・直後が変わります。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「ところ」表示動作階段：辞書形ところ是正要，ているところ是正在，たところ是剛剛。",
-  "mental_model": "「ところ」は、動作がどの段階にあるかを見る表現です。辞書形なら直前、ている形なら進行中、た形なら直後を示します。「ばかり」と比べると、時間の新しさより動作の段階そのものに焦点があります。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "ばかり"
+      ],
+      "error_class": "recent-completion",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "mental_model": "「ところ」は、動作がどの段階にあるかを見る表現です。辞書形なら直前、ている形なら進行中、た形なら直後を示します。「ばかり」と比べると、時間の新しさより動作の段階そのものに焦点があります。",
-    "furigana": {"key_terms":[{"kanji":"動作","reading":"どうさ"},{"kanji":"段階","reading":"だんかい"},{"kanji":"直前","reading":"ちょくぜん"},{"kanji":"進行","reading":"しんこう"},{"kanji":"中","reading":"ちゅう"},{"kanji":"直後","reading":"ちょくご"}]}
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "動作",
+          "reading": "どうさ"
+        },
+        {
+          "kanji": "段階",
+          "reading": "だんかい"
+        },
+        {
+          "kanji": "直前",
+          "reading": "ちょくぜん"
+        },
+        {
+          "kanji": "進行",
+          "reading": "しんこう"
+        },
+        {
+          "kanji": "中",
+          "reading": "ちゅう"
+        },
+        {
+          "kanji": "直後",
+          "reading": "ちょくご"
+        }
+      ]
+    }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": [
-    {"if_answer_equals_any": ["ばかり"], "error_class": "recent-completion"}
-  ]
+  "audit_status": "pre-redesign"
 }

@@ -2,8 +2,10 @@ import {
   ANNOTATION_KINDS,
   type AnnotationKind,
   type Annotations,
+  type Block,
   type FuriganaAnnotation,
   type FuriganaPair,
+  type Token,
 } from "../apiTypes";
 
 export const LABELS: Record<AnnotationKind, string> = {
@@ -14,11 +16,12 @@ export const LABELS: Record<AnnotationKind, string> = {
   mental_model: "考え方のヒント",
   nuance_note: "ニュアンス",
   furigana: "ふりがな",
+  classifier: "辨析",
 };
 
 function hasFuriganaPairs(value: FuriganaAnnotation | undefined) {
   if (!value) return false;
-  return [value.title_ja, value.key_terms].some((pairs) =>
+  return [value.title_ja, value.vocabulary].some((pairs) =>
     filterRenderableFuriganaPairs(pairs).length > 0
   );
 }
@@ -65,7 +68,7 @@ function RubyList({ pairs }: { pairs: FuriganaPair[] }) {
 
 function FuriganaBlock({ value }: { value: FuriganaAnnotation }) {
   const titlePairs = filterRenderableFuriganaPairs(value.title_ja);
-  const keyTermPairs = filterRenderableFuriganaPairs(value.key_terms);
+  const vocabularyPairs = filterRenderableFuriganaPairs(value.vocabulary);
 
   return (
     <div className="space-y-1 text-sm leading-relaxed text-sky-950">
@@ -74,11 +77,81 @@ function FuriganaBlock({ value }: { value: FuriganaAnnotation }) {
           <RubyList pairs={titlePairs} />
         </div>
       )}
-      {keyTermPairs.length > 0 && (
+      {vocabularyPairs.length > 0 && (
         <div>
-          <RubyList pairs={keyTermPairs} />
+          <RubyList pairs={vocabularyPairs} />
         </div>
       )}
+    </div>
+  );
+}
+
+function TokenRenderer({ token }: { token: Token }) {
+  if (token.t === "ruby") {
+    return (
+      <ruby>
+        {token.k}
+        <rt>{token.r}</rt>
+      </ruby>
+    );
+  }
+  if (token.t === "term") {
+    const href = token.kind === "grammar" ? `#grammar/${token.slug}` : `#vocab/${token.slug}`;
+    return (
+      <a className="font-medium text-blue-700 underline-offset-2 hover:underline" href={href}>
+        {token.label}
+      </a>
+    );
+  }
+  return <>{token.v}</>;
+}
+
+function Tokens({ tokens }: { tokens: Token[] }) {
+  return (
+    <>
+      {tokens.map((token, index) => (
+        <TokenRenderer key={`${token.t}-${index}`} token={token} />
+      ))}
+    </>
+  );
+}
+
+export function BlockRenderer({ blocks }: { blocks: Block[] }) {
+  if (!Array.isArray(blocks) || blocks.length === 0) return null;
+
+  return (
+    <div className="space-y-3 text-sm leading-relaxed text-slate-900">
+      {blocks.map((block, index) => {
+        if (block.kind === "list") {
+          return (
+            <ul key={index} className="list-disc space-y-1 pl-5">
+              {block.items.map((item, itemIndex) => (
+                <li key={itemIndex}>
+                  <Tokens tokens={item.tokens} />
+                </li>
+              ))}
+            </ul>
+          );
+        }
+        if (block.kind === "callout") {
+          const toneClass =
+            block.tone === "warn"
+              ? "border-amber-300 bg-amber-50 text-amber-950"
+              : block.tone === "tip"
+                ? "border-emerald-300 bg-emerald-50 text-emerald-950"
+                : "border-sky-300 bg-sky-50 text-sky-950";
+          return (
+            <aside key={index} className={`rounded-md border px-3 py-2 ${toneClass}`}>
+              <Tokens tokens={block.tokens} />
+            </aside>
+          );
+        }
+        return (
+          <p key={index} className="whitespace-pre-wrap">
+            <Tokens tokens={block.tokens} />
+          </p>
+        );
+      })}
     </div>
   );
 }
@@ -92,7 +165,7 @@ export function EntryAnnotations({
 }) {
   const allowedKinds = new Set(kinds ?? ANNOTATION_KINDS);
   const visibleKinds = ANNOTATION_KINDS.filter(
-    (kind) => allowedKinds.has(kind) && hasAnnotationValue(kind, annotations)
+    (kind) => kind !== "classifier" && allowedKinds.has(kind) && hasAnnotationValue(kind, annotations)
   );
 
   if (visibleKinds.length === 0) return null;

@@ -3,19 +3,94 @@
   "title_ja": "〜ば",
   "title_zh": "〜ば（條件 / 邏輯成立）",
   "jlpt_level": "N3",
-  "explanation_ja": "「〜ば」は、Aという条件が成り立つとBになる、という論理的な条件を表します。\n\n形：\n- 一段動詞：食べる→食べれば\n- 五段動詞：飲む→飲めば、書く→書けば\n- い形容詞：高い→高ければ\n- 否定：〜なければ\n\n「〜ば〜ほど」は「AすればするほどB」という比例の意味です。\n\n注意：Aが動作の場合、Bに命令・依頼・意志を置きにくいです。「駅に着けば、電話してください」より「駅に着いたら、電話してください」が自然です。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜ば」は、Aという条件が成り立つとBになる、という論理的な条件を表します。\n\n形：\n- 一段動詞：食べる→食べれば\n- 五段動詞：飲む→飲めば、書く→書けば\n- い形容詞：高い→高ければ\n- 否定：〜なければ\n\n「〜ば〜ほど」は「AすればするほどB」という比例の意味です。\n\n注意：Aが動作の場合、Bに命令・依頼・意志を置きにくいです。「駅に着けば、電話してください」より「駅に着いたら、電話してください」が自然です。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜ば」是邏輯型條件句，N3 重點之一。\n\n**形態**：\n- 一段動詞：去る加れば → 食べる→食べれば、見る→見れば\n- 五段動詞：う段→え段＋ば → 飲む→飲めば、書く→書けば\n- い形容詞：い→ければ → 高い→高ければ\n- な形容詞・名詞：〜なら（不用ば）\n- 否定：〜なければ\n\n**用法**：\n1. **邏輯條件**（A 成立則 B 必然）：このボタンを押せば、ドアが開きます\n2. **〜ば〜ほど**：高ければ高いほどいい（越貴越好）\n3. **不滿/反事實**：もう少し早く来ればよかった（早點來就好了）\n\n**重要限制**：B 子句不能含意志、希望、命令、邀請（除非 A 是狀態而非動作）\n- × 駅に着けば、電話してください\n- ✓ 駅に着いたら、電話してください\n- ✓ 時間があれば、来てください（A 是狀態 → 可以）\n\n**與 〜たら 的差別**：たら 萬用，ば 強調邏輯關係且 B 受限。考試題常以「B 子句是否含意志」為判別點。",
-  "mental_model": "「〜ば」は、Aという条件が成り立つならBになる、という論理的なつながりを見る表現です。条件と結果を落ち着いて結ぶ感じが強く、命令や依頼など相手にすぐ動いてほしい文では「たら」のほうが自然になりやすいです。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_suffix_any": [
+        "たら",
+        "だら"
+      ],
+      "error_class": "used-tara",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "ば"
+      ],
+      "error_class": "wrong-conjugation",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "mental_model": "「〜ば」は、Aという条件が成り立つならBになる、という論理的なつながりを見る表現です。条件と結果を落ち着いて結ぶ感じが強く、命令や依頼など相手にすぐ動いてほしい文では「たら」のほうが自然になりやすいです。",
-    "furigana": {"key_terms":[{"kanji":"条件","reading":"じょうけん"},{"kanji":"論理","reading":"ろんり"},{"kanji":"的","reading":"てき"},{"kanji":"一段","reading":"いちだん"},{"kanji":"五段","reading":"ごだん"},{"kanji":"動詞","reading":"どうし"},{"kanji":"形容詞","reading":"けいようし"},{"kanji":"否定","reading":"ひてい"},{"kanji":"比例","reading":"ひれい"},{"kanji":"意志","reading":"いし"}]}
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "条件",
+          "reading": "じょうけん"
+        },
+        {
+          "kanji": "論理",
+          "reading": "ろんり"
+        },
+        {
+          "kanji": "的",
+          "reading": "てき"
+        },
+        {
+          "kanji": "一段",
+          "reading": "いちだん"
+        },
+        {
+          "kanji": "五段",
+          "reading": "ごだん"
+        },
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        },
+        {
+          "kanji": "形容詞",
+          "reading": "けいようし"
+        },
+        {
+          "kanji": "否定",
+          "reading": "ひてい"
+        },
+        {
+          "kanji": "比例",
+          "reading": "ひれい"
+        },
+        {
+          "kanji": "意志",
+          "reading": "いし"
+        }
+      ]
+    }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": [
-    {"if_answer_suffix_any": ["たら", "だら"], "error_class": "used-tara"},
-    {"if_answer_not_contains_any": ["ば"], "error_class": "wrong-conjugation"}
-  ]
+  "audit_status": "pre-redesign"
 }

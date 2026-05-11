@@ -3,18 +3,62 @@
   "title_ja": "ことにする",
   "title_zh": "ことにする（決定做）",
   "jlpt_level": "N3",
-  "explanation_ja": "「V辞書形/ない形 + ことにする」は、自分の意志で決めたことを表します。習慣として決めていることにも使います。\n\n- 毎朝走ることにしました\n- 夜は甘いものを食べないことにしています",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「V辞書形/ない形 + ことにする」は、自分の意志で決めたことを表します。習慣として決めていることにも使います。\n\n- 毎朝走ることにしました\n- 夜は甘いものを食べないことにしています"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「ことにする」表示由自己決定做或不做某事，也可表示自己定下的習慣。",
-  "mental_model": "「ことにする」は、自分の意志でこれからの行動を決める表現です。一回の決定にも、習慣として決めていることにも使えます。「ことになる」と違い、決定の中心が自分側にあると見ると分かりやすいです。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "ことになる"
+      ],
+      "error_class": "decision-source-pattern",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "mental_model": "「ことにする」は、自分の意志でこれからの行動を決める表現です。一回の決定にも、習慣として決めていることにも使えます。「ことになる」と違い、決定の中心が自分側にあると見ると分かりやすいです。",
-    "furigana": {"key_terms":[{"kanji":"辞書","reading":"じしょ"},{"kanji":"形","reading":"がた"},{"kanji":"意志","reading":"いし"},{"kanji":"習慣","reading":"しゅうかん"}]}
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "辞書",
+          "reading": "じしょ"
+        },
+        {
+          "kanji": "形",
+          "reading": "がた"
+        },
+        {
+          "kanji": "意志",
+          "reading": "いし"
+        },
+        {
+          "kanji": "習慣",
+          "reading": "しゅうかん"
+        }
+      ]
+    }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": [
-    {"if_answer_equals_any": ["ことになる"], "error_class": "decision-source-pattern"}
-  ]
+  "audit_status": "pre-redesign"
 }

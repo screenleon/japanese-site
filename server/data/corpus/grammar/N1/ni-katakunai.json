@@ -3,17 +3,85 @@
   "title_ja": "〜にかたくない",
   "title_zh": "〜にかたくない（不難…）",
   "jlpt_level": "N1",
-  "explanation_ja": "意味核：ある判断・想像・理解などが容易にできることを、硬く控えめに述べる表現である。多くは「想像にかたくない」「理解にかたくない」の形で、状況から当然そう考えられると示す。\n\n接続：形：名詞＋にかたくない。用いられる名詞は「想像」「理解」「推察」「察すること」など、認識・判断に関わるものが中心である。\n\n例：住民の不安は想像にかたくない／関係者の苦労は理解にかたくない／現場の混乱は推察にかたくない\n\nレジスター／類義差別：社説・報告書・評論でよく使われる書面体である。「〜しやすい」は性質や傾向を述べるが、「〜にかたくない」は証拠や状況から容易に判断できる、という論理的な推量を表す。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "意味核：ある判断・想像・理解などが容易にできることを、硬く控えめに述べる表現である。多くは「想像にかたくない」「理解にかたくない」の形で、状況から当然そう考えられると示す。\n\n接続：形：名詞＋にかたくない。用いられる名詞は「想像」「理解」「推察」「察すること」など、認識・判断に関わるものが中心である。\n\n例：住民の不安は想像にかたくない／関係者の苦労は理解にかたくない／現場の混乱は推察にかたくない\n\nレジスター／類義差別：社説・報告書・評論でよく使われる書面体である。「〜しやすい」は性質や傾向を述べるが、「〜にかたくない」は証拠や状況から容易に判断できる、という論理的な推量を表す。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜にかたくない」表示「不難想像／不難理解／不難推察」，用較正式、含蓄的方式說明從情況看很容易作出某判斷。\n\n**形態**：\n- 名詞＋にかたくない\n- 常見名詞：想像、理解、推察、察すること\n\n**例**：\n- 住民の不安は想像にかたくない。\n- 現場の混乱は推察にかたくない。\n\n**比較／差別**：\n- 〜しやすい：表示容易發生或容易做。\n- 〜できる：直接表示能夠。\n- 〜にかたくない：正式地表示「根據情況不難判斷、想像」。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"判断","reading":"はんだん"},{"kanji":"想像","reading":"そうぞう"},{"kanji":"理解","reading":"りかい"},{"kanji":"状況","reading":"じょうきょう"},{"kanji":"住民","reading":"じゅうみん"},{"kanji":"不安","reading":"ふあん"},{"kanji":"関係者","reading":"かんけいしゃ"},{"kanji":"苦労","reading":"くろう"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_contains_any": ["しやすい", "できる"], "error_class": "used-easy-wrong-form"},
-    {"if_answer_not_contains_any": ["かたくない"], "error_class": "missing-katakunai"}
-  ]
+    {
+      "if_answer_contains_any": [
+        "しやすい",
+        "できる"
+      ],
+      "error_class": "used-easy-wrong-form",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "かたくない"
+      ],
+      "error_class": "missing-katakunai",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "判断",
+          "reading": "はんだん"
+        },
+        {
+          "kanji": "想像",
+          "reading": "そうぞう"
+        },
+        {
+          "kanji": "理解",
+          "reading": "りかい"
+        },
+        {
+          "kanji": "状況",
+          "reading": "じょうきょう"
+        },
+        {
+          "kanji": "住民",
+          "reading": "じゅうみん"
+        },
+        {
+          "kanji": "不安",
+          "reading": "ふあん"
+        },
+        {
+          "kanji": "関係者",
+          "reading": "かんけいしゃ"
+        },
+        {
+          "kanji": "苦労",
+          "reading": "くろう"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

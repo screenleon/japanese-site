@@ -3,16 +3,57 @@
   "title_ja": "とすれば",
   "title_zh": "とすれば（假設／如果）",
   "jlpt_level": "N3",
-  "explanation_ja": "「とすれば」は、ある事柄を仮定したうえで、その結果や判断を述べる表現である。「としたら」とほぼ同じ意味で用いられ、「もしそうであるならば」という前提を示す。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「とすれば」は、ある事柄を仮定したうえで、その結果や判断を述べる表現である。「としたら」とほぼ同じ意味で用いられ、「もしそうであるならば」という前提を示す。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「とすれば」表示「假設……的話」，先設定一個前提，再說出結果或判斷。意思接近「としたら」。",
-  "mental_model": "「とすれば」は、ある事柄を仮に前提として置き、その前提から結果や判断を述べる表現です。「もしそれが本当なら」と考える形なので、事実かどうかよりも、その条件を受けた論理の流れに焦点があります。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
   "annotations": {
     "mental_model": "「とすれば」は、ある事柄を仮に前提として置き、その前提から結果や判断を述べる表現です。「もしそれが本当なら」と考える形なので、事実かどうかよりも、その条件を受けた論理の流れに焦点があります。",
-    "furigana": {"key_terms":[{"kanji":"事柄","reading":"ことがら"},{"kanji":"仮定","reading":"かてい"},{"kanji":"結果","reading":"けっか"},{"kanji":"判断","reading":"はんだん"},{"kanji":"前提","reading":"ぜんてい"}]}
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "事柄",
+          "reading": "ことがら"
+        },
+        {
+          "kanji": "仮定",
+          "reading": "かてい"
+        },
+        {
+          "kanji": "結果",
+          "reading": "けっか"
+        },
+        {
+          "kanji": "判断",
+          "reading": "はんだん"
+        },
+        {
+          "kanji": "前提",
+          "reading": "ぜんてい"
+        }
+      ]
+    }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": []
+  "audit_status": "pre-redesign"
 }

@@ -3,16 +3,73 @@
   "title_ja": "わけにはいかない",
   "title_zh": "わけにはいかない（不能／不可以）",
   "jlpt_level": "N3",
-  "explanation_ja": "「わけにはいかない」は、社会的、道徳的、または状況上の理由により、ある行為をすることができない、またはしてはいけないことを表す表現である。動詞の辞書形に接続し、単なる能力ではなく、事情による不可を述べる。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「わけにはいかない」は、社会的、道徳的、または状況上の理由により、ある行為をすることができない、またはしてはいけないことを表す表現である。動詞の辞書形に接続し、単なる能力ではなく、事情による不可を述べる。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「わけにはいかない」表示因社會、道德或情勢上的理由而不能做、不可做。接續為動詞辭書形 + わけにはいかない。",
-  "mental_model": "「わけにはいかない」は、能力の問題ではなく、社会的・道徳的・状況上の理由でその行為ができない、またはしてはいけないという表現です。「したいが事情が許さない」と見ると意味がつかみやすいです。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
   "annotations": {
     "mental_model": "「わけにはいかない」は、能力の問題ではなく、社会的・道徳的・状況上の理由でその行為ができない、またはしてはいけないという表現です。「したいが事情が許さない」と見ると意味がつかみやすいです。",
-    "furigana": {"key_terms":[{"kanji":"社会的","reading":"しゃかいてき"},{"kanji":"道徳的","reading":"どうとくてき"},{"kanji":"状況","reading":"じょうきょう"},{"kanji":"理由","reading":"りゆう"},{"kanji":"行為","reading":"こうい"},{"kanji":"辞書","reading":"じしょ"},{"kanji":"形","reading":"がた"},{"kanji":"能力","reading":"のうりょく"},{"kanji":"事情","reading":"じじょう"}]}
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "社会的",
+          "reading": "しゃかいてき"
+        },
+        {
+          "kanji": "道徳的",
+          "reading": "どうとくてき"
+        },
+        {
+          "kanji": "状況",
+          "reading": "じょうきょう"
+        },
+        {
+          "kanji": "理由",
+          "reading": "りゆう"
+        },
+        {
+          "kanji": "行為",
+          "reading": "こうい"
+        },
+        {
+          "kanji": "辞書",
+          "reading": "じしょ"
+        },
+        {
+          "kanji": "形",
+          "reading": "がた"
+        },
+        {
+          "kanji": "能力",
+          "reading": "のうりょく"
+        },
+        {
+          "kanji": "事情",
+          "reading": "じじょう"
+        }
+      ]
+    }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": []
+  "audit_status": "pre-redesign"
 }

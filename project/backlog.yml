@@ -978,6 +978,7 @@ items:
       - 切片建議：N3 → N2 → N1 → N4 → N5（用戶 N3-N2 學習目標優先級）。可一個 PR 全推或分等級切，依 LLM-pipeline 容量決定。
       - Prep tooling done 2026-05-09 — Kuromoji confirmed via `scripts/generate-furigana.mjs` + smoke test `scripts/test-generate-furigana.sh`; ADR-0002 accepted; full N3 sweep yielded 0/40 manual corrections. See `audits/js-067-tokenizer-spike-2026-05-09.md`.
       - Remaining operational prerequisites — (a) PR #50-or-newer bundle deployed AND cached-client rotation window satisfied (or explicit risk acceptance), (b) native/content review plan exists for generated readings.
+      - JS-097 folds the emitted-but-incomplete `key_terms` naming/content concern into the Phase 2 `vocabulary` rename and native-review tightening path.
       - Source — user-feedback 2026-05-09 + PM scoping 2026-05-09.
 
   - id: JS-068
@@ -1390,6 +1391,127 @@ items:
       - Observability gap，非 break；長期 milestone 字串應隨可觀察行為變更而 bump。
       - Requirement — 將 version 字串改為 `"M3-C4"`（或下一個 milestone seq）並 commit；server tests / API smoke tests 同步更新。可隨 JS-067 PR 合併一併處理或開單獨小 PR。
       - Source — pr-gate:2026-05-09 architecture-reviewer low #3.
+
+  - id: JS-097
+    title: key_terms→vocabulary rename + native-review tightening
+    status: doing
+    priority: P1
+    milestone: M3
+    theme: schema-spike
+    area: schema/content
+    source: spike:JS-097/098/099
+    related: [JS-067, JS-098, JS-099]
+    notes:
+      - Rename `annotations.furigana.key_terms` to `annotations.furigana.vocabulary` across the annotation contract, lint, API types, and renderers.
+      - Keep JS-097/098/099 PoC entries at `native-reviewer-v1-pending` until the native-reviewer second pass signs them off.
+      - Folds JS-067's emitted-but-incomplete `key_terms` content concern; JS-067 cross-references this item.
+
+  - id: JS-098
+    title: explanation_ja → Block[] engine
+    status: doing
+    priority: P1
+    milestone: M3
+    theme: schema-spike
+    area: schema/frontend
+    source: spike:JS-097/098/099
+    related: [JS-097, JS-099]
+    notes:
+      - Replace grammar runtime/corpus `explanation_ja` with required `explanation_ja_blocks: Block[]`.
+      - Render blocks via the shared Block renderer and enforce `paragraph | list | callout` plus `text | ruby | term` invariants.
+      - Keep the SQLite `explanation_ja` shadow populated mechanically until JS-102.
+
+  - id: JS-099
+    title: classifier_rules editorial expansion + ClassifierContrasts UI
+    status: doing
+    priority: P1
+    milestone: M3
+    theme: schema-spike
+    area: schema/frontend
+    source: spike:JS-097/098/099
+    related: [JS-097, JS-098, JS-103]
+    notes:
+      - Add optional editorial `contrast` payloads to top-level `classifier_rules` while preserving Go classifier predicate semantics.
+      - Mirror non-null contrasts into `annotations.classifier.rules[]` with no machine predicates.
+      - Render learner-facing contrast cards through `<ClassifierContrasts />`; null contrasts render nothing.
+
+  - id: JS-100
+    title: Full N5/N4/N3 grammar v2 content regen (120 entries)
+    status: todo
+    priority: P1
+    milestone: M3
+    theme: content-uplift
+    area: content
+    source: blocked-on-spike-merge
+    blocked_by: [JS-097, JS-098, JS-099]
+    notes:
+      - Regenerate and native-review full N5/N4/N3 grammar v2 content for 120 entries.
+      - Remove `audit_status: "pre-redesign"` entry-by-entry only after the entry passes native review.
+      - This is downstream content work, not part of the Phase 2 schema spike.
+
+  - id: JS-101
+    title: N2/N1 grammar v2 gradual content uplift
+    status: todo
+    priority: P2
+    milestone: M3
+    theme: content-uplift
+    area: content
+    source: blocked-on-spike-merge
+    blocked_by: [JS-097, JS-098, JS-099]
+    notes:
+      - Gradually uplift N2/N1 v2 entries because advanced register and literary forms need slower native-reviewer handling.
+      - Drop `audit_status: "pre-redesign"` per entry as native-reviewer signs it off.
+
+  - id: JS-102
+    title: Drop SQLite legacy shadow columns on grammar_point
+    status: todo
+    priority: P2
+    milestone: M3
+    theme: schema-cleanup
+    area: backend/schema
+    source: blocked-on JS-100/JS-101 content cycle + one release window
+    blocked_by: [JS-100, JS-101]
+    notes:
+      - Drop SQLite legacy shadow columns `mental_model`, `nuance_note`, and `explanation_ja` from `grammar_point`.
+      - Blocked until the JS-100/JS-101 content cycle completes and one release window has elapsed.
+
+  - id: JS-103
+    title: Full 150-entry classifier contrast rollout authored by native reviewer
+    status: todo
+    priority: P2
+    milestone: M3
+    theme: content-uplift
+    area: content
+    source: blocked-on JS-100
+    blocked_by: [JS-100]
+    related: [JS-099]
+    notes:
+      - Author and native-review a full 150-entry classifier contrast rollout.
+      - Use the `classifier_rules[].contrast` plus `annotations.classifier.rules[]` mirror contract from JS-099.
+
+  - id: JS-104
+    title: Vocab corpus migration to schema_version=2 + Block engine for gloss fields
+    status: todo
+    priority: P2
+    milestone: M3
+    theme: schema-spike
+    area: schema/content
+    source: scope-deferred (grammar-only spike)
+    notes:
+      - Migrate vocab corpus to `schema_version=2`.
+      - Add Block-engine support for vocab `gloss_*` fields and the corresponding lint/API/UI updates.
+      - Deferred because JS-097/098/099 is grammar-only.
+
+  - id: JS-105
+    title: pm-schema bump v1→v2 for grammar / schema-spike themes
+    status: todo
+    priority: P2
+    milestone: DX
+    area: planning/schema
+    source: pm-schema frozen at v1 per PR #46
+    notes:
+      - Decision-needing follow-up to add new `theme:` values for grammar and schema-spike workstreams.
+      - Do not modify `.pm/schema.md`, `project/backlog.yml` schema header, or other pm-schema files in JS-097/098/099.
+      - Keep pm-schema v1 frozen until this separate item is decided.
 
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.

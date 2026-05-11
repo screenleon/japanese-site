@@ -103,6 +103,15 @@
 | JS-094 | 🔵 active | `test-lint-grammar.sh` 加 `key_terms`-only happy-path fixture | testing | 2026-05-09 | pr-gate:2026-05-09 qa-tester medium |
 | JS-095 | 🔵 active | ADR-0002 status closure with cross-ref to JS-067 PR | docs | 2026-05-09 | pr-gate:2026-05-09 architecture-reviewer medium |
 | JS-096 | 🔵 active | `/api/version` bump M3-C3 → M3-C4 on JS-067 live emission | observability | 2026-05-09 | pr-gate:2026-05-09 architecture-reviewer low |
+| JS-097 | 🟡 in_progress | key_terms→vocabulary rename + native-review tightening | schema/content | 2026-05-10 | spike:JS-097/098/099 |
+| JS-098 | 🟡 in_progress | explanation_ja → Block[] engine | schema/frontend | 2026-05-10 | spike:JS-097/098/099 |
+| JS-099 | 🟡 in_progress | classifier_rules editorial expansion + ClassifierContrasts UI | schema/frontend | 2026-05-10 | spike:JS-097/098/099 |
+| JS-100 | 🔵 active | Full N5/N4/N3 grammar v2 content regen (120 entries) | content | 2026-05-10 | blocked-on-spike-merge |
+| JS-101 | 🔵 active | N2/N1 grammar v2 gradual content uplift | content | 2026-05-10 | blocked-on-spike-merge |
+| JS-102 | 🔵 active | Drop SQLite legacy shadow columns | backend/schema | 2026-05-10 | blocked-on JS-100/JS-101 content cycle + one release window |
+| JS-103 | 🔵 active | Full 150-entry classifier contrast rollout | content | 2026-05-10 | blocked-on JS-100 |
+| JS-104 | 🔵 active | Vocab schema_version=2 + Block engine for gloss fields | schema/content | 2026-05-10 | scope-deferred (grammar-only spike) |
+| JS-105 | 🔵 active | pm-schema bump v1→v2 for grammar/schema-spike themes | planning/schema | 2026-05-10 | pm-schema frozen at v1 per PR #46 |
 
 ---
 
@@ -1065,3 +1074,127 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Tags**: P3, backend, observability
 **Source**: pr-gate:2026-05-09 architecture-reviewer low #3
 <!-- 首次記錄: 2026-05-09 -->
+
+## JS-097 — key_terms→vocabulary rename + native-review tightening
+
+**Problem**: ADR-0001 introduced `annotations.furigana.key_terms`, but the Phase 2 schema spike freezes the clearer `annotations.furigana.vocabulary` name and requires PoC classifier/furigana content to remain native-reviewer-pending until the second pass signs it off.
+
+**Why**: The old name leaked authoring implementation detail and JS-067's emitted-but-incomplete `key_terms` concern would otherwise remain a separate stale backlog thread.
+
+**Requirement**: Rename furigana `key_terms` to `vocabulary` across the grammar/vocab annotation contract, lint, API types, and renderers; keep the four JS-097/098/099 PoC entries at `native-reviewer-v1-pending` until the native-reviewer gate completes.
+
+**Tags**: P1, schema-spike, content
+**Status**: doing
+**Source**: spike:JS-097/098/099
+**Related**: JS-067
+**Folds**: JS-067 emitted-but-incomplete `key_terms` content concern.
+<!-- 首次記錄: 2026-05-10 -->
+
+## JS-098 — explanation_ja → Block[] engine
+
+**Problem**: Flat `explanation_ja` cannot represent paragraphs, lists, callouts, ruby, or cross-linked terms without ad hoc text conventions.
+
+**Why**: Grammar explanations now need structured rendering and lintable shape while keeping legacy SQLite shadow output alive for one release.
+
+**Requirement**: Replace grammar runtime/corpus `explanation_ja` with required `explanation_ja_blocks: Block[]`, render it via the shared Block renderer, mechanically backfill the SQLite shadow `explanation_ja`, and enforce the v2 block invariants in lint and tests.
+
+**Tags**: P1, schema-spike, frontend, backend
+**Status**: doing
+**Source**: spike:JS-097/098/099
+<!-- 首次記錄: 2026-05-10 -->
+
+## JS-099 — classifier_rules editorial expansion + ClassifierContrasts UI
+
+**Problem**: Existing `classifier_rules` drive the deterministic grader but do not explain pattern contrasts to learners.
+
+**Why**: Learners need human-authored contrast notes while the Go classifier semantics must stay stable and machine predicates must not leak into the annotation renderer.
+
+**Requirement**: Add optional editorial `contrast` payloads to classifier rules, mirror non-null contrasts into `annotations.classifier.rules[]`, render them through `<ClassifierContrasts />`, and keep null contrasts invisible.
+
+**Tags**: P1, schema-spike, frontend, content
+**Status**: doing
+**Source**: spike:JS-097/098/099
+<!-- 首次記錄: 2026-05-10 -->
+
+## JS-100 — Full N5/N4/N3 grammar v2 content regen (120 entries)
+
+**Problem**: The Phase 2 spike mechanically migrates most non-PoC entries and leaves many N5/N4/N3 entries with `audit_status: "pre-redesign"`.
+
+**Why**: Lower-level grammar is learner-critical and should receive native-reviewed v2 explanations, patterns, furigana vocabulary, and annotation cleanup instead of remaining envelope-only migrated content.
+
+**Requirement**: Regenerate and native-review full N5/N4/N3 grammar v2 content for 120 entries, removing `audit_status: "pre-redesign"` entry-by-entry as each passes review.
+
+**Tags**: P1, content
+**Status**: todo
+**Blocked by**: JS-097/098/099 spike merge
+**Source**: blocked-on-spike-merge
+<!-- 首次記錄: 2026-05-10 -->
+
+## JS-101 — N2/N1 grammar v2 gradual content uplift
+
+**Problem**: N2/N1 entries also receive the v2 envelope mechanically, but higher-level grammar needs slower native-reviewer treatment because register, written style, and archaic forms carry more risk.
+
+**Why**: Leaving `audit_status: "pre-redesign"` indefinitely would make the v2 schema mechanically correct but pedagogically incomplete.
+
+**Requirement**: Gradually uplift N2/N1 grammar v2 entries and drop `audit_status: "pre-redesign"` per entry only after native-reviewer sign-off.
+
+**Tags**: P2, content
+**Status**: todo
+**Blocked by**: JS-097/098/099 spike merge
+**Source**: blocked-on-spike-merge
+<!-- 首次記錄: 2026-05-10 -->
+
+## JS-102 — Drop SQLite legacy shadow columns
+
+**Problem**: `grammar_point.mental_model`, `grammar_point.nuance_note`, and `grammar_point.explanation_ja` remain as temporary SQLite shadow columns after the Phase 2 runtime schema moves those fields into `annotations` / `explanation_ja_blocks`.
+
+**Why**: The shadows keep cached and legacy query paths working for the transition, but keeping them indefinitely preserves dual-shape ambiguity.
+
+**Requirement**: After the JS-100/JS-101 content cycle completes and one release window has elapsed, ship the migration that drops the legacy shadow columns from `grammar_point`.
+
+**Tags**: P2, backend, schema
+**Status**: todo
+**Blocked by**: JS-100/JS-101 content cycle plus one release window
+**Source**: blocked-on JS-100/JS-101 content cycle + one release window
+<!-- 首次記錄: 2026-05-10 -->
+
+## JS-103 — Full 150-entry classifier contrast rollout
+
+**Problem**: The spike seeds only the PoC classifier contrasts required to prove the UI and schema path.
+
+**Why**: A useful contrast system needs broad native-authored coverage across classifier-capable grammar points rather than a handful of examples.
+
+**Requirement**: Author and native-review a full 150-entry classifier contrast rollout using the `classifier_rules[].contrast` plus `annotations.classifier.rules[]` mirror contract.
+
+**Tags**: P2, content
+**Status**: todo
+**Blocked by**: JS-100
+**Source**: blocked-on JS-100
+<!-- 首次記錄: 2026-05-10 -->
+
+## JS-104 — Vocab schema_version=2 + Block engine for gloss fields
+
+**Problem**: The Phase 2 spike is grammar-only; vocab remains on its existing flat gloss fields.
+
+**Why**: Vocab will eventually need the same structured Japanese-first rendering affordances, but folding it into this spike would expand the schema and content surface too far.
+
+**Requirement**: Design and migrate vocab corpus to `schema_version=2`, including Block-engine support for vocab `gloss_*` fields and any corresponding lint/API/UI changes.
+
+**Tags**: P2, schema, content
+**Status**: todo
+**Source**: scope-deferred (grammar-only spike)
+<!-- 首次記錄: 2026-05-10 -->
+
+## JS-105 — pm-schema bump v1→v2 for grammar/schema-spike themes
+
+**Problem**: The Phase 2 backlog items need clearer `theme:` values for grammar and schema-spike workstreams, but pm-schema is frozen at v1 per PR #46.
+
+**Why**: Modifying pm-schema during JS-097/098/099 would mix planning-schema governance with the grammar runtime/content spike.
+
+**Requirement**: Open a separate decision-needing pm-schema v2 item that adds the new `theme:` values needed for grammar / schema-spike workstreams without changing `.pm/schema.md` or the backlog schema header in this spike.
+
+**Tags**: P2, planning, schema
+**Status**: todo
+**Source**: pm-schema frozen at v1 per PR #46
+**Flag**: decision-needed
+<!-- 首次記錄: 2026-05-10 -->

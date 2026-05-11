@@ -3,17 +3,91 @@
   "title_ja": "〜を皮切りに（して）／〜を皮切りとして",
   "title_zh": "〜を皮切りに（して）／〜を皮切りとして（以…為開端）",
   "jlpt_level": "N1",
-  "explanation_ja": "意味核：ある出来事を最初のきっかけとして、その後に同種の出来事が連続して広がることを表す。単なる開始時点ではなく、後続の展開が予想される「起点」を強調する表現である。\n\n接続：形：名詞＋を皮切りに／を皮切りとして。出来事・地域・人物名など、展開の最初に位置づけられる名詞を取る。\n\n例：東京公演を皮切りに全国を巡回する／首脳会談を皮切りとして協議が進む／新制度の導入を皮切りに改革が相次ぐ\n\nレジスター／類義差別：報道・論説・事業計画などで、連鎖的な展開を述べる硬い表現である。「〜をはじめとして」は代表例の列挙に重点があり、「〜を皮切りに」は時間的な第一歩とその後の広がりに重点がある。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "意味核：ある出来事を最初のきっかけとして、その後に同種の出来事が連続して広がることを表す。単なる開始時点ではなく、後続の展開が予想される「起点」を強調する表現である。\n\n接続：形：名詞＋を皮切りに／を皮切りとして。出来事・地域・人物名など、展開の最初に位置づけられる名詞を取る。\n\n例：東京公演を皮切りに全国を巡回する／首脳会談を皮切りとして協議が進む／新制度の導入を皮切りに改革が相次ぐ\n\nレジスター／類義差別：報道・論説・事業計画などで、連鎖的な展開を述べる硬い表現である。「〜をはじめとして」は代表例の列挙に重点があり、「〜を皮切りに」は時間的な第一歩とその後の広がりに重点がある。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜を皮切りに／〜を皮切りとして」表示「以 A 為開端，之後同類事件陸續展開」。重點不只是開始，而是 A 成為後續發展的第一步。\n\n**形態**：\n- 名詞＋を皮切りに\n- 名詞＋を皮切りとして\n\n**例**：\n- 東京公演を皮切りに、全国公演が始まった。\n- 新制度の導入を皮切りとして、改革が進んだ。\n\n**比較／差別**：\n- 〜をはじめ：表示列舉代表例。\n- 〜をきっかけに：表示契機，後續不一定是連續展開。\n- 〜を皮切りに：強調第一個事件之後，同類事件接連發生，語氣偏報導、正式。",
-  "annotations": {
-    "furigana": {"title_ja":[{"kanji":"皮切り","reading":"かわきり"}],"key_terms":[{"kanji":"出来事","reading":"できごと"},{"kanji":"最初","reading":"さいしょ"},{"kanji":"後","reading":"あと"},{"kanji":"同種","reading":"どうしゅ"},{"kanji":"連続","reading":"れんぞく"},{"kanji":"起点","reading":"きてん"},{"kanji":"東京","reading":"とうきょう"},{"kanji":"公演","reading":"こうえん"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_contains_any": ["はじめ", "きっかけ"], "error_class": "used-wrong-start-form"},
-    {"if_answer_not_contains_any": ["皮切り"], "error_class": "missing-kawakiri"}
-  ]
+    {
+      "if_answer_contains_any": [
+        "はじめ",
+        "きっかけ"
+      ],
+      "error_class": "used-wrong-start-form",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "皮切り"
+      ],
+      "error_class": "missing-kawakiri",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "皮切り",
+          "reading": "かわきり"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "出来事",
+          "reading": "できごと"
+        },
+        {
+          "kanji": "最初",
+          "reading": "さいしょ"
+        },
+        {
+          "kanji": "後",
+          "reading": "あと"
+        },
+        {
+          "kanji": "同種",
+          "reading": "どうしゅ"
+        },
+        {
+          "kanji": "連続",
+          "reading": "れんぞく"
+        },
+        {
+          "kanji": "起点",
+          "reading": "きてん"
+        },
+        {
+          "kanji": "東京",
+          "reading": "とうきょう"
+        },
+        {
+          "kanji": "公演",
+          "reading": "こうえん"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

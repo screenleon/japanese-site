@@ -75,7 +75,7 @@ export function VocabTab() {
               NonNullable<VocabRow["annotations"]>["furigana"]
             >;
             return (
-              (furigana.title_ja?.length ?? 0) + (furigana.key_terms?.length ?? 0) > 0
+              (furigana.title_ja?.length ?? 0) + (furigana.vocabulary?.length ?? 0) > 0
             );
           }
           return false;

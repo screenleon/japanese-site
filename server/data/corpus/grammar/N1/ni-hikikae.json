@@ -3,17 +3,85 @@
   "title_ja": "〜にひきかえ",
   "title_zh": "〜にひきかえ（與…相反／相比之下）",
   "jlpt_level": "N1",
-  "explanation_ja": "意味核：前に述べる事柄と対照的に、後の事柄が大きく異なることを表す。後件には評価や批判が伴いやすく、落差をはっきり示す表現である。\n\n接続：形：名詞＋にひきかえ、普通形＋のにひきかえ。前件と後件には同じ観点で比べられる対象を置く。\n\n例：都市部の回復にひきかえ地方の消費は弱い／兄が慎重なのにひきかえ弟は大胆だ／輸出が伸びたのにひきかえ内需は停滞した\n\nレジスター／類義差別：論説・評論で対照を強調するときに使う。「〜とは違って」は中立的に相違を述べるが、「〜にひきかえ」は落差や評価を含み、後件を問題視する文脈で使われやすい。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "意味核：前に述べる事柄と対照的に、後の事柄が大きく異なることを表す。後件には評価や批判が伴いやすく、落差をはっきり示す表現である。\n\n接続：形：名詞＋にひきかえ、普通形＋のにひきかえ。前件と後件には同じ観点で比べられる対象を置く。\n\n例：都市部の回復にひきかえ地方の消費は弱い／兄が慎重なのにひきかえ弟は大胆だ／輸出が伸びたのにひきかえ内需は停滞した\n\nレジスター／類義差別：論説・評論で対照を強調するときに使う。「〜とは違って」は中立的に相違を述べるが、「〜にひきかえ」は落差や評価を含み、後件を問題視する文脈で使われやすい。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜にひきかえ」表示「與 A 相反，B 卻…」，用來凸顯兩者差距，後句常帶評價或批判語氣。\n\n**形態**：\n- 名詞＋にひきかえ\n- 普通形＋のにひきかえ\n\n**例**：\n- 都市部の回復にひきかえ、地方の消費は弱い。\n- 輸出が伸びたのにひきかえ、内需は停滞した。\n\n**比較／差別**：\n- 〜とは違って：較中性，表示不同。\n- 〜一方で：可表示對比，也可表示並列。\n- 〜にひきかえ：強烈凸顯落差，常含「相比之下卻不佳」的評價。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"事柄","reading":"ことがら"},{"kanji":"対照","reading":"たいしょう"},{"kanji":"後件","reading":"こうけん"},{"kanji":"評価","reading":"ひょうか"},{"kanji":"批判","reading":"ひはん"},{"kanji":"落差","reading":"らくさ"},{"kanji":"都市部","reading":"としぶ"},{"kanji":"地方","reading":"ちほう"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_contains_any": ["とは違って", "一方"], "error_class": "used-contrast-wrong-form"},
-    {"if_answer_not_contains_any": ["ひきかえ"], "error_class": "missing-hikikae"}
-  ]
+    {
+      "if_answer_contains_any": [
+        "とは違って",
+        "一方"
+      ],
+      "error_class": "used-contrast-wrong-form",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "ひきかえ"
+      ],
+      "error_class": "missing-hikikae",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "事柄",
+          "reading": "ことがら"
+        },
+        {
+          "kanji": "対照",
+          "reading": "たいしょう"
+        },
+        {
+          "kanji": "後件",
+          "reading": "こうけん"
+        },
+        {
+          "kanji": "評価",
+          "reading": "ひょうか"
+        },
+        {
+          "kanji": "批判",
+          "reading": "ひはん"
+        },
+        {
+          "kanji": "落差",
+          "reading": "らくさ"
+        },
+        {
+          "kanji": "都市部",
+          "reading": "としぶ"
+        },
+        {
+          "kanji": "地方",
+          "reading": "ちほう"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

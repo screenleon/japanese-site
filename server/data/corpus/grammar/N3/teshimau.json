@@ -3,18 +3,63 @@
   "title_ja": "てしまう",
   "title_zh": "てしまう（做完／不小心）",
   "jlpt_level": "N3",
-  "explanation_ja": "「Vてしまう」は、動作が全部終わることを表します。残念な気持ちや、思わずしてしまった気持ちを表すこともあります。\n\n- 宿題を全部やってしまいました\n- 大切な写真を消してしまいました",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「Vてしまう」は、動作が全部終わることを表します。残念な気持ちや、思わずしてしまった気持ちを表すこともあります。\n\n- 宿題を全部やってしまいました\n- 大切な写真を消してしまいました"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「てしまう」表示動作完成，也常帶有遺憾、後悔或不小心做了某事的語氣。",
-  "mental_model": "「てしまう」は、動作が最後まで終わったことを表し、文脈によって残念さや思わずした気持ちも加わります。完了そのものを見る場合と、「してしまった」と話し手の評価が乗る場合を分けると整理しやすいです。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "ておく",
+        "ている"
+      ],
+      "error_class": "aspect-pattern",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "mental_model": "「てしまう」は、動作が最後まで終わったことを表し、文脈によって残念さや思わずした気持ちも加わります。完了そのものを見る場合と、「してしまった」と話し手の評価が乗る場合を分けると整理しやすいです。",
-    "furigana": {"key_terms":[{"kanji":"動作","reading":"どうさ"},{"kanji":"全部","reading":"ぜんぶ"},{"kanji":"残念","reading":"ざんねん"},{"kanji":"気持","reading":"きも"}]}
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "動作",
+          "reading": "どうさ"
+        },
+        {
+          "kanji": "全部",
+          "reading": "ぜんぶ"
+        },
+        {
+          "kanji": "残念",
+          "reading": "ざんねん"
+        },
+        {
+          "kanji": "気持",
+          "reading": "きも"
+        }
+      ]
+    }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": [
-    {"if_answer_equals_any": ["ておく", "ている"], "error_class": "aspect-pattern"}
-  ]
+  "audit_status": "pre-redesign"
 }

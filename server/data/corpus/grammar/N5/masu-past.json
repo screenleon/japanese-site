@@ -3,18 +3,85 @@
   "title_ja": "ました",
   "title_zh": "ました（禮貌過去形）",
   "jlpt_level": "N5",
-  "explanation_ja": "「ました」は、動詞のます形の過去をていねいに言う形です。「昨日、映画を見ました」や「朝ご飯を食べました」のように、もう終わった動作に使います。現在やこれからのことは「行きます」、過去のことは「行きました」と言います。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ました」は、動詞のます形の過去をていねいに言う形です。「昨日、映画を見ました」や「朝ご飯を食べました」のように、もう終わった動作に使います。現在やこれからのことは「行きます」、過去のことは「行きました」と言います。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「ました」是動詞ます形的禮貌過去式，用來表示已經發生或完成的動作。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"過去","reading":"かこ"},{"kanji":"動作","reading":"どうさ"},{"kanji":"現在","reading":"げんざい"},{"kanji":"昨日","reading":"きのう"},{"kanji":"映画","reading":"えいが"},{"kanji":"ご飯","reading":"ごはん"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_suffix_any": ["ます"], "error_class": "non-past-form"},
-    {"if_answer_suffix_any": ["ません"], "error_class": "negative-form"},
-    {"default": true, "error_class": "wrong-tense"}
-  ]
+    {
+      "if_answer_suffix_any": [
+        "ます"
+      ],
+      "error_class": "non-past-form",
+      "contrast": null
+    },
+    {
+      "if_answer_suffix_any": [
+        "ません"
+      ],
+      "error_class": "negative-form",
+      "contrast": null
+    },
+    {
+      "default": true,
+      "error_class": "wrong-tense",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        },
+        {
+          "kanji": "過去",
+          "reading": "かこ"
+        },
+        {
+          "kanji": "動作",
+          "reading": "どうさ"
+        },
+        {
+          "kanji": "現在",
+          "reading": "げんざい"
+        },
+        {
+          "kanji": "昨日",
+          "reading": "きのう"
+        },
+        {
+          "kanji": "映画",
+          "reading": "えいが"
+        },
+        {
+          "kanji": "ご飯",
+          "reading": "ごはん"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

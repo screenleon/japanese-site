@@ -3,13 +3,45 @@
   "title_ja": "ていく・てくる",
   "title_zh": "ていく・てくる（變化的方向）",
   "jlpt_level": "N3",
-  "explanation_ja": "「Vていく」は、今から先へ変化や動きが続くことを表します。「Vてくる」は、過去から今までの変化や、話し手の方へ近づく動きを表します。\n\n- これから寒くなっていきます\n- 少しずつ日本語が分かってきました",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「Vていく」は、今から先へ変化や動きが続くことを表します。「Vてくる」は、過去から今までの変化や、話し手の方へ近づく動きを表します。\n\n- これから寒くなっていきます\n- 少しずつ日本語が分かってきました"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「ていく」表示往未來延續的變化或離開說話者的動作；「てくる」表示到現在為止的變化或朝說話者靠近的動作。",
-  "mental_model": "「ていく・てくる」は、話し手の立つ位置を基準に、動きや変化の向きを示す表現です。「ていく」は話し手の今から離れて先へ進む変化、「てくる」は過去から話し手のところへ近づいてきた変化や、外側から話し手側へ向かう動きを表します。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "ている",
+        "てある"
+      ],
+      "error_class": "state-pattern",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "mental_model": "「ていく・てくる」は、話し手の立つ位置を基準に、動きや変化の向きを示す表現です。「ていく」は話し手の今から離れて先へ進む変化、「てくる」は過去から話し手のところへ近づいてきた変化や、外側から話し手側へ向かう動きを表します。",
     "furigana": {
-      "key_terms": [
+      "vocabulary": [
         {
           "kanji": "変化",
           "reading": "へんか"
@@ -37,17 +69,5 @@
       ]
     }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1,
-  "classifier_rules": [
-    {
-      "if_answer_equals_any": [
-        "ている",
-        "てある"
-      ],
-      "error_class": "state-pattern"
-    }
-  ]
+  "audit_status": "pre-redesign"
 }

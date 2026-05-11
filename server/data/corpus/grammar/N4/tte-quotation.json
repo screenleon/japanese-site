@@ -3,14 +3,64 @@
   "title_ja": "って",
   "title_zh": "って（引用／聽說／話題）",
   "jlpt_level": "N4",
-  "explanation_ja": "「って」は、会話でよく使われる「と」のくだけた形です。発言や内容を引用するとき、聞いた内容を伝えるとき、また話題を示すときに使います。書面では「と」や「という」を使うほうが改まった表現になります。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「って」は、会話でよく使われる「と」のくだけた形です。発言や内容を引用するとき、聞いた内容を伝えるとき、また話題を示すときに使います。書面では「と」や「という」を使うほうが改まった表現になります。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「って」是口語中相當於「と」的形式，可用於引用、轉述聽到的內容，也可提示話題。較正式的書面語通常用「と」或「という」。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"表現","reading":"ひょうげん"},{"kanji":"会話","reading":"かいわ"},{"kanji":"発言","reading":"はつげん"},{"kanji":"内容","reading":"ないよう"},{"kanji":"引用","reading":"いんよう"},{"kanji":"話題","reading":"わだい"},{"kanji":"書面","reading":"しょめん"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": []
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "表現",
+          "reading": "ひょうげん"
+        },
+        {
+          "kanji": "会話",
+          "reading": "かいわ"
+        },
+        {
+          "kanji": "発言",
+          "reading": "はつげん"
+        },
+        {
+          "kanji": "内容",
+          "reading": "ないよう"
+        },
+        {
+          "kanji": "引用",
+          "reading": "いんよう"
+        },
+        {
+          "kanji": "話題",
+          "reading": "わだい"
+        },
+        {
+          "kanji": "書面",
+          "reading": "しょめん"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

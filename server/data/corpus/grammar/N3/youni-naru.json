@@ -3,18 +3,89 @@
   "title_ja": "ようになる",
   "title_zh": "ようになる（變得能夠／開始會）",
   "jlpt_level": "N3",
-  "explanation_ja": "「V辞書形 + ようになる」は、前はできなかったことができる状態に変わることを表します。「Vない形 + ようになる」は、前はしていたことをしない状態へ変わる意味です。\n\n- 漢字が読めるようになりました\n- 最近、夜ふかししないようになりました",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "V辞書形＋ようになる",
+      "gloss_zh": "變得會做某事",
+      "notes_zh": "能力、習慣或狀態自然轉變後的結果"
+    },
+    {
+      "form": "Vない形＋ようになる",
+      "gloss_zh": "變得不再做某事",
+      "notes_zh": "以前會做，現在變成不做的狀態"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ようになる」は、前と今を比べて、できること・しないこと・状態が変わった結果を表します。努力そのものよりも、変化したあとの状態に焦点があります。"
+        }
+      ]
+    },
+    {
+      "kind": "list",
+      "items": [
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "V辞書形＋ようになる：前はできなかったことが、今はできる状態になる。例：漢字が読めるようになりました。"
+            }
+          ]
+        },
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "Vない形＋ようになる：前はしていたことを、今はしない状態になる。例：夜ふかししないようになりました。"
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「ようになる」表示能力、習慣或狀態的變化，意思是「變得會、變得不再」。",
-  "mental_model": "「ようになる」は、前はできなかったことができる状態へ変わる、または前はしていたことをしない状態へ変わる表現です。自分の努力よりも、結果として状態が変化した点に焦点があります。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "native-reviewer-v1-pending",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "ようにする"
+      ],
+      "error_class": "effort-vs-change-pattern",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "mental_model": "「ようになる」は、前はできなかったことができる状態へ変わる、または前はしていたことをしない状態へ変わる表現です。自分の努力よりも、結果として状態が変化した点に焦点があります。",
-    "furigana": {"key_terms":[{"kanji":"辞書","reading":"じしょ"},{"kanji":"形","reading":"がた"},{"kanji":"状態","reading":"じょうたい"},{"kanji":"漢字","reading":"かんじ"}]}
-  },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": [
-    {"if_answer_equals_any": ["ようにする"], "error_class": "effort-vs-change-pattern"}
-  ]
+    "nuance_note": "「ようにする」は意識して努力する側、「ようになる」は変化した結果を述べる側です。",
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "辞書",
+          "reading": "じしょ"
+        },
+        {
+          "kanji": "形",
+          "reading": "けい"
+        },
+        {
+          "kanji": "状態",
+          "reading": "じょうたい"
+        },
+        {
+          "kanji": "変化",
+          "reading": "へんか"
+        }
+      ]
+    }
+  }
 }

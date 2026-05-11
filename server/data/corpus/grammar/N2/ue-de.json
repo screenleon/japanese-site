@@ -3,16 +3,79 @@
   "title_ja": "上で",
   "title_zh": "上で（在...之後／在...方面）",
   "jlpt_level": "N2",
-  "explanation_ja": "「Vた上で」は、先に必要なことをしてから次のことをする意味です。「Nの上で」は、ある面や範囲を表すこともあります。\n\n- 内容を確認した上で、署名してください\n- 仕事の上で大切なこと",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「Vた上で」は、先に必要なことをしてから次のことをする意味です。「Nの上で」は、ある面や範囲を表すこともあります。\n\n- 内容を確認した上で、署名してください\n- 仕事の上で大切なこと"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「Vた上で」表示先完成某動作後再做下一步；「Nの上で」也可表示在某方面、某範圍中。",
-  "annotations": {
-    "furigana": {"title_ja":[{"kanji":"上","reading":"うえ"}],"key_terms":[{"kanji":"必要","reading":"ひつよう"},{"kanji":"範囲","reading":"はんい"},{"kanji":"内容","reading":"ないよう"},{"kanji":"確認","reading":"かくにん"},{"kanji":"署名","reading":"しょめい"},{"kanji":"仕事","reading":"しごと"},{"kanji":"大切","reading":"たいせつ"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_equals_any": ["あとで"], "error_class": "plain-after"}
-  ]
+    {
+      "if_answer_equals_any": [
+        "あとで"
+      ],
+      "error_class": "plain-after",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "上",
+          "reading": "うえ"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "必要",
+          "reading": "ひつよう"
+        },
+        {
+          "kanji": "範囲",
+          "reading": "はんい"
+        },
+        {
+          "kanji": "内容",
+          "reading": "ないよう"
+        },
+        {
+          "kanji": "確認",
+          "reading": "かくにん"
+        },
+        {
+          "kanji": "署名",
+          "reading": "しょめい"
+        },
+        {
+          "kanji": "仕事",
+          "reading": "しごと"
+        },
+        {
+          "kanji": "大切",
+          "reading": "たいせつ"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

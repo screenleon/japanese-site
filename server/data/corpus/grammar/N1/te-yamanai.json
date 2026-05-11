@@ -3,11 +3,51 @@
   "title_ja": "〜てやまない",
   "title_zh": "〜てやまない（衷心／不止地）",
   "jlpt_level": "N1",
-  "explanation_ja": "「〜てやまない」は、願う・愛する・惜しむ・期待するなどの感情や評価が非常に強く、ずっと続いていることを表す硬い表現である。「成功を願ってやまない」「恩師を敬愛してやまない」のように、好意・祈り・惜別などを改まった調子で述べる。日常の一時的な感情よりも、文章や挨拶で深い気持ちを示す場合に用いられる。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜てやまない」は、願う・愛する・惜しむ・期待するなどの感情や評価が非常に強く、ずっと続いていることを表す硬い表現である。「成功を願ってやまない」「恩師を敬愛してやまない」のように、好意・祈り・惜別などを改まった調子で述べる。日常の一時的な感情よりも、文章や挨拶で深い気持ちを示す場合に用いられる。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜てやまない」表示某種情感非常強烈且持續不止，如「衷心祈願、深愛、深感惋惜」。多用於正式文章或致詞。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_contains_any": [
+        "続ける",
+        "とまらない"
+      ],
+      "error_class": "used-literal-continuation",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "やまない"
+      ],
+      "error_class": "missing-yamanai",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "furigana": {
-      "key_terms": [
+      "vocabulary": [
         {
           "kanji": "願う",
           "reading": "ねがう"
@@ -43,23 +83,5 @@
       ]
     }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1,
-  "classifier_rules": [
-    {
-      "if_answer_contains_any": [
-        "続ける",
-        "とまらない"
-      ],
-      "error_class": "used-literal-continuation"
-    },
-    {
-      "if_answer_not_contains_any": [
-        "やまない"
-      ],
-      "error_class": "missing-yamanai"
-    }
-  ]
+  "audit_status": "pre-redesign"
 }

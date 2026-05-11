@@ -1,1 +1,64 @@
-{"slug":"time-expression","title_ja":"時刻","title_zh":"時刻（時間表達）","jlpt_level":"N5","explanation_ja":"時刻は「時」と「分」を使って表す。「三時」「三時十分」のように、時間の後に分を置く。四時は「よじ」、七時は「しちじ」、九時は「くじ」と読む。分は「ぷん」と「ふん」の読み分けがあり、一分、三分、四分、六分、八分、十分は「ぷん」で読むことが多い。午前は昼の前、午後は昼の後を表す。","explanation_zh":"時間用「時」和「分」表示，先說幾點再說幾分。四時、七時、九時的讀法要注意；分有「ふん」和「ぷん」兩種讀法。午前表示上午，午後表示下午或晚上。","annotations":{"furigana":{"title_ja":[{"kanji":"時刻","reading":"じこく"}],"key_terms":[{"kanji":"時刻","reading":"じこく"},{"kanji":"時間","reading":"じかん"},{"kanji":"十分","reading":"じゅうぶん"},{"kanji":"午前","reading":"ごぜん"},{"kanji":"午後","reading":"ごご"}]}},"source":"curated","license":"CC-BY-SA-4.0","validated_by":"import-curated-v1","validator_score":1,"classifier_rules":[]}
+{
+  "slug": "time-expression",
+  "title_ja": "時刻",
+  "title_zh": "時刻（時間表達）",
+  "jlpt_level": "N5",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "時刻は「時」と「分」を使って表す。「三時」「三時十分」のように、時間の後に分を置く。四時は「よじ」、七時は「しちじ」、九時は「くじ」と読む。分は「ぷん」と「ふん」の読み分けがあり、一分、三分、四分、六分、八分、十分は「ぷん」で読むことが多い。午前は昼の前、午後は昼の後を表す。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "時間用「時」和「分」表示，先說幾點再說幾分。四時、七時、九時的讀法要注意；分有「ふん」和「ぷん」兩種讀法。午前表示上午，午後表示下午或晚上。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "時刻",
+          "reading": "じこく"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "時刻",
+          "reading": "じこく"
+        },
+        {
+          "kanji": "時間",
+          "reading": "じかん"
+        },
+        {
+          "kanji": "十分",
+          "reading": "じゅうぶん"
+        },
+        {
+          "kanji": "午前",
+          "reading": "ごぜん"
+        },
+        {
+          "kanji": "午後",
+          "reading": "ごご"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
+}

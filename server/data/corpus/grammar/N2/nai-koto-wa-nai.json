@@ -3,11 +3,50 @@
   "title_ja": "〜ないことはない",
   "title_zh": "〜ないことはない（不是不…／並非不能…）",
   "jlpt_level": "N2",
-  "explanation_ja": "「〜ないことはない」は、完全に否定はしないが積極的にも認めない、という控えめな肯定を表す。例として「読めないことはない」「行けないことはないが時間がかかる」のように、可能性はあるが条件やためらいが残る。強い肯定ではなく、限定つきの肯定として使う。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜ないことはない」は、完全に否定はしないが積極的にも認めない、という控えめな肯定を表す。例として「読めないことはない」「行けないことはないが時間がかかる」のように、可能性はあるが条件やためらいが残る。強い肯定ではなく、限定つきの肯定として使う。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜ないことはない」表示不是完全不行或不是完全沒有，但語氣保留，常暗示條件、勉強或程度不高。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_contains_any": [
+        "わけではない"
+      ],
+      "error_class": "used-wakedehanai",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "ないことはない"
+      ],
+      "error_class": "missing-nai-koto-wa-nai",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "furigana": {
-      "key_terms": [
+      "vocabulary": [
         {
           "kanji": "完全",
           "reading": "かんぜん"
@@ -35,22 +74,5 @@
       ]
     }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1,
-  "classifier_rules": [
-    {
-      "if_answer_contains_any": [
-        "わけではない"
-      ],
-      "error_class": "used-wakedehanai"
-    },
-    {
-      "if_answer_not_contains_any": [
-        "ないことはない"
-      ],
-      "error_class": "missing-nai-koto-wa-nai"
-    }
-  ]
+  "audit_status": "pre-redesign"
 }

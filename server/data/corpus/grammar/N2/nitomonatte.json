@@ -3,17 +3,90 @@
   "title_ja": "〜に伴って",
   "title_zh": "〜に伴って（隨著／伴隨）",
   "jlpt_level": "N2",
-  "explanation_ja": "「〜に伴って」は、ある変化と同時に別の変化も起こることを表す。例として「人口の増加に伴って交通量も増えた」「気温が上がるに伴って売上が伸びる」のように、社会的・数量的な変化によく使われる。書き言葉で、二つの変化の連動を客観的に述べる。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜に伴って」は、ある変化と同時に別の変化も起こることを表す。例として「人口の増加に伴って交通量も増えた」「気温が上がるに伴って売上が伸びる」のように、社会的・数量的な変化によく使われる。書き言葉で、二つの変化の連動を客観的に述べる。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜に伴って」表示隨著某變化，另一個變化也一起發生，常用於書面或正式說明。",
-  "annotations": {
-    "furigana": {"title_ja":[{"kanji":"伴って","reading":"ともなって"}],"key_terms":[{"kanji":"変化","reading":"へんか"},{"kanji":"同時","reading":"どうじ"},{"kanji":"人口","reading":"じんこう"},{"kanji":"増加","reading":"ぞうか"},{"kanji":"交通","reading":"こうつう"},{"kanji":"気温","reading":"きおん"},{"kanji":"売上","reading":"うりあげ"},{"kanji":"社会","reading":"しゃかい"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_contains_any": ["につれて"], "error_class": "used-nitsurete"},
-    {"if_answer_not_contains_any": ["伴"], "error_class": "missing-tomonatte"}
-  ]
+    {
+      "if_answer_contains_any": [
+        "につれて"
+      ],
+      "error_class": "used-nitsurete",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "伴"
+      ],
+      "error_class": "missing-tomonatte",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "伴って",
+          "reading": "ともなって"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "変化",
+          "reading": "へんか"
+        },
+        {
+          "kanji": "同時",
+          "reading": "どうじ"
+        },
+        {
+          "kanji": "人口",
+          "reading": "じんこう"
+        },
+        {
+          "kanji": "増加",
+          "reading": "ぞうか"
+        },
+        {
+          "kanji": "交通",
+          "reading": "こうつう"
+        },
+        {
+          "kanji": "気温",
+          "reading": "きおん"
+        },
+        {
+          "kanji": "売上",
+          "reading": "うりあげ"
+        },
+        {
+          "kanji": "社会",
+          "reading": "しゃかい"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

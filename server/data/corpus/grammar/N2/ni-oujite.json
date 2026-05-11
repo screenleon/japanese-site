@@ -3,17 +3,90 @@
   "title_ja": "〜に応じて",
   "title_zh": "〜に応じて（根據／依照）",
   "jlpt_level": "N2",
-  "explanation_ja": "「〜に応じて」は、相手・状況・量などに合わせて対応や内容が変わることを表す。例として「経験に応じて仕事を任せる」「人数に応じて資料を用意する」のように、基準に合わせた調整を述べる。公式な説明や制度の記述でもよく使われる。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜に応じて」は、相手・状況・量などに合わせて対応や内容が変わることを表す。例として「経験に応じて仕事を任せる」「人数に応じて資料を用意する」のように、基準に合わせた調整を述べる。公式な説明や制度の記述でもよく使われる。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜に応じて」表示依照條件、狀況、數量或需求來調整做法或內容。",
-  "annotations": {
-    "furigana": {"title_ja":[{"kanji":"応","reading":"おう"}],"key_terms":[{"kanji":"相手","reading":"あいて"},{"kanji":"状況","reading":"じょうきょう"},{"kanji":"対応","reading":"たいおう"},{"kanji":"内容","reading":"ないよう"},{"kanji":"経験","reading":"けいけん"},{"kanji":"人数","reading":"にんずう"},{"kanji":"基準","reading":"きじゅん"},{"kanji":"調整","reading":"ちょうせい"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_contains_any": ["によって"], "error_class": "used-niyotte"},
-    {"if_answer_not_contains_any": ["応じ"], "error_class": "missing-oujite"}
-  ]
+    {
+      "if_answer_contains_any": [
+        "によって"
+      ],
+      "error_class": "used-niyotte",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "応じ"
+      ],
+      "error_class": "missing-oujite",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "応",
+          "reading": "おう"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "相手",
+          "reading": "あいて"
+        },
+        {
+          "kanji": "状況",
+          "reading": "じょうきょう"
+        },
+        {
+          "kanji": "対応",
+          "reading": "たいおう"
+        },
+        {
+          "kanji": "内容",
+          "reading": "ないよう"
+        },
+        {
+          "kanji": "経験",
+          "reading": "けいけん"
+        },
+        {
+          "kanji": "人数",
+          "reading": "にんずう"
+        },
+        {
+          "kanji": "基準",
+          "reading": "きじゅん"
+        },
+        {
+          "kanji": "調整",
+          "reading": "ちょうせい"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

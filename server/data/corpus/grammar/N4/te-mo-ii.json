@@ -3,16 +3,73 @@
   "title_ja": "てもいい",
   "title_zh": "てもいい（可以）",
   "jlpt_level": "N4",
-  "explanation_ja": "「動詞て形 + もいい」は、許可を表します。「〜してもいいですか」は、相手に許可を求める表現です。\n\n- 入ってもいいです\n- 写真を撮ってもいいですか\n\n「いい」の代わりに「かまいません」を使うと、より丁寧になります。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「動詞て形 + もいい」は、許可を表します。「〜してもいいですか」は、相手に許可を求める表現です。\n\n- 入ってもいいです\n- 写真を撮ってもいいですか\n\n「いい」の代わりに「かまいません」を使うと、より丁寧になります。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「動詞て形 + もいい」表示可以做某事；「〜てもいいですか」用來請求許可。例如「入ってもいいですか」。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"許可","reading":"きょか"},{"kanji":"相手","reading":"あいて"},{"kanji":"表現","reading":"ひょうげん"},{"kanji":"丁寧","reading":"ていねい"},{"kanji":"写真","reading":"しゃしん"},{"kanji":"代わり","reading":"かわり"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_equals_any": ["は"], "error_class": "used-wa"}
-  ]
+    {
+      "if_answer_equals_any": [
+        "は"
+      ],
+      "error_class": "used-wa",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        },
+        {
+          "kanji": "許可",
+          "reading": "きょか"
+        },
+        {
+          "kanji": "相手",
+          "reading": "あいて"
+        },
+        {
+          "kanji": "表現",
+          "reading": "ひょうげん"
+        },
+        {
+          "kanji": "丁寧",
+          "reading": "ていねい"
+        },
+        {
+          "kanji": "写真",
+          "reading": "しゃしん"
+        },
+        {
+          "kanji": "代わり",
+          "reading": "かわり"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

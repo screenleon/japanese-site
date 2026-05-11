@@ -1,1 +1,76 @@
-{"slug":"kore-sore-are","title_ja":"こ・そ・あ系","title_zh":"こ・そ・あ系指示詞","jlpt_level":"N5","explanation_ja":"「こ・そ・あ・ど」は、話し手や聞き手からの距離を表す指示語の体系である。「これ」は話し手に近い物、「それ」は聞き手に近い物、「あれ」は両方から遠い物、「どれ」は不明な物を尋ねるときに使う。場所は「ここ・そこ・あそこ・どこ」、方向や丁寧な場所表現は「こちら・そちら・あちら・どちら」を使う。","explanation_zh":"「こ・そ・あ・ど」表示與說話者、聽話者的距離。これ是靠近說話者的東西、それ是靠近聽話者的東西、あれ是離雙方都遠的東西、どれ用來詢問哪一個。場所用ここ、そこ、あそこ、どこ；方向或較禮貌的場所表達用こちら等。","annotations":{"furigana":{"title_ja":[{"kanji":"系","reading":"けい"}],"key_terms":[{"kanji":"話し手","reading":"はなして"},{"kanji":"場所","reading":"ばしょ"},{"kanji":"方向","reading":"ほうこう"},{"kanji":"丁寧","reading":"ていねい"},{"kanji":"表現","reading":"ひょうげん"},{"kanji":"聞き手","reading":"ききて"},{"kanji":"距離","reading":"きょり"},{"kanji":"指示","reading":"しじ"}]}},"source":"curated","license":"CC-BY-SA-4.0","validated_by":"import-curated-v1","validator_score":1,"classifier_rules":[]}
+{
+  "slug": "kore-sore-are",
+  "title_ja": "こ・そ・あ系",
+  "title_zh": "こ・そ・あ系指示詞",
+  "jlpt_level": "N5",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「こ・そ・あ・ど」は、話し手や聞き手からの距離を表す指示語の体系である。「これ」は話し手に近い物、「それ」は聞き手に近い物、「あれ」は両方から遠い物、「どれ」は不明な物を尋ねるときに使う。場所は「ここ・そこ・あそこ・どこ」、方向や丁寧な場所表現は「こちら・そちら・あちら・どちら」を使う。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「こ・そ・あ・ど」表示與說話者、聽話者的距離。これ是靠近說話者的東西、それ是靠近聽話者的東西、あれ是離雙方都遠的東西、どれ用來詢問哪一個。場所用ここ、そこ、あそこ、どこ；方向或較禮貌的場所表達用こちら等。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "系",
+          "reading": "けい"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "話し手",
+          "reading": "はなして"
+        },
+        {
+          "kanji": "場所",
+          "reading": "ばしょ"
+        },
+        {
+          "kanji": "方向",
+          "reading": "ほうこう"
+        },
+        {
+          "kanji": "丁寧",
+          "reading": "ていねい"
+        },
+        {
+          "kanji": "表現",
+          "reading": "ひょうげん"
+        },
+        {
+          "kanji": "聞き手",
+          "reading": "ききて"
+        },
+        {
+          "kanji": "距離",
+          "reading": "きょり"
+        },
+        {
+          "kanji": "指示",
+          "reading": "しじ"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
+}

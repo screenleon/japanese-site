@@ -3,18 +3,77 @@
   "title_ja": "たい",
   "title_zh": "たい（想要做）",
   "jlpt_level": "N5",
-  "explanation_ja": "「たい」は、話し手がしたいことを表します。動詞のます形から「ます」を取って、「日本へ行きたいです」や「水を飲みたいです」のように使います。「たい」はい形容詞のように、「行きたくないです」「行きたかったです」と変化します。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「たい」は、話し手がしたいことを表します。動詞のます形から「ます」を取って、「日本へ行きたいです」や「水を飲みたいです」のように使います。「たい」はい形容詞のように、「行きたくないです」「行きたかったです」と変化します。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「たい」接在動詞ます形去掉ます之後，表示說話者想做某事。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"話し手","reading":"はなして"},{"kanji":"動詞","reading":"どうし"},{"kanji":"形容詞","reading":"けいようし"},{"kanji":"日本","reading":"にほん"},{"kanji":"変化","reading":"へんか"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_suffix_any": ["ます"], "error_class": "kept-masu"},
-    {"if_answer_contains_any": ["ほしい"], "error_class": "used-hoshii"},
-    {"default": true, "error_class": "wrong-desire-form"}
-  ]
+    {
+      "if_answer_suffix_any": [
+        "ます"
+      ],
+      "error_class": "kept-masu",
+      "contrast": null
+    },
+    {
+      "if_answer_contains_any": [
+        "ほしい"
+      ],
+      "error_class": "used-hoshii",
+      "contrast": null
+    },
+    {
+      "default": true,
+      "error_class": "wrong-desire-form",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "話し手",
+          "reading": "はなして"
+        },
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        },
+        {
+          "kanji": "形容詞",
+          "reading": "けいようし"
+        },
+        {
+          "kanji": "日本",
+          "reading": "にほん"
+        },
+        {
+          "kanji": "変化",
+          "reading": "へんか"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

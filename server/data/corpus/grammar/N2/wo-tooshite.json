@@ -3,8 +3,40 @@
   "title_ja": "を通して",
   "title_zh": "を通して（透過／整個期間）",
   "jlpt_level": "N2",
-  "explanation_ja": "「Nを通して」は、手段・媒介、または期間全体を表します。\n\n- 友人を通して知りました\n- 一年を通して暖かいです\n\n人や活動を媒介にする場合と、時間の範囲全体を言う場合があります。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「Nを通して」は、手段・媒介、または期間全体を表します。\n\n- 友人を通して知りました\n- 一年を通して暖かいです\n\n人や活動を媒介にする場合と、時間の範囲全体を言う場合があります。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「Nを通して」可表示透過某媒介，也可表示整個期間。例：「友人を通して」「一年を通して」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "で"
+      ],
+      "error_class": "simple-means",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "furigana": {
       "title_ja": [
@@ -13,7 +45,7 @@
           "reading": "とおして"
         }
       ],
-      "key_terms": [
+      "vocabulary": [
         {
           "kanji": "手段",
           "reading": "しゅだん"
@@ -49,16 +81,5 @@
       ]
     }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1,
-  "classifier_rules": [
-    {
-      "if_answer_equals_any": [
-        "で"
-      ],
-      "error_class": "simple-means"
-    }
-  ]
+  "audit_status": "pre-redesign"
 }
