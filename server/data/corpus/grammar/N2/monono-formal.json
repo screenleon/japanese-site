@@ -3,29 +3,86 @@
   "title_ja": "〜ものの",
   "title_zh": "〜ものの（雖然…但是…）",
   "jlpt_level": "N2",
-  "nuance_note": "N3 の ものの と同語だが、書き言葉や改まった文脈で多用され、後文に話者の評価や複雑な節構造を伴うことが多い。",
-  "related_slugs": [
-    "monono"
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
   ],
-  "explanation_ja": "意味核：前件を事実として認めながら、そこから予想される結果とは異なる後件を述べる。硬めの逆接表現。\n\n接続：動詞普通形＋ものの。い形容詞＋ものの。な形容詞＋な／である＋ものの。名詞＋である＋ものの。\n\n例：計画は立てたものの、実行には移せていない。／説明を聞いたものの、まだ不安は残る。／便利なものの、使いこなすには練習が必要だ。\n\nレジスター／類義差別：書き言葉寄り。「けれども」より硬く、予想とのずれを示しやすい。",
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "意味核：前件を事実として認めながら、そこから予想される結果とは異なる後件を述べる。硬めの逆接表現。\n\n接続：動詞普通形＋ものの。い形容詞＋ものの。な形容詞＋な／である＋ものの。名詞＋である＋ものの。\n\n例：計画は立てたものの、実行には移せていない。／説明を聞いたものの、まだ不安は残る。／便利なものの、使いこなすには練習が必要だ。\n\nレジスター／類義差別：書き言葉寄り。「けれども」より硬く、予想とのずれを示しやすい。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "〜ものの 表示承認 A 事實，但後項 B 與預期不同。\n\n**形態**：\n- 普通形＋ものの；な形容詞＋な／である＋ものの；名詞＋である＋ものの。\n\n**例**：\n- 計画は立てたものの、実行には移せていない。\n- 説明を聞いたものの、まだ不安は残る。\n\n**比較／差別**：\n- 比「けれども」更書面，也更強調承認前項後的落差。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"事実","reading":"じじつ"},{"kanji":"認","reading":"みと"},{"kanji":"予想","reading":"よそう"},{"kanji":"結果","reading":"けっか"},{"kanji":"異","reading":"こと"},{"kanji":"逆接","reading":"ぎゃくせつ"},{"kanji":"計画","reading":"けいかく"},{"kanji":"実行","reading":"じっこう"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
     {
       "if_answer_not_contains_any": [
         "ものの"
       ],
-      "error_class": "missing-target-pattern"
+      "error_class": "missing-target-pattern",
+      "contrast": null
     },
     {
       "default": true,
-      "error_class": "generic"
+      "error_class": "generic",
+      "contrast": null
     }
-  ]
+  ],
+  "related_slugs": [
+    "monono"
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "事実",
+          "reading": "じじつ"
+        },
+        {
+          "kanji": "認",
+          "reading": "みと"
+        },
+        {
+          "kanji": "予想",
+          "reading": "よそう"
+        },
+        {
+          "kanji": "結果",
+          "reading": "けっか"
+        },
+        {
+          "kanji": "異",
+          "reading": "こと"
+        },
+        {
+          "kanji": "逆接",
+          "reading": "ぎゃくせつ"
+        },
+        {
+          "kanji": "計画",
+          "reading": "けいかく"
+        },
+        {
+          "kanji": "実行",
+          "reading": "じっこう"
+        }
+      ]
+    },
+    "nuance_note": "N3 の ものの と同語だが、書き言葉や改まった文脈で多用され、後文に話者の評価や複雑な節構造を伴うことが多い。"
+  },
+  "audit_status": "pre-redesign"
 }

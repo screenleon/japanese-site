@@ -3,18 +3,59 @@
   "title_ja": "さえ〜ば",
   "title_zh": "さえ〜ば（只要）",
   "jlpt_level": "N3",
-  "explanation_ja": "「さえ〜ば」は、その一つの条件が満たされれば十分だ、という意味を表します。名詞には「Nさえあれば」、動詞には「Vます形 + さえすれば」の形がよく使われます。\n\n- 時間さえあれば行けます\n- 練習しさえすれば上手になります",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「さえ〜ば」は、その一つの条件が満たされれば十分だ、という意味を表します。名詞には「Nさえあれば」、動詞には「Vます形 + さえすれば」の形がよく使われます。\n\n- 時間さえあれば行けます\n- 練習しさえすれば上手になります"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「さえ〜ば」表示只要某個最低條件成立就足夠，意思是「只要……就……」。",
-  "mental_model": "「さえ〜ば」は、必要な条件を一つに絞り、それが満たされれば十分だと見る表現です。「時間さえあれば」のように、他の条件は大きな問題ではなく、その一つが鍵になるという感覚を表します。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "だけ",
+        "ばかり"
+      ],
+      "error_class": "minimum-condition-pattern",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "mental_model": "「さえ〜ば」は、必要な条件を一つに絞り、それが満たされれば十分だと見る表現です。「時間さえあれば」のように、他の条件は大きな問題ではなく、その一つが鍵になるという感覚を表します。",
-    "furigana": {"key_terms":[{"kanji":"条件","reading":"じょうけん"},{"kanji":"名詞","reading":"めいし"},{"kanji":"動詞","reading":"どうし"}]}
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "条件",
+          "reading": "じょうけん"
+        },
+        {
+          "kanji": "名詞",
+          "reading": "めいし"
+        },
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        }
+      ]
+    }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": [
-    {"if_answer_equals_any": ["だけ", "ばかり"], "error_class": "minimum-condition-pattern"}
-  ]
+  "audit_status": "pre-redesign"
 }

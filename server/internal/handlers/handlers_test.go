@@ -116,7 +116,7 @@ func TestAPISmoke(t *testing.T) {
 			method:     http.MethodGet,
 			path:       "/api/grammar/test-gp",
 			wantStatus: http.StatusOK,
-			wantBody:   `"mental_model":"条件を先に置き、後件が成り立つ場面を考える。`,
+			wantBody:   `"schema_version":2`,
 		},
 		{
 			name:       "grammar examples",
@@ -219,7 +219,12 @@ func TestAPIAnnotationsRoundTrip(t *testing.T) {
 			t.Fatalf("status = %d, body=%s", rec.Code, rec.Body.String())
 		}
 		var body struct {
-			Annotations map[string]json.RawMessage `json:"annotations"`
+			SchemaVersion       int                          `json:"schema_version"`
+			Pattern             []map[string]string          `json:"pattern"`
+			ExplanationJABlocks []map[string]any             `json:"explanation_ja_blocks"`
+			Meta                map[string]any               `json:"_meta"`
+			Annotations         map[string]json.RawMessage   `json:"annotations"`
+			ClassifierRules     []map[string]json.RawMessage `json:"classifier_rules"`
 		}
 		if err := json.NewDecoder(rec.Body).Decode(&body); err != nil {
 			t.Fatalf("decode grammar body: %v", err)
@@ -230,6 +235,18 @@ func TestAPIAnnotationsRoundTrip(t *testing.T) {
 		}
 		if mentalModel != "条件を先に置き、後件が成り立つ場面を考える。" {
 			t.Fatalf("annotations.mental_model = %q", mentalModel)
+		}
+		if body.SchemaVersion != 2 || len(body.Pattern) == 0 || body.Pattern[0]["form"] == "" {
+			t.Fatalf("v2 grammar shape missing pattern/schema: %+v", body)
+		}
+		if len(body.ExplanationJABlocks) == 0 || body.ExplanationJABlocks[0]["kind"] == "" {
+			t.Fatalf("v2 grammar shape missing explanation_ja_blocks: %+v", body.ExplanationJABlocks)
+		}
+		if body.Meta["source"] != "test" {
+			t.Fatalf("_meta.source = %#v, want test", body.Meta["source"])
+		}
+		if body.Annotations["classifier"] == nil {
+			t.Fatalf("annotations.classifier missing")
 		}
 	})
 
@@ -252,6 +269,80 @@ func TestAPIAnnotationsRoundTrip(t *testing.T) {
 		}
 		if usage != "「食べる」は日常の食事や食べ物を口に入れる動作に使う。" {
 			t.Fatalf("annotations.usage = %q", usage)
+		}
+	})
+}
+
+func TestGrammarGet_RejectsLegacyRow(t *testing.T) {
+	db := newHandlerTestDB(t)
+	if _, err := db.Exec(`INSERT INTO grammar_point (
+			slug, title_ja, title_zh, jlpt_level, explanation_ja,
+			explanation_zh, source, license, validated_by
+		) VALUES (
+			'legacy-gp', '旧文法', '舊文法', 'N5', '旧説明',
+			'legacy explanation', 'test', 'CC0', 'test-validator'
+		)`); err != nil {
+		t.Fatalf("seed legacy grammar: %v", err)
+	}
+	mux := http.NewServeMux()
+	Register(mux, db, store.NewSQLiteProgressStore(db))
+
+	t.Run("legacy get returns 404", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodGet, "/api/grammar/legacy-gp", nil)
+		rec := httptest.NewRecorder()
+		mux.ServeHTTP(rec, req)
+		if rec.Code != http.StatusNotFound {
+			t.Fatalf("status = %d, want 404; body=%s", rec.Code, rec.Body.String())
+		}
+	})
+
+	t.Run("loaded get still returns v2", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodGet, "/api/grammar/test-gp", nil)
+		rec := httptest.NewRecorder()
+		mux.ServeHTTP(rec, req)
+		if rec.Code != http.StatusOK {
+			t.Fatalf("status = %d, want 200; body=%s", rec.Code, rec.Body.String())
+		}
+		var body struct {
+			Slug                string            `json:"slug"`
+			SchemaVersion       int               `json:"schema_version"`
+			Pattern             []map[string]any  `json:"pattern"`
+			ExplanationJABlocks []map[string]any  `json:"explanation_ja_blocks"`
+			Meta                map[string]string `json:"_meta"`
+		}
+		if err := json.NewDecoder(rec.Body).Decode(&body); err != nil {
+			t.Fatalf("decode loaded grammar: %v", err)
+		}
+		if body.Slug != "test-gp" || body.SchemaVersion != 2 {
+			t.Fatalf("loaded grammar identity/schema = %+v", body)
+		}
+		if len(body.Pattern) == 0 || len(body.ExplanationJABlocks) == 0 || body.Meta["source"] != "test" {
+			t.Fatalf("loaded grammar missing v2 shape: %+v", body)
+		}
+	})
+
+	t.Run("list filters legacy rows", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodGet, "/api/grammar?jlpt=N5", nil)
+		rec := httptest.NewRecorder()
+		mux.ServeHTTP(rec, req)
+		if rec.Code != http.StatusOK {
+			t.Fatalf("status = %d, want 200; body=%s", rec.Code, rec.Body.String())
+		}
+		var body struct {
+			Count  int `json:"count"`
+			Points []struct {
+				Slug          string `json:"slug"`
+				SchemaVersion int    `json:"schema_version"`
+			} `json:"points"`
+		}
+		if err := json.NewDecoder(rec.Body).Decode(&body); err != nil {
+			t.Fatalf("decode list grammar: %v", err)
+		}
+		if body.Count != 1 || len(body.Points) != 1 {
+			t.Fatalf("list returned count=%d points=%+v, want only loaded row", body.Count, body.Points)
+		}
+		if body.Points[0].Slug != "test-gp" || body.Points[0].SchemaVersion != 2 {
+			t.Fatalf("list point = %+v, want loaded v2 test-gp", body.Points[0])
 		}
 	})
 }
@@ -502,8 +593,20 @@ func seedHandlerTestDB(t *testing.T, db *store.DB) {
 		 VALUES ('食', 'ショク', 'た.べる', 'eat', '食べること。食べ物。', '吃／食物', 'N5', 2, 9, 'test', 'CC0', 'test-validator')`,
 		`INSERT INTO sentence (text_ja, text_en, jlpt_level, source, license, validated_by)
 		 VALUES ('ご飯を食べます。', 'I eat rice.', 'N5', 'test', 'CC0', 'test-validator')`,
-		`INSERT INTO grammar_point (slug, title_ja, title_zh, jlpt_level, mental_model, annotations, explanation_zh, source, license, validated_by)
-		 VALUES ('test-gp', '〜ば', '條件形', 'N5', '条件を先に置き、後件が成り立つ場面を考える。', '{"mental_model":"条件を先に置き、後件が成り立つ場面を考える。"}', '測試文法說明', 'test', 'CC0', 'test-validator')`,
+		`INSERT INTO grammar_point (
+			slug, title_ja, title_zh, jlpt_level, annotations, explanation_ja,
+			explanation_ja_blocks, explanation_zh, source, license, validated_by,
+			classifier_rules, pattern, schema_version
+		) VALUES (
+			'test-gp', '〜ば', '條件形', 'N5',
+			'{"mental_model":"条件を先に置き、後件が成り立つ場面を考える。","classifier":{"rules":[{"with_pattern":"なら","rule_ja_blocks":[{"kind":"paragraph","tokens":[{"t":"text","v":"条件の置き方が違います。"}]}]}]}}',
+			'条件を先に置きます。',
+			'[{"kind":"paragraph","tokens":[{"t":"text","v":"条件を先に置きます。"}]}]',
+			'測試文法說明', 'test', 'CC0', 'native-reviewer-v1-pending',
+			'[{"error_class":"used-nara","if_answer_equals_any":["なら"],"contrast":{"with_pattern":"なら","rule_ja_blocks":[{"kind":"paragraph","tokens":[{"t":"text","v":"条件の置き方が違います。"}]}]}},{"error_class":"generic","default":true,"contrast":null}]',
+			'[{"form":"Vば","gloss_zh":"條件形"}]',
+			2
+		)`,
 		`INSERT INTO question (id, kind, jlpt_level, grammar_point, prompt, expected, hint, source, license, validated_by)
 		 VALUES ('testquestion0001', 'cloze', 'N5', 'test-gp', '時間が ___ 行きます。', 'あれば', 'ば形', 'test', 'CC0', 'test-validator')`,
 		`INSERT INTO feedback_template (grammar_point, error_class, body_zh, source, license)

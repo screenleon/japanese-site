@@ -3,18 +3,91 @@
   "title_ja": "〜を余儀なくされる",
   "title_zh": "〜を余儀なくされる（被迫…／不得不…）",
   "jlpt_level": "N1",
-  "explanation_ja": "「〜を余儀なくされる」は、外からの事情によって、望まないことをしなければならなくなるという意味です。\n\n形：名詞＋を余儀なくされる。\n- 計画の変更を余儀なくされる\n- 避難を余儀なくされる\n- 休業を余儀なくされる\n\n硬い表現で、ニュースや報告でよく使われます。「自分で選んだ」というより、災害・事故・状況の変化などで選択肢がなくなる感じです。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜を余儀なくされる」は、外からの事情によって、望まないことをしなければならなくなるという意味です。\n\n形：名詞＋を余儀なくされる。\n- 計画の変更を余儀なくされる\n- 避難を余儀なくされる\n- 休業を余儀なくされる\n\n硬い表現で、ニュースや報告でよく使われます。「自分で選んだ」というより、災害・事故・状況の変化などで選択肢がなくなる感じです。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜を余儀なくされる」表示「因外在情勢而被迫…／不得不…」，常見於新聞、報告等正式語境。\n\n**形態**：名詞＋を余儀なくされる\n- 計画の変更を余儀なくされる：被迫變更計畫\n- 避難を余儀なくされる：被迫避難\n\n語感是「不是自己想選，而是狀況逼得只能如此」。",
-  "mental_model": "この表現では、主語は状況を選ぶ人ではなく、不本意な事情を受ける側として置かれる。被害を受ける受身と同じように、外から来た出来事によって自分の行動や立場が変えられる、と考えるとよい。自分が何をしたかより、何を受けてその状態になったかに焦点がある。",
-  "annotations": {
-    "furigana": {"title_ja":[{"kanji":"余儀","reading":"よぎ"}],"key_terms":[{"kanji":"余儀","reading":"よぎ"},{"kanji":"事情","reading":"じじょう"},{"kanji":"計画","reading":"けいかく"},{"kanji":"変更","reading":"へんこう"},{"kanji":"避難","reading":"ひなん"},{"kanji":"休業","reading":"きゅうぎょう"},{"kanji":"災害","reading":"さいがい"},{"kanji":"事故","reading":"じこ"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_contains_any": ["ざるを得"], "error_class": "used-zaruwoenai"},
-    {"if_answer_not_contains_any": ["余儀"], "error_class": "missing-yogi"}
-  ]
+    {
+      "if_answer_contains_any": [
+        "ざるを得"
+      ],
+      "error_class": "used-zaruwoenai",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "余儀"
+      ],
+      "error_class": "missing-yogi",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "余儀",
+          "reading": "よぎ"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "余儀",
+          "reading": "よぎ"
+        },
+        {
+          "kanji": "事情",
+          "reading": "じじょう"
+        },
+        {
+          "kanji": "計画",
+          "reading": "けいかく"
+        },
+        {
+          "kanji": "変更",
+          "reading": "へんこう"
+        },
+        {
+          "kanji": "避難",
+          "reading": "ひなん"
+        },
+        {
+          "kanji": "休業",
+          "reading": "きゅうぎょう"
+        },
+        {
+          "kanji": "災害",
+          "reading": "さいがい"
+        },
+        {
+          "kanji": "事故",
+          "reading": "じこ"
+        }
+      ]
+    },
+    "mental_model": "この表現では、主語は状況を選ぶ人ではなく、不本意な事情を受ける側として置かれる。被害を受ける受身と同じように、外から来た出来事によって自分の行動や立場が変えられる、と考えるとよい。自分が何をしたかより、何を受けてその状態になったかに焦点がある。"
+  },
+  "audit_status": "pre-redesign"
 }

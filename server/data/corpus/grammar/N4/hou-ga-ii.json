@@ -3,16 +3,77 @@
   "title_ja": "ほうがいい",
   "title_zh": "ほうがいい（最好／比較好）",
   "jlpt_level": "N4",
-  "explanation_ja": "「〜ほうがいい」は、助言や提案を表します。動詞のた形やない形とよく使います。\n\n- 早く寝たほうがいいです\n- 無理をしないほうがいいです\n\n相手に強く命令するのではなく、よい選択をすすめる表現です。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜ほうがいい」は、助言や提案を表します。動詞のた形やない形とよく使います。\n\n- 早く寝たほうがいいです\n- 無理をしないほうがいいです\n\n相手に強く命令するのではなく、よい選択をすすめる表現です。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜ほうがいい」表示建議或提案，常接動詞た形或ない形，意思是「最好、比較好」。例如「早く寝たほうがいいです」。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"相手","reading":"あいて"},{"kanji":"表現","reading":"ひょうげん"},{"kanji":"助言","reading":"じょげん"},{"kanji":"提案","reading":"ていあん"},{"kanji":"無理","reading":"むり"},{"kanji":"命令","reading":"めいれい"},{"kanji":"選択","reading":"せんたく"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_equals_any": ["こと"], "error_class": "wrong-pattern"}
-  ]
+    {
+      "if_answer_equals_any": [
+        "こと"
+      ],
+      "error_class": "wrong-pattern",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        },
+        {
+          "kanji": "相手",
+          "reading": "あいて"
+        },
+        {
+          "kanji": "表現",
+          "reading": "ひょうげん"
+        },
+        {
+          "kanji": "助言",
+          "reading": "じょげん"
+        },
+        {
+          "kanji": "提案",
+          "reading": "ていあん"
+        },
+        {
+          "kanji": "無理",
+          "reading": "むり"
+        },
+        {
+          "kanji": "命令",
+          "reading": "めいれい"
+        },
+        {
+          "kanji": "選択",
+          "reading": "せんたく"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

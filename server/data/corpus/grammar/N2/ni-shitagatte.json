@@ -3,11 +3,43 @@
   "title_ja": "にしたがって",
   "title_zh": "にしたがって（隨著）",
   "jlpt_level": "N2",
-  "explanation_ja": "「AにしたがってB」は、Aが変化すると、それに合わせてBも変化することを表します。\n\n- 年を取るにしたがって、体力が落ちます\n- 気温が上がるにしたがって、売上も増えます\n\n自然な変化や連動する変化によく使います。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「AにしたがってB」は、Aが変化すると、それに合わせてBも変化することを表します。\n\n- 年を取るにしたがって、体力が落ちます\n- 気温が上がるにしたがって、売上も増えます\n\n自然な変化や連動する変化によく使います。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「AにしたがってB」表示隨著 A 的變化，B 也跟著變化。常用於自然變化或連動變化。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "によって"
+      ],
+      "error_class": "cause-pattern",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "furigana": {
-      "key_terms": [
+      "vocabulary": [
         {
           "kanji": "変化",
           "reading": "へんか"
@@ -39,16 +71,5 @@
       ]
     }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1,
-  "classifier_rules": [
-    {
-      "if_answer_equals_any": [
-        "によって"
-      ],
-      "error_class": "cause-pattern"
-    }
-  ]
+  "audit_status": "pre-redesign"
 }

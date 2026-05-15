@@ -3,8 +3,45 @@
   "title_ja": "〜限りだ",
   "title_zh": "〜限りだ（非常…）",
   "jlpt_level": "N1",
-  "explanation_ja": "意味核：感情や評価の程度が極めて高いことを表す。話し手の主観的な強い気持ちを、硬く改まって述べる。\n\n接続：い形容詞＋限りだ。な形容詞＋な＋限りだ。感情形容詞と特に相性がよい。\n\n例：皆様にお会いできて、うれしい限りです。／このような評価をいただき、光栄な限りだ。／突然の知らせに、残念な限りです。\n\nレジスター／類義差別：書き言葉・改まった挨拶で用いられる。「とても〜だ」より格式がある。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "意味核：感情や評価の程度が極めて高いことを表す。話し手の主観的な強い気持ちを、硬く改まって述べる。\n\n接続：い形容詞＋限りだ。な形容詞＋な＋限りだ。感情形容詞と特に相性がよい。\n\n例：皆様にお会いできて、うれしい限りです。／このような評価をいただき、光栄な限りだ。／突然の知らせに、残念な限りです。\n\nレジスター／類義差別：書き言葉・改まった挨拶で用いられる。「とても〜だ」より格式がある。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "〜限りだ 表示感情或評價達到極高程度，相當於「非常…」「無比…」。\n\n**形態**：\n- い形容詞＋限りだ；な形容詞＋な＋限りだ。\n\n**例**：\n- 皆様にお会いできて、うれしい限りです。\n- このような評価をいただき、光栄な限りだ。\n\n**比較／差別**：\n- 比「とても」更正式，常用於致意、公告、感想。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_not_contains_any": [
+        "限り"
+      ],
+      "error_class": "missing-target-pattern",
+      "contrast": null
+    },
+    {
+      "default": true,
+      "error_class": "generic",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "furigana": {
       "title_ja": [
@@ -13,7 +50,7 @@
           "reading": "かぎりだ"
         }
       ],
-      "key_terms": [
+      "vocabulary": [
         {
           "kanji": "感情",
           "reading": "かんじょう"
@@ -45,20 +82,5 @@
       ]
     }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1,
-  "classifier_rules": [
-    {
-      "if_answer_not_contains_any": [
-        "限り"
-      ],
-      "error_class": "missing-target-pattern"
-    },
-    {
-      "default": true,
-      "error_class": "generic"
-    }
-  ]
+  "audit_status": "pre-redesign"
 }

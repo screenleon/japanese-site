@@ -3,14 +3,64 @@
   "title_ja": "てあげる",
   "title_zh": "てあげる（為別人做）",
   "jlpt_level": "N4",
-  "explanation_ja": "「動詞て形 + あげる」は、話し手や話し手側の人が、相手のために何かをすることを表します。相手に恩を着せるように聞こえる場合があるため、目上の人に使うときは注意が必要です。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「動詞て形 + あげる」は、話し手や話し手側の人が、相手のために何かをすることを表します。相手に恩を着せるように聞こえる場合があるため、目上の人に使うときは注意が必要です。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「動詞て形 + あげる」表示說話者或自己這邊的人為別人做某事，是給予幫助或好意的表現。對上位者使用時需注意語氣。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"話し手","reading":"はなして"},{"kanji":"相手","reading":"あいて"},{"kanji":"場合","reading":"ばあい"},{"kanji":"目上","reading":"めうえ"},{"kanji":"注意","reading":"ちゅうい"},{"kanji":"必要","reading":"ひつよう"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": []
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        },
+        {
+          "kanji": "話し手",
+          "reading": "はなして"
+        },
+        {
+          "kanji": "相手",
+          "reading": "あいて"
+        },
+        {
+          "kanji": "場合",
+          "reading": "ばあい"
+        },
+        {
+          "kanji": "目上",
+          "reading": "めうえ"
+        },
+        {
+          "kanji": "注意",
+          "reading": "ちゅうい"
+        },
+        {
+          "kanji": "必要",
+          "reading": "ひつよう"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

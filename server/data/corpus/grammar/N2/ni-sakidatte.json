@@ -3,17 +3,90 @@
   "title_ja": "〜に先立って",
   "title_zh": "〜に先立って（在…之前）",
   "jlpt_level": "N2",
-  "explanation_ja": "「〜に先立って」は、重要な出来事や公式な行動の前に何かを行うことを表す。例として「開会に先立って注意事項を説明する」「出発に先立って荷物を確認した」のように使う。単なる「前に」より硬く、準備や手続きの文脈に合う。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜に先立って」は、重要な出来事や公式な行動の前に何かを行うことを表す。例として「開会に先立って注意事項を説明する」「出発に先立って荷物を確認した」のように使う。単なる「前に」より硬く、準備や手続きの文脈に合う。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜に先立って」表示在重要或正式事情之前先做某事，語氣比「前に」正式。",
-  "annotations": {
-    "furigana": {"title_ja":[{"kanji":"先立って","reading":"さきだって"}],"key_terms":[{"kanji":"重要","reading":"じゅうよう"},{"kanji":"出来事","reading":"できごと"},{"kanji":"公式","reading":"こうしき"},{"kanji":"開会","reading":"かいかい"},{"kanji":"注意","reading":"ちゅうい"},{"kanji":"事項","reading":"じこう"},{"kanji":"出発","reading":"しゅっぱつ"},{"kanji":"荷物","reading":"にもつ"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_contains_any": ["前に"], "error_class": "used-maeni"},
-    {"if_answer_not_contains_any": ["先立"], "error_class": "missing-sakidatte"}
-  ]
+    {
+      "if_answer_contains_any": [
+        "前に"
+      ],
+      "error_class": "used-maeni",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "先立"
+      ],
+      "error_class": "missing-sakidatte",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "先立って",
+          "reading": "さきだって"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "重要",
+          "reading": "じゅうよう"
+        },
+        {
+          "kanji": "出来事",
+          "reading": "できごと"
+        },
+        {
+          "kanji": "公式",
+          "reading": "こうしき"
+        },
+        {
+          "kanji": "開会",
+          "reading": "かいかい"
+        },
+        {
+          "kanji": "注意",
+          "reading": "ちゅうい"
+        },
+        {
+          "kanji": "事項",
+          "reading": "じこう"
+        },
+        {
+          "kanji": "出発",
+          "reading": "しゅっぱつ"
+        },
+        {
+          "kanji": "荷物",
+          "reading": "にもつ"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

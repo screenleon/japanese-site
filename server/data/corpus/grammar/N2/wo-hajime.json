@@ -3,17 +3,84 @@
   "title_ja": "〜をはじめ",
   "title_zh": "〜をはじめ（以…為首／包括…在內）",
   "jlpt_level": "N2",
-  "explanation_ja": "「〜をはじめ」は、代表例を一つ挙げ、そのほかにも同じ種類のものがあることを表す。例として「社長をはじめ全社員が参加した」「京都をはじめ多くの都市で行われた」のように使う。後件には複数の人・物・場所の広がりが続く。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜をはじめ」は、代表例を一つ挙げ、そのほかにも同じ種類のものがあることを表す。例として「社長をはじめ全社員が参加した」「京都をはじめ多くの都市で行われた」のように使う。後件には複数の人・物・場所の広がりが続く。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜をはじめ」表示舉出代表例，意思是「以…為首、包括…在內」，後面通常接一個範圍或群體。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"代表","reading":"だいひょう"},{"kanji":"種類","reading":"しゅるい"},{"kanji":"社長","reading":"しゃちょう"},{"kanji":"社員","reading":"しゃいん"},{"kanji":"京都","reading":"きょうと"},{"kanji":"都市","reading":"とし"},{"kanji":"複数","reading":"ふくすう"},{"kanji":"場所","reading":"ばしょ"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_contains_any": ["から"], "error_class": "used-kara"},
-    {"if_answer_not_contains_any": ["はじめ"], "error_class": "missing-hajime"}
-  ]
+    {
+      "if_answer_contains_any": [
+        "から"
+      ],
+      "error_class": "used-kara",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "はじめ"
+      ],
+      "error_class": "missing-hajime",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "代表",
+          "reading": "だいひょう"
+        },
+        {
+          "kanji": "種類",
+          "reading": "しゅるい"
+        },
+        {
+          "kanji": "社長",
+          "reading": "しゃちょう"
+        },
+        {
+          "kanji": "社員",
+          "reading": "しゃいん"
+        },
+        {
+          "kanji": "京都",
+          "reading": "きょうと"
+        },
+        {
+          "kanji": "都市",
+          "reading": "とし"
+        },
+        {
+          "kanji": "複数",
+          "reading": "ふくすう"
+        },
+        {
+          "kanji": "場所",
+          "reading": "ばしょ"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

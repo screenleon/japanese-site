@@ -60,6 +60,13 @@ func grammarList(db *store.DB) http.HandlerFunc {
 			httpError(w, r, http.StatusInternalServerError, "internal", err)
 			return
 		}
+		filtered := points[:0]
+		for _, gp := range points {
+			if gp.SchemaVersion == 2 {
+				filtered = append(filtered, gp)
+			}
+		}
+		points = filtered
 		writeJSON(w, http.StatusOK, map[string]any{"points": points, "count": len(points)})
 	}
 }
@@ -72,6 +79,10 @@ func grammarGet(db *store.DB) http.HandlerFunc {
 			// Distinct sql.ErrNoRows vs other DB error — both treated 404 to
 			// avoid revealing which slugs map to broken rows.
 			httpError(w, r, http.StatusNotFound, "not_found", err)
+			return
+		}
+		if gp.SchemaVersion != 2 {
+			writeJSON(w, http.StatusNotFound, map[string]string{"error": "not_found"})
 			return
 		}
 		writeJSON(w, http.StatusOK, gp)
@@ -98,6 +109,10 @@ func grammarRandom(db *store.DB) http.HandlerFunc {
 		}
 		if err != nil {
 			httpError(w, r, http.StatusInternalServerError, "internal", err)
+			return
+		}
+		if gp.SchemaVersion != 2 {
+			writeJSON(w, http.StatusNotFound, map[string]string{"error": "no_grammar"})
 			return
 		}
 		writeJSON(w, http.StatusOK, gp)
@@ -360,7 +375,7 @@ func health(w http.ResponseWriter, _ *http.Request) {
 func version(w http.ResponseWriter, _ *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]string{
 		"name":      "japanese-site",
-		"milestone": "M3-C3",
+		"milestone": "M3-C4",
 	})
 }
 

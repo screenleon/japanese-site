@@ -3,11 +3,50 @@
   "title_ja": "〜ごとき／〜ごとく／〜ごとし",
   "title_zh": "〜ごとき／〜ごとく／〜ごとし（如同…／像…一樣）",
   "jlpt_level": "N1",
-  "explanation_ja": "「〜ごとき／〜ごとく／〜ごとし」は、「〜のような／〜のように／〜のようだ」を硬く、文語的に言う表現です。\n\n使い分け：\n- ごとき＋名詞：夢のごとき時間\n- ごとく＋動詞・形容詞：風のごとく走る\n- ごとし：文末で「〜のようだ」\n\n古風で硬い響きがあるため、日常会話では「ような／ように」を使うほうが自然です。文章・演説・文学的な表現でよく見られます。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜ごとき／〜ごとく／〜ごとし」は、「〜のような／〜のように／〜のようだ」を硬く、文語的に言う表現です。\n\n使い分け：\n- ごとき＋名詞：夢のごとき時間\n- ごとく＋動詞・形容詞：風のごとく走る\n- ごとし：文末で「〜のようだ」\n\n古風で硬い響きがあるため、日常会話では「ような／ように」を使うほうが自然です。文章・演説・文学的な表現でよく見られます。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜ごとき／〜ごとく／〜ごとし」是文語、較硬的「像…一樣」。\n\n**用法**：\n- ごとき＋名詞：夢のごとき時間（如夢般的時間）\n- ごとく＋動詞・形容詞：風のごとく走る（如風般奔跑）\n- ごとし：句尾，表示「如同…」\n\n日常會話通常用「ような／ように」較自然；「ごとき」有時也可帶輕蔑語氣，要看上下文。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_contains_any": [
+        "よう"
+      ],
+      "error_class": "used-you",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "ごと"
+      ],
+      "error_class": "missing-gotoku",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "furigana": {
-      "key_terms": [
+      "vocabulary": [
         {
           "kanji": "使い",
           "reading": "つかい"
@@ -43,22 +82,5 @@
       ]
     }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1,
-  "classifier_rules": [
-    {
-      "if_answer_contains_any": [
-        "よう"
-      ],
-      "error_class": "used-you"
-    },
-    {
-      "if_answer_not_contains_any": [
-        "ごと"
-      ],
-      "error_class": "missing-gotoku"
-    }
-  ]
+  "audit_status": "pre-redesign"
 }

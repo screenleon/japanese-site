@@ -3,17 +3,90 @@
   "title_ja": "〜を契機に",
   "title_zh": "〜を契機に（以…為契機）",
   "jlpt_level": "N2",
-  "explanation_ja": "「〜を契機に」は、ある出来事がきっかけとなって、その後に大きな変化や行動が起こることを表す。例として「留学を契機に考え方が変わった」「事故を契機に安全対策が見直された」のように使う。単なる理由ではなく、変化の出発点を示す硬い表現である。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜を契機に」は、ある出来事がきっかけとなって、その後に大きな変化や行動が起こることを表す。例として「留学を契機に考え方が変わった」「事故を契機に安全対策が見直された」のように使う。単なる理由ではなく、変化の出発点を示す硬い表現である。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜を契機に」表示以某件事為契機，之後產生變化、行動或新局面，語氣較正式。",
-  "annotations": {
-    "furigana": {"title_ja":[{"kanji":"契機","reading":"けいき"}],"key_terms":[{"kanji":"出来事","reading":"できごと"},{"kanji":"変化","reading":"へんか"},{"kanji":"行動","reading":"こうどう"},{"kanji":"留学","reading":"りゅうがく"},{"kanji":"事故","reading":"じこ"},{"kanji":"安全","reading":"あんぜん"},{"kanji":"対策","reading":"たいさく"},{"kanji":"出発","reading":"しゅっぱつ"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_contains_any": ["きっかけ"], "error_class": "used-kikkake"},
-    {"if_answer_not_contains_any": ["契機"], "error_class": "missing-keiki"}
-  ]
+    {
+      "if_answer_contains_any": [
+        "きっかけ"
+      ],
+      "error_class": "used-kikkake",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "契機"
+      ],
+      "error_class": "missing-keiki",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "契機",
+          "reading": "けいき"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "出来事",
+          "reading": "できごと"
+        },
+        {
+          "kanji": "変化",
+          "reading": "へんか"
+        },
+        {
+          "kanji": "行動",
+          "reading": "こうどう"
+        },
+        {
+          "kanji": "留学",
+          "reading": "りゅうがく"
+        },
+        {
+          "kanji": "事故",
+          "reading": "じこ"
+        },
+        {
+          "kanji": "安全",
+          "reading": "あんぜん"
+        },
+        {
+          "kanji": "対策",
+          "reading": "たいさく"
+        },
+        {
+          "kanji": "出発",
+          "reading": "しゅっぱつ"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

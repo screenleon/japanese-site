@@ -3,14 +3,52 @@
   "title_ja": "ないで",
   "title_zh": "ないで（不……就……／請不要……）",
   "jlpt_level": "N4",
-  "explanation_ja": "「動詞ない形 + で」は、ある動作をしない状態で別の動作をすることを表します。また、「ないでください」の形で、何かをしないよう丁寧に頼むこともできます。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「動詞ない形 + で」は、ある動作をしない状態で別の動作をすることを表します。また、「ないでください」の形で、何かをしないよう丁寧に頼むこともできます。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「V-ない + で」表示不做某動作而做另一件事，也可用「ないでください」表示「請不要……」。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"動作","reading":"どうさ"},{"kanji":"状態","reading":"じょうたい"},{"kanji":"丁寧","reading":"ていねい"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": []
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        },
+        {
+          "kanji": "動作",
+          "reading": "どうさ"
+        },
+        {
+          "kanji": "状態",
+          "reading": "じょうたい"
+        },
+        {
+          "kanji": "丁寧",
+          "reading": "ていねい"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

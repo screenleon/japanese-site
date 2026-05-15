@@ -3,14 +3,68 @@
   "title_ja": "んです・のです",
   "title_zh": "んです／のです（說明原因或情況）",
   "jlpt_level": "N4",
-  "explanation_ja": "「んです」「のです」は、理由や事情を説明するとき、または相手に説明を求めるときに使います。普通形に続きますが、名詞とナ形容詞では「なのです」「なんです」になります。「のです」は「んです」より書き言葉的です。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「んです」「のです」は、理由や事情を説明するとき、または相手に説明を求めるときに使います。普通形に続きますが、名詞とナ形容詞では「なのです」「なんです」になります。「のです」は「んです」より書き言葉的です。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「んです／のです」用來說明原因、背景或情況，也可用來詢問對方的說明。接普通形，名詞與な形容詞要用「なのです／なんです」。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"理由","reading":"りゆう"},{"kanji":"相手","reading":"あいて"},{"kanji":"普通","reading":"ふつう"},{"kanji":"名詞","reading":"めいし"},{"kanji":"形容詞","reading":"けいようし"},{"kanji":"事情","reading":"じじょう"},{"kanji":"説明","reading":"せつめい"},{"kanji":"書き言葉","reading":"かきことば"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": []
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "理由",
+          "reading": "りゆう"
+        },
+        {
+          "kanji": "相手",
+          "reading": "あいて"
+        },
+        {
+          "kanji": "普通",
+          "reading": "ふつう"
+        },
+        {
+          "kanji": "名詞",
+          "reading": "めいし"
+        },
+        {
+          "kanji": "形容詞",
+          "reading": "けいようし"
+        },
+        {
+          "kanji": "事情",
+          "reading": "じじょう"
+        },
+        {
+          "kanji": "説明",
+          "reading": "せつめい"
+        },
+        {
+          "kanji": "書き言葉",
+          "reading": "かきことば"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

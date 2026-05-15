@@ -3,18 +3,74 @@
   "title_ja": "たらどうですか",
   "title_zh": "たらどうですか（建議）",
   "jlpt_level": "N3",
-  "explanation_ja": "「Vたらどうですか」は、相手に提案や助言をする表現です。\n\n- 先生に相談したらどうですか\n- 少し休んだらどうですか\n\n直接命令するよりやわらかい言い方です。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「Vたらどうですか」は、相手に提案や助言をする表現です。\n\n- 先生に相談したらどうですか\n- 少し休んだらどうですか\n\n直接命令するよりやわらかい言い方です。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「たらどうですか」表示建議，意思是「...怎麼樣？」比命令柔和。",
-  "mental_model": "「たらどうですか」は、相手に一つの行動を提案したり助言したりする表現です。「そうしたらどうですか」と仮に行動を置いて勧めるため、直接命令するよりもやわらかく聞こえます。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "ほう"
+      ],
+      "error_class": "advice-related",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "mental_model": "「たらどうですか」は、相手に一つの行動を提案したり助言したりする表現です。「そうしたらどうですか」と仮に行動を置いて勧めるため、直接命令するよりもやわらかく聞こえます。",
-    "furigana": {"key_terms":[{"kanji":"相手","reading":"あいて"},{"kanji":"提案","reading":"ていあん"},{"kanji":"助言","reading":"じょげん"},{"kanji":"先生","reading":"せんせい"},{"kanji":"相談","reading":"そうだん"},{"kanji":"直接","reading":"ちょくせつ"},{"kanji":"命令","reading":"めいれい"}]}
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "相手",
+          "reading": "あいて"
+        },
+        {
+          "kanji": "提案",
+          "reading": "ていあん"
+        },
+        {
+          "kanji": "助言",
+          "reading": "じょげん"
+        },
+        {
+          "kanji": "先生",
+          "reading": "せんせい"
+        },
+        {
+          "kanji": "相談",
+          "reading": "そうだん"
+        },
+        {
+          "kanji": "直接",
+          "reading": "ちょくせつ"
+        },
+        {
+          "kanji": "命令",
+          "reading": "めいれい"
+        }
+      ]
+    }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": [
-    {"if_answer_equals_any": ["ほう"], "error_class": "advice-related"}
-  ]
+  "audit_status": "pre-redesign"
 }

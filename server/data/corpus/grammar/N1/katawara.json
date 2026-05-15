@@ -3,25 +3,82 @@
   "title_ja": "〜かたわら",
   "title_zh": "〜かたわら（一邊…一邊／同時…）",
   "jlpt_level": "N1",
-  "explanation_ja": "意味核：主要な仕事・活動を続けながら、別の活動も並行して行うことを表す。習慣的・長期的な併行関係を示す。\n\n接続：動詞辞書形＋かたわら。名詞＋の＋かたわら。\n\n例：大学で教えるかたわら、地域の講座も担当している。／会社勤務のかたわら、翻訳の仕事を続けている。／研究を進めるかたわら、後進の指導にも力を入れた。\n\nレジスター／類義差別：硬い書き言葉。瞬間的な同時動作には「〜ながら」を使う。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "意味核：主要な仕事・活動を続けながら、別の活動も並行して行うことを表す。習慣的・長期的な併行関係を示す。\n\n接続：動詞辞書形＋かたわら。名詞＋の＋かたわら。\n\n例：大学で教えるかたわら、地域の講座も担当している。／会社勤務のかたわら、翻訳の仕事を続けている。／研究を進めるかたわら、後進の指導にも力を入れた。\n\nレジスター／類義差別：硬い書き言葉。瞬間的な同時動作には「〜ながら」を使う。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "〜かたわら 表示從事主要活動的同時，也持續進行另一項活動。\n\n**形態**：\n- 動詞辞書形＋かたわら；名詞＋の＋かたわら。\n\n**例**：\n- 大学で教えるかたわら、地域の講座も担当している。\n- 会社勤務のかたわら、翻訳の仕事を続けている。\n\n**比較／差別**：\n- 不同於「ながら」的即時同時動作，較常表示長期並行。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"主要","reading":"しゅよう"},{"kanji":"仕事","reading":"しごと"},{"kanji":"活動","reading":"かつどう"},{"kanji":"並行","reading":"へいこう"},{"kanji":"習慣","reading":"しゅうかん"},{"kanji":"長期","reading":"ちょうき"},{"kanji":"大学","reading":"だいがく"},{"kanji":"勤務","reading":"きんむ"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
     {
       "if_answer_not_contains_any": [
         "かたわら"
       ],
-      "error_class": "missing-target-pattern"
+      "error_class": "missing-target-pattern",
+      "contrast": null
     },
     {
       "default": true,
-      "error_class": "generic"
+      "error_class": "generic",
+      "contrast": null
     }
-  ]
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "主要",
+          "reading": "しゅよう"
+        },
+        {
+          "kanji": "仕事",
+          "reading": "しごと"
+        },
+        {
+          "kanji": "活動",
+          "reading": "かつどう"
+        },
+        {
+          "kanji": "並行",
+          "reading": "へいこう"
+        },
+        {
+          "kanji": "習慣",
+          "reading": "しゅうかん"
+        },
+        {
+          "kanji": "長期",
+          "reading": "ちょうき"
+        },
+        {
+          "kanji": "大学",
+          "reading": "だいがく"
+        },
+        {
+          "kanji": "勤務",
+          "reading": "きんむ"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

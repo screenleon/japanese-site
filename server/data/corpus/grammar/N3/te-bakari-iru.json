@@ -3,13 +3,35 @@
   "title_ja": "てばかりいる",
   "title_zh": "てばかりいる（老是／只顧著）",
   "jlpt_level": "N3",
-  "explanation_ja": "「てばかりいる」は、同じ行為を何度も続けたり、それだけをして他のことをしなかったりする状態を表す表現である。動詞のて形に接続し、しばしば話し手の不満や批判の気持ちを伴う。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「てばかりいる」は、同じ行為を何度も続けたり、それだけをして他のことをしなかったりする状態を表す表現である。動詞のて形に接続し、しばしば話し手の不満や批判の気持ちを伴う。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「てばかりいる」表示一直做同一件事、只顧著做某事，常帶有批評或不滿語氣。接續為動詞て形 + ばかりいる。",
-  "mental_model": "「てばかりいる」は、同じ行為に偏っていて、他のことをしていない状態を表します。単に回数が多いだけでなく、話し手が「そればかりでよくない」と感じる批判や不満を伴いやすい表現です。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
   "annotations": {
     "mental_model": "「てばかりいる」は、同じ行為に偏っていて、他のことをしていない状態を表します。単に回数が多いだけでなく、話し手が「そればかりでよくない」と感じる批判や不満を伴いやすい表現です。",
     "furigana": {
-      "key_terms": [
+      "vocabulary": [
         {
           "kanji": "行為",
           "reading": "こうい"
@@ -45,9 +67,5 @@
       ]
     }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1,
-  "classifier_rules": []
+  "audit_status": "pre-redesign"
 }

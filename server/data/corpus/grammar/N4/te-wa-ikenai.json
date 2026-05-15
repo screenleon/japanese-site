@@ -3,16 +3,57 @@
   "title_ja": "てはいけない",
   "title_zh": "てはいけない（不可以）",
   "jlpt_level": "N4",
-  "explanation_ja": "「動詞て形 + はいけない」は、してはいけないこと、禁止されていることを表します。\n\n- ここでたばこを吸ってはいけません\n- この水を飲んではいけません\n\n会話では「ちゃいけない」「じゃいけない」という形もあります。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「動詞て形 + はいけない」は、してはいけないこと、禁止されていることを表します。\n\n- ここでたばこを吸ってはいけません\n- この水を飲んではいけません\n\n会話では「ちゃいけない」「じゃいけない」という形もあります。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「動詞て形 + はいけない」表示禁止、不可以做某事。例如「ここで吸ってはいけません」。口語也有「ちゃいけない」「じゃいけない」。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"禁止","reading":"きんし"},{"kanji":"会話","reading":"かいわ"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_equals_any": ["も"], "error_class": "permission-pattern"}
-  ]
+    {
+      "if_answer_equals_any": [
+        "も"
+      ],
+      "error_class": "permission-pattern",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        },
+        {
+          "kanji": "禁止",
+          "reading": "きんし"
+        },
+        {
+          "kanji": "会話",
+          "reading": "かいわ"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

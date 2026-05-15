@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { api, ApiError } from "../api";
+import { api, ApiError, type GrammarPoint } from "../api";
 import { GrammarTab } from "./GrammarTab";
 
 vi.mock("../hooks/useReadTracking", () => ({
@@ -19,8 +19,16 @@ vi.mock("../api", async () => {
   };
 });
 
+const basePoint: Pick<GrammarPoint, "schema_version" | "pattern" | "explanation_ja_blocks" | "_meta"> = {
+  schema_version: 2,
+  pattern: [{ form: "普通形＋テスト", gloss_zh: "測試句型" }],
+  explanation_ja_blocks: [{ kind: "paragraph", tokens: [{ t: "text", v: "日本語の説明" }] }],
+  _meta: { source: "curated", license: "CC0-1.0" },
+};
+
 const points = [
   {
+    ...basePoint,
     slug: "sae",
     title_ja: "〜さえ",
     title_zh: "甚至；只要",
@@ -28,6 +36,7 @@ const points = [
     explanation_zh: "表示極端例或最低條件。",
   },
   {
+    ...basePoint,
     slug: "dake",
     title_ja: "〜だけ",
     title_zh: "只有",
@@ -35,17 +44,21 @@ const points = [
     explanation_zh: "表示限定。",
   },
   {
+    ...basePoint,
     slug: "monono",
     title_ja: "ものの",
     title_zh: "ものの（雖然／但是）",
     jlpt_level: "N3",
-    nuance_note: "口語・くだけた逆接。前文の予想と異なる結果を続ける。",
-    mental_model:
-      "前件を事実として置いたうえで、後件で予想から外れる結果を示す。逆接を一つの流れとして読むことで、単なる接続詞ではなく判断の向きを意識できる。",
+    annotations: {
+      nuance_note: "口語・くだけた逆接。前文の予想と異なる結果を続ける。",
+      mental_model:
+        "前件を事実として置いたうえで、後件で予想から外れる結果を示す。逆接を一つの流れとして読むことで、単なる接続詞ではなく判断の向きを意識できる。",
+    },
     related_slugs: ["monono-formal"],
     explanation_zh: "雖然但是。",
   },
   {
+    ...basePoint,
     slug: "zzz-decoy-n2-foo",
     title_ja: "デコイ",
     title_zh: "decoy N2 entry",
@@ -53,20 +66,23 @@ const points = [
     explanation_zh: "如果 related-slug navigation 沒有設定 active slug，會落到這一筆。",
   },
   {
+    ...basePoint,
     slug: "monono-formal",
     title_ja: "〜ものの",
     title_zh: "〜ものの（雖然…但是…）",
     jlpt_level: "N2",
-    nuance_note: "文語的な逆接で、書き言葉や改まった場面で使う。",
+    annotations: {
+      nuance_note: "文語的な逆接で、書き言葉や改まった場面で使う。",
+    },
     related_slugs: ["monono"],
     explanation_zh: "書面逆接。",
   },
   {
+    ...basePoint,
     slug: "te-iru",
     title_ja: "ている",
     title_zh: "ている",
     jlpt_level: "N3",
-    mental_model: "flat mental model should not render when nested exists",
     annotations: {
       mental_model: "nested mental model wins",
       nuance_note: "nested nuance renders",
@@ -74,11 +90,11 @@ const points = [
     explanation_zh: "正在／狀態。",
   },
   {
+    ...basePoint,
     slug: "empty-nested",
     title_ja: "空文字",
     title_zh: "empty nested",
     jlpt_level: "N3",
-    mental_model: "flat mental model must not replace empty nested",
     annotations: {
       mental_model: "",
     },
@@ -92,7 +108,7 @@ const getGrammarExamples = vi.mocked(api.getGrammarExamples!);
 
 async function expectMainEntryWithoutExamples(errorText: RegExp) {
   expect(await screen.findByRole("heading", { name: "ものの" })).toBeVisible();
-  expect(screen.getByText("雖然但是。")).toBeVisible();
+  expect(screen.getByText("日本語の説明")).toBeVisible();
   expect(
     screen.getByText("口語・くだけた逆接。前文の予想と異なる結果を続ける。")
   ).toBeVisible();

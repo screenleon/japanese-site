@@ -3,18 +3,63 @@
   "title_ja": "かどうか",
   "title_zh": "かどうか（是否）",
   "jlpt_level": "N3",
-  "explanation_ja": "「かどうか」は、そうであるかそうでないか分からない内容を表します。文の中で「行くかどうか分かりません」「必要かどうか確認します」のように使います。\n\n- 明日行くかどうか分かりません\n- この書類が必要かどうか確認します",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「かどうか」は、そうであるかそうでないか分からない内容を表します。文の中で「行くかどうか分かりません」「必要かどうか確認します」のように使います。\n\n- 明日行くかどうか分かりません\n- この書類が必要かどうか確認します"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「かどうか」表示「是否」，用來嵌入不確定的內容。",
-  "mental_model": "「かどうか」は、答えが「はい」か「いいえ」か分からない内容を文の中に入れる表現です。質問をそのまま相手に投げるのではなく、「行くかどうか確認する」のように、不確かな二択を一つの名詞的な内容として扱います。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "かもしれない",
+        "なら"
+      ],
+      "error_class": "embedded-question-pattern",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "mental_model": "「かどうか」は、答えが「はい」か「いいえ」か分からない内容を文の中に入れる表現です。質問をそのまま相手に投げるのではなく、「行くかどうか確認する」のように、不確かな二択を一つの名詞的な内容として扱います。",
-    "furigana": {"key_terms":[{"kanji":"内容","reading":"ないよう"},{"kanji":"必要","reading":"ひつよう"},{"kanji":"確認","reading":"かくにん"},{"kanji":"書類","reading":"しょるい"}]}
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "内容",
+          "reading": "ないよう"
+        },
+        {
+          "kanji": "必要",
+          "reading": "ひつよう"
+        },
+        {
+          "kanji": "確認",
+          "reading": "かくにん"
+        },
+        {
+          "kanji": "書類",
+          "reading": "しょるい"
+        }
+      ]
+    }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": [
-    {"if_answer_equals_any": ["かもしれない", "なら"], "error_class": "embedded-question-pattern"}
-  ]
+  "audit_status": "pre-redesign"
 }

@@ -210,3 +210,18 @@ For grammar (already per-slug JSON), `annotations` could live in a sibling
 truth for one entry across two files for negligible benefit, while vocab
 JSONL would have to choose between embedding (B) or going per-headword JSON
 files (a much bigger restructure). Symmetry with vocab forces inline.
+
+## 2026-05-10 update
+
+The dual-write transition for grammar `mental_model` and `nuance_note` ends with
+the JS-097 / JS-098 / JS-099 Phase 2 schema spike. For grammar corpus and
+runtime structs, `annotations.mental_model` and `annotations.nuance_note` are now
+the sole homes; the top-level fields are dropped.
+
+The SQLite shadow columns `mental_model`, `nuance_note`, and `explanation_ja` on
+`grammar_point` remain temporarily for cached-client and legacy query
+compatibility. The downstream drop migration is tracked separately as JS-102.
+
+See [ADR 0003](0003-block-engine-and-pattern-and-classifier.md) for the Phase 2
+Block engine, structured pattern, classifier contrast, `_meta`, and v2 grammar
+schema decision.

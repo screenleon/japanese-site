@@ -3,18 +3,89 @@
   "title_ja": "だけ",
   "title_zh": "だけ（只有）",
   "jlpt_level": "N5",
-  "explanation_ja": "「だけ」は、数や物や人を一つに限る表現です。「水だけ飲みます」や「日曜日だけ休みです」のように、「それ以外はない」という意味を表します。名詞の後ろにも、時間を表す言葉の後ろにも使えます。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「だけ」は、数や物や人を一つに限る表現です。「水だけ飲みます」や「日曜日だけ休みです」のように、「それ以外はない」という意味を表します。名詞の後ろにも、時間を表す言葉の後ろにも使えます。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「だけ」表示限定，意思是「只有、僅僅」，用來指出範圍內沒有其他項目。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"表現","reading":"ひょうげん"},{"kanji":"意味","reading":"いみ"},{"kanji":"名詞","reading":"めいし"},{"kanji":"時間","reading":"じかん"},{"kanji":"一つ","reading":"ひとつ"},{"kanji":"日曜日","reading":"にちようび"},{"kanji":"後ろ","reading":"うしろ"},{"kanji":"言葉","reading":"ことば"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_equals_any": ["も"], "error_class": "too-also"},
-    {"if_answer_equals_any": ["しか"], "error_class": "negative-only-pattern"},
-    {"default": true, "error_class": "wrong-limiting-particle"}
-  ]
+    {
+      "if_answer_equals_any": [
+        "も"
+      ],
+      "error_class": "too-also",
+      "contrast": null
+    },
+    {
+      "if_answer_equals_any": [
+        "しか"
+      ],
+      "error_class": "negative-only-pattern",
+      "contrast": null
+    },
+    {
+      "default": true,
+      "error_class": "wrong-limiting-particle",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "表現",
+          "reading": "ひょうげん"
+        },
+        {
+          "kanji": "意味",
+          "reading": "いみ"
+        },
+        {
+          "kanji": "名詞",
+          "reading": "めいし"
+        },
+        {
+          "kanji": "時間",
+          "reading": "じかん"
+        },
+        {
+          "kanji": "一つ",
+          "reading": "ひとつ"
+        },
+        {
+          "kanji": "日曜日",
+          "reading": "にちようび"
+        },
+        {
+          "kanji": "後ろ",
+          "reading": "うしろ"
+        },
+        {
+          "kanji": "言葉",
+          "reading": "ことば"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

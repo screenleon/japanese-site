@@ -3,16 +3,83 @@
   "title_ja": "で（動作の場所）",
   "title_zh": "で（動作場所）",
   "jlpt_level": "N5",
-  "explanation_ja": "「で」は、動作をする場所を示します。\n\n- 図書館で勉強します\n- 家でご飯を食べます\n\n「に」は存在する場所や到着する場所、「で」はそこで何かをする場所です。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「で」は、動作をする場所を示します。\n\n- 図書館で勉強します\n- 家でご飯を食べます\n\n「に」は存在する場所や到着する場所、「で」はそこで何かをする場所です。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「で」標示動作進行的場所，例如「図書館で勉強します」是在圖書館讀書。和「に」不同，「に」偏向存在位置或到達點。",
-  "annotations": {
-    "furigana": {"title_ja":[{"kanji":"動作","reading":"どうさ"},{"kanji":"場所","reading":"ばしょ"}],"key_terms":[{"kanji":"動作","reading":"どうさ"},{"kanji":"場所","reading":"ばしょ"},{"kanji":"存在","reading":"そんざい"},{"kanji":"図書館","reading":"としょかん"},{"kanji":"勉強","reading":"べんきょう"},{"kanji":"ご飯","reading":"ごはん"},{"kanji":"到着","reading":"とうちゃく"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_equals_any": ["に"], "error_class": "used-ni"}
-  ]
+    {
+      "if_answer_equals_any": [
+        "に"
+      ],
+      "error_class": "used-ni",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "動作",
+          "reading": "どうさ"
+        },
+        {
+          "kanji": "場所",
+          "reading": "ばしょ"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "動作",
+          "reading": "どうさ"
+        },
+        {
+          "kanji": "場所",
+          "reading": "ばしょ"
+        },
+        {
+          "kanji": "存在",
+          "reading": "そんざい"
+        },
+        {
+          "kanji": "図書館",
+          "reading": "としょかん"
+        },
+        {
+          "kanji": "勉強",
+          "reading": "べんきょう"
+        },
+        {
+          "kanji": "ご飯",
+          "reading": "ごはん"
+        },
+        {
+          "kanji": "到着",
+          "reading": "とうちゃく"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

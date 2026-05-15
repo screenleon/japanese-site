@@ -3,17 +3,84 @@
   "title_ja": "〜きらいがある",
   "title_zh": "〜きらいがある（有…傾向／容易…）",
   "jlpt_level": "N1",
-  "explanation_ja": "「〜きらいがある」は、よくない傾向や心配な癖がある、という意味です。人や組織の性質を少し批判的に言うときに使います。\n\n形：動詞辞書形・ない形＋きらいがある。名詞は「名詞＋の＋きらいがある」です。\n- 話を大げさにするきらいがある\n- 物事を悪く考えるきらいがある\n- 独断のきらいがある\n\nよい傾向には普通使いません。「努力するきらいがある」のように褒める文脈では不自然です。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜きらいがある」は、よくない傾向や心配な癖がある、という意味です。人や組織の性質を少し批判的に言うときに使います。\n\n形：動詞辞書形・ない形＋きらいがある。名詞は「名詞＋の＋きらいがある」です。\n- 話を大げさにするきらいがある\n- 物事を悪く考えるきらいがある\n- 独断のきらいがある\n\nよい傾向には普通使いません。「努力するきらいがある」のように褒める文脈では不自然です。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜きらいがある」表示「有某種不太好的傾向／容易…」，通常帶輕微批判或擔憂。\n\n**形態**：\n- 動詞辭書形＋きらいがある\n- 動詞ない形＋きらいがある\n- 名詞＋の＋きらいがある\n\n**語感**：多用於負面傾向，不太用於稱讚。\n- 彼は話を大げさにするきらいがある。\n- この議論は感情的になるきらいがある。\n\n**注意**：常寫平假名「きらいがある」，不是普通的「嫌い＝討厭」用法。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"傾向","reading":"けいこう"},{"kanji":"心配","reading":"しんぱい"},{"kanji":"癖","reading":"くせ"},{"kanji":"組織","reading":"そしき"},{"kanji":"性質","reading":"せいしつ"},{"kanji":"批判","reading":"ひはん"},{"kanji":"独断","reading":"どくだん"},{"kanji":"努力","reading":"どりょく"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_contains_any": ["傾向"], "error_class": "used-meaning-instead"},
-    {"if_answer_not_contains_any": ["きらい"], "error_class": "missing-kirai"}
-  ]
+    {
+      "if_answer_contains_any": [
+        "傾向"
+      ],
+      "error_class": "used-meaning-instead",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "きらい"
+      ],
+      "error_class": "missing-kirai",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "傾向",
+          "reading": "けいこう"
+        },
+        {
+          "kanji": "心配",
+          "reading": "しんぱい"
+        },
+        {
+          "kanji": "癖",
+          "reading": "くせ"
+        },
+        {
+          "kanji": "組織",
+          "reading": "そしき"
+        },
+        {
+          "kanji": "性質",
+          "reading": "せいしつ"
+        },
+        {
+          "kanji": "批判",
+          "reading": "ひはん"
+        },
+        {
+          "kanji": "独断",
+          "reading": "どくだん"
+        },
+        {
+          "kanji": "努力",
+          "reading": "どりょく"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

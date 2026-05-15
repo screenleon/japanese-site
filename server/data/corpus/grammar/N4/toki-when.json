@@ -3,14 +3,68 @@
   "title_ja": "とき",
   "title_zh": "とき（……的時候）",
   "jlpt_level": "N4",
-  "explanation_ja": "「とき」は、ある時点や場面を表します。動詞や形容詞の普通形、または「名詞 + の + とき」に接続します。動詞の非過去形はその動作の前または同時、過去形はその動作が終わった後の場面を表すことがあります。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「とき」は、ある時点や場面を表します。動詞や形容詞の普通形、または「名詞 + の + とき」に接続します。動詞の非過去形はその動作の前または同時、過去形はその動作が終わった後の場面を表すことがあります。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「とき」表示「……的時候」。接普通形，名詞接「の」。動詞非過去形與過去形會影響時間關係，例如「行くとき」是去之前或去的時候，「行ったとき」是去了之後那個時候。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"形容詞","reading":"けいようし"},{"kanji":"普通","reading":"ふつう"},{"kanji":"名詞","reading":"めいし"},{"kanji":"接続","reading":"せつぞく"},{"kanji":"過去","reading":"かこ"},{"kanji":"動作","reading":"どうさ"},{"kanji":"時点","reading":"じてん"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": []
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        },
+        {
+          "kanji": "形容詞",
+          "reading": "けいようし"
+        },
+        {
+          "kanji": "普通",
+          "reading": "ふつう"
+        },
+        {
+          "kanji": "名詞",
+          "reading": "めいし"
+        },
+        {
+          "kanji": "接続",
+          "reading": "せつぞく"
+        },
+        {
+          "kanji": "過去",
+          "reading": "かこ"
+        },
+        {
+          "kanji": "動作",
+          "reading": "どうさ"
+        },
+        {
+          "kanji": "時点",
+          "reading": "じてん"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

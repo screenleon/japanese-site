@@ -143,8 +143,8 @@ func TestGetGrammarPointIncludesJapaneseExplanation(t *testing.T) {
 	if got.ExplanationJA != "日本語の説明" {
 		t.Fatalf("ExplanationJA = %q, want Japanese explanation", got.ExplanationJA)
 	}
-	if got.MentalModel != "思考の説明" {
-		t.Fatalf("MentalModel = %q, want mental model", got.MentalModel)
+	if string(got.Annotations) != "{}" {
+		t.Fatalf("Annotations = %s, want empty object", got.Annotations)
 	}
 	if got.ExplanationZH != "中文說明" {
 		t.Fatalf("ExplanationZH = %q, want Chinese explanation", got.ExplanationZH)

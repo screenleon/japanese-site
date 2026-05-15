@@ -3,14 +3,68 @@
   "title_ja": "だろう",
   "title_zh": "だろう（推測）",
   "jlpt_level": "N4",
-  "explanation_ja": "「だろう」は、話し手の推量や予想を表す普通体の表現です。「でしょう」よりくだけた形で、文章や独り言、親しい会話で使われます。動詞普通形、い形容詞、な形容詞語幹、名詞に続きます。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「だろう」は、話し手の推量や予想を表す普通体の表現です。「でしょう」よりくだけた形で、文章や独り言、親しい会話で使われます。動詞普通形、い形容詞、な形容詞語幹、名詞に続きます。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「だろう」表示說話者的推測或猜想，是「でしょう」較普通體、較不客氣的形式。常譯為「大概……吧」「可能……吧」。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"話し手","reading":"はなして"},{"kanji":"普通","reading":"ふつう"},{"kanji":"表現","reading":"ひょうげん"},{"kanji":"動詞","reading":"どうし"},{"kanji":"形容詞","reading":"けいようし"},{"kanji":"名詞","reading":"めいし"},{"kanji":"推量","reading":"すいりょう"},{"kanji":"予想","reading":"よそう"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": []
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "話し手",
+          "reading": "はなして"
+        },
+        {
+          "kanji": "普通",
+          "reading": "ふつう"
+        },
+        {
+          "kanji": "表現",
+          "reading": "ひょうげん"
+        },
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        },
+        {
+          "kanji": "形容詞",
+          "reading": "けいようし"
+        },
+        {
+          "kanji": "名詞",
+          "reading": "めいし"
+        },
+        {
+          "kanji": "推量",
+          "reading": "すいりょう"
+        },
+        {
+          "kanji": "予想",
+          "reading": "よそう"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

@@ -3,17 +3,74 @@
   "title_ja": "です/だ",
   "title_zh": "です/だ（繫詞 / 是）",
   "jlpt_level": "N5",
-  "explanation_ja": "「です」は、名詞やな形容詞のあとに置いて、文をていねいにする表現です。\n\n基本：\n- 学生です\n- 学生じゃないです／学生ではありません\n- 学生でした\n- 学生じゃなかったです／学生ではありませんでした\n\n「です」は動詞のあとには使いません。い形容詞の「高いです」は、い形容詞をていねいにしている形です。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「です」は、名詞やな形容詞のあとに置いて、文をていねいにする表現です。\n\n基本：\n- 学生です\n- 学生じゃないです／学生ではありません\n- 学生でした\n- 学生じゃなかったです／学生ではありませんでした\n\n「です」は動詞のあとには使いません。い形容詞の「高いです」は、い形容詞をていねいにしている形です。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「です」是「だ」的禮貌形，相當於中文的「是」。\n- 現在肯定：です（学生です = 是學生）\n- 現在否定：じゃないです / ではありません（学生じゃないです = 不是學生）\n- 過去肯定：でした（学生でした = 以前是學生）\n- 過去否定：じゃなかったです / ではありませんでした\n\n注意：です/だ 接在名詞或な形容詞之後，不接在動詞或い形容詞之後。「美しいです」是 い形容詞 + です 表禮貌，不是繫詞用法。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"名詞","reading":"めいし"},{"kanji":"形容詞","reading":"けいようし"},{"kanji":"表現","reading":"ひょうげん"},{"kanji":"動詞","reading":"どうし"},{"kanji":"基本","reading":"きほん"},{"kanji":"学生","reading":"がくせい"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_equals_any": ["だ"], "error_class": "used-da-instead"},
-    {"default": true, "error_class": "wrong-tense"}
-  ]
+    {
+      "if_answer_equals_any": [
+        "だ"
+      ],
+      "error_class": "used-da-instead",
+      "contrast": null
+    },
+    {
+      "default": true,
+      "error_class": "wrong-tense",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "名詞",
+          "reading": "めいし"
+        },
+        {
+          "kanji": "形容詞",
+          "reading": "けいようし"
+        },
+        {
+          "kanji": "表現",
+          "reading": "ひょうげん"
+        },
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        },
+        {
+          "kanji": "基本",
+          "reading": "きほん"
+        },
+        {
+          "kanji": "学生",
+          "reading": "がくせい"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

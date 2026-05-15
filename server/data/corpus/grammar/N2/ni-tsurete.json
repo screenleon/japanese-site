@@ -3,11 +3,43 @@
   "title_ja": "につれて",
   "title_zh": "につれて（隨著）",
   "jlpt_level": "N2",
-  "explanation_ja": "「AにつれてB」は、Aが変わると一緒にBも変わることを表します。「にしたがって」と近いですが、自然に少しずつ変わる感じがあります。\n\n- 暗くなるにつれて寒くなった\n- 成長するにつれて考え方が変わる",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「AにつれてB」は、Aが変わると一緒にBも変わることを表します。「にしたがって」と近いですが、自然に少しずつ変わる感じがあります。\n\n- 暗くなるにつれて寒くなった\n- 成長するにつれて考え方が変わる"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「AにつれてB」表示隨著 A 變化，B 也跟著變化。語感上常表示自然、逐漸的變化。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "について"
+      ],
+      "error_class": "topic-pattern",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "furigana": {
-      "key_terms": [
+      "vocabulary": [
         {
           "kanji": "変わると",
           "reading": "かわると"
@@ -27,16 +59,5 @@
       ]
     }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1,
-  "classifier_rules": [
-    {
-      "if_answer_equals_any": [
-        "について"
-      ],
-      "error_class": "topic-pattern"
-    }
-  ]
+  "audit_status": "pre-redesign"
 }

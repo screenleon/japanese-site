@@ -3,6 +3,26 @@
 This file records active architectural and behavioral decisions for this repository.
 Agents must read it before planning or implementation tasks.
 
+## 2026-05-10 — Phase 2 schema spike (JS-097 / JS-098 / JS-099)
+
+**Goal**: The Phase 2 schema spike moves all grammar entries to `schema_version: 2` across the runtime, corpus, lint, test, and UI surfaces: `explanation_ja` becomes typed blocks, `pattern` becomes a required structured field, classifier editorial contrasts are mirrored into `annotations.classifier`, top-level metadata moves into `_meta`, and mechanically migrated entries are flagged with `audit_status: "pre-redesign"`.
+
+**Reference**: The architecture record is `docs/adr/0003-block-engine-and-pattern-and-classifier.md`. ADR-0001 was amended under `docs/adr/0001-vocab-annotations-schema.md` → `2026-05-10 update` to close the grammar `mental_model` / `nuance_note` dual-write transition.
+
+**Frozen decisions from the canonical brief table**:
+- Q1: `explanation_ja` is replaced by `explanation_ja_blocks: Block[]` using `paragraph | list | callout`; no line-break sentinel.
+- Q2: `annotations.furigana.key_terms` is renamed to `annotations.furigana.vocabulary`.
+- Q3: Top-level `mental_model` and `nuance_note` are dropped; `annotations.mental_model` and `annotations.nuance_note` are the sole homes.
+- Q4: The spike hand-authors four N3 PoC entries and mechanically migrates the other 196 entries as envelope-only `pre-redesign` content.
+- Q5: `pattern: PatternRow[]` is required on every entry; unknown patterns use `_TBD` only with `audit_status: "pre-redesign"`.
+- Q6: Top-level fields carry identity and canonical content; `annotations` carries optional pedagogy, and lint enforces no key overlap.
+- A: `explanation_zh` stays a flat string.
+- B: `source`, `license`, `validator_score`, and `validated_by` move from top level into `_meta`.
+- C: `classifier_rules` stays as the Go grader contract, while optional editorial `contrast` payloads mirror into `annotations.classifier.rules[]`.
+- D: Spike block kinds are `paragraph | list | callout`; token kinds are `text | ruby | term`.
+- E: `audit_status: "pre-redesign"` marks mechanically migrated non-PoC entries until downstream native review/content uplift removes it.
+- F: `schema_version: 2` is a runtime field on every grammar entry and lint hard-fails missing or non-v2 entries.
+
 ## 2026-05-07-pm-schema-v1-milestone-theme-split
 
 **Context**: JS-045 — pm-schema v1 had `milestone:` overloaded with two orthogonal axes: release-bucket (`M3`, `M4`, `DX`) and topic-tag values such as content or ops. Same-shape items therefore took inconsistent values.

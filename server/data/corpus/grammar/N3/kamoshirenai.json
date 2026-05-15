@@ -3,18 +3,67 @@
   "title_ja": "かもしれない",
   "title_zh": "かもしれない（也許）",
   "jlpt_level": "N3",
-  "explanation_ja": "「かもしれない」は、可能性があるが、はっきり分からないことを表します。普通形の後に続き、丁寧に言う時は「かもしれません」になります。\n\n- 明日は雨が降るかもしれません\n- 彼は来ないかもしれない",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「かもしれない」は、可能性があるが、はっきり分からないことを表します。普通形の後に続き、丁寧に言う時は「かもしれません」になります。\n\n- 明日は雨が降るかもしれません\n- 彼は来ないかもしれない"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「かもしれない」表示不確定的可能性，意思是「也許、可能」。",
-  "mental_model": "「かもしれない」は、可能性はあるが、はっきりとは言えないという推量です。断定を避けて、いくつか考えられる中の一つとして置く表現なので、「たぶん」よりも不確かさを残す感覚で使います。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "でしょう",
+        "はず"
+      ],
+      "error_class": "certainty-pattern",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "mental_model": "「かもしれない」は、可能性はあるが、はっきりとは言えないという推量です。断定を避けて、いくつか考えられる中の一つとして置く表現なので、「たぶん」よりも不確かさを残す感覚で使います。",
-    "furigana": {"key_terms":[{"kanji":"可能","reading":"かのう"},{"kanji":"性","reading":"せい"},{"kanji":"普通","reading":"ふつう"},{"kanji":"形","reading":"がた"},{"kanji":"丁寧","reading":"ていねい"}]}
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "可能",
+          "reading": "かのう"
+        },
+        {
+          "kanji": "性",
+          "reading": "せい"
+        },
+        {
+          "kanji": "普通",
+          "reading": "ふつう"
+        },
+        {
+          "kanji": "形",
+          "reading": "がた"
+        },
+        {
+          "kanji": "丁寧",
+          "reading": "ていねい"
+        }
+      ]
+    }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": [
-    {"if_answer_equals_any": ["でしょう", "はず"], "error_class": "certainty-pattern"}
-  ]
+  "audit_status": "pre-redesign"
 }

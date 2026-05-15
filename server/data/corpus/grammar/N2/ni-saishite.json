@@ -3,8 +3,47 @@
   "title_ja": "〜に際して",
   "title_zh": "〜に際して（在…之際）",
   "jlpt_level": "N2",
-  "explanation_ja": "「〜に際して」は、特別な出来事や公式な行動を行う時に、という意味を表す。例として「出発に際して注意を受けた」「契約を結ぶに際して資料を確認した」のように、改まった場面で使われる。日常の小さな動作より、式典・手続き・重要な行動に合う。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜に際して」は、特別な出来事や公式な行動を行う時に、という意味を表す。例として「出発に際して注意を受けた」「契約を結ぶに際して資料を確認した」のように、改まった場面で使われる。日常の小さな動作より、式典・手続き・重要な行動に合う。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜に際して」表示在進行重要、正式或特別事情之際，語氣正式，常用於通知、手續或典禮。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_contains_any": [
+        "とき"
+      ],
+      "error_class": "used-toki",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "際"
+      ],
+      "error_class": "missing-saishite",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "furigana": {
       "title_ja": [
@@ -13,7 +52,7 @@
           "reading": "さいして"
         }
       ],
-      "key_terms": [
+      "vocabulary": [
         {
           "kanji": "特別",
           "reading": "とくべつ"
@@ -49,22 +88,5 @@
       ]
     }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1,
-  "classifier_rules": [
-    {
-      "if_answer_contains_any": [
-        "とき"
-      ],
-      "error_class": "used-toki"
-    },
-    {
-      "if_answer_not_contains_any": [
-        "際"
-      ],
-      "error_class": "missing-saishite"
-    }
-  ]
+  "audit_status": "pre-redesign"
 }

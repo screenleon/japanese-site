@@ -30,6 +30,7 @@ export const ANNOTATION_KINDS = [
   "mental_model",
   "nuance_note",
   "furigana",
+  "classifier",
 ] as const;
 
 export type AnnotationKind = typeof ANNOTATION_KINDS[number];
@@ -40,11 +41,67 @@ export interface FuriganaPair {
 
 export interface FuriganaAnnotation {
   title_ja?: FuriganaPair[];
-  key_terms?: FuriganaPair[];
+  vocabulary?: FuriganaPair[];
+}
+
+export type BlockKind = "paragraph" | "list" | "callout";
+export type Block =
+  | { kind: "paragraph"; tokens: Token[] }
+  | { kind: "list"; items: { tokens: Token[] }[] }
+  | { kind: "callout"; tone?: "info" | "warn" | "tip"; tokens: Token[] };
+
+export type TokenKind = "text" | "ruby" | "term";
+export type Token =
+  | { t: "text"; v: string }
+  | { t: "ruby"; k: string; r: string }
+  | { t: "term"; slug: string; kind: "vocab" | "grammar"; label: string };
+
+export interface PatternRow {
+  form: string;
+  gloss_zh: string;
+  notes_zh?: string;
+}
+
+export interface Meta {
+  source: string;
+  license: string;
+  validated_by?: string;
+  validator_score?: number;
+}
+
+export interface ClassifierContrastExample {
+  use_this: string;
+  use_alt: string;
+  gloss_zh?: string;
+}
+
+export interface ClassifierContrast {
+  with_pattern: string;
+  with_slug?: string;
+  rule_ja_blocks: Block[];
+  rule_zh?: string;
+  examples?: ClassifierContrastExample[];
+}
+
+export interface ClassifierRule {
+  error_class?: string;
+  if_answer_equals_any?: string[];
+  if_answer_suffix_any?: string[];
+  if_answer_contains_any?: string[];
+  if_answer_not_contains_any?: string[];
+  if_answer_dictionary_form?: boolean;
+  default?: boolean;
+  contrast?: ClassifierContrast | null;
+}
+
+export interface ClassifierAnnotation {
+  rules: ClassifierContrast[];
 }
 
 export type AnnotationValue<K extends AnnotationKind = AnnotationKind> =
-  K extends "furigana" ? FuriganaAnnotation : string;
+  K extends "furigana" ? FuriganaAnnotation
+  : K extends "classifier" ? ClassifierAnnotation
+  : string;
 
 export type Annotations = {
   [K in AnnotationKind]?: AnnotationValue<K>;
@@ -80,12 +137,15 @@ export interface GrammarPoint {
   title_ja: string;
   title_zh: string;
   jlpt_level: string;
-  nuance_note?: string;
-  mental_model?: string;
-  annotations?: Annotations;
-  related_slugs?: string[];
-  explanation_ja?: string;
+  schema_version: 2;
+  pattern: PatternRow[];
+  explanation_ja_blocks: Block[];
   explanation_zh: string;
+  _meta: Meta;
+  classifier_rules?: ClassifierRule[];
+  related_slugs?: string[];
+  annotations?: Annotations;
+  audit_status?: "pre-redesign";
 }
 
 export interface GrammarExample {

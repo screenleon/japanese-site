@@ -15,6 +15,7 @@ package corpus
 
 import (
 	"bufio"
+	"bytes"
 	"context"
 	"database/sql"
 	"encoding/json"
@@ -23,6 +24,7 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"time"
 
@@ -42,24 +44,30 @@ var allowedAnnotationKinds = map[string]struct{}{
 	"mental_model":     {},
 	"nuance_note":      {},
 	"furigana":         {},
+	"classifier":       {},
 }
 
 type GrammarPoint struct {
-	Slug            string          `json:"slug"`
-	TitleJA         string          `json:"title_ja"`
-	TitleZH         string          `json:"title_zh"`
-	JLPTLevel       string          `json:"jlpt_level"`
-	NuanceNote      string          `json:"nuance_note,omitempty"`
-	MentalModel     string          `json:"mental_model,omitempty"`
-	Annotations     json.RawMessage `json:"annotations,omitempty"`
-	RelatedSlugs    []string        `json:"related_slugs,omitempty"`
-	ExplanationJA   string          `json:"explanation_ja,omitempty"`
-	ExplanationZH   string          `json:"explanation_zh"`
-	Source          string          `json:"source"`
-	License         string          `json:"license"`
-	ValidatedBy     string          `json:"validated_by"`
-	ValidatorScore  float64         `json:"validator_score"`
-	ClassifierRules []quizrule.Rule `json:"classifier_rules,omitempty"`
+	Slug                string          `json:"slug"`
+	TitleJA             string          `json:"title_ja"`
+	TitleZH             string          `json:"title_zh"`
+	JLPTLevel           string          `json:"jlpt_level"`
+	SchemaVersion       int             `json:"schema_version"`
+	AuditStatus         string          `json:"audit_status,omitempty"`
+	Pattern             json.RawMessage `json:"pattern"`
+	ExplanationJABlocks json.RawMessage `json:"explanation_ja_blocks"`
+	ExplanationZH       string          `json:"explanation_zh"`
+	Meta                json.RawMessage `json:"_meta"`
+	ClassifierRules     []quizrule.Rule `json:"classifier_rules,omitempty"`
+	RelatedSlugs        []string        `json:"related_slugs,omitempty"`
+	Annotations         json.RawMessage `json:"annotations,omitempty"`
+}
+
+type GrammarMeta struct {
+	Source         string  `json:"source"`
+	License        string  `json:"license"`
+	ValidatedBy    string  `json:"validated_by,omitempty"`
+	ValidatorScore float64 `json:"validator_score,omitempty"`
 }
 
 type GrammarExample struct {
@@ -127,26 +135,29 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 
 	upsertGP, err := tx.PrepareContext(ctx, `
 		INSERT INTO grammar_point (
-			slug, title_ja, title_zh, jlpt_level, nuance_note, mental_model, related_slugs,
-			explanation_ja, explanation_zh,
+			slug, title_ja, title_zh, jlpt_level, related_slugs,
+			explanation_ja, explanation_ja_blocks, explanation_zh,
 			source, license, validated_by, validator_score, validated_at,
-			classifier_rules, annotations
-		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			classifier_rules, annotations, pattern, audit_status, schema_version
+		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON CONFLICT(slug) DO UPDATE SET
 			title_ja=excluded.title_ja,
 			title_zh=excluded.title_zh,
 			jlpt_level=excluded.jlpt_level,
-			nuance_note=excluded.nuance_note,
-			mental_model=excluded.mental_model,
 			related_slugs=excluded.related_slugs,
 			explanation_ja=excluded.explanation_ja,
+			explanation_ja_blocks=excluded.explanation_ja_blocks,
 			explanation_zh=excluded.explanation_zh,
+			source=excluded.source,
+			license=excluded.license,
+			validated_by=excluded.validated_by,
+			validator_score=excluded.validator_score,
 			validated_at=excluded.validated_at,
 			classifier_rules=excluded.classifier_rules,
-			annotations=CASE
-				WHEN excluded.annotations = '{}' THEN grammar_point.annotations
-				ELSE excluded.annotations
-			END`)
+			annotations=CASE WHEN excluded.annotations = '{}' THEN grammar_point.annotations ELSE excluded.annotations END,
+			pattern=excluded.pattern,
+			audit_status=excluded.audit_status,
+			schema_version=excluded.schema_version`)
 	if err != nil {
 		return stats, fmt.Errorf("prepare gp: %w", err)
 	}
@@ -201,6 +212,10 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 			if err != nil {
 				return fmt.Errorf("read %s: %w", path, err)
 			}
+			meta, err := decodeGrammarMeta(gp)
+			if err != nil {
+				return fmt.Errorf("meta %s: %w", gp.Slug, err)
+			}
 			classifierRules, err := classifierRulesJSON(gp.ClassifierRules)
 			if err != nil {
 				return fmt.Errorf("classifier rules %s: %w", gp.Slug, err)
@@ -213,10 +228,15 @@ func Load(ctx context.Context, db *sql.DB, root string) (LoadStats, error) {
 			if err != nil {
 				return err
 			}
+			explanationJA, err := plainTextFromBlocks(gp.ExplanationJABlocks)
+			if err != nil {
+				return fmt.Errorf("explanation_ja_blocks %s: %w", gp.Slug, err)
+			}
 			if _, err := upsertGP.ExecContext(ctx,
-				gp.Slug, gp.TitleJA, gp.TitleZH, gp.JLPTLevel, nullStr(gp.NuanceNote), nullStr(gp.MentalModel), relatedSlugs,
-				nullStr(gp.ExplanationJA), gp.ExplanationZH,
-				gp.Source, gp.License, gp.ValidatedBy, gp.ValidatorScore, now, classifierRules, annotations); err != nil {
+				gp.Slug, gp.TitleJA, gp.TitleZH, gp.JLPTLevel, relatedSlugs,
+				nullStr(explanationJA), string(gp.ExplanationJABlocks), gp.ExplanationZH,
+				meta.Source, meta.License, nullStr(meta.ValidatedBy), meta.ValidatorScore, now,
+				classifierRules, annotations, string(gp.Pattern), gp.AuditStatus, gp.SchemaVersion); err != nil {
 				return fmt.Errorf("upsert gp %s: %w", gp.Slug, err)
 			}
 			stats.GrammarPoints++
@@ -579,8 +599,31 @@ func readGrammarPoint(path string) (GrammarPoint, error) {
 	if err != nil {
 		return GrammarPoint{}, err
 	}
+	var top map[string]json.RawMessage
+	if err := json.Unmarshal(body, &top); err != nil {
+		return GrammarPoint{}, err
+	}
 	var gp GrammarPoint
 	if err := json.Unmarshal(body, &gp); err != nil {
+		return GrammarPoint{}, err
+	}
+	if gp.SchemaVersion != 2 {
+		return GrammarPoint{}, fmt.Errorf("schema_version must equal 2")
+	}
+	if len(gp.Pattern) == 0 || bytes.Equal(bytes.TrimSpace(gp.Pattern), []byte("null")) {
+		return GrammarPoint{}, fmt.Errorf("pattern must be present")
+	}
+	var pattern []json.RawMessage
+	if err := json.Unmarshal(gp.Pattern, &pattern); err != nil || len(pattern) == 0 {
+		return GrammarPoint{}, fmt.Errorf("pattern must be a non-empty array")
+	}
+	if len(gp.ExplanationJABlocks) == 0 || bytes.Equal(bytes.TrimSpace(gp.ExplanationJABlocks), []byte("null")) {
+		return GrammarPoint{}, fmt.Errorf("explanation_ja_blocks must be present")
+	}
+	if err := rejectTopAnnotationOverlap(gp.Slug, top, gp.Annotations); err != nil {
+		return GrammarPoint{}, err
+	}
+	if err := validateClassifierMirror(gp); err != nil {
 		return GrammarPoint{}, err
 	}
 	return gp, nil
@@ -690,8 +733,7 @@ func normalizeAnnotations(raw json.RawMessage) (string, error) {
 	}
 	for kind := range obj {
 		if _, ok := allowedAnnotationKinds[kind]; !ok {
-			// Defense in depth: corpus lint should catch typos, but the loader must not persist unknown kinds.
-			delete(obj, kind)
+			return "", fmt.Errorf("unsupported annotation kind %q", kind)
 		}
 	}
 	body, err := json.Marshal(obj)
@@ -701,11 +743,6 @@ func normalizeAnnotations(raw json.RawMessage) (string, error) {
 	return string(body), nil
 }
 
-// mergeGrammarAnnotations intentionally has two effects for one loader pass:
-// it returns the JSON annotations body to persist, and mutates gp.MentalModel /
-// gp.NuanceNote when the nested annotations map has a value and the flat field
-// is empty. This keeps transition fields converged while the loader normalizes
-// flat and nested grammar annotation shapes in a single pass.
 func mergeGrammarAnnotations(gp *GrammarPoint) (string, error) {
 	raw := gp.Annotations
 	if len(raw) == 0 {
@@ -720,55 +757,14 @@ func mergeGrammarAnnotations(gp *GrammarPoint) (string, error) {
 	}
 	for kind := range obj {
 		if _, ok := allowedAnnotationKinds[kind]; !ok {
-			// Defense in depth: corpus lint should catch typos, but the loader must not persist unknown kinds.
-			delete(obj, kind)
+			return "", fmt.Errorf("grammar %s: unsupported annotation kind %q", gp.Slug, kind)
 		}
 	}
-
-	if err := mergeGrammarAnnotationField(gp.Slug, "mental_model", gp.MentalModel, obj); err != nil {
-		return "", err
-	}
-	if gp.MentalModel == "" {
-		nested, err := rawAnnotationString(obj["mental_model"])
-		if err != nil {
-			return "", fmt.Errorf("grammar %s: mental_model nested annotation must be a string: %w", gp.Slug, err)
-		}
-		gp.MentalModel = nested
-	}
-	if err := mergeGrammarAnnotationField(gp.Slug, "nuance_note", gp.NuanceNote, obj); err != nil {
-		return "", err
-	}
-	if gp.NuanceNote == "" {
-		nested, err := rawAnnotationString(obj["nuance_note"])
-		if err != nil {
-			return "", fmt.Errorf("grammar %s: nuance_note nested annotation must be a string: %w", gp.Slug, err)
-		}
-		gp.NuanceNote = nested
-	}
-
 	body, err := json.Marshal(obj)
 	if err != nil {
 		return "", err
 	}
 	return string(body), nil
-}
-
-func mergeGrammarAnnotationField(slug, kind, flat string, obj map[string]json.RawMessage) error {
-	nested, err := rawAnnotationString(obj[kind])
-	if err != nil {
-		return fmt.Errorf("grammar %s: %s nested annotation must be a string: %w", slug, kind, err)
-	}
-	if flat != "" && nested != "" && flat != nested {
-		return fmt.Errorf("grammar %s: %s conflict — flat=%q nested=%q", slug, kind, flat, nested)
-	}
-	if flat != "" && nested == "" {
-		body, err := json.Marshal(flat)
-		if err != nil {
-			return err
-		}
-		obj[kind] = body
-	}
-	return nil
 }
 
 func rawAnnotationString(raw json.RawMessage) (string, error) {
@@ -783,6 +779,149 @@ func rawAnnotationString(raw json.RawMessage) (string, error) {
 		return "", err
 	}
 	return s, nil
+}
+
+func decodeGrammarMeta(gp GrammarPoint) (GrammarMeta, error) {
+	var meta GrammarMeta
+	if len(gp.Meta) == 0 {
+		return meta, fmt.Errorf("_meta is required")
+	}
+	if err := json.Unmarshal(gp.Meta, &meta); err != nil {
+		return meta, err
+	}
+	if strings.TrimSpace(meta.Source) == "" || strings.TrimSpace(meta.License) == "" {
+		return meta, fmt.Errorf("_meta.source and _meta.license are required")
+	}
+	return meta, nil
+}
+
+func rejectTopAnnotationOverlap(slug string, top map[string]json.RawMessage, rawAnnotations json.RawMessage) error {
+	if len(rawAnnotations) == 0 {
+		return nil
+	}
+	var annotations map[string]json.RawMessage
+	if err := json.Unmarshal(rawAnnotations, &annotations); err != nil {
+		return fmt.Errorf("grammar %s: annotations must be an object: %w", slug, err)
+	}
+	for key := range annotations {
+		if _, ok := top[key]; ok {
+			return fmt.Errorf("grammar %s: annotations key %q overlaps top-level key", slug, key)
+		}
+		if _, ok := allowedAnnotationKinds[key]; !ok {
+			return fmt.Errorf("grammar %s: unsupported annotation kind %q", slug, key)
+		}
+	}
+	return nil
+}
+
+func validateClassifierMirror(gp GrammarPoint) error {
+	var annotations struct {
+		Classifier *struct {
+			Rules []json.RawMessage `json:"rules"`
+		} `json:"classifier"`
+	}
+	if len(gp.Annotations) > 0 {
+		if err := json.Unmarshal(gp.Annotations, &annotations); err != nil {
+			return fmt.Errorf("grammar %s: annotations decode: %w", gp.Slug, err)
+		}
+	}
+	var contrasts []json.RawMessage
+	for i, rule := range gp.ClassifierRules {
+		if rule.Default && rule.Contrast != nil {
+			return fmt.Errorf("grammar %s: classifier_rules[%d] default rule cannot carry contrast", gp.Slug, i)
+		}
+		if rule.Contrast == nil {
+			continue
+		}
+		body, err := json.Marshal(rule.Contrast)
+		if err != nil {
+			return err
+		}
+		contrasts = append(contrasts, body)
+	}
+	if len(contrasts) == 0 {
+		if annotations.Classifier != nil {
+			return fmt.Errorf("grammar %s: annotations.classifier must be absent without non-null contrasts", gp.Slug)
+		}
+		return nil
+	}
+	if annotations.Classifier == nil || len(annotations.Classifier.Rules) != len(contrasts) {
+		return fmt.Errorf("grammar %s: annotations.classifier.rules length does not match contrast count", gp.Slug)
+	}
+	for i := range contrasts {
+		if !jsonEqual(annotations.Classifier.Rules[i], contrasts[i]) {
+			return fmt.Errorf("grammar %s: annotations.classifier.rules[%d] does not mirror classifier_rules contrast", gp.Slug, i)
+		}
+	}
+	return nil
+}
+
+func jsonEqual(a, b json.RawMessage) bool {
+	var av any
+	var bv any
+	if err := json.Unmarshal(a, &av); err != nil {
+		return false
+	}
+	if err := json.Unmarshal(b, &bv); err != nil {
+		return false
+	}
+	return reflect.DeepEqual(av, bv)
+}
+
+func plainTextFromBlocks(raw json.RawMessage) (string, error) {
+	var blocks []struct {
+		Kind   string            `json:"kind"`
+		Tone   string            `json:"tone,omitempty"`
+		Tokens []plainBlockToken `json:"tokens,omitempty"`
+		Items  []struct {
+			Tokens []plainBlockToken `json:"tokens"`
+		} `json:"items,omitempty"`
+	}
+	if err := json.Unmarshal(raw, &blocks); err != nil {
+		return "", err
+	}
+	parts := make([]string, 0, len(blocks))
+	for _, block := range blocks {
+		switch block.Kind {
+		case "paragraph":
+			parts = append(parts, tokensPlain(block.Tokens))
+		case "list":
+			lines := make([]string, 0, len(block.Items))
+			for _, item := range block.Items {
+				lines = append(lines, "- "+tokensPlain(item.Tokens))
+			}
+			parts = append(parts, strings.Join(lines, "\n"))
+		case "callout":
+			prefix := "[info] "
+			if block.Tone != "" {
+				prefix = "[" + block.Tone + "] "
+			}
+			parts = append(parts, prefix+tokensPlain(block.Tokens))
+		}
+	}
+	return strings.TrimSpace(strings.Join(parts, "\n\n")), nil
+}
+
+type plainBlockToken struct {
+	T     string `json:"t"`
+	V     string `json:"v,omitempty"`
+	K     string `json:"k,omitempty"`
+	Label string `json:"label,omitempty"`
+}
+
+func tokensPlain(tokens []plainBlockToken) string {
+	var b strings.Builder
+	for _, token := range tokens {
+		switch token.T {
+		case "text":
+			b.WriteString(token.V)
+		case "ruby":
+			b.WriteString(token.K)
+		case "term":
+			b.WriteString(token.Label)
+		}
+	}
+	return b.String()
 }
 
 func validJLPTLevel(level string) bool {

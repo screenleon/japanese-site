@@ -3,16 +3,53 @@
   "title_ja": "からといって",
   "title_zh": "からといって（雖說因為...也不）",
   "jlpt_level": "N2",
-  "explanation_ja": "「AからといってBとは限らない」は、Aという理由だけでBだとは言えない、という意味です。\n\n- 高いからといって、必ず良いとは限りません\n- 若いからといって、無理をしてはいけません\n\n思い込みを否定するときによく使います。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「AからといってBとは限らない」は、Aという理由だけでBだとは言えない、という意味です。\n\n- 高いからといって、必ず良いとは限りません\n- 若いからといって、無理をしてはいけません\n\n思い込みを否定するときによく使います。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「AからといってBとは限らない」表示不能只因為 A 就斷定 B。常用於否定過度推論。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"理由","reading":"りゆう"},{"kanji":"否定","reading":"ひてい"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_equals_any": ["から"], "error_class": "simple-reason"}
-  ]
+    {
+      "if_answer_equals_any": [
+        "から"
+      ],
+      "error_class": "simple-reason",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "理由",
+          "reading": "りゆう"
+        },
+        {
+          "kanji": "否定",
+          "reading": "ひてい"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

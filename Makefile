@@ -1,4 +1,4 @@
-.PHONY: help lint lint-rules lint-grammar lint-vocab backlog-render lint-backlog-render corpus-scale vet test test-dump-grammar-examples test-lint-grammar test-lint-vocab test-validate-backlog-schema clean bake-static dump-grammar-examples build-static \
+.PHONY: help lint lint-rules lint-grammar lint-vocab backlog-render lint-backlog-render corpus-scale vet test test-dump-grammar-examples test-lint-grammar test-lint-vocab test-validate-backlog-schema clean bake-static dump-grammar-examples build-static preview-static \
         bootstrap dev start build dist dist-update \
         run web-dev web-build \
         seed-jmdict seed-kanjidic2 seed-jlpt seed-tatoeba seed-derive seed-corpus seed-all \
@@ -6,9 +6,10 @@
 
 # ── Quick start ─────────────────────────────────────────────────────────────
 help:
-	@echo "First-time setup:    make bootstrap   # install deps + seed DB"
-	@echo "Daily development:   make dev         # backend + frontend hot-reload"
-	@echo "One-shot start:      make start       # build everything, serve on :8080"
+	@echo "First-time setup:    make bootstrap     # install deps + seed DB"
+	@echo "Daily development:   make dev           # backend + frontend hot-reload"
+	@echo "One-shot start:      make start         # build everything, serve on :8080 (LISTEN_ADDR override)"
+	@echo "Static preview:      make preview-static # build static bundle (no DB) + Vite preview on :4173 (PREVIEW_PORT override)"
 	@echo ""
 	@echo "Other targets:"
 	@echo "  build         Build production server binary + frontend bundle"
@@ -44,7 +45,7 @@ bootstrap-web:
 # Run backend on :8080 and Vite dev server on :5173 simultaneously.
 # Ctrl-C cleans up both.
 dev:
-	@echo "API on :8080  ・  Web on :5173 (proxies /api → backend)"
+	@echo "API on $${LISTEN_ADDR:-:8080}  ・  Web on :5173 (proxies /api → backend)"
 	@trap 'kill 0' INT TERM; \
 	(cd server && go run ./cmd/api) & \
 	(cd web && npm run dev -- --host 127.0.0.1) & \
@@ -54,7 +55,7 @@ dev:
 # Build frontend bundle and run the Go server with STATIC_DIR pointing at it.
 # Single port (:8080) serves both the SPA and /api/*.
 start: build
-	@echo "Serving on http://localhost:8080  ・  Ctrl-C to stop"
+	@echo "Serving on http://localhost$${LISTEN_ADDR:-:8080}  ・  Ctrl-C to stop"
 	cd server && STATIC_DIR=../web/dist ./bin/api
 
 # ── Build (production-style) ────────────────────────────────────────────────
@@ -146,6 +147,20 @@ dump-grammar-examples:
 
 build-static: bake-static dump-grammar-examples
 	cd web && VITE_DEPLOY_MODE=static VITE_DEPLOY_BASE=/japanese-site/ npm run build
+
+# Serve the static-deploy bundle locally — no Go server, no SQLite. Useful for
+# validating the static deploy mode and corpus rollup against a browser
+# without spinning up the full backend. Builds with VITE_DEPLOY_MODE=static
+# but OMITS the `/japanese-site/` URL prefix used by GitHub Pages so the
+# preview opens at the root URL. Port defaults to 4173; override via
+# `PREVIEW_PORT=5000 make preview-static`.
+preview-static: bake-static dump-grammar-examples
+	@PORT="$${PREVIEW_PORT:-4173}"; \
+	echo "Building static bundle (no /japanese-site/ base prefix)..."; \
+	cd web && VITE_DEPLOY_MODE=static npm run build && \
+	echo "" && \
+	echo "Serving static bundle on http://localhost:$$PORT  ・  Ctrl-C to stop" && \
+	npm run preview -- --host 127.0.0.1 --port "$$PORT" --strictPort
 
 lint: lint-rules lint-vocab
 

@@ -1,6 +1,7 @@
 package quizrule
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 )
@@ -8,13 +9,28 @@ import (
 // Rule is one ordered classifier rule loaded from grammar corpus JSON.
 // The first matching rule wins. A rule with Default=true always matches.
 type Rule struct {
-	ErrorClass             string   `json:"error_class"`
-	IfAnswerEqualsAny      []string `json:"if_answer_equals_any,omitempty"`
-	IfAnswerSuffixAny      []string `json:"if_answer_suffix_any,omitempty"`
-	IfAnswerContainsAny    []string `json:"if_answer_contains_any,omitempty"`
-	IfAnswerNotContainsAny []string `json:"if_answer_not_contains_any,omitempty"`
-	IfAnswerDictionaryForm bool     `json:"if_answer_dictionary_form,omitempty"`
-	Default                bool     `json:"default,omitempty"`
+	ErrorClass             string    `json:"error_class"`
+	IfAnswerEqualsAny      []string  `json:"if_answer_equals_any,omitempty"`
+	IfAnswerSuffixAny      []string  `json:"if_answer_suffix_any,omitempty"`
+	IfAnswerContainsAny    []string  `json:"if_answer_contains_any,omitempty"`
+	IfAnswerNotContainsAny []string  `json:"if_answer_not_contains_any,omitempty"`
+	IfAnswerDictionaryForm bool      `json:"if_answer_dictionary_form,omitempty"`
+	Default                bool      `json:"default,omitempty"`
+	Contrast               *Contrast `json:"contrast,omitempty"`
+}
+
+type Contrast struct {
+	WithPattern  string            `json:"with_pattern"`
+	WithSlug     string            `json:"with_slug,omitempty"`
+	RuleJABlocks json.RawMessage   `json:"rule_ja_blocks"`
+	RuleZH       string            `json:"rule_zh,omitempty"`
+	Examples     []ContrastExample `json:"examples,omitempty"`
+}
+
+type ContrastExample struct {
+	UseThis string `json:"use_this"`
+	UseAlt  string `json:"use_alt"`
+	GlossZH string `json:"gloss_zh,omitempty"`
 }
 
 // Classify returns the first matching error_class, or "generic" when no
@@ -38,6 +54,9 @@ func ValidateRules(rules []Rule) error {
 		}
 		if !hasPredicate(rule) {
 			return fmt.Errorf("rule %d (%s) has no predicate", i, rule.ErrorClass)
+		}
+		if rule.Default && rule.Contrast != nil {
+			return fmt.Errorf("rule %d (%s) default rule cannot carry contrast", i, rule.ErrorClass)
 		}
 	}
 	return nil

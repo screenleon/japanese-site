@@ -3,17 +3,43 @@
   "title_ja": "だけでなく",
   "title_zh": "だけでなく（不只）",
   "jlpt_level": "N3",
-  "explanation_ja": "「だけでなく」は、一つだけではなく、ほかにも当てはまることを表します。後ろには「も」や「まで」が来ることが多いです。\n\n- 日本語だけでなく中国語も話せます\n- 雨だけでなく風も強いです",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「だけでなく」は、一つだけではなく、ほかにも当てはまることを表します。後ろには「も」や「まで」が来ることが多いです。\n\n- 日本語だけでなく中国語も話せます\n- 雨だけでなく風も強いです"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「だけでなく」表示「不只……也……」，後面常與「も」搭配。",
-  "mental_model": "「だけでなく」は、一つの範囲で終わらず、別のものにも当てはまると広げる表現です。前の名詞や内容を「それだけではない」といったん越えて、後ろの「も」「まで」で追加情報を足していく感覚です。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_equals_any": [
+        "だけ",
+        "ばかり"
+      ],
+      "error_class": "only-pattern",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "mental_model": "「だけでなく」は、一つの範囲で終わらず、別のものにも当てはまると広げる表現です。前の名詞や内容を「それだけではない」といったん越えて、後ろの「も」「まで」で追加情報を足していく感覚です。"
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": [
-    {"if_answer_equals_any": ["だけ", "ばかり"], "error_class": "only-pattern"}
-  ]
+  "audit_status": "pre-redesign"
 }

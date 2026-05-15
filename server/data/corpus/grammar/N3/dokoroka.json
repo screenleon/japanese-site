@@ -3,20 +3,77 @@
   "title_ja": "どころか",
   "title_zh": "どころか（別說／豈止）",
   "jlpt_level": "N3",
-  "nuance_note": "Aどころか B：A をはるかに超えて B である、という強い対比を示す基本用法。会話・文章どちらでも使う。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「どころか」は、前に述べた内容を否定または低く見積もったうえで、実際にはそれを大きく超える、または反対の状態であることを表す表現である。普通形や名詞に接続し、「それどころではなく」という強い対比を示す。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「どころか」表示「別說……，甚至……」或「豈止……」，用來否定前項並加強後項。接續為普通形或名詞 + どころか。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
   "related_slugs": [
     "dokoroka-formal"
   ],
-  "explanation_ja": "「どころか」は、前に述べた内容を否定または低く見積もったうえで、実際にはそれを大きく超える、または反対の状態であることを表す表現である。普通形や名詞に接続し、「それどころではなく」という強い対比を示す。",
-  "explanation_zh": "「どころか」表示「別說……，甚至……」或「豈止……」，用來否定前項並加強後項。接續為普通形或名詞 + どころか。",
-  "mental_model": "「どころか」は、前に挙げた程度や予想を「そんなものではない」と退けたうえで、実際はそれ以上か正反対だと強い驚きとともに示す表現です。「AどころかB」は、Aを足場にせず、Bのほうが現実だと一気に飛び越える形を取ります。",
   "annotations": {
     "mental_model": "「どころか」は、前に挙げた程度や予想を「そんなものではない」と退けたうえで、実際はそれ以上か正反対だと強い驚きとともに示す表現です。「AどころかB」は、Aを足場にせず、Bのほうが現実だと一気に飛び越える形を取ります。",
-    "furigana": {"key_terms":[{"kanji":"内容","reading":"ないよう"},{"kanji":"否定","reading":"ひてい"},{"kanji":"見積","reading":"みつ"},{"kanji":"実際","reading":"じっさい"},{"kanji":"反対","reading":"はんたい"},{"kanji":"状態","reading":"じょうたい"},{"kanji":"普通","reading":"ふつう"},{"kanji":"形","reading":"がた"},{"kanji":"対比","reading":"たいひ"}]}
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "内容",
+          "reading": "ないよう"
+        },
+        {
+          "kanji": "否定",
+          "reading": "ひてい"
+        },
+        {
+          "kanji": "見積",
+          "reading": "みつ"
+        },
+        {
+          "kanji": "実際",
+          "reading": "じっさい"
+        },
+        {
+          "kanji": "反対",
+          "reading": "はんたい"
+        },
+        {
+          "kanji": "状態",
+          "reading": "じょうたい"
+        },
+        {
+          "kanji": "普通",
+          "reading": "ふつう"
+        },
+        {
+          "kanji": "形",
+          "reading": "がた"
+        },
+        {
+          "kanji": "対比",
+          "reading": "たいひ"
+        }
+      ]
+    },
+    "nuance_note": "Aどころか B：A をはるかに超えて B である、という強い対比を示す基本用法。会話・文章どちらでも使う。"
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": []
+  "audit_status": "pre-redesign"
 }

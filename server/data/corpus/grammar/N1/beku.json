@@ -3,25 +3,82 @@
   "title_ja": "〜べく",
   "title_zh": "〜べく（為了…）",
   "jlpt_level": "N1",
-  "explanation_ja": "意味核：目的を持って後件の行為を行うことを表す。話し手・主語の意志的な努力や計画性を強く示す。\n\n接続：動詞辞書形＋べく。するは「すべく」「するべく」の両方が見られる。後件には目的達成のための意志的行為が来る。\n\n例：制度の問題点を明らかにするべく、調査委員会が設置された。／原因を特定すべく、技術チームはログを再分析した。／海外市場を開拓するべく、現地法人を設立した。\n\nレジスター／類義差別：硬い書き言葉。日常的には「〜ために」「〜ように」を使う。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "意味核：目的を持って後件の行為を行うことを表す。話し手・主語の意志的な努力や計画性を強く示す。\n\n接続：動詞辞書形＋べく。するは「すべく」「するべく」の両方が見られる。後件には目的達成のための意志的行為が来る。\n\n例：制度の問題点を明らかにするべく、調査委員会が設置された。／原因を特定すべく、技術チームはログを再分析した。／海外市場を開拓するべく、現地法人を設立した。\n\nレジスター／類義差別：硬い書き言葉。日常的には「〜ために」「〜ように」を使う。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "〜べく 表示為了達成 A 而進行 B，帶有明確目的與意志。\n\n**形態**：\n- 動詞辞書形＋べく；する可為「すべく／するべく」。\n\n**例**：\n- 制度の問題点を明らかにするべく、調査委員会が設置された。\n- 原因を特定すべく、技術チームはログを再分析した。\n\n**比較／差別**：\n- 比「〜ために」更正式，常用於報告、新聞或計畫敘述。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"目的","reading":"もくてき"},{"kanji":"後件","reading":"こうけん"},{"kanji":"行為","reading":"こうい"},{"kanji":"意志","reading":"いし"},{"kanji":"努力","reading":"どりょく"},{"kanji":"計画性","reading":"けいかくせい"},{"kanji":"制度","reading":"せいど"},{"kanji":"調査","reading":"ちょうさ"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
     {
       "if_answer_not_contains_any": [
         "べく"
       ],
-      "error_class": "missing-target-pattern"
+      "error_class": "missing-target-pattern",
+      "contrast": null
     },
     {
       "default": true,
-      "error_class": "generic"
+      "error_class": "generic",
+      "contrast": null
     }
-  ]
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "目的",
+          "reading": "もくてき"
+        },
+        {
+          "kanji": "後件",
+          "reading": "こうけん"
+        },
+        {
+          "kanji": "行為",
+          "reading": "こうい"
+        },
+        {
+          "kanji": "意志",
+          "reading": "いし"
+        },
+        {
+          "kanji": "努力",
+          "reading": "どりょく"
+        },
+        {
+          "kanji": "計画性",
+          "reading": "けいかくせい"
+        },
+        {
+          "kanji": "制度",
+          "reading": "せいど"
+        },
+        {
+          "kanji": "調査",
+          "reading": "ちょうさ"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

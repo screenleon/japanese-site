@@ -3,16 +3,73 @@
   "title_ja": "てしまう",
   "title_zh": "てしまう（做完／不小心）",
   "jlpt_level": "N4",
-  "explanation_ja": "「動詞て形 + しまう」は、動作が全部終わることや、残念な気持ちを表します。例えば「宿題をしてしまいました」は終わったことを表し、「かぎを忘れてしまいました」は困った気持ちを表します。丁寧な文では「てしまいます」「てしまいました」をよく使います。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「動詞て形 + しまう」は、動作が全部終わることや、残念な気持ちを表します。例えば「宿題をしてしまいました」は終わったことを表し、「かぎを忘れてしまいました」は困った気持ちを表します。丁寧な文では「てしまいます」「てしまいました」をよく使います。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「動詞て形 + しまう」表示動作完成，或帶有遺憾、懊悔的語氣。常譯為「做完了」或「不小心／結果竟然」。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"動詞","reading":"どうし"},{"kanji":"動作","reading":"どうさ"},{"kanji":"丁寧","reading":"ていねい"},{"kanji":"全部","reading":"ぜんぶ"},{"kanji":"残念","reading":"ざんねん"},{"kanji":"気持ち","reading":"きもち"},{"kanji":"宿題","reading":"しゅくだい"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_equals_any": ["ている"], "error_class": "wrong-pattern"}
-  ]
+    {
+      "if_answer_equals_any": [
+        "ている"
+      ],
+      "error_class": "wrong-pattern",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        },
+        {
+          "kanji": "動作",
+          "reading": "どうさ"
+        },
+        {
+          "kanji": "丁寧",
+          "reading": "ていねい"
+        },
+        {
+          "kanji": "全部",
+          "reading": "ぜんぶ"
+        },
+        {
+          "kanji": "残念",
+          "reading": "ざんねん"
+        },
+        {
+          "kanji": "気持ち",
+          "reading": "きもち"
+        },
+        {
+          "kanji": "宿題",
+          "reading": "しゅくだい"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

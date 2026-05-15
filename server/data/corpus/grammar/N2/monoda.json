@@ -3,17 +3,84 @@
   "title_ja": "〜ものだ",
   "title_zh": "〜ものだ（普遍真理 / 懷舊 / 應該）",
   "jlpt_level": "N2",
-  "explanation_ja": "「〜ものだ」には、いくつか別の使い方があります。\n\n1. 一般的な性質や常識：子供は泣くものだ\n2. 昔の習慣を思い出す：子供のころ、よく公園で遊んだものだ\n3. 強い感心や驚き：よく我慢したものだ\n\n形は普通形＋ものだです。な形容詞は「静かなものだ」のように「な」を入れます。\n\n「〜ものではない」は禁止や注意、「〜ことだ」は助言、「〜べきだ」は強い義務に近い表現なので、混ぜないようにします。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜ものだ」には、いくつか別の使い方があります。\n\n1. 一般的な性質や常識：子供は泣くものだ\n2. 昔の習慣を思い出す：子供のころ、よく公園で遊んだものだ\n3. 強い感心や驚き：よく我慢したものだ\n\n形は普通形＋ものだです。な形容詞は「静かなものだ」のように「な」を入れます。\n\n「〜ものではない」は禁止や注意、「〜ことだ」は助言、「〜べきだ」は強い義務に近い表現なので、混ぜないようにします。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜ものだ」是 N2 重要句型，**有三種互不相關的用法**，初學容易混淆。\n\n**形態**：普通形＋ものだ\n- 動詞辭書形・否定形：泣く→泣くものだ、泣かない→泣かないものだ\n- い形容詞：寒い→寒いものだ\n- な形容詞：静か**な**＋ものだ\n\n**用法 1：普遍/常理（人/事物本就如此）**\n- 子供は泣くものだ（小孩本來就會哭）\n- 時間が経つのは早いものだ（時間過得真快）\n→ 主語通常是泛指或抽象\n\n**用法 2：懷舊（「以前常常…」）**\n- 動詞**た形**＋ものだ\n- 子供のころ、よく公園で遊んだものだ（小時候常在公園玩）\n→ 主語通常是「我/我們」，回憶過去習慣\n\n**用法 3：強烈感慨/驚嘆**\n- よく我慢したものだ（你很能忍耐啊／真是了不起）\n→ 表達讚嘆或驚訝\n\n**注意不要混的家族**：\n- 〜ものではない：禁止/告誡（人前で泣くものではない）\n- 〜ことだ：建議/應該（早く寝ることだ）\n- 〜べきだ：強烈應該（行くべきだ）",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"性質","reading":"せいしつ"},{"kanji":"常識","reading":"じょうしき"},{"kanji":"習慣","reading":"しゅうかん"},{"kanji":"感心","reading":"かんしん"},{"kanji":"驚","reading":"おどろ"},{"kanji":"形容詞","reading":"けいようし"},{"kanji":"禁止","reading":"きんし"},{"kanji":"義務","reading":"ぎむ"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_contains_any": ["こと"], "error_class": "used-koto"},
-    {"if_answer_contains_any": ["べき"], "error_class": "used-beki"}
-  ]
+    {
+      "if_answer_contains_any": [
+        "こと"
+      ],
+      "error_class": "used-koto",
+      "contrast": null
+    },
+    {
+      "if_answer_contains_any": [
+        "べき"
+      ],
+      "error_class": "used-beki",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "性質",
+          "reading": "せいしつ"
+        },
+        {
+          "kanji": "常識",
+          "reading": "じょうしき"
+        },
+        {
+          "kanji": "習慣",
+          "reading": "しゅうかん"
+        },
+        {
+          "kanji": "感心",
+          "reading": "かんしん"
+        },
+        {
+          "kanji": "驚",
+          "reading": "おどろ"
+        },
+        {
+          "kanji": "形容詞",
+          "reading": "けいようし"
+        },
+        {
+          "kanji": "禁止",
+          "reading": "きんし"
+        },
+        {
+          "kanji": "義務",
+          "reading": "ぎむ"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

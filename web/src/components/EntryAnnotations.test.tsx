@@ -56,7 +56,7 @@ describe("EntryAnnotations", () => {
         annotations={{
           furigana: {
             title_ja: [{ kanji: "違", reading: "ちが" }],
-            key_terms: [{ kanji: "根拠", reading: "こんきょ" }],
+            vocabulary: [{ kanji: "根拠", reading: "こんきょ" }],
           },
         }}
       />
@@ -120,7 +120,7 @@ describe("EntryAnnotations", () => {
                 { kanji: "違", reading: "ちが" },
                 { kanji: null, reading: "ちが" },
               ],
-              key_terms: [{ kanji: 123, reading: "こんきょ" }],
+              vocabulary: [{ kanji: 123, reading: "こんきょ" }],
             },
           } as never
         }
@@ -151,5 +151,27 @@ describe("EntryAnnotations", () => {
     expect(screen.getByText("会話でよく使う。")).toBeVisible();
     expect(screen.queryByText("bar")).not.toBeInTheDocument();
     expect(screen.queryByText("undefined")).not.toBeInTheDocument();
+  });
+
+  it("does not render classifier annotations in the generic renderer", () => {
+    render(
+      <EntryAnnotations
+        annotations={{
+          classifier: {
+            rules: [
+              {
+                with_pattern: "わけだ",
+                rule_ja_blocks: [
+                  { kind: "paragraph", tokens: [{ t: "text", v: "辨析本文" }] },
+                ],
+              },
+            ],
+          },
+        }}
+      />
+    );
+
+    expect(screen.queryByText("辨析")).not.toBeInTheDocument();
+    expect(screen.queryByText("辨析本文")).not.toBeInTheDocument();
   });
 });

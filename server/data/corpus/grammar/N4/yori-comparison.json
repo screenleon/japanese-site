@@ -3,16 +3,71 @@
   "title_ja": "より（比較）",
   "title_zh": "より（比較）",
   "jlpt_level": "N4",
-  "explanation_ja": "「AよりBのほうが〜」は、AとBを比べて、Bの程度が高いことを表します。\n\n- バスより電車のほうが速いです\n- 昨日より今日のほうが寒いです\n\n「より」は比べる基準を示します。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「AよりBのほうが〜」は、AとBを比べて、Bの程度が高いことを表します。\n\n- バスより電車のほうが速いです\n- 昨日より今日のほうが寒いです\n\n「より」は比べる基準を示します。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「AよりBのほうが〜」表示和 A 相比，B 比較怎樣。「より」標示比較基準，例如「バスより電車のほうが速いです」。",
-  "annotations": {
-    "furigana": {"title_ja":[{"kanji":"比較","reading":"ひかく"}],"key_terms":[{"kanji":"基準","reading":"きじゅん"},{"kanji":"程度","reading":"ていど"},{"kanji":"電車","reading":"でんしゃ"},{"kanji":"昨日","reading":"きのう"},{"kanji":"今日","reading":"きょう"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_equals_any": ["から"], "error_class": "wrong-particle"}
-  ]
+    {
+      "if_answer_equals_any": [
+        "から"
+      ],
+      "error_class": "wrong-particle",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "比較",
+          "reading": "ひかく"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "基準",
+          "reading": "きじゅん"
+        },
+        {
+          "kanji": "程度",
+          "reading": "ていど"
+        },
+        {
+          "kanji": "電車",
+          "reading": "でんしゃ"
+        },
+        {
+          "kanji": "昨日",
+          "reading": "きのう"
+        },
+        {
+          "kanji": "今日",
+          "reading": "きょう"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

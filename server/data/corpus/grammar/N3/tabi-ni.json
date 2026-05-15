@@ -3,13 +3,35 @@
   "title_ja": "たびに",
   "title_zh": "たびに（每當／每次）",
   "jlpt_level": "N3",
-  "explanation_ja": "「たびに」は、ある出来事が起こるごとに、別の出来事も繰り返し起こることを表す表現である。動詞の辞書形または「名詞 + の」に接続し、習慣的・規則的な反復を述べる際に用いられる。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「たびに」は、ある出来事が起こるごとに、別の出来事も繰り返し起こることを表す表現である。動詞の辞書形または「名詞 + の」に接続し、習慣的・規則的な反復を述べる際に用いられる。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「たびに」表示每當某事發生，另一件事也會反覆發生。接續為動詞辭書形或「名詞 + の + たびに」。",
-  "mental_model": "「たびに」は、ある出来事が起こるごとに、別の出来事も繰り返し起こると見る表現です。一回だけの結果ではなく、「Aが起きるたびにBも起きる」という反復の組み合わせを表します。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
   "annotations": {
     "mental_model": "「たびに」は、ある出来事が起こるごとに、別の出来事も繰り返し起こると見る表現です。一回だけの結果ではなく、「Aが起きるたびにBも起きる」という反復の組み合わせを表します。",
     "furigana": {
-      "key_terms": [
+      "vocabulary": [
         {
           "kanji": "出来事",
           "reading": "できごと"
@@ -57,9 +79,5 @@
       ]
     }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1,
-  "classifier_rules": []
+  "audit_status": "pre-redesign"
 }

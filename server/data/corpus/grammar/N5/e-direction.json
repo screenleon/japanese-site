@@ -3,16 +3,79 @@
   "title_ja": "へ（方向）",
   "title_zh": "へ（方向）",
   "jlpt_level": "N5",
-  "explanation_ja": "「へ」は、移動の方向を示します。書くときは「へ」ですが、助詞として読むときは「え」と発音します。\n\n- 日本へ行きます\n- こちらへ来てください\n\n到着点を強く言う「に」と似ていますが、「へ」は向かう方向を表す感じが強いです。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「へ」は、移動の方向を示します。書くときは「へ」ですが、助詞として読むときは「え」と発音します。\n\n- 日本へ行きます\n- こちらへ来てください\n\n到着点を強く言う「に」と似ていますが、「へ」は向かう方向を表す感じが強いです。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「へ」表示移動方向。作為助詞時發音為「え」。它和「に」都可接移動動詞，但「へ」比較強調方向。",
-  "annotations": {
-    "furigana": {"title_ja":[{"kanji":"方向","reading":"ほうこう"}],"key_terms":[{"kanji":"方向","reading":"ほうこう"},{"kanji":"助詞","reading":"じょし"},{"kanji":"移動","reading":"いどう"},{"kanji":"発音","reading":"はつおん"},{"kanji":"日本","reading":"にほん"},{"kanji":"到着","reading":"とうちゃく"},{"kanji":"感じ","reading":"かんじ"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_equals_any": ["に"], "error_class": "used-ni"}
-  ]
+    {
+      "if_answer_equals_any": [
+        "に"
+      ],
+      "error_class": "used-ni",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "方向",
+          "reading": "ほうこう"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "方向",
+          "reading": "ほうこう"
+        },
+        {
+          "kanji": "助詞",
+          "reading": "じょし"
+        },
+        {
+          "kanji": "移動",
+          "reading": "いどう"
+        },
+        {
+          "kanji": "発音",
+          "reading": "はつおん"
+        },
+        {
+          "kanji": "日本",
+          "reading": "にほん"
+        },
+        {
+          "kanji": "到着",
+          "reading": "とうちゃく"
+        },
+        {
+          "kanji": "感じ",
+          "reading": "かんじ"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

@@ -6,25 +6,19 @@ import {
   type GrammarExample,
   type GrammarPoint,
 } from "../api";
-import { EntryAnnotations } from "../components/EntryAnnotations";
+import { ClassifierContrasts } from "../components/ClassifierContrasts";
+import { BlockRenderer, EntryAnnotations } from "../components/EntryAnnotations";
 import { useReadTracking } from "../hooks/useReadTracking";
 
 const levels = ["N5", "N4", "N3", "N2", "N1"];
 
-function mergeFromGrammarPoint(point: GrammarPoint): Annotations {
-  return {
-    ...point.annotations,
-    mental_model: point.annotations?.mental_model ?? point.mental_model,
-    nuance_note: point.annotations?.nuance_note ?? point.nuance_note,
-  };
-}
-
 function hasAnnotations(annotations: Annotations) {
   return Object.entries(annotations).some(([kind, value]) => {
+    if (kind === "classifier") return false;
     if (typeof value === "string") return value.trim().length > 0;
     if (kind === "furigana" && value) {
       const furigana = value as NonNullable<Annotations["furigana"]>;
-      return (furigana.title_ja?.length ?? 0) + (furigana.key_terms?.length ?? 0) > 0;
+      return (furigana.title_ja?.length ?? 0) + (furigana.vocabulary?.length ?? 0) > 0;
     }
     return false;
   });
@@ -96,8 +90,7 @@ export function GrammarTab({
 
   const levelPoints = grouped.find((g) => g.level === selectedLevel)?.points || [];
   const active = levelPoints.find((p) => p.slug === activeSlug) || levelPoints[0] || null;
-  const primaryExplanation = active?.explanation_ja || active?.explanation_zh || "";
-  const hasJapaneseExplanation = Boolean(active?.explanation_ja?.trim());
+  const hasJapaneseExplanation = Boolean(active?.explanation_ja_blocks?.length);
   const relatedPoints = useMemo(() => {
     return (active?.related_slugs || []).map((slug) => ({
       slug,
@@ -242,17 +235,29 @@ export function GrammarTab({
                     {active.jlpt_level} · {active.title_zh}
                   </p>
                 </header>
-                {hasAnnotations(mergeFromGrammarPoint(active)) && (
+                {hasAnnotations(active.annotations ?? {}) && (
                   <div className="mb-4">
                     <EntryAnnotations
-                      annotations={mergeFromGrammarPoint(active)}
+                      annotations={active.annotations}
                       kinds={["furigana", "nuance_note", "mental_model"]}
                     />
                   </div>
                 )}
-                <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed">
-                  {primaryExplanation}
-                </pre>
+                <section className="mb-4 rounded-md border border-slate-200 bg-slate-50 p-4">
+                  <h3 className="text-base font-medium">句型</h3>
+                  <dl className="mt-3 space-y-2">
+                    {active.pattern.map((row, index) => (
+                      <div key={`${row.form}-${index}`} className="grid gap-1 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+                        <dt className="font-mono text-sm text-slate-900">{row.form}</dt>
+                        <dd className="text-sm text-slate-600">
+                          {row.gloss_zh}
+                          {row.notes_zh && <span className="ml-2 text-slate-500">{row.notes_zh}</span>}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                </section>
+                <BlockRenderer blocks={active.explanation_ja_blocks} />
                 {(examples.length > 0 || examplesFailed) && (
                   <section className="mt-6 border-t border-slate-200 pt-5">
                     <h3 className="text-base font-medium">例文</h3>
@@ -299,6 +304,13 @@ export function GrammarTab({
                     </div>
                   </section>
                 )}
+                <div className="mt-6">
+                  <ClassifierContrasts
+                    annotations={active.annotations}
+                    points={points}
+                    primaryPattern={active.pattern[0]?.form}
+                  />
+                </div>
                 {hasJapaneseExplanation && (
                   <div className="mt-5 border-t border-slate-200 pt-4">
                     <button

@@ -3,11 +3,48 @@
   "title_ja": "〜あっての",
   "title_zh": "〜あっての（有了…才有…）",
   "jlpt_level": "N1",
-  "explanation_ja": "意味核：ある存在や支えがあるからこそ後件が成り立つことを表す。感謝・前提条件・依存関係を強く示す。\n\n接続：名詞＋あっての＋名詞。必要に応じて「名詞があっての」とも言う。\n\n例：読者あっての雑誌なので、編集部は声を丁寧に拾っている。／現場の協力あっての調査結果だ。／地域の信頼あってのサービスだから、説明責任は重い。\n\nレジスター／類義差別：やや硬い叙述から丁寧な話し言葉まで使える。「〜のおかげで」は原因に焦点を置くが、「〜あっての」は存在そのものが前提である点を強く示す。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "意味核：ある存在や支えがあるからこそ後件が成り立つことを表す。感謝・前提条件・依存関係を強く示す。\n\n接続：名詞＋あっての＋名詞。必要に応じて「名詞があっての」とも言う。\n\n例：読者あっての雑誌なので、編集部は声を丁寧に拾っている。／現場の協力あっての調査結果だ。／地域の信頼あってのサービスだから、説明責任は重い。\n\nレジスター／類義差別：やや硬い叙述から丁寧な話し言葉まで使える。「〜のおかげで」は原因に焦点を置くが、「〜あっての」は存在そのものが前提である点を強く示す。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "〜あっての 表示「正因為有 A，B 才成立」，強調支撐、前提或不可欠的存在。\n\n**形態**：\n- 名詞＋あっての＋名詞；也可作「名詞があっての」。\n\n**例**：\n- 読者あっての雑誌なので、編集部は声を丁寧に拾っている。\n- 現場の協力あっての調査結果だ。\n\n**比較／差別**：\n- 比「〜のおかげで」更強調 B 的存在本身依賴 A。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_not_contains_any": [
+        "あっての"
+      ],
+      "error_class": "missing-target-pattern",
+      "contrast": null
+    },
+    {
+      "default": true,
+      "error_class": "generic",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "furigana": {
-      "key_terms": [
+      "vocabulary": [
         {
           "kanji": "存在",
           "reading": "そんざい"
@@ -43,20 +80,5 @@
       ]
     }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1,
-  "classifier_rules": [
-    {
-      "if_answer_not_contains_any": [
-        "あっての"
-      ],
-      "error_class": "missing-target-pattern"
-    },
-    {
-      "default": true,
-      "error_class": "generic"
-    }
-  ]
+  "audit_status": "pre-redesign"
 }

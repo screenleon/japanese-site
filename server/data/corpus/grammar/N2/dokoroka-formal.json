@@ -3,21 +3,89 @@
   "title_ja": "〜どころか",
   "title_zh": "〜どころか（哪裡是…還／別說…就連）",
   "jlpt_level": "N2",
-  "nuance_note": "N3 の どころか と同源だが、改まった文章でも自然に使え、対比の落差を強調する書き言葉寄りの用法。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜どころか」は、Aという予想や程度を強く否定して、実際はBだと言う表現です。\n\n形：名詞・動詞辞書形・形容詞の語幹に直接つけます。\n- 漢字どころか、ひらがなも読めない\n- 勉強するどころか、遊んでばかりいる\n- 寒いどころか、暑いくらいだ\n\n「ばかりか」は同じ方向に情報を足す表現ですが、「どころか」は予想と反対、またはさらに極端な事実を出すときに使います。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「〜どころか」用於**強烈否定預期**，後接「不僅不…甚至相反」。N2 高頻句型。\n\n**形態**：直接接名詞、辭書形、形容詞詞幹\n- 名詞：漢字どころか\n- 動詞：勉強するどころか\n- い形容詞：上手どころか\n\n**用法 1：A 是錯的，實際上是 B（B 是 A 的反面或更甚）**\n- 漢字どころか、ひらがなも読めない（別說漢字，連平假名都不會讀）\n- 寒いどころか、暑いくらいだ（哪裡冷，根本是熱）\n\n**用法 2：不僅 A，連更甚的 B**\n- 病気は治るどころか、悪化した（病不但沒好，還惡化了）\n\n**與 〜ばかりか 的差別**：\n- ばかりか：「不只 A，還 B」（B 同方向加強）：彼は親切なばかりか、よく働く\n- どころか：「哪是 A，還 B」（B 與 A 反向或更極端）：親切などころか、冷たい\n\n**與 〜くらい／〜ぐらい 的差別**：くらい 表程度比較，どころか 表反向強烈否定。\n\n**N2 必考**：題目常給「親切なAが…」結構，看你是否選對 ばかりか／どころか。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_contains_any": [
+        "ばかり"
+      ],
+      "error_class": "used-bakarika",
+      "contrast": null
+    },
+    {
+      "if_answer_contains_any": [
+        "くらい",
+        "ぐらい"
+      ],
+      "error_class": "used-kurai",
+      "contrast": null
+    }
+  ],
   "related_slugs": [
     "dokoroka"
   ],
-  "explanation_ja": "「〜どころか」は、Aという予想や程度を強く否定して、実際はBだと言う表現です。\n\n形：名詞・動詞辞書形・形容詞の語幹に直接つけます。\n- 漢字どころか、ひらがなも読めない\n- 勉強するどころか、遊んでばかりいる\n- 寒いどころか、暑いくらいだ\n\n「ばかりか」は同じ方向に情報を足す表現ですが、「どころか」は予想と反対、またはさらに極端な事実を出すときに使います。",
-  "explanation_zh": "「〜どころか」用於**強烈否定預期**，後接「不僅不…甚至相反」。N2 高頻句型。\n\n**形態**：直接接名詞、辭書形、形容詞詞幹\n- 名詞：漢字どころか\n- 動詞：勉強するどころか\n- い形容詞：上手どころか\n\n**用法 1：A 是錯的，實際上是 B（B 是 A 的反面或更甚）**\n- 漢字どころか、ひらがなも読めない（別說漢字，連平假名都不會讀）\n- 寒いどころか、暑いくらいだ（哪裡冷，根本是熱）\n\n**用法 2：不僅 A，連更甚的 B**\n- 病気は治るどころか、悪化した（病不但沒好，還惡化了）\n\n**與 〜ばかりか 的差別**：\n- ばかりか：「不只 A，還 B」（B 同方向加強）：彼は親切なばかりか、よく働く\n- どころか：「哪是 A，還 B」（B 與 A 反向或更極端）：親切などころか、冷たい\n\n**與 〜くらい／〜ぐらい 的差別**：くらい 表程度比較，どころか 表反向強烈否定。\n\n**N2 必考**：題目常給「親切なAが…」結構，看你是否選對 ばかりか／どころか。",
   "annotations": {
-    "furigana": {"key_terms":[{"kanji":"予想","reading":"よそう"},{"kanji":"程度","reading":"ていど"},{"kanji":"否定","reading":"ひてい"},{"kanji":"実際","reading":"じっさい"},{"kanji":"漢字","reading":"かんじ"},{"kanji":"勉強","reading":"べんきょう"},{"kanji":"反対","reading":"はんたい"},{"kanji":"事実","reading":"じじつ"}]}
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "予想",
+          "reading": "よそう"
+        },
+        {
+          "kanji": "程度",
+          "reading": "ていど"
+        },
+        {
+          "kanji": "否定",
+          "reading": "ひてい"
+        },
+        {
+          "kanji": "実際",
+          "reading": "じっさい"
+        },
+        {
+          "kanji": "漢字",
+          "reading": "かんじ"
+        },
+        {
+          "kanji": "勉強",
+          "reading": "べんきょう"
+        },
+        {
+          "kanji": "反対",
+          "reading": "はんたい"
+        },
+        {
+          "kanji": "事実",
+          "reading": "じじつ"
+        }
+      ]
+    },
+    "nuance_note": "N3 の どころか と同源だが、改まった文章でも自然に使え、対比の落差を強調する書き言葉寄りの用法。"
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
-  "classifier_rules": [
-    {"if_answer_contains_any": ["ばかり"], "error_class": "used-bakarika"},
-    {"if_answer_contains_any": ["くらい", "ぐらい"], "error_class": "used-kurai"}
-  ]
+  "audit_status": "pre-redesign"
 }

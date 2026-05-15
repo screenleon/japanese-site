@@ -3,25 +3,82 @@
   "title_ja": "〜であれ",
   "title_zh": "〜であれ（即使…／無論…）",
   "jlpt_level": "N1",
-  "explanation_ja": "意味核：どのような立場・条件であっても、後件の判断や結果は変わらないことを表す。強い一般化や原則を示す。\n\n接続：名詞＋であれ。な形容詞語幹＋であれ。疑問詞＋であれ。\n\n例：理由が何であれ、無断欠席は認められない。／新人であれ、規則を守る責任はある。／小さな不具合であれ、報告を怠ってはならない。\n\nレジスター／類義差別：硬い書き言葉・演説調。「〜でも」「〜であっても」より改まった響きがある。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "意味核：どのような立場・条件であっても、後件の判断や結果は変わらないことを表す。強い一般化や原則を示す。\n\n接続：名詞＋であれ。な形容詞語幹＋であれ。疑問詞＋であれ。\n\n例：理由が何であれ、無断欠席は認められない。／新人であれ、規則を守る責任はある。／小さな不具合であれ、報告を怠ってはならない。\n\nレジスター／類義差別：硬い書き言葉・演説調。「〜でも」「〜であっても」より改まった響きがある。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "〜であれ 表示即使是 A，後項原則或結果也不改變。\n\n**形態**：\n- 名詞／な形容詞語幹／疑問詞＋であれ。\n\n**例**：\n- 理由が何であれ、無断欠席は認められない。\n- 新人であれ、規則を守る責任はある。\n\n**比較／差別**：\n- 比「〜でも」更正式，常用於原則、制度、評論。",
-  "annotations": {
-    "furigana": {"key_terms":[{"kanji":"立場","reading":"たちば"},{"kanji":"条件","reading":"じょうけん"},{"kanji":"後件","reading":"こうけん"},{"kanji":"判断","reading":"はんだん"},{"kanji":"結果","reading":"けっか"},{"kanji":"一般","reading":"いっぱん"},{"kanji":"原則","reading":"げんそく"},{"kanji":"理由","reading":"りゆう"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
     {
       "if_answer_not_contains_any": [
         "であれ"
       ],
-      "error_class": "missing-target-pattern"
+      "error_class": "missing-target-pattern",
+      "contrast": null
     },
     {
       "default": true,
-      "error_class": "generic"
+      "error_class": "generic",
+      "contrast": null
     }
-  ]
+  ],
+  "annotations": {
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "立場",
+          "reading": "たちば"
+        },
+        {
+          "kanji": "条件",
+          "reading": "じょうけん"
+        },
+        {
+          "kanji": "後件",
+          "reading": "こうけん"
+        },
+        {
+          "kanji": "判断",
+          "reading": "はんだん"
+        },
+        {
+          "kanji": "結果",
+          "reading": "けっか"
+        },
+        {
+          "kanji": "一般",
+          "reading": "いっぱん"
+        },
+        {
+          "kanji": "原則",
+          "reading": "げんそく"
+        },
+        {
+          "kanji": "理由",
+          "reading": "りゆう"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

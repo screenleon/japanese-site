@@ -3,17 +3,90 @@
   "title_ja": "〜といっても過言ではない",
   "title_zh": "〜といっても過言ではない（說是…也不為過）",
   "jlpt_level": "N1",
-  "explanation_ja": "「〜といっても過言ではない」は、「少し大げさに聞こえるかもしれないが、実際にそう言えるほどだ」という意味です。\n\n形：普通形＋といっても過言ではない。\n- 彼の発見が医学を変えたといっても過言ではない\n- この町は観光で成り立っているといっても過言ではない\n\n強く評価するときに使います。話し言葉でも使えますが、説明・評論・発表などの少し改まった文脈に合います。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「〜といっても過言ではない」は、「少し大げさに聞こえるかもしれないが、実際にそう言えるほどだ」という意味です。\n\n形：普通形＋といっても過言ではない。\n- 彼の発見が医学を変えたといっても過言ではない\n- この町は観光で成り立っているといっても過言ではない\n\n強く評価するときに使います。話し言葉でも使えますが、説明・評論・発表などの少し改まった文脈に合います。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜といっても過言ではない」表示「即使說成…也不誇張／也不為過」。用來強調某評價或判斷並非誇大。\n\n**形態**：普通形＋といっても過言ではない\n- 彼の発見が医学を変えたといっても過言ではない。\n- この町は観光で成り立っているといっても過言ではない。\n\n重點是「看似強烈，但這樣說並不算過度」。",
-  "annotations": {
-    "furigana": {"title_ja":[{"kanji":"過言","reading":"かごん"}],"key_terms":[{"kanji":"過言","reading":"かごん"},{"kanji":"発見","reading":"はっけん"},{"kanji":"医学","reading":"いがく"},{"kanji":"町","reading":"まち"},{"kanji":"観光","reading":"かんこう"},{"kanji":"評価","reading":"ひょうか"},{"kanji":"説明","reading":"せつめい"},{"kanji":"評論","reading":"ひょうろん"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_contains_any": ["大げさ"], "error_class": "used-oogesa"},
-    {"if_answer_not_contains_any": ["過言"], "error_class": "missing-kagon"}
-  ]
+    {
+      "if_answer_contains_any": [
+        "大げさ"
+      ],
+      "error_class": "used-oogesa",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "過言"
+      ],
+      "error_class": "missing-kagon",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "過言",
+          "reading": "かごん"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "過言",
+          "reading": "かごん"
+        },
+        {
+          "kanji": "発見",
+          "reading": "はっけん"
+        },
+        {
+          "kanji": "医学",
+          "reading": "いがく"
+        },
+        {
+          "kanji": "町",
+          "reading": "まち"
+        },
+        {
+          "kanji": "観光",
+          "reading": "かんこう"
+        },
+        {
+          "kanji": "評価",
+          "reading": "ひょうか"
+        },
+        {
+          "kanji": "説明",
+          "reading": "せつめい"
+        },
+        {
+          "kanji": "評論",
+          "reading": "ひょうろん"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

@@ -3,17 +3,91 @@
   "title_ja": "〜をおいて（他にない）",
   "title_zh": "〜をおいて（他にない）（除了…沒有別的）",
   "jlpt_level": "N1",
-  "explanation_ja": "意味核：ある役割・条件に最もふさわしいものはそれ以外にない、と強く限定する表現である。多くの場合「〜をおいてほかにない」の形で、唯一性や最適性を述べる。\n\n接続：形：名詞＋をおいて（ほかにない／他にない）。人・組織・場所・方法など、唯一の候補として評価する名詞を取る。\n\n例：この任務は彼をおいてほかにない／開催地は京都をおいて他にない／解決策は対話をおいてほかにない\n\nレジスター／類義差別：評論・演説・推薦文などで用いられる硬い断定である。「〜しかない」は広く使えるが、「〜をおいてほかにない」は対象を前に出し、唯一性を格調高く強調する。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "意味核：ある役割・条件に最もふさわしいものはそれ以外にない、と強く限定する表現である。多くの場合「〜をおいてほかにない」の形で、唯一性や最適性を述べる。\n\n接続：形：名詞＋をおいて（ほかにない／他にない）。人・組織・場所・方法など、唯一の候補として評価する名詞を取る。\n\n例：この任務は彼をおいてほかにない／開催地は京都をおいて他にない／解決策は対話をおいてほかにない\n\nレジスター／類義差別：評論・演説・推薦文などで用いられる硬い断定である。「〜しかない」は広く使えるが、「〜をおいてほかにない」は対象を前に出し、唯一性を格調高く強調する。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜をおいてほかにない」表示「除了 A 以外沒有別的」，用來強調 A 是唯一或最適合的人、地點、方法等。\n\n**形態**：\n- 名詞＋をおいてほかにない\n- 名詞＋をおいて他にない\n\n**例**：\n- この任務は彼をおいてほかにない。\n- 解決策は対話をおいてほかにない。\n\n**比較／差別**：\n- 〜しかない：普通、廣泛使用。\n- 〜よりほかない：表示不得不如此。\n- 〜をおいてほかにない：正式且強調「正是 A，沒有其他候選」。",
-  "annotations": {
-    "furigana": {"title_ja":[{"kanji":"他","reading":"た"}],"key_terms":[{"kanji":"役割","reading":"やくわり"},{"kanji":"条件","reading":"じょうけん"},{"kanji":"唯一","reading":"ゆいいつ"},{"kanji":"最適","reading":"さいてき"},{"kanji":"任務","reading":"にんむ"},{"kanji":"彼","reading":"かれ"},{"kanji":"開催","reading":"かいさい"},{"kanji":"解決策","reading":"かいけつさく"}]}
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1.0,
   "classifier_rules": [
-    {"if_answer_contains_any": ["しか", "よりほか"], "error_class": "used-only-wrong-form"},
-    {"if_answer_not_contains_any": ["おいて"], "error_class": "missing-oite"}
-  ]
+    {
+      "if_answer_contains_any": [
+        "しか",
+        "よりほか"
+      ],
+      "error_class": "used-only-wrong-form",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "おいて"
+      ],
+      "error_class": "missing-oite",
+      "contrast": null
+    }
+  ],
+  "annotations": {
+    "furigana": {
+      "title_ja": [
+        {
+          "kanji": "他",
+          "reading": "た"
+        }
+      ],
+      "vocabulary": [
+        {
+          "kanji": "役割",
+          "reading": "やくわり"
+        },
+        {
+          "kanji": "条件",
+          "reading": "じょうけん"
+        },
+        {
+          "kanji": "唯一",
+          "reading": "ゆいいつ"
+        },
+        {
+          "kanji": "最適",
+          "reading": "さいてき"
+        },
+        {
+          "kanji": "任務",
+          "reading": "にんむ"
+        },
+        {
+          "kanji": "彼",
+          "reading": "かれ"
+        },
+        {
+          "kanji": "開催",
+          "reading": "かいさい"
+        },
+        {
+          "kanji": "解決策",
+          "reading": "かいけつさく"
+        }
+      ]
+    }
+  },
+  "audit_status": "pre-redesign"
 }

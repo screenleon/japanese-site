@@ -3,8 +3,48 @@
   "title_ja": "〜が早いか",
   "title_zh": "〜が早いか（一…馬上就…）",
   "jlpt_level": "N1",
-  "explanation_ja": "意味核：ある動作が終わるのとほぼ同時に、次の動作がただちに起こることを表す。反応の速さ、切迫感、機械的な即時性を強く示し、前件と後件の間にほとんど時間差がない。\n\n接続：形：動詞辞書形＋が早いか。前件には瞬間的に完了する動作を置き、後件にはすぐ続く行為・反応を置く。\n\n例：発表が終わるが早いか質問が相次ぐ／警報が鳴るが早いか職員が避難誘導を始める／資料を受け取るが早いか分析に着手する\n\nレジスター／類義差別：報道文・硬い叙述で用いられ、話し言葉では「〜とすぐ」「〜たらすぐ」が自然である。「〜たとたん」は直後性に加えて予期しない結果を表しやすいが、「〜が早いか」は反応の迅速さに焦点がある。",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "意味核：ある動作が終わるのとほぼ同時に、次の動作がただちに起こることを表す。反応の速さ、切迫感、機械的な即時性を強く示し、前件と後件の間にほとんど時間差がない。\n\n接続：形：動詞辞書形＋が早いか。前件には瞬間的に完了する動作を置き、後件にはすぐ続く行為・反応を置く。\n\n例：発表が終わるが早いか質問が相次ぐ／警報が鳴るが早いか職員が避難誘導を始める／資料を受け取るが早いか分析に着手する\n\nレジスター／類義差別：報道文・硬い叙述で用いられ、話し言葉では「〜とすぐ」「〜たらすぐ」が自然である。「〜たとたん」は直後性に加えて予期しない結果を表しやすいが、「〜が早いか」は反応の迅速さに焦点がある。"
+        }
+      ]
+    }
+  ],
   "explanation_zh": "「〜が早いか」表示「一 A，立刻 B」，強調前後幾乎沒有時間差，常帶有迅速反應或緊迫感。\n\n**形態**：\n- 動詞辞書形＋が早いか\n\n**例**：\n- 発表が終わるが早いか、質問が相次いだ。\n- 警報が鳴るが早いか、職員は誘導を始めた。\n\n**比較／差別**：\n- 〜とすぐ：中性、較日常。\n- 〜たとたん：常表示剛發生就出現意外結果。\n- 〜が早いか：偏書面，強調反應或動作的即時性。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "classifier_rules": [
+    {
+      "if_answer_contains_any": [
+        "すぐ",
+        "たとたん"
+      ],
+      "error_class": "used-immediate-wrong-form",
+      "contrast": null
+    },
+    {
+      "if_answer_not_contains_any": [
+        "早い"
+      ],
+      "error_class": "missing-hayai",
+      "contrast": null
+    }
+  ],
   "annotations": {
     "furigana": {
       "title_ja": [
@@ -13,7 +53,7 @@
           "reading": "はやいか"
         }
       ],
-      "key_terms": [
+      "vocabulary": [
         {
           "kanji": "動作",
           "reading": "どうさ"
@@ -49,23 +89,5 @@
       ]
     }
   },
-  "source": "curated",
-  "license": "CC-BY-SA-4.0",
-  "validated_by": "import-curated-v1",
-  "validator_score": 1,
-  "classifier_rules": [
-    {
-      "if_answer_contains_any": [
-        "すぐ",
-        "たとたん"
-      ],
-      "error_class": "used-immediate-wrong-form"
-    },
-    {
-      "if_answer_not_contains_any": [
-        "早い"
-      ],
-      "error_class": "missing-hayai"
-    }
-  ]
+  "audit_status": "pre-redesign"
 }

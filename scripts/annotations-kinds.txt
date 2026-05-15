@@ -6,3 +6,4 @@ synonym_diff
 mental_model
 nuance_note
 furigana
+classifier
