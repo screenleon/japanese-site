@@ -1513,6 +1513,39 @@ items:
       - Do not modify `.pm/schema.md`, `project/backlog.yml` schema header, or other pm-schema files in JS-097/098/099.
       - Keep pm-schema v1 frozen until this separate item is decided.
 
+  - id: JS-106
+    title: Inline ruby migration for grammar `explanation_ja_blocks` (corpus-wide)
+    status: todo
+    priority: P2
+    milestone: content
+    area: content/schema-rollout
+    source: User feedback 2026-05-15 on 限り detail page; kagiri PoC commit demonstrates target shape
+    notes:
+      - 195+ N5/N4/N3/N2/N1 grammar entries still store `explanation_ja_blocks.tokens` as plain `{t:"text"}` runs.
+      - Schema, loader, renderer, lint all already support `{t:"ruby", k, r}` tokens (used in JS-097/098/099 spike PoC entries + kagiri PoC).
+      - Decide tokenization approach (hand-author / kagome-based auto-tokenizer / hybrid) before rollout.
+      - Rollout phased by JLPT level; recommended N3 → N2 → N1 → N4 → N5 to match user's learning level.
+      - Invariant: byte-identical text concatenation per entry (text token v + ruby token k concat == original explanation text).
+      - Coordinate with JS-107 on `annotations.furigana.vocabulary[]` retire policy.
+
+  - id: JS-107
+    title: Key-terms / lesson-vocab feature design + schema spike
+    status: todo
+    priority: P2
+    milestone: content
+    area: content/schema-spike
+    source: User feedback 2026-05-15 ("我覺得只要是B有需求") — vocabulary[] retire decision
+    notes:
+      - Real demand for per-entry "重點生詞" / collocations surface (e.g. 限り → 力の限り / 命の限り / 可能の限り).
+      - Current `annotations.furigana.vocabulary[]` was a failed proxy — POS-mixed extraction, no Chinese gloss, no vocab-corpus link, no curated selection. After PR #57 + JS-106 it has no UI consumer.
+      - Design spike deliverable: ADR + schema decision + 4-entry hand-author PoC.
+      - Schema candidate: `key_terms: [{ja, reading, gloss_zh, vocab_slug?}]` — must include Chinese gloss, must optionally link vocab corpus.
+      - UI label must NOT be "ふりがな" (separate intent from pronunciation aid) — e.g. "本文重點詞" / "覚えておきたい語彙".
+      - Selection: hand-author N (5–10?) per entry; do NOT seed from JS-067 pipeline output.
+      - Coordinate with JS-106 — `key_terms` is study list, not pronunciation table; should NOT duplicate inline ruby readings.
+      - Retire `FuriganaAnnotation.vocabulary` type field once `key_terms` ships and corpus migrates over.
+      - Blocked-by: design discussion with user on exact "key term" definition + selection criteria.
+
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.
 done:
