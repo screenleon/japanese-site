@@ -1,6 +1,8 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import type { ReactElement } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api, ApiError, type GrammarPoint } from "../api";
+import { ChineseVisibilityProvider } from "../chineseVisibility";
 import { GrammarTab } from "./GrammarTab";
 
 vi.mock("../hooks/useReadTracking", () => ({
@@ -106,6 +108,14 @@ const listGrammar = vi.mocked(api.listGrammar);
 const randomGrammar = vi.mocked(api.randomGrammar);
 const getGrammarExamples = vi.mocked(api.getGrammarExamples!);
 
+function renderWithChinese(visible: boolean, ui: ReactElement) {
+  return render(
+    <ChineseVisibilityProvider initialVisible={visible}>
+      {ui}
+    </ChineseVisibilityProvider>
+  );
+}
+
 async function expectMainEntryWithoutExamples(errorText: RegExp) {
   expect(await screen.findByRole("heading", { name: "ものの" })).toBeVisible();
   expect(screen.getByText("日本語の説明")).toBeVisible();
@@ -193,6 +203,26 @@ describe("GrammarTab", () => {
       expect(getGrammarExamples).toHaveBeenCalledWith("sae");
     });
     expect(screen.getByText("名前さえ書けばいい。")).toBeVisible();
+  });
+
+  it("hides Chinese grammar surfaces by default", async () => {
+    render(<GrammarTab />);
+
+    expect(await screen.findByRole("heading", { name: "〜さえ" })).toBeVisible();
+    expect(screen.queryByText("甚至；只要")).not.toBeInTheDocument();
+    expect(screen.queryByText("測試句型")).not.toBeInTheDocument();
+    expect(screen.queryByText("只要寫名字就好。")).not.toBeInTheDocument();
+    expect(screen.getByText("N3 · 〜さえ")).toBeVisible();
+  });
+
+  it("shows Chinese grammar surfaces when globally enabled", async () => {
+    renderWithChinese(true, <GrammarTab />);
+
+    expect(await screen.findByRole("heading", { name: "〜さえ" })).toBeVisible();
+    expect(screen.getAllByText("甚至；只要").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText("測試句型")).toBeVisible();
+    expect(screen.getByText("只要寫名字就好。")).toBeVisible();
+    expect(screen.getByText("N3 · 甚至；只要")).toBeVisible();
   });
 
   it("examples 404 — page renders main entry without crashing", async () => {

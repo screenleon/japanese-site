@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "../api";
+import { ChineseVisibilityProvider } from "../chineseVisibility";
 import { VocabTab } from "./VocabTab";
 
 vi.mock("../hooks/useReadTracking", () => ({
@@ -43,6 +44,14 @@ const kanaOnlyVocab = {
 
 const searchVocab = vi.mocked(api.searchVocab);
 const randomVocab = vi.mocked(api.randomVocab);
+
+function renderWithChinese(visible: boolean) {
+  return render(
+    <ChineseVisibilityProvider initialVisible={visible}>
+      <VocabTab />
+    </ChineseVisibilityProvider>
+  );
+}
 
 describe("VocabTab", () => {
   beforeEach(() => {
@@ -111,5 +120,19 @@ describe("VocabTab", () => {
 
     // Assert
     expect(container.querySelector("ruby")).not.toBeInTheDocument();
+  });
+
+  it("hides Chinese glosses by default", async () => {
+    render(<VocabTab />);
+
+    expect(await screen.findAllByText("よく話すこと。")).not.toHaveLength(0);
+    expect(screen.queryByText("聊天、多話。")).not.toBeInTheDocument();
+  });
+
+  it("shows Chinese glosses when globally enabled", async () => {
+    renderWithChinese(true);
+
+    expect(await screen.findAllByText("よく話すこと。")).not.toHaveLength(0);
+    expect(screen.getAllByText("聊天、多話。").length).toBeGreaterThanOrEqual(2);
   });
 });
