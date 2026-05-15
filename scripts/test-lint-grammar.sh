@@ -60,7 +60,10 @@ JSON
   "annotations": {
     "mental_model": "根拠から当然そうだと見る。",
     "nuance_note": "義務ではなく推量です。",
-    "furigana": {"vocabulary": [{"kanji": "根拠", "reading": "こんきょ"}]},
+    "furigana": {
+      "title_ja": [{"t": "text", "v": "はずだ"}],
+      "vocabulary": [{"kanji": "根拠", "reading": "こんきょ"}]
+    },
     "classifier": {
       "rules": [
         {
@@ -96,6 +99,22 @@ clean_root="$tmp_root/clean"
 make_clean_root "$clean_root"
 GRAMMAR_ROOT="$clean_root" bash scripts/lint-grammar.sh >/tmp/test-lint-grammar-clean.log
 
+vocabulary_only_root="$tmp_root/vocabulary-only"
+make_clean_root "$vocabulary_only_root"
+jq 'del(.annotations.furigana.title_ja) | .annotations.furigana.vocabulary = [{"kanji":"根拠","reading":"こんきょ"}]' "$vocabulary_only_root/N3/hazuda.json" > "$vocabulary_only_root/N3/hazuda.tmp"
+mv "$vocabulary_only_root/N3/hazuda.tmp" "$vocabulary_only_root/N3/hazuda.json"
+if ! GRAMMAR_ROOT="$vocabulary_only_root" bash scripts/lint-grammar.sh >"$tmp_root/vocabulary-only.out" 2>"$tmp_root/vocabulary-only.err"; then
+	echo "test-lint-grammar: vocabulary-only fixture unexpectedly failed" >&2
+	cat "$tmp_root/vocabulary-only.err" >&2
+	exit 1
+fi
+if [[ -s "$tmp_root/vocabulary-only.err" ]]; then
+	echo "test-lint-grammar: vocabulary-only fixture emitted findings" >&2
+	cat "$tmp_root/vocabulary-only.err" >&2
+	exit 1
+fi
+echo "test-lint-grammar: vocabulary-only fixture: ok"
+
 assert_bad "i1-schema-version" 'del(.schema_version)' "schema_version must equal integer 2"
 assert_bad "i2-pattern" '.pattern = [{"form":"   ","gloss_zh":"待補"}]' "pattern[0].form must be a non-empty string"
 assert_bad "i3-block" '.explanation_ja_blocks[0].tokens[0] = {"t":"ruby","k":"","r":"こんきょ"}' "explanation_ja_blocks block 0 token 0 ruby.k and ruby.r"
@@ -103,6 +122,8 @@ assert_bad "i4-meta" '._meta.license = ""' "_meta.license must be a non-empty st
 assert_bad "i5-legacy-top" '.source = "curated"' "source is disallowed; move to _meta.source"
 assert_bad "i6-annotation-overlap" '.annotations.pattern = "bad"' "annotations key 'pattern' overlaps top-level key"
 assert_bad "i7-furigana-key-terms" '.annotations.furigana.key_terms = [{"kanji":"根拠","reading":"こんきょ"}]' "annotations.furigana.key_terms is disallowed"
+assert_bad "i7-title-old-shape" '.annotations.furigana.title_ja = [{"kanji":"違いない","reading":"ちがいない"}]' "annotations.furigana.title_ja must be a Token array"
+assert_bad "i7-title-round-trip" '.title_ja = "に違いない" | .annotations.furigana.title_ja = [{"t":"ruby","k":"違いない","r":"ちがいない"}]' "annotations.furigana.title_ja round-trip mismatch"
 assert_bad "i8-empty-mental-model" '.annotations.mental_model = "   "' "annotations.mental_model must be a non-empty string"
 assert_bad "i9-classifier-predicate-mirror" '.annotations.classifier.rules[0].error_class = "bad"' "must not contain predicate key 'error_class'"
 assert_bad "i10-bad-contrast" '.classifier_rules[0].contrast.with_pattern = ""' "contrast.with_pattern must be a non-empty string"

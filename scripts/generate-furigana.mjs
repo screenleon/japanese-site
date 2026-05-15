@@ -3,9 +3,10 @@
 // Reads Japanese text from stdin (or `--text "<...>"`), runs Kuromoji
 // (kuromoji@0.1.2 + mecab-ipadic-2.7.0-20070801, both Apache-2.0 / NAIST
 // permissive) over it, and prints `Pair[]` JSON suitable for assembling
-// an `annotations.furigana.title_ja` or `annotations.furigana.key_terms`
-// array. Per ADR-0001 each pair has non-whitespace `kanji` and `reading`
-// strings; pure-kana input produces an empty array.
+// an `annotations.furigana.vocabulary` Pair[] array by default, or a shared
+// Token[] array for `annotations.furigana.title_ja` with `--emit token`.
+// Per ADR-0001 each pair has non-whitespace `kanji` and `reading` strings;
+// pure-kana Pair[] output is empty, while Token[] output preserves the text.
 
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
@@ -65,26 +66,11 @@ function hiraganaToKatakana(text) {
   return out;
 }
 
-// Walk a kuromoji token's surface_form alongside its (katakana) reading, splitting
-// the surface into runs of kanji vs. kana and assigning each kanji-run a reading
-// suffix-stripped from the token's full reading. Returns Pair[] with hiragana
-// readings.
-function pairsFromToken(token) {
-  const surface = token.surface_form ?? "";
-  const reading = token.reading;
-  // Reading missing or "*" → unknown reading. Skip token entirely.
-  if (!reading || reading === "*") return [];
-
-  // Walk surface character-by-character, segmenting kanji vs. kana runs.
+function surfaceSegments(surface) {
   const segments = [];
   let cur = null;
   for (const ch of surface) {
     const kind = isKanji(ch) ? "kanji" : isHiragana(ch) || isKatakana(ch) ? "kana" : "other";
-    if (kind === "other") {
-      if (cur) segments.push(cur);
-      cur = null;
-      continue;
-    }
     if (cur && cur.kind === kind) {
       cur.text += ch;
     } else {
@@ -93,6 +79,67 @@ function pairsFromToken(token) {
     }
   }
   if (cur) segments.push(cur);
+  return segments;
+}
+
+function readingAnchors(segments, reading) {
+  const anchors = [];
+  let cursor = 0;
+  for (let i = 0; i < segments.length; i++) {
+    const seg = segments[i];
+    if (seg.kind !== "kana") continue;
+    const target = hiraganaToKatakana(seg.text);
+    const idx = reading.indexOf(target, cursor);
+    if (idx === -1) return null;
+    anchors.push({ segIdx: i, readingStart: idx, readingEnd: idx + target.length });
+    cursor = idx + target.length;
+  }
+  return anchors;
+}
+
+function kanjiReadingsFromSegments(segments, reading) {
+  const anchors = readingAnchors(segments, reading);
+  if (!anchors) return null;
+
+  const readings = new Map();
+  let readingPos = 0;
+  let anchorIdx = 0;
+  for (let i = 0; i < segments.length; i++) {
+    const seg = segments[i];
+    if (seg.kind === "kana") {
+      const anchor = anchors[anchorIdx++];
+      readingPos = anchor.readingEnd;
+      continue;
+    }
+    if (seg.kind !== "kanji") continue;
+    const nextAnchor = anchors[anchorIdx];
+    const end = nextAnchor ? nextAnchor.readingStart : reading.length;
+    const runReading = reading.slice(readingPos, end);
+    if (runReading.length === 0) return null;
+    const hira = katakanaToHiragana(runReading);
+    if (hira.trim().length === 0 || seg.text.trim().length === 0) return null;
+    readings.set(i, hira);
+    readingPos = end;
+  }
+  return readings;
+}
+
+function tokenHasKanji(token) {
+  return [...(token.surface_form ?? "")].some(isKanji);
+}
+
+// Walk a kuromoji token's surface_form alongside its (katakana) reading,
+// splitting the surface into runs of kanji vs. kana and assigning each kanji-run
+// a reading suffix-stripped from the token's full reading. Returns Pair[] with
+// hiragana readings.
+function pairsFromToken(token) {
+  const surface = token.surface_form ?? "";
+  const reading = token.reading;
+  // Reading missing or "*" → unknown reading. Skip token entirely.
+  if (!reading || reading === "*") return [];
+
+  // Walk surface character-by-character, segmenting kanji vs. kana runs.
+  const segments = surfaceSegments(surface).filter((segment) => segment.kind !== "other");
 
   if (segments.length === 0) return [];
 
@@ -102,48 +149,59 @@ function pairsFromToken(token) {
   // Anchor each kana-run inside the reading by exact match (kana-run converted to
   // katakana). Each kanji-run's reading is the slice of reading between the
   // previous anchor's end (or 0) and the next anchor's start (or reading length).
-  const anchors = []; // [{ segIdx, readingStart, readingEnd }]
-  let cursor = 0;
-  for (let i = 0; i < segments.length; i++) {
-    const seg = segments[i];
-    if (seg.kind !== "kana") continue;
-    const target = hiraganaToKatakana(seg.text);
-    const idx = reading.indexOf(target, cursor);
-    if (idx === -1) {
-      // Reading does not contain this kana run starting at cursor — give up on
-      // this token to avoid misaligned (kanji, reading) pairs.
-      return [];
-    }
-    anchors.push({ segIdx: i, readingStart: idx, readingEnd: idx + target.length });
-    cursor = idx + target.length;
-  }
+  const kanjiReadings = kanjiReadingsFromSegments(segments, reading);
+  if (!kanjiReadings) return [];
 
   const pairs = [];
-  let readingPos = 0;
-  let anchorIdx = 0;
   for (let i = 0; i < segments.length; i++) {
     const seg = segments[i];
-    if (seg.kind === "kana") {
-      // Move readingPos past this kana run via its anchor.
-      const anchor = anchors[anchorIdx++];
-      readingPos = anchor.readingEnd;
-      continue;
-    }
-    // Kanji run: its reading runs from readingPos to the next anchor's start
-    // (or to end of reading if no further anchor).
-    const nextAnchor = anchors[anchorIdx];
-    const end = nextAnchor ? nextAnchor.readingStart : reading.length;
-    const runReading = reading.slice(readingPos, end);
-    if (runReading.length === 0) {
-      // Aligned to empty — drop this kanji-run rather than emit an empty reading.
-      continue;
-    }
-    const hira = katakanaToHiragana(runReading);
-    if (hira.trim().length === 0 || seg.text.trim().length === 0) continue;
-    pairs.push({ kanji: seg.text, reading: hira });
-    readingPos = end;
+    if (seg.kind !== "kanji") continue;
+    const readingForRun = kanjiReadings.get(i);
+    if (readingForRun) pairs.push({ kanji: seg.text, reading: readingForRun });
   }
   return pairs;
+}
+
+function tokensFromToken(token) {
+  const surface = token.surface_form ?? "";
+  if (!surface) return [];
+  const reading = token.reading;
+  const segments = surfaceSegments(surface);
+
+  if (!tokenHasKanji(token)) {
+    return [{ t: "text", v: surface }];
+  }
+  if (!reading || reading === "*") return [];
+
+  const kanjiReadings = kanjiReadingsFromSegments(segments, reading);
+  if (!kanjiReadings) return [];
+
+  const out = [];
+  for (let i = 0; i < segments.length; i++) {
+    const seg = segments[i];
+    if (seg.kind === "kanji") {
+      const r = kanjiReadings.get(i);
+      if (!r) return [];
+      out.push({ t: "ruby", k: seg.text, r });
+    } else {
+      out.push({ t: "text", v: seg.text });
+    }
+  }
+  return out;
+}
+
+function mergeAdjacentTextTokens(tokens) {
+  const out = [];
+  for (const token of tokens) {
+    if (token.t === "text" && token.v === "") continue;
+    const prev = out[out.length - 1];
+    if (token.t === "text" && prev?.t === "text") {
+      prev.v += token.v;
+    } else {
+      out.push(token);
+    }
+  }
+  return out;
 }
 
 // De-dupe consecutive identical pairs (e.g. a token boundary that splits the same
@@ -177,18 +235,25 @@ async function readStdin() {
 }
 
 function parseArgs(argv) {
-  const args = { text: null, dicPath: DEFAULT_DIC_PATH, debug: false };
+  const args = { text: null, dicPath: DEFAULT_DIC_PATH, emit: "pair", debug: false };
   for (let i = 2; i < argv.length; i++) {
     const a = argv[i];
     if (a === "--text") args.text = argv[++i];
     else if (a === "--dic-path") args.dicPath = argv[++i];
+    else if (a === "--emit") {
+      args.emit = argv[++i];
+      if (!["pair", "token"].includes(args.emit)) {
+        console.error("generate-furigana: --emit must be 'pair' or 'token'");
+        process.exit(2);
+      }
+    }
     else if (a === "--debug") args.debug = true;
     else if (a === "--help" || a === "-h") {
       console.log(
-        "Usage: generate-furigana.mjs [--text \"<japanese>\"] [--dic-path <path>] [--debug]\n" +
+        "Usage: generate-furigana.mjs [--text \"<japanese>\"] [--dic-path <path>] [--emit pair|token] [--debug]\n" +
           "       echo \"<japanese>\" | generate-furigana.mjs\n" +
-          "Reads Japanese text and prints a JSON array of { kanji, reading } pairs.\n" +
-          "Pure-kana input prints `[]`."
+          "Reads Japanese text and prints Pair[] by default, or Token[] with --emit token.\n" +
+          "Pure-kana input prints `[]` in pair mode and a text token in token mode."
       );
       process.exit(0);
     } else {
@@ -208,6 +273,16 @@ async function main() {
   }
   const tokenizer = await buildTokenizer(args.dicPath);
   const tokens = tokenizer.tokenize(text);
+  if (args.emit === "token") {
+    const allTokens = [];
+    for (const tok of tokens) {
+      if (args.debug) console.error(JSON.stringify({ surface: tok.surface_form, reading: tok.reading, pos: tok.pos }));
+      for (const token of tokensFromToken(tok)) allTokens.push(token);
+    }
+    console.log(JSON.stringify(mergeAdjacentTextTokens(allTokens)));
+    return;
+  }
+
   const allPairs = [];
   for (const tok of tokens) {
     if (args.debug) console.error(JSON.stringify({ surface: tok.surface_form, reading: tok.reading, pos: tok.pos }));

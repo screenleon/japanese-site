@@ -52,8 +52,13 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "形",
-          "reading": "けい"
+          "t": "text",
+          "v": "て"
+        },
+        {
+          "t": "ruby",
+          "k": "形",
+          "r": "けい"
         }
       ],
       "vocabulary": [

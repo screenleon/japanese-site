@@ -3,6 +3,28 @@
 This file records active architectural and behavioral decisions for this repository.
 Agents must read it before planning or implementation tasks.
 
+## 2026-05-16 — JS-110 API-002 in-place evolution override
+
+**Context**: JS-110 migrates `annotations.furigana.title_ja` from `FuriganaPair[]` to `Token[]` in place — a non-additive wire-shape change to the `/api/grammar/<level>` static payload. PR-gate full + targeted reviewers (critic high + architecture high, cross-overlap) flagged this as `rules/domain/backend-api.md` API-002 violation: API-002 requires existing endpoint schema changes to be additive (dual field / versioned path / migration window), not in-place type changes. The `/api/version` milestone was bumped `M3-C4` → `M3-C5` per JS-067/JS-096 pattern, but version bump alone does not satisfy API-002's evolution rule.
+
+**Decision**: project-pm overrides the API-002 block-soft for JS-110 with user authorization (2026-05-16). The in-place migration ships; no dual-field shim is added.
+
+**Rationale**:
+- **Audience-of-one** (`project_japanese-site_audience` memory): the only consumer of `/api/grammar/<level>` is the user's own browser. There are no external API clients, no cached SDKs, no third-party integrations, no CI/CD downstream depending on the wire shape.
+- **User preference `[[breaking-change for maintainability]]`** explicitly favors full breaking schema changes over compat hacks; the migration was authored under this principle from Round 1.
+- **Cached-client risk is bounded and self-healing**: the only stale-cache consumer is the user's browser bundle. Reload after deploy clears it. Service workers / IndexedDB caches: none in this codebase (Vite SPA with no offline manifest). Static `/web/public/data/grammar/*.json` is rebaked alongside corpus and served fresh in the same build.
+- **Rollback plan**: `git revert` the JS-110 merge commit + `make bake-static` + redeploy. User reloads browser. Total recovery time < 5 min. No data migration to undo (annotations are static JSON in repo, not in a live DB).
+- **Migration cost of compliance is wasted work in this context**: API-002's dual-field design exists to protect external clients during a rollover window. Implementing it here would add `title_ja_v2` alongside `title_ja`, force renderer to handle both, double the lint surface, then delete the v1 field later — pure ceremony for zero observable consumer.
+
+**Constraints introduced**:
+- This override applies only to japanese-site annotation-shape changes where (a) consumer is provably audience-of-one and (b) `[[breaking-change for maintainability]]` is the dominant user signal. API-002 still applies by default for any future endpoint shape change unless re-overridden with explicit rationale.
+- Future audience expansion (e.g. opening the site for external users, adding a public API) revokes this override class; re-evaluate before any non-additive change.
+- The `/api/version` milestone bump remains the observable signal for cached clients (user's browser) — bumping is the minimum compliance even when full API-002 dual-field is overridden.
+
+**Closes**: JS-110 architecture-reviewer block-soft, critic block-soft (cross-overlap) from `.gate-results/gate-20260515-234341.md`.
+
+**Refs**: `rules/domain/backend-api.md` API-002, ADR-0004, [[breaking-change for maintainability]] memory, [[project_japanese-site_audience]] memory.
+
 ## 2026-05-10 — Phase 2 schema spike (JS-097 / JS-098 / JS-099)
 
 **Goal**: The Phase 2 schema spike moves all grammar entries to `schema_version: 2` across the runtime, corpus, lint, test, and UI surfaces: `explanation_ja` becomes typed blocks, `pattern` becomes a required structured field, classifier editorial contrasts are mirrored into `annotations.classifier`, top-level metadata moves into `_meta`, and mechanically migrated entries are flagged with `audit_status: "pre-redesign"`.

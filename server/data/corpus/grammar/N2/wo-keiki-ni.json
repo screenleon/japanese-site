@@ -48,8 +48,17 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "契機",
-          "reading": "けいき"
+          "t": "text",
+          "v": "〜を"
+        },
+        {
+          "t": "ruby",
+          "k": "契機",
+          "r": "けいき"
+        },
+        {
+          "t": "text",
+          "v": "に"
         }
       ],
       "vocabulary": [

@@ -46,8 +46,13 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "限りだ",
-          "reading": "かぎりだ"
+          "t": "text",
+          "v": "〜"
+        },
+        {
+          "t": "ruby",
+          "k": "限りだ",
+          "r": "かぎりだ"
         }
       ],
       "vocabulary": [

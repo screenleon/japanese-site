@@ -47,12 +47,7 @@
   ],
   "annotations": {
     "furigana": {
-      "title_ja": [
-        {
-          "kanji": "他",
-          "reading": "た"
-        }
-      ],
+      "title_ja": [],
       "vocabulary": [
         {
           "kanji": "役割",

@@ -40,7 +40,7 @@ export interface FuriganaPair {
 }
 
 export interface FuriganaAnnotation {
-  title_ja?: FuriganaPair[];
+  title_ja?: Token[];
   vocabulary?: FuriganaPair[];
 }
 

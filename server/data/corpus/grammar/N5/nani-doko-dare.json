@@ -32,12 +32,18 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "何",
-          "reading": "なに"
+          "t": "ruby",
+          "k": "何",
+          "r": "なに"
         },
         {
-          "kanji": "誰",
-          "reading": "だれ"
+          "t": "text",
+          "v": "・どこ・"
+        },
+        {
+          "t": "ruby",
+          "k": "誰",
+          "r": "だれ"
         }
       ],
       "vocabulary": [

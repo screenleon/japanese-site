@@ -135,6 +135,64 @@ function validateTokens(tokens, rel, context) {
   });
 }
 
+function validateTokenArray(tokens, rel, context) {
+  if (!Array.isArray(tokens)) {
+    fail(rel, `${context} must be a Token array`);
+    return false;
+  }
+  tokens.forEach((token, tokenIndex) => {
+    const where = `${context} token ${tokenIndex}`;
+    if (!isObj(token)) {
+      fail(rel, `${where} must be an object`);
+      return;
+    }
+    if (Object.prototype.hasOwnProperty.call(token, "kanji") || Object.prototype.hasOwnProperty.call(token, "reading")) {
+      fail(rel, `${context} must be a Token array; old {kanji, reading} title_ja pairs are disallowed`);
+      return;
+    }
+    if (!tokenKinds.has(token.t)) {
+      fail(rel, `${where} has invalid token kind '${token.t}'`);
+      return;
+    }
+    if (token.t === "text" && !nonEmptyString(token.v)) {
+      fail(rel, `${where} text.v must be a non-empty string`);
+    }
+    if (token.t === "ruby" && (!nonEmptyString(token.k) || !nonEmptyString(token.r))) {
+      fail(rel, `${where} ruby.k and ruby.r must be non-empty strings`);
+    }
+    if (token.t === "term") {
+      if (!nonEmptyString(token.slug)) fail(rel, `${where} term.slug must be a non-empty string`);
+      if (!termKinds.has(token.kind)) fail(rel, `${where} term.kind must be vocab or grammar`);
+      if (!nonEmptyString(token.label)) fail(rel, `${where} term.label must be a non-empty string`);
+    }
+  });
+  return true;
+}
+
+function tokenText(token) {
+  if (token.t === "text") return token.v;
+  if (token.t === "ruby") return token.k;
+  if (token.t === "term") return token.label;
+  return "";
+}
+
+function titleSource(title) {
+  return title.replace(/（[^）]*）$/, "");
+}
+
+function validateFuriganaPairArray(pairs, rel, context) {
+  if (!Array.isArray(pairs)) {
+    fail(rel, `${context} must be a FuriganaPair array`);
+    return false;
+  }
+  pairs.forEach((pair, i) => {
+    if (!isObj(pair) || !nonEmptyString(pair.kanji) || !nonEmptyString(pair.reading)) {
+      fail(rel, `${context} pair ${i} must contain non-empty kanji and reading`);
+    }
+  });
+  return true;
+}
+
 function validateBlocks(blocks, rel, context) {
   if (!Array.isArray(blocks) || blocks.length === 0) {
     fail(rel, `${context} must be a non-empty Block[]`);
@@ -232,15 +290,29 @@ function validateAnnotations(gp, rel) {
       if (Object.prototype.hasOwnProperty.call(f, "key_terms")) {
         fail(rel, "annotations.furigana.key_terms is disallowed; rename to annotations.furigana.vocabulary");
       }
-      const pairs = [...(Array.isArray(f.title_ja) ? f.title_ja : []), ...(Array.isArray(f.vocabulary) ? f.vocabulary : [])];
-      if (pairs.length === 0) {
-        fail(rel, "annotations.furigana must contain at least one title_ja or vocabulary pair");
-      }
-      pairs.forEach((pair, i) => {
-        if (!isObj(pair) || !nonEmptyString(pair.kanji) || !nonEmptyString(pair.reading)) {
-          fail(rel, `annotations.furigana pair ${i} must contain non-empty kanji and reading`);
+      let titleLen = 0;
+      let vocabLen = 0;
+      if (Object.prototype.hasOwnProperty.call(f, "title_ja")) {
+        if (validateTokenArray(f.title_ja, rel, "annotations.furigana.title_ja")) {
+          titleLen = f.title_ja.length;
+          const rendered = f.title_ja.map(tokenText).join("");
+          const expected = titleSource(gp.title_ja || "");
+          if (titleLen > 0 && rendered !== expected) {
+            fail(
+              rel,
+              `annotations.furigana.title_ja round-trip mismatch: tokens render '${rendered}', expected '${expected}'`
+            );
+          }
         }
-      });
+      }
+      if (Object.prototype.hasOwnProperty.call(f, "vocabulary")) {
+        if (validateFuriganaPairArray(f.vocabulary, rel, "annotations.furigana.vocabulary")) {
+          vocabLen = f.vocabulary.length;
+        }
+      }
+      if (titleLen === 0 && vocabLen === 0) {
+        fail(rel, "annotations.furigana must contain at least one title_ja token or vocabulary pair");
+      }
     }
   }
   for (const key of ["mental_model", "nuance_note"]) {

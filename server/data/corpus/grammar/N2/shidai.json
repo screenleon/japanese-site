@@ -41,8 +41,9 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "次第",
-          "reading": "しだい"
+          "t": "ruby",
+          "k": "次第",
+          "r": "しだい"
         }
       ],
       "vocabulary": [

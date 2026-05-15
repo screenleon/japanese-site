@@ -49,8 +49,13 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "早いか",
-          "reading": "はやいか"
+          "t": "text",
+          "v": "〜が"
+        },
+        {
+          "t": "ruby",
+          "k": "早いか",
+          "r": "はやいか"
         }
       ],
       "vocabulary": [

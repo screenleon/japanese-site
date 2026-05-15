@@ -32,8 +32,13 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "何本",
-          "reading": "なんぼん"
+          "t": "text",
+          "v": "いくら・"
+        },
+        {
+          "t": "ruby",
+          "k": "何本",
+          "r": "なんぼん"
         }
       ],
       "vocabulary": [

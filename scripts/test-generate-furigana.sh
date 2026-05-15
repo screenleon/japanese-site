@@ -18,13 +18,36 @@ assert_output() {
 	local label="$1"
 	local input="$2"
 	local expected="$3"
+	local emit="${4:-pair}"
 	local actual
-	actual="$(node "$SCRIPT" --text "$input" 2>&1)"
+	actual="$(node "$SCRIPT" --emit "$emit" --text "$input" 2>&1)"
 	if [[ "$actual" != "$expected" ]]; then
 		echo "test-generate-furigana: '$label' failed" >&2
 		echo "  input:    $input" >&2
 		echo "  expected: $expected" >&2
 		echo "  actual:   $actual" >&2
+		exit 1
+	fi
+	echo "test-generate-furigana: $label ok"
+}
+
+assert_failure() {
+	local label="$1"
+	local expected_status="$2"
+	local expected_stderr="$3"
+	shift 3
+	local actual
+	local status
+	set +e
+	actual="$("$@" 2>&1)"
+	status=$?
+	set -e
+	if [[ "$status" -ne "$expected_status" || "$actual" != *"$expected_stderr"* ]]; then
+		echo "test-generate-furigana: '$label' failed" >&2
+		echo "  expected status: $expected_status" >&2
+		echo "  actual status:   $status" >&2
+		echo "  expected stderr: $expected_stderr" >&2
+		echo "  actual output:   $actual" >&2
 		exit 1
 	fi
 	echo "test-generate-furigana: $label ok"
@@ -51,11 +74,19 @@ assert_output "kanji compound (義務)" "義務" '[{"kanji":"義務","reading":"
 
 # 5. Real N3 grammar title with embedded kanji.
 assert_output "grammar title (に違いない)" "に違いない" '[{"kanji":"違","reading":"ちが"}]'
+assert_output "token mode title (に違いない)" "に違いない" '[{"t":"text","v":"に"},{"t":"ruby","k":"違","r":"ちが"},{"t":"text","v":"いない"}]' token
+# corpus hand-authored idiom differs by design — see ADR-0004 §Title-token idioms
+assert_output "ni-chigainai generator idiom" "に違いない" '[{"t":"text","v":"に"},{"t":"ruby","k":"違","r":"ちが"},{"t":"text","v":"いない"}]' token
+assert_output "token mode pure kana" "ようになる" '[{"t":"text","v":"ようになる"}]' token
 
 # 6. Kanji-kana-kanji pattern — split into multiple pairs.
 assert_output "kanji-kana-kanji (取り戻す)" "取り戻す" '[{"kanji":"取","reading":"と"},{"kanji":"戻","reading":"もど"}]'
 
 # 7. Jukujikun — multi-kanji compound with non-decomposable reading.
 assert_output "jukujikun (明日)" "明日" '[{"kanji":"明日","reading":"あした"}]'
+
+# 8. Invalid emit values fail with the stable CLI usage error.
+assert_failure "invalid emit value" 2 "generate-furigana: --emit must be 'pair' or 'token'" \
+	node "$SCRIPT" --text "あ" --emit bad
 
 echo "test-generate-furigana: all assertions passed"

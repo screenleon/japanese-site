@@ -32,12 +32,18 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "頻度",
-          "reading": "ひんど"
+          "t": "ruby",
+          "k": "頻度",
+          "r": "ひんど"
         },
         {
-          "kanji": "副詞",
-          "reading": "ふくし"
+          "t": "text",
+          "v": "の"
+        },
+        {
+          "t": "ruby",
+          "k": "副詞",
+          "r": "ふくし"
         }
       ],
       "vocabulary": [

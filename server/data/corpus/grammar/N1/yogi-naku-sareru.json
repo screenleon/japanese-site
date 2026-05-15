@@ -48,8 +48,17 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "余儀",
-          "reading": "よぎ"
+          "t": "text",
+          "v": "〜を"
+        },
+        {
+          "t": "ruby",
+          "k": "余儀",
+          "r": "よぎ"
+        },
+        {
+          "t": "text",
+          "v": "なくされる"
         }
       ],
       "vocabulary": [

@@ -4,7 +4,6 @@ import {
   type Annotations,
   type Block,
   type FuriganaAnnotation,
-  type FuriganaPair,
   type Token,
 } from "../apiTypes";
 
@@ -19,59 +18,26 @@ export const LABELS: Record<AnnotationKind, string> = {
   classifier: "辨析",
 };
 
-function hasFuriganaPairs(value: FuriganaAnnotation | undefined) {
+function hasFuriganaTitleTokens(value: FuriganaAnnotation | undefined) {
   if (!value) return false;
-  return filterRenderableFuriganaPairs(value.title_ja).length > 0;
-}
-
-function isRenderableFuriganaPair(pair: unknown): pair is FuriganaPair {
-  if (!pair || typeof pair !== "object") return false;
-  const candidate = pair as Partial<Record<keyof FuriganaPair, unknown>>;
-  return (
-    typeof candidate.kanji === "string" &&
-    typeof candidate.reading === "string" &&
-    candidate.kanji.trim() !== "" &&
-    candidate.reading.trim() !== ""
-  );
-}
-
-function filterRenderableFuriganaPairs(pairs: unknown) {
-  if (!Array.isArray(pairs)) return [];
-  return pairs.filter(isRenderableFuriganaPair);
+  return value.title_ja?.some(isRenderableToken) ?? false;
 }
 
 function hasAnnotationValue(kind: AnnotationKind, annotations?: Annotations) {
   const value = annotations?.[kind];
   if (kind === "furigana") {
-    return hasFuriganaPairs(value as FuriganaAnnotation | undefined);
+    return hasFuriganaTitleTokens(value as FuriganaAnnotation | undefined);
   }
   return typeof value === "string" && value.trim().length > 0;
 }
 
-function RubyList({ pairs }: { pairs: FuriganaPair[] }) {
-  return (
-    <>
-      {pairs.map((pair, index) => (
-        <span key={`${pair.kanji}-${pair.reading}-${index}`}>
-          {index > 0 && "、"}
-          <ruby>
-            {pair.kanji}
-            <rt>{pair.reading}</rt>
-          </ruby>
-        </span>
-      ))}
-    </>
-  );
-}
-
 function FuriganaBlock({ value }: { value: FuriganaAnnotation }) {
-  const titlePairs = filterRenderableFuriganaPairs(value.title_ja);
-  if (titlePairs.length === 0) return null;
+  if (!hasFuriganaTitleTokens(value)) return null;
 
   return (
     <div className="space-y-1 text-sm leading-relaxed text-sky-950">
       <div>
-        <RubyList pairs={titlePairs} />
+        <Tokens tokens={value.title_ja ?? []} />
       </div>
     </div>
   );
@@ -97,10 +63,30 @@ function TokenRenderer({ token }: { token: Token }) {
   return <>{token.v}</>;
 }
 
+function isNonBlankString(value: unknown): value is string {
+  return typeof value === "string" && value.trim() !== "";
+}
+
+function isRenderableToken(value: unknown): value is Token {
+  if (!value || typeof value !== "object" || !("t" in value)) return false;
+  const token = value as Record<string, unknown>;
+  if (token.t === "text") return isNonBlankString(token.v);
+  if (token.t === "ruby") return isNonBlankString(token.k) && isNonBlankString(token.r);
+  if (token.t === "term") {
+    return (
+      isNonBlankString(token.slug) &&
+      isNonBlankString(token.label) &&
+      (token.kind === "grammar" || token.kind === "vocab")
+    );
+  }
+  return false;
+}
+
 function Tokens({ tokens }: { tokens: Token[] }) {
+  const renderableTokens = tokens.filter(isRenderableToken);
   return (
     <>
-      {tokens.map((token, index) => (
+      {renderableTokens.map((token, index) => (
         <TokenRenderer key={`${token.t}-${index}`} token={token} />
       ))}
     </>
