@@ -1513,6 +1513,40 @@ items:
       - Do not modify `.pm/schema.md`, `project/backlog.yml` schema header, or other pm-schema files in JS-097/098/099.
       - Keep pm-schema v1 frozen until this separate item is decided.
 
+  - id: JS-106
+    title: Inline ruby migration for grammar `explanation_ja_blocks` (corpus-wide)
+    status: todo
+    priority: P2
+    milestone: M3
+    theme: content-uplift
+    area: content
+    source: User feedback 2026-05-15 on 限り detail page; kagiri PoC commit demonstrates target shape
+    notes:
+      - 195+ N5/N4/N3/N2/N1 grammar entries still store `explanation_ja_blocks.tokens` as plain `{t:"text"}` runs.
+      - Schema, loader, renderer, lint all already support `{t:"ruby", k, r}` tokens (used in JS-097/098/099 spike PoC entries + kagiri PoC).
+      - Decide tokenization approach (hand-author / kagome-based auto-tokenizer / hybrid) before rollout.
+      - "Phasing per user 2026-05-15: ship N3 first (40 entries), evaluate on live deploy, then propagate N2 → N1 → N4 → N5. Do NOT batch all 5 levels in one go."
+      - Invariant: byte-identical text concatenation per entry (text token v + ruby token k concat == original explanation text).
+      - Coordinate with JS-107 on `annotations.furigana.vocabulary[]` retire policy.
+
+  - id: JS-107
+    title: Key-terms / lesson-vocab feature design + schema spike
+    status: todo
+    priority: P2
+    milestone: M3
+    theme: annotations-schema
+    area: content/backend/frontend
+    source: User feedback 2026-05-15 ("我覺得只要是B有需求") — vocabulary[] retire decision
+    notes:
+      - "User-confirmed scope 2026-05-15: covers BOTH (a) idiomatic collocations with the grammar point (力の限り / 命の限り) AND (b) cross-level vocab in example sentences. NOT (c) semantically central nouns in explanation — that's JS-106 inline ruby."
+      - "Schema candidate: key_terms: [{ja, reading, gloss_zh, kind: 'collocation' | 'example_vocab', vocab_slug?}] — kind discriminator separates (a) from (b)."
+      - UI label must NOT be "ふりがな" (separate intent from pronunciation aid) — e.g. "本文重點詞" / "覚えておきたい語彙". Decide single-list-with-badges vs split-sections in PoC.
+      - "Selection volume: 5–10 entries per grammar (3–5 collocations + 3–5 example-vocab typical), hand-authored. Do NOT seed from JS-067 pipeline output."
+      - "Phasing per user 2026-05-15: spike + N3 PoC first; evaluate; then propagate N2 → N1 → N4 → N5 — same N3-first checkpoint pattern as JS-106."
+      - Retire `FuriganaAnnotation.vocabulary` type field once `key_terms` ships and corpus migrates over.
+      - Coordinate with JS-106 — `key_terms` is a study list, not a pronunciation table; should NOT duplicate inline ruby readings.
+      - Design spike deliverable: ADR + schema decision + 4-entry hand-author PoC (suggested PoC slugs: limit-related kagiri / 力-collocation entries to demonstrate (a) + (b) mix).
+
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.
 done:

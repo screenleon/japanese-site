@@ -112,6 +112,8 @@
 | JS-103 | 🔵 active | Full 150-entry classifier contrast rollout | content | 2026-05-10 | blocked-on JS-100 |
 | JS-104 | 🔵 active | Vocab schema_version=2 + Block engine for gloss fields | schema/content | 2026-05-10 | scope-deferred (grammar-only spike) |
 | JS-105 | 🔵 active | pm-schema bump v1→v2 for grammar/schema-spike themes | planning/schema | 2026-05-10 | pm-schema frozen at v1 per PR #46 |
+| JS-106 | 🔵 active | Inline ruby migration for grammar `explanation_ja_blocks` (corpus-wide) | content | 2026-05-15 | User feedback 2026-05-15 on 限り detail page; kagiri PoC commit demonstrates target shape |
+| JS-107 | 🔵 active | Key-terms / lesson-vocab feature design + schema | content/backend/frontend | 2026-05-15 | User feedback 2026-05-15 ("我覺得只要是B有需求") — vocabulary[] retire decision |
 
 ---
 
@@ -1198,3 +1200,51 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: pm-schema frozen at v1 per PR #46
 **Flag**: decision-needed
 <!-- 首次記錄: 2026-05-10 -->
+
+## JS-106 — Inline ruby migration for grammar `explanation_ja_blocks` (corpus-wide)
+
+**Problem**: 195+ N5/N4/N3/N2/N1 grammar entries store `explanation_ja_blocks[*].tokens` as plain `{t:"text"}` runs. The schema already supports `{t:"ruby", k, r}` mixed tokens (used in JS-097/098/099 spike PoC entries `youni-naru` / `youni-suru` / `hazuda` / `monono`, plus this ticket's kagiri PoC). Without inline ruby in prose, learners cannot get readings for kanji where they encounter them — falling back to the detached `annotations.furigana.vocabulary[]` glossary, which has known content-quality issues (POS-mixed extraction, no Chinese gloss, no context anchor).
+
+**Why**: PR #57 hid the detached `vocabulary[]` rendering because it provided neither pronunciation aid in context nor real learning value. The real fix is inline ruby in prose — readings surface at the position of use, supported by surrounding context for meaning. Schema is ready; corpus migration is the remaining surface.
+
+**Requirement**:
+1. Decide tokenization approach: (a) hand-author all entries (highest quality, ~195 entries × ~5 min = significant content effort), (b) Go-side kagome-based auto-tokenizer + native-review audit pass, (c) hybrid (auto-tokenize + spot-check).
+2. **Phasing per user 2026-05-15**: ship N3 first (40 entries), evaluate the visual + learning effect on the live deployment, then propagate to N2 → N1 → N4 → N5. Do NOT batch-author all 5 levels in one go — user wants checkpoint after N3 lands.
+3. Each migrated entry: byte-identical text concatenation invariant (`concat(text tokens) + concat(ruby.k tokens)` equals original explanation text — see `kagiri` PoC commit for shape).
+4. Once entry's `explanation_ja_blocks` has inline ruby, the entry's `annotations.furigana.vocabulary[]` becomes redundant. Decide retire policy in same PR or defer per [[shared-schema brief rule]] (full surface audit before mass-delete).
+5. Coordinate with JS-107 — if key-terms feature decides to repurpose `vocabulary[]`, retire timing changes.
+
+**Scope notes**: schema is unchanged. Loader (`server/internal/content/corpus/load.go`) already understands ruby tokens. Frontend `BlockRenderer.TokenRenderer` already renders ruby. Lint `scripts/lint-grammar.sh` already validates ruby tokens. So this is a pure content migration ticket.
+
+**Tags**: P2, content, schema-rollout
+**Status**: todo
+**Source**: User feedback 2026-05-15 on 限り detail page (kagiri PoC commit demonstrates target shape)
+**Blocked-by**: none structurally; sequencing on author bandwidth vs auto-tokenizer build
+<!-- 首次記錄: 2026-05-15 -->
+
+## JS-107 — Key-terms / lesson-vocab feature design + schema
+
+**Problem**: User confirmed real demand for a "本篇重點生詞" surface — vocabulary worth memorizing per grammar entry (例：限り → 「力の限り」「命の限り」「可能の限り」 idiomatic collocations). The current `annotations.furigana.vocabulary[]` field was a failed proxy for this need: pipeline-extracted, POS-mixed (動詞/辞書/形 grammar metalanguage bleeding in), no Chinese gloss, no link to vocab corpus slug. After PR #57 + JS-106 (inline ruby), `vocabulary[]` field has no UI consumer.
+
+**Why**: Without a principled "key terms" surface, learner cannot quickly find this-grammar-needs-these-vocab connections, and the current data field is dead weight in the schema.
+
+**Requirement** (design spike, not implementation):
+1. **User-confirmed definition (2026-05-15)**: "key terms" covers BOTH (a) and (b) below; (c) is NOT in scope because inline ruby already covers it.
+   - (a) **Idiomatic collocations with the grammar point itself** — e.g. 限り → 力の限り、命の限り、可能の限り
+   - (b) **Cross-level vocab the learner might not know but appears in the entry's example sentences** — e.g. an entry's example uses パスポート or 忘れる, those qualify
+   - (c) ~~Semantically central nouns in the explanation (e.g. 範囲 for 限り)~~ — **out of scope**; this is what JS-106 inline ruby solves
+   - List is hand-curated, NOT auto-extracted from JS-067 pipeline output.
+2. Schema shape: new field on grammar entry, e.g. `key_terms: [{ja: kanji, reading: hiragana, gloss_zh: ..., kind: "collocation" | "example_vocab", vocab_slug?: string}]`. Must include Chinese gloss. Must optionally link to vocab corpus when entry exists. `kind` discriminator separates (a) from (b) so UI can group/label them.
+3. UI: separate panel labeled clearly (NOT "ふりがな"). Possibly two sub-sections per (a)/(b) split or unified list with `kind` icon/badge. Decision deferred to spike PoC visual check.
+4. Retirement plan for `annotations.furigana.vocabulary[]` once `key_terms` ships: deprecation window, lint to forbid both, eventual schema removal.
+5. Selection volume: hand-author 5–10 entries per grammar (3–5 collocations + 3–5 example-vocab typical). User signaled this range as workable.
+6. **Phasing per user 2026-05-15**: spike + N3 PoC first; evaluate; then propagate to N2 → N1 → N4 → N5 — same N3-first checkpoint pattern as JS-106.
+7. Coordinate with JS-106 (inline ruby) — `key_terms` should NOT duplicate inline ruby readings; it's a study list, not a pronunciation table.
+
+**Scope notes**: this is a design spike (deliverable: ADR + schema decision + 4-entry hand-author PoC). Full corpus rollout is a follow-up ticket once design solidifies. The `FuriganaAnnotation.vocabulary` type field stays for now (no UI consumer after PR #57, no lint constraint requiring it).
+
+**Tags**: P2, content, schema-spike, design-needed
+**Status**: todo
+**Source**: User feedback 2026-05-15 — confirmed B-need exists ("我覺得只要是B有需求")
+**Blocked-by**: discussion with user on exact "key term" definition + selection criteria; NOT blocked on JS-106 but coordinates with it
+<!-- 首次記錄: 2026-05-15 -->
