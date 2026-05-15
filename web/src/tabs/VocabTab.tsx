@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, type VocabRow } from "../api";
 import { EntryAnnotations } from "../components/EntryAnnotations";
+import { useChineseVisibility } from "../chineseVisibility";
 import { useReadTracking } from "../hooks/useReadTracking";
 
 const levels = ["N5", "N4", "N3", "N2", "N1"];
@@ -10,10 +11,10 @@ export function VocabTab() {
   const [selectedLevel, setSelectedLevel] = useState("N5");
   const [rows, setRows] = useState<VocabRow[]>([]);
   const [randomRow, setRandomRow] = useState<VocabRow | null>(null);
-  const [showTranslation, setShowTranslation] = useState(false);
   const [err, setErr] = useState("");
   const [loadingList, setLoadingList] = useState(false);
   const [loadingRandom, setLoadingRandom] = useState(false);
+  const { visible: chineseVisible } = useChineseVisibility();
 
   useReadTracking(
     randomRow?.headword ? { type: "vocab", headword: randomRow.headword } : null
@@ -43,7 +44,6 @@ export function VocabTab() {
     setErr("");
     try {
       setRandomRow(await api.randomVocab(level));
-      setShowTranslation(false);
     } catch (e) {
       setErr(String(e));
       setRandomRow(null);
@@ -152,20 +152,14 @@ export function VocabTab() {
                   <EntryAnnotations annotations={randomRow.annotations} />
                 </div>
               )}
-              <div className="mt-5 border-t border-slate-200 pt-4">
-                <button
-                  type="button"
-                  onClick={() => setShowTranslation((current) => !current)}
-                  className="rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
-                >
-                  {showTranslation ? "隱藏中文說明" : "顯示中文說明"}
-                </button>
-                {showTranslation && (
+              {chineseVisible && (
+                <div className="mt-5 border-t border-slate-200 pt-4">
+                  <h3 className="text-sm font-medium text-slate-700">中文說明</h3>
                   <div className="mt-4 text-slate-600">
                     {randomRow.gloss_zh?.trim() || "繁中釋義待補"}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
               <div className="mt-2 text-xs text-slate-400">
                 {randomRow.pos}
                 {randomRow.jlpt_level && <span className="ml-2">{randomRow.jlpt_level}</span>}
@@ -220,7 +214,9 @@ export function VocabTab() {
                     <EntryAnnotations annotations={r.annotations} />
                   </div>
                 )}
-                <div className="mt-1 text-xs text-slate-500">{supportGloss(r)}</div>
+                {chineseVisible && (
+                  <div className="mt-1 text-xs text-slate-500">{supportGloss(r)}</div>
+                )}
                 <div className="mt-1 text-xs text-slate-400">
                   {r.pos}
                   {r.jlpt_level && (

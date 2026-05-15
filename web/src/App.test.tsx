@@ -2,14 +2,10 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "./api";
 import { App } from "./App";
-import type { Capabilities } from "./apiTypes";
+import type { Capabilities, GrammarPoint } from "./apiTypes";
 
 vi.mock("./tabs/QuizTab", () => ({
   QuizTab: () => <section aria-label="quiz panel">quiz panel</section>,
-}));
-
-vi.mock("./tabs/GrammarTab", () => ({
-  GrammarTab: () => <section aria-label="grammar panel">grammar panel</section>,
 }));
 
 vi.mock("./tabs/VocabTab", () => ({
@@ -34,6 +30,7 @@ vi.mock("./api", () => ({
     listGrammar: vi.fn().mockResolvedValue({ points: [], count: 0 }),
     randomGrammar: vi.fn().mockResolvedValue(null),
     getGrammar: vi.fn().mockResolvedValue(null),
+    getGrammarExamples: vi.fn().mockResolvedValue({ examples: [], count: 0 }),
     nextQuestion: vi.fn().mockResolvedValue(null),
     answer: vi.fn().mockResolvedValue(null),
     stats: vi.fn().mockResolvedValue({
@@ -57,6 +54,20 @@ vi.mock("./api", () => ({
 }));
 
 const getCapabilities = vi.mocked(api.getCapabilities);
+const listGrammar = vi.mocked(api.listGrammar);
+const getGrammarExamples = vi.mocked(api.getGrammarExamples!);
+
+const grammarPoint: GrammarPoint = {
+  slug: "sae",
+  title_ja: "〜さえ",
+  title_zh: "甚至；只要",
+  jlpt_level: "N3",
+  schema_version: 2,
+  pattern: [{ form: "普通形＋さえ", gloss_zh: "甚至連這種極端例也包含" }],
+  explanation_ja_blocks: [{ kind: "paragraph", tokens: [{ t: "text", v: "日本語の説明" }] }],
+  explanation_zh: "表示極端例或最低條件。",
+  _meta: { source: "curated", license: "CC0-1.0" },
+};
 
 function mockCapabilities(capabilities: Capabilities) {
   getCapabilities.mockResolvedValueOnce(capabilities);
@@ -70,7 +81,10 @@ function expectVisibleTabs(labels: string[]) {
 
 describe("App tab filtering", () => {
   beforeEach(() => {
+    localStorage.clear();
     vi.clearAllMocks();
+    listGrammar.mockResolvedValue({ points: [grammarPoint], count: 1 });
+    getGrammarExamples.mockResolvedValue({ examples: [], count: 0 });
   });
 
   it("renders all 5 tabs when capabilities load with quiz and sentence enabled", async () => {
@@ -106,7 +120,7 @@ describe("App tab filtering", () => {
     await waitFor(() => {
       expect(screen.queryByRole("button", { name: "練習題" })).not.toBeInTheDocument();
       expect(screen.queryByRole("button", { name: "例句" })).not.toBeInTheDocument();
-      expect(screen.getByLabelText("grammar panel")).toBeVisible();
+      expect(screen.getByRole("heading", { name: "〜さえ" })).toBeVisible();
     });
     expectVisibleTabs(["文法", "單字", "漢字"]);
     expect(screen.queryByLabelText("quiz panel")).not.toBeInTheDocument();
@@ -124,7 +138,7 @@ describe("App tab filtering", () => {
     fireEvent.click(await screen.findByRole("button", { name: /^文法/ }));
 
     expect(screen.getByRole("button", { name: "練習題" })).toBeVisible();
-    expect(screen.getByLabelText("grammar panel")).toBeVisible();
+    expect(await screen.findByRole("heading", { name: "〜さえ" })).toBeVisible();
 
     resolveCapabilities({
       progress: false,
@@ -135,7 +149,48 @@ describe("App tab filtering", () => {
 
     await waitFor(() => {
       expect(screen.queryByRole("button", { name: "練習題" })).not.toBeInTheDocument();
-      expect(screen.getByLabelText("grammar panel")).toBeVisible();
+      expect(screen.getByRole("heading", { name: "〜さえ" })).toBeVisible();
     });
+  });
+});
+
+describe("Chinese visibility toggle", () => {
+  beforeEach(() => {
+    localStorage.clear();
+    vi.clearAllMocks();
+    listGrammar.mockResolvedValue({ points: [grammarPoint], count: 1 });
+    getGrammarExamples.mockResolvedValue({ examples: [], count: 0 });
+  });
+
+  /**
+   * Integration: verifies the App-level header `<ChineseVisibilityToggle />` is wired
+   * through the real `<ChineseVisibilityProvider>` and controls Chinese content in
+   * the active tab.
+   * Steps:
+   * 1. Arrange: clear localStorage; mock api to return a fixture grammar entry with
+   *    non-empty title_zh / explanation_zh / pattern.gloss_zh.
+   * 2. Act: render full <App />, navigate from HomePage to the Grammar tab.
+   * 3. Assert (default-hidden): some Chinese surface (e.g. title_zh value or
+   *    explanation_zh value or pattern.gloss_zh value) is NOT in the DOM.
+   * 4. Act: click the header `中文` button.
+   * 5. Assert (toggled-visible): the same Chinese surface IS now in the DOM.
+   */
+  it("header 中文 toggle reveals Chinese surfaces across tabs", async () => {
+    mockCapabilities({
+      progress: false,
+      history: false,
+      quiz: false,
+      sentence: false,
+    });
+
+    render(<App />);
+    fireEvent.click(await screen.findByRole("button", { name: /^文法/ }));
+
+    expect(await screen.findByRole("heading", { name: "〜さえ" })).toBeVisible();
+    expect(screen.queryByText("表示極端例或最低條件。")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "中文" }));
+
+    expect(await screen.findByText("表示極端例或最低條件。")).toBeVisible();
   });
 });

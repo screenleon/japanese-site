@@ -6,6 +6,7 @@ import { GrammarTab } from "./tabs/GrammarTab";
 import { QuizTab, type QuizInitialMode } from "./tabs/QuizTab";
 import { HomePage } from "./HomePage";
 import { CapabilitiesProvider, useCapabilities } from "./capabilities";
+import { ChineseVisibilityProvider, ChineseVisibilityToggle } from "./chineseVisibility";
 import { api, type ProgressSummary } from "./api";
 
 type Tab = "quiz" | "grammar" | "vocab" | "kanji" | "sentence";
@@ -21,9 +22,11 @@ const tabs: { id: Tab; label: string }[] = [
 
 export function App() {
   return (
-    <CapabilitiesProvider>
-      <AppInner />
-    </CapabilitiesProvider>
+    <ChineseVisibilityProvider>
+      <CapabilitiesProvider>
+        <AppInner />
+      </CapabilitiesProvider>
+    </ChineseVisibilityProvider>
   );
 }
 
@@ -94,22 +97,27 @@ function AppShell({
             <span className="text-xs text-slate-500">{quiz ? "M3 開發預覽" : "靜態瀏覽"}</span>
           </div>
         </div>
-        <nav className="max-w-4xl mx-auto px-4 flex gap-1 -mb-px">
-          {visibleTabs.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => setActive(t.id)}
-              className={
-                "px-4 py-2 text-sm font-medium border-b-2 transition-colors " +
-                (active === t.id
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-slate-600 hover:text-slate-900")
-              }
-            >
-              {t.label}
-            </button>
-          ))}
-        </nav>
+        <div className="max-w-4xl mx-auto px-4 flex items-end justify-between gap-4 -mb-px">
+          <nav className="flex flex-wrap gap-1">
+            {visibleTabs.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setActive(t.id)}
+                className={
+                  "px-4 py-2 text-sm font-medium border-b-2 transition-colors " +
+                  (active === t.id
+                    ? "border-blue-600 text-blue-600"
+                    : "border-transparent text-slate-600 hover:text-slate-900")
+                }
+              >
+                {t.label}
+              </button>
+            ))}
+          </nav>
+          <div className="pb-2">
+            <ChineseVisibilityToggle />
+          </div>
+        </div>
       </header>
       <main className="max-w-4xl mx-auto px-4 py-8">
         {active === "quiz" && quiz && (

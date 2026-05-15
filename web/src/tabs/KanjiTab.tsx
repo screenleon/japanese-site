@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { api, type Kanji } from "../api";
+import { useChineseVisibility } from "../chineseVisibility";
 import { useReadTracking } from "../hooks/useReadTracking";
 
 export function KanjiTab() {
   const [ch, setCh] = useState("");
   const [data, setData] = useState<Kanji | null>(null);
   const [err, setErr] = useState("");
+  const { visible: chineseVisible } = useChineseVisibility();
 
   useReadTracking(
     data?.character ? { type: "kanji", character: data.character } : null
@@ -44,7 +46,9 @@ export function KanjiTab() {
           <div className="text-7xl font-serif">{data.character}</div>
           <dl className="space-y-2 text-sm">
             <Row label="意味" value={data.meaning_ja || "日本語の意味は準備中です。"} />
-            <Row label="繁中" value={data.meaning_zh || "繁中意義待補"} />
+            {chineseVisible && (
+              <Row label="繁中" value={data.meaning_zh || "繁中意義待補"} />
+            )}
             <Row label="音讀" value={data.onyomi} />
             <Row label="訓讀" value={data.kunyomi} />
             <Row label="JLPT" value={data.jlpt_level} />

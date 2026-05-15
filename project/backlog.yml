@@ -1530,22 +1530,21 @@ items:
       - Coordinate with JS-107 on `annotations.furigana.vocabulary[]` retire policy.
 
   - id: JS-108
-    title: Click-to-reveal Chinese explanation + examples on grammar entry detail page
+    title: App-wide Japanese-first toggle — hide all `*_zh` surfaces behind a single Chinese-reveal switch
     status: todo
-    priority: P2
+    priority: P1
     milestone: M3
     theme: japanese-first
     area: frontend
-    source: User feedback 2026-05-15 — Japanese-first immersion preference
+    source: User feedback 2026-05-15 — "一切都應該優先以日文呈現 使用者有必要時才提供中文內容"
     notes:
-      - "User 2026-05-15: 「N3 · 限り（只要／在範圍內） 後面這個中文介紹 跟中文例句 都是要點及 顯示中文說明時才呈現的」"
-      - Aligns with existing DECISIONS.md 2026-04-30 Japanese-first-explanations-with-Chinese-reveal direction, extends it to the grammar entry detail page.
-      - "Scope: hide Chinese-language fields by default on grammar detail page — title_zh tail (the parenthetical 「只要／在範圍內」 part of title), explanation_zh prose, gloss_zh / notes_zh in pattern rows, rule_zh in classifier rules, gloss_zh in any future key_terms (see JS-107). Replace with a 「顯示中文說明」 toggle button that reveals the Chinese surface inline (or expand panel)."
-      - "Likely UI primitive: persistent toggle state per session (localStorage or React context) so user doesn't re-click on every entry. Default = hidden."
-      - "Cross-cuts: GrammarTab.tsx, EntryAnnotations.tsx, ClassifierContrasts.tsx, PatternList component (if extracted), and the per-entry detail page layout. Decide whether toggle is global (one switch app-wide) or per-page (per-entry switch); user preference TBD."
-      - "Consider whether VocabTab gloss_zh field should follow same pattern (probably yes for consistency)."
-      - "NOT in scope: Chinese in non-detail surfaces (e.g. HomePage corpus counts, navigation labels) — those remain visible."
-      - "Blocked-by: none. Independent of JS-106 (inline ruby) and JS-107 (key terms)."
+      - "FOUNDATIONAL UX PRINCIPLE (not feature improvement). User 2026-05-15 declared app-wide Japanese-first principle: every learner-facing surface defaults to Japanese only; Chinese reveals only when user opts in."
+      - "Targets (default-hidden): title_zh parenthetical, explanation_zh, pattern[].gloss_zh, pattern[].notes_zh, classifier_rules[].contrast.rule_zh, vocab gloss_zh, future JS-107 key_terms[].gloss_zh, any future *_zh field."
+      - "Implementation: React context provider with `chineseVisible: boolean`; ToggleableChinese wrapper component; single app-level toggle in header; localStorage persisted per-device; default OFF."
+      - "Out of scope: chrome — tab names (語彙/文法/漢字/句子/測驗), HomePage corpus counts, navigation labels, error messages. App skeleton, not learning content."
+      - "PR-gate hard rule going forward: any new feature / schema field with *_zh surface must wire through the toggle; critic blocks on violation. Add to project rules doc."
+      - "Priority P1 (elevated from P2) because user declared principle, not feature. JS-106/JS-107 become much more useful once Chinese is hidden by default."
+      - "Blocked-by: none. Independent of JS-106 (inline ruby) and JS-107 (key terms) but coordinated — both ride on this toggle once shipped."
 
   - id: JS-107
     title: Key-terms / lesson-vocab feature design + schema spike

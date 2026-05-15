@@ -8,6 +8,7 @@ import {
   type QuizContentType,
   type Stats,
 } from "../api";
+import { IfChinese, useChineseVisibility } from "../chineseVisibility";
 
 type Mode = "single" | "session" | "summary";
 export type QuizInitialMode = "練習" | "測試" | "複習";
@@ -636,10 +637,11 @@ function ResultBox({
   sessionMode: boolean;
   onNavigateGrammar?: (slug: string) => void;
 }) {
+  const { visible: chineseVisible } = useChineseVisibility();
   const isGrammar = result.content_type === "grammar";
   const isVocab = result.content_type === "vocab";
   const showErrorClass = result.error_class && result.error_class !== "generic";
-  const explanation = result.explanation_zh && !result.explanation_zh.includes("暫無針對此題")
+  const explanation = chineseVisible && result.explanation_zh && !result.explanation_zh.includes("暫無針對此題")
     ? result.explanation_zh
     : null;
 
@@ -675,26 +677,30 @@ function ResultBox({
 
           {/* Grammar explanation from corpus */}
           {isGrammar && result.item_detail_zh && (
-            <div className="text-sm leading-relaxed space-y-1">
-              <p className="text-xs font-medium text-amber-700">文法說明</p>
-              <p className="line-clamp-4">{result.item_detail_zh}</p>
-              {onNavigateGrammar && (
-                <button
-                  onClick={() => onNavigateGrammar(result.grammar_point)}
-                  className="text-xs text-blue-700 hover:underline mt-1"
-                >
-                  查看完整說明 →
-                </button>
-              )}
-            </div>
+            <IfChinese>
+              <div className="text-sm leading-relaxed space-y-1">
+                <p className="text-xs font-medium text-amber-700">文法說明</p>
+                <p className="line-clamp-4">{result.item_detail_zh}</p>
+                {onNavigateGrammar && (
+                  <button
+                    onClick={() => onNavigateGrammar(result.grammar_point)}
+                    className="text-xs text-blue-700 hover:underline mt-1"
+                  >
+                    查看完整說明 →
+                  </button>
+                )}
+              </div>
+            </IfChinese>
           )}
 
           {/* Vocab meaning */}
           {isVocab && result.item_detail_zh && (
-            <div className="text-sm space-y-1">
-              <p className="text-xs font-medium text-amber-700">詞義</p>
-              <p>{result.item_detail_zh}</p>
-            </div>
+            <IfChinese>
+              <div className="text-sm space-y-1">
+                <p className="text-xs font-medium text-amber-700">詞義</p>
+                <p>{result.item_detail_zh}</p>
+              </div>
+            </IfChinese>
           )}
 
           {hint && <p className="text-xs text-slate-600">提示：{hint}</p>}

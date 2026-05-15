@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "../api";
+import { ChineseVisibilityProvider } from "../chineseVisibility";
 import { VocabTab } from "./VocabTab";
 
 vi.mock("../hooks/useReadTracking", () => ({
@@ -43,6 +44,14 @@ const kanaOnlyVocab = {
 
 const searchVocab = vi.mocked(api.searchVocab);
 const randomVocab = vi.mocked(api.randomVocab);
+
+function renderWithChinese(visible: boolean) {
+  return render(
+    <ChineseVisibilityProvider initialVisible={visible}>
+      <VocabTab />
+    </ChineseVisibilityProvider>
+  );
+}
 
 describe("VocabTab", () => {
   beforeEach(() => {
@@ -111,5 +120,35 @@ describe("VocabTab", () => {
 
     // Assert
     expect(container.querySelector("ruby")).not.toBeInTheDocument();
+  });
+
+  /**
+   * Verifies Chinese vocab glosses stay hidden under the default provider state.
+   * Steps:
+   * 1. Arrange: mock vocab API responses with Japanese and Chinese gloss text.
+   * 2. Act: render VocabTab without enabling the Chinese visibility provider.
+   * 3. Assert: wait for the Japanese gloss to confirm the tab has loaded.
+   * 4. Assert: the Chinese gloss is absent from the DOM.
+   */
+  it("hides Chinese glosses by default", async () => {
+    render(<VocabTab />);
+
+    expect(await screen.findAllByText("よく話すこと。")).not.toHaveLength(0);
+    expect(screen.queryByText("聊天、多話。")).not.toBeInTheDocument();
+  });
+
+  /**
+   * Verifies Chinese vocab glosses render when global Chinese visibility is enabled.
+   * Steps:
+   * 1. Arrange: mock vocab API responses with Japanese and Chinese gloss text.
+   * 2. Act: render VocabTab inside ChineseVisibilityProvider with initialVisible=true.
+   * 3. Assert: wait for the Japanese gloss to confirm the tab has loaded.
+   * 4. Assert: the Chinese gloss appears in both expected vocab surfaces.
+   */
+  it("shows Chinese glosses when globally enabled", async () => {
+    renderWithChinese(true);
+
+    expect(await screen.findAllByText("よく話すこと。")).not.toHaveLength(0);
+    expect(screen.getAllByText("聊天、多話。").length).toBeGreaterThanOrEqual(2);
   });
 });

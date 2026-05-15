@@ -8,6 +8,7 @@ import {
 } from "../api";
 import { ClassifierContrasts } from "../components/ClassifierContrasts";
 import { BlockRenderer, EntryAnnotations } from "../components/EntryAnnotations";
+import { IfChinese, useChineseVisibility } from "../chineseVisibility";
 import { useReadTracking } from "../hooks/useReadTracking";
 
 const levels = ["N5", "N4", "N3", "N2", "N1"];
@@ -36,7 +37,6 @@ export function GrammarTab({
   const [activeSlug, setActiveSlug] = useState("");
   const [examples, setExamples] = useState<GrammarExample[]>([]);
   const [examplesFailed, setExamplesFailed] = useState(false);
-  const [showTranslation, setShowTranslation] = useState(false);
   const [loading, setLoading] = useState(true);
   const initialSlugApplied = useRef(false);
   const skipExamplesForInitialSlug = useRef(false);
@@ -90,7 +90,8 @@ export function GrammarTab({
 
   const levelPoints = grouped.find((g) => g.level === selectedLevel)?.points || [];
   const active = levelPoints.find((p) => p.slug === activeSlug) || levelPoints[0] || null;
-  const hasJapaneseExplanation = Boolean(active?.explanation_ja_blocks?.length);
+  const hasChineseExplanation = Boolean(active?.explanation_zh?.trim());
+  const { visible: chineseVisible } = useChineseVisibility();
   const relatedPoints = useMemo(() => {
     return (active?.related_slugs || []).map((slug) => ({
       slug,
@@ -109,12 +110,7 @@ export function GrammarTab({
       return;
     }
     setActiveSlug("");
-    setShowTranslation(false);
   }, [selectedLevel]);
-
-  useEffect(() => {
-    setShowTranslation(false);
-  }, [active?.slug]);
 
   useEffect(() => {
     let cancelled = false;
@@ -211,7 +207,9 @@ export function GrammarTab({
                     }
                   >
                     <div>{p.title_ja}</div>
-                    <div className="text-xs text-slate-400">{p.title_zh}</div>
+                    {chineseVisible && (
+                      <div className="text-xs text-slate-400">{p.title_zh}</div>
+                    )}
                   </button>
                 </li>
               ))}
@@ -232,7 +230,7 @@ export function GrammarTab({
                     </button>
                   </div>
                   <p className="text-sm text-slate-500">
-                    {active.jlpt_level} · {active.title_zh}
+                    {active.jlpt_level} · {chineseVisible ? active.title_zh : active.title_ja}
                   </p>
                 </header>
                 {hasAnnotations(active.annotations ?? {}) && (
@@ -250,8 +248,10 @@ export function GrammarTab({
                       <div key={`${row.form}-${index}`} className="grid gap-1 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
                         <dt className="font-mono text-sm text-slate-900">{row.form}</dt>
                         <dd className="text-sm text-slate-600">
-                          {row.gloss_zh}
-                          {row.notes_zh && <span className="ml-2 text-slate-500">{row.notes_zh}</span>}
+                          <IfChinese>
+                            {row.gloss_zh}
+                            {row.notes_zh && <span className="ml-2 text-slate-500">{row.notes_zh}</span>}
+                          </IfChinese>
                         </dd>
                       </div>
                     ))}
@@ -270,7 +270,9 @@ export function GrammarTab({
                             <p className="text-sm leading-relaxed text-slate-900">
                               {example.text_ja}
                             </p>
-                            <p className="mt-1 text-sm text-slate-500">{example.text_zh}</p>
+                            <IfChinese>
+                              <p className="mt-1 text-sm text-slate-500">{example.text_zh}</p>
+                            </IfChinese>
                           </li>
                         ))}
                       </ul>
@@ -311,21 +313,15 @@ export function GrammarTab({
                     primaryPattern={active.pattern[0]?.form}
                   />
                 </div>
-                {hasJapaneseExplanation && (
-                  <div className="mt-5 border-t border-slate-200 pt-4">
-                    <button
-                      type="button"
-                      onClick={() => setShowTranslation((current) => !current)}
-                      className="rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
-                    >
-                      {showTranslation ? "隱藏中文說明" : "顯示中文說明"}
-                    </button>
-                    {showTranslation && (
+                {hasChineseExplanation && (
+                  <IfChinese>
+                    <div className="mt-5 border-t border-slate-200 pt-4">
+                      <h3 className="text-base font-medium">中文說明</h3>
                       <pre className="mt-4 whitespace-pre-wrap font-sans text-sm leading-relaxed text-slate-700">
                         {active.explanation_zh}
                       </pre>
-                    )}
-                  </div>
+                    </div>
+                  </IfChinese>
                 )}
               </article>
             )}

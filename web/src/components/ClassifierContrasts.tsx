@@ -1,4 +1,5 @@
 import type { Annotations, GrammarPoint } from "../apiTypes";
+import { useChineseVisibility } from "../chineseVisibility";
 import { BlockRenderer } from "./EntryAnnotations";
 
 export function ClassifierContrasts({
@@ -11,6 +12,7 @@ export function ClassifierContrasts({
   primaryPattern?: string;
 }) {
   const rules = annotations?.classifier?.rules ?? [];
+  const { visible: chineseVisible } = useChineseVisibility();
   if (rules.length === 0) return null;
 
   return (
@@ -36,7 +38,7 @@ export function ClassifierContrasts({
               <div className="mt-3">
                 <BlockRenderer blocks={rule.rule_ja_blocks} />
               </div>
-              {rule.rule_zh && (
+              {chineseVisible && rule.rule_zh && (
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">{rule.rule_zh}</p>
               )}
               {rule.examples && rule.examples.length > 0 && (

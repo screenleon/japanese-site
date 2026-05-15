@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { api, type Sentence } from "../api";
+import { useChineseVisibility } from "../chineseVisibility";
 
 export function SentenceTab() {
   const [jlpt, setJlpt] = useState("");
   const [s, setS] = useState<Sentence | null>(null);
   const [err, setErr] = useState("");
+  const { visible: chineseVisible } = useChineseVisibility();
 
   async function refresh() {
     setErr("");
@@ -44,6 +46,9 @@ export function SentenceTab() {
       {s && (
         <div className="bg-white border border-slate-200 rounded-md p-6">
           <p className="text-2xl leading-relaxed">{s.text_ja}</p>
+          {chineseVisible && s.text_zh && (
+            <p className="mt-3 text-sm leading-relaxed text-slate-500">{s.text_zh}</p>
+          )}
           <div className="text-xs text-slate-400 mt-4 space-x-2">
             <span>番号 {s.id}</span>
             {s.jlpt_level && (
