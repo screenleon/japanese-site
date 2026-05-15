@@ -1,5 +1,7 @@
 # JS-100 N3 Pattern Regen — Native Review (PR #56)
 
+> **Status (2026-05-15)**: 7 tweaks applied in commit `c90c079`. PR ready to merge — native review gate cleared.
+
 **Date**: 2026-05-15
 **Reviewer**: Claude (main thread) — per `feedback_native_reviewer_role`, the native-review role for japanese-site falls to Claude because the user is still N3–N2 learning and cannot independently validate Japanese native intuition.
 **Audience-of-one criterion**: judgments calibrated to "useful to the user (N3 → N1) for internalising real Japanese", not to a generic JLPT-learner cohort (`project_japanese-site_audience`).
