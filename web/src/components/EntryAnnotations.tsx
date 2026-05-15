@@ -20,13 +20,7 @@ export const LABELS: Record<AnnotationKind, string> = {
 
 function hasFuriganaTitleTokens(value: FuriganaAnnotation | undefined) {
   if (!value) return false;
-  return value.title_ja?.some((token) => {
-    if (!token || typeof token !== "object" || !("t" in token)) return false;
-    if (token.t === "ruby") return token.k.trim() !== "" && token.r.trim() !== "";
-    if (token.t === "text") return token.v.trim() !== "";
-    if (token.t === "term") return token.label.trim() !== "";
-    return false;
-  }) ?? false;
+  return value.title_ja?.some(isRenderableToken) ?? false;
 }
 
 function hasAnnotationValue(kind: AnnotationKind, annotations?: Annotations) {
@@ -69,10 +63,30 @@ function TokenRenderer({ token }: { token: Token }) {
   return <>{token.v}</>;
 }
 
+function isNonBlankString(value: unknown): value is string {
+  return typeof value === "string" && value.trim() !== "";
+}
+
+function isRenderableToken(value: unknown): value is Token {
+  if (!value || typeof value !== "object" || !("t" in value)) return false;
+  const token = value as Record<string, unknown>;
+  if (token.t === "text") return isNonBlankString(token.v);
+  if (token.t === "ruby") return isNonBlankString(token.k) && isNonBlankString(token.r);
+  if (token.t === "term") {
+    return (
+      isNonBlankString(token.slug) &&
+      isNonBlankString(token.label) &&
+      (token.kind === "grammar" || token.kind === "vocab")
+    );
+  }
+  return false;
+}
+
 function Tokens({ tokens }: { tokens: Token[] }) {
+  const renderableTokens = tokens.filter(isRenderableToken);
   return (
     <>
-      {tokens.map((token, index) => (
+      {renderableTokens.map((token, index) => (
         <TokenRenderer key={`${token.t}-${index}`} token={token} />
       ))}
     </>

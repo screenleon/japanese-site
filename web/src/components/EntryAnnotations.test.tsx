@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { EntryAnnotations } from "./EntryAnnotations";
 
 describe("EntryAnnotations", () => {
@@ -153,6 +153,49 @@ describe("EntryAnnotations", () => {
 
     // Assert
     expect(container).toBeEmptyDOMElement();
+  });
+
+  it("filters malformed title tokens at runtime without throwing", () => {
+    /**
+     * Verifies malformed Token[] payloads are silently filtered before render.
+     * Steps:
+     * 1. Render an entry annotation block with malformed and valid title tokens.
+     * 2. Assert React does not throw or report a render error.
+     * 3. Assert only the valid ruby token remains visible.
+     */
+    // Arrange
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    try {
+      // Act / Assert
+      expect(() => {
+        render(
+          <EntryAnnotations
+            annotations={
+              {
+                furigana: {
+                  title_ja: [
+                    { t: "ruby", k: null, r: "x" },
+                    { t: "text", v: "" },
+                    { t: "ruby", k: "違", r: "ちが" },
+                  ],
+                },
+              } as never
+            }
+          />
+        );
+      }).not.toThrow();
+      expect(consoleError).not.toHaveBeenCalled();
+    } finally {
+      consoleError.mockRestore();
+    }
+
+    expect(screen.getByText("ふりがな")).toBeVisible();
+    const ruby = document.querySelectorAll("ruby");
+    expect(ruby).toHaveLength(1);
+    expect(ruby[0]).toHaveTextContent("違ちが");
+    expect(ruby[0].querySelector("rt")).toHaveTextContent("ちが");
+    expect(document.body.textContent).not.toContain("x");
   });
 
   it("ignores unknown runtime annotation keys", () => {

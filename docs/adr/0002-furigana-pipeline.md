@@ -159,3 +159,18 @@ The pipeline runs as a build-time Node script — **not** a runtime dependency.
   deliverable. If results pass, JS-067 rollout authoring begins on N3 first.
 - If results fail, the prep PR supersedes this ADR with an ADR-0002-revised
   entry naming Mecab plus the Mecab-specific integration details.
+
+## Supersession 2026-05-15 (JS-110)
+
+JS-110 supersedes the title portion of this ADR's original Pair[] output shape.
+The active furigana annotation contract is now split by use case:
+
+- `annotations.furigana.title_ja?: Token[]` — shared with
+  `explanation_ja_blocks.tokens`, preserving kana context and inline ruby order
+  for grammar titles.
+- `annotations.furigana.vocabulary?: FuriganaPair[]` — unchanged detached
+  vocabulary/key-term readings.
+
+`scripts/generate-furigana.mjs` now supports `--emit token` for title authoring
+and keeps `--emit pair` as the default for vocabulary authoring. Invalid emit
+values fail closed with exit code 2.

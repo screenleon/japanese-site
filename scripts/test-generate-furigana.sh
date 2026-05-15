@@ -31,6 +31,28 @@ assert_output() {
 	echo "test-generate-furigana: $label ok"
 }
 
+assert_failure() {
+	local label="$1"
+	local expected_status="$2"
+	local expected_stderr="$3"
+	shift 3
+	local actual
+	local status
+	set +e
+	actual="$("$@" 2>&1)"
+	status=$?
+	set -e
+	if [[ "$status" -ne "$expected_status" || "$actual" != *"$expected_stderr"* ]]; then
+		echo "test-generate-furigana: '$label' failed" >&2
+		echo "  expected status: $expected_status" >&2
+		echo "  actual status:   $status" >&2
+		echo "  expected stderr: $expected_stderr" >&2
+		echo "  actual output:   $actual" >&2
+		exit 1
+	fi
+	echo "test-generate-furigana: $label ok"
+}
+
 # 1. ADR-0002 acceptance criterion 1 — kanji/okurigana split (drop okurigana from
 #    both kanji and reading).
 assert_output "okurigana split (違う)" "違う" '[{"kanji":"違","reading":"ちが"}]'
@@ -60,5 +82,9 @@ assert_output "kanji-kana-kanji (取り戻す)" "取り戻す" '[{"kanji":"取",
 
 # 7. Jukujikun — multi-kanji compound with non-decomposable reading.
 assert_output "jukujikun (明日)" "明日" '[{"kanji":"明日","reading":"あした"}]'
+
+# 8. Invalid emit values fail with the stable CLI usage error.
+assert_failure "invalid emit value" 2 "generate-furigana: --emit must be 'pair' or 'token'" \
+	node "$SCRIPT" --text "あ" --emit bad
 
 echo "test-generate-furigana: all assertions passed"

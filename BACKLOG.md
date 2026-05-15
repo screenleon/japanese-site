@@ -1307,19 +1307,18 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 
 **Why**: The right fix is a schema and renderer shape change, not another data-only deletion. `furigana.title_ja` needs token-level structure so kana and ruby can be rendered in place as one expression.
 
-**Requirement**:
-1. Run a `/pre-impl` full surface audit before implementation.
-2. Upgrade `furigana.title_ja` to a token shape such as `Token[]`.
-3. Update renderer, API types, lint, generation pipeline, and static bake expectations together.
-4. Preserve kana context when rendering title furigana instead of showing detached ruby lists.
+**Implemented in this PR**:
+1. `annotations.furigana.title_ja` now uses the shared `Token[]` shape from `explanation_ja_blocks.tokens`.
+2. `annotations.furigana.vocabulary` remains `FuriganaPair[]` for detached vocabulary annotations.
+3. The renderer composes title furigana in order, preserving surrounding kana context instead of showing detached ruby lists.
+4. API types, corpus lint, generation pipeline, component tests, and static bake expectations were updated together.
 
-**Scope notes**: filed only. JS-109 does not implement this ticket and does not change schema, renderer, or pipeline.
+**Scope notes**: JS-109 remains the sister content-only cleanup. JS-110 is the shared-schema follow-up implemented by this PR, including the `/pre-impl` audit trail captured in the 2026-05-15 mainline PR-gate context.
 
 **Tags**: P2, schema, M3-C4
-**Status**: filed
+**Status**: doing → done (本 PR)
 **Source**: user UX feedback 2026-05-15 — 「に違いない 的 furigana 應該完整覆蓋」
-**Blocked-on**: `/pre-impl` full surface audit
-**Refs**: JS-067 root shape; JS-109 sister-fix
+**Refs**: JS-067 root shape; JS-109 sister-fix; `/pre-impl` audit 2026-05-15 recorded in mainline meeting context; ADR-0002 supersession 2026-05-15; ADR-0004
 <!-- 首次記錄: 2026-05-15 -->
 
 ## JS-111 — 同形不同義 grammar 條目合併為多義 entry
