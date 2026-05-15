@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "N／Vて形＋ばかり",
-      "gloss_zh": "表示總是或光是某事，常帶有偏多或不滿的語氣"
+      "form": "N＋ばかり",
+      "gloss_zh": "表示主觀地認為前項偏多或過度，常含說話者的批判或不滿",
+      "notes_zh": "Vて系統的「Vて＋ばかりいる」見 te-bakari-iru.json"
     },
     {
       "form": "Vた形＋ばかり",
