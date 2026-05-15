@@ -201,4 +201,30 @@ describe("ChineseVisibilityProvider", () => {
     // Assert
     expect(screen.getByTestId("visible")).toHaveTextContent("true");
   });
+
+  /**
+   * Verifies the provider falls back to visible=false (and does not crash) when
+   * localStorage.getItem throws on initial read (e.g. browser private mode,
+   * security exception, storage disabled).
+   * Steps:
+   * 1. Arrange Storage.getItem to throw a security-style error before mount.
+   * 2. Act by rendering a consumer inside ChineseVisibilityProvider.
+   * 3. Assert visible state is false and the consumer renders without error.
+   */
+  it("tolerates localStorage read failure with visible=false fallback", () => {
+    // Arrange
+    vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+      throw new Error("SecurityError: storage access denied");
+    });
+
+    // Act
+    render(
+      <ChineseVisibilityProvider>
+        <Consumer />
+      </ChineseVisibilityProvider>
+    );
+
+    // Assert
+    expect(screen.getByTestId("visible")).toHaveTextContent("false");
+  });
 });
