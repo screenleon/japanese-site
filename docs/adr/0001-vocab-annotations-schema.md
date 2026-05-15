@@ -36,6 +36,8 @@ should land, not the fourth.
 
 Both vocab and grammar entries gain a single optional nested object:
 
+> Superseded — see ADR-0004 for the current `annotations.furigana` contract.
+
 ```ts
 interface Annotations {
   usage?: string;            // narrative usage / register / 適用情境
@@ -52,6 +54,8 @@ interface Annotations {
 ```
 
 ### Furigana annotation kind
+
+> Superseded — see ADR-0004 for the current `annotations.furigana` contract.
 
 `annotations.furigana` is the structured-value exception to the otherwise
 string-valued annotation kinds. Its shape is:
@@ -225,3 +229,16 @@ compatibility. The downstream drop migration is tracked separately as JS-102.
 See [ADR 0003](0003-block-engine-and-pattern-and-classifier.md) for the Phase 2
 Block engine, structured pattern, classifier contrast, `_meta`, and v2 grammar
 schema decision.
+
+## 2026-05-15 supersession
+
+ADR-0004 supersedes the original furigana shape for both grammar and vocab.
+`annotations.furigana.title_ja` is now `Token[]`, using the same `text | ruby |
+term` token union as grammar block content, and must round-trip to the entry
+title/headword. `annotations.furigana.vocabulary` remains
+`Array<{ kanji: string; reading: string }>`. `key_terms` is disallowed.
+
+Both `scripts/lint-grammar.sh` and `scripts/lint-vocab.sh` enforce this shared
+contract: `title_ja` rejects the old `{ kanji, reading }` Pair[] shape,
+`vocabulary` accepts only non-empty FuriganaPair values, and `key_terms` fails
+closed.

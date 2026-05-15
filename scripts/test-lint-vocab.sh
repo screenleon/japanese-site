@@ -8,6 +8,10 @@ if ! command -v jq >/dev/null 2>&1; then
 	echo "test-lint-vocab: jq is required" >&2
 	exit 1
 fi
+if ! command -v node >/dev/null 2>&1; then
+	echo "test-lint-vocab: node is required" >&2
+	exit 1
+fi
 
 ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 LINT="$ROOT_DIR/scripts/lint-vocab.sh"
@@ -30,6 +34,24 @@ done
 
 VOCAB_ROOT="$clean_root" bash "$LINT" >/tmp/test-lint-vocab-clean.log
 echo "test-lint-vocab: clean fixture passed"
+
+# Positive case: furigana title_ja accepts Token[] and round-trips to headword.
+title_token_furigana_root="$tmp_root/title-token-furigana/server/data/corpus/vocab"
+mkdir -p "$title_token_furigana_root"
+cp "$clean_root"/*.jsonl "$title_token_furigana_root/"
+jq -c '.headword = "違いない" | .annotations = {"furigana":{"title_ja":[{"t":"ruby","k":"違","r":"ちが"},{"t":"text","v":"いない"}]}}' "$title_token_furigana_root/N3.jsonl" > "$title_token_furigana_root/N3.tmp"
+mv "$title_token_furigana_root/N3.tmp" "$title_token_furigana_root/N3.jsonl"
+VOCAB_ROOT="$title_token_furigana_root" bash "$LINT" >/tmp/test-lint-vocab-title-token-furigana.log
+echo "test-lint-vocab: title_ja Token[] furigana fixture passed"
+
+# Positive case: furigana vocabulary keeps Pair[] shape.
+vocabulary_furigana_root="$tmp_root/vocabulary-furigana/server/data/corpus/vocab"
+mkdir -p "$vocabulary_furigana_root"
+cp "$clean_root"/*.jsonl "$vocabulary_furigana_root/"
+jq -c '.annotations = {"furigana":{"vocabulary":[{"kanji":"根拠","reading":"こんきょ"}]}}' "$vocabulary_furigana_root/N3.jsonl" > "$vocabulary_furigana_root/N3.tmp"
+mv "$vocabulary_furigana_root/N3.tmp" "$vocabulary_furigana_root/N3.jsonl"
+VOCAB_ROOT="$vocabulary_furigana_root" bash "$LINT" >/tmp/test-lint-vocab-vocabulary-furigana.log
+echo "test-lint-vocab: vocabulary Pair[] furigana fixture passed"
 
 # Negative case: unknown annotation kind.
 unknown_root="$tmp_root/unknown/server/data/corpus/vocab"
@@ -95,60 +117,73 @@ if VOCAB_ROOT="$empty_title_furigana_root" bash "$LINT" >/tmp/test-lint-vocab-em
 	echo "test-lint-vocab: empty title_ja furigana fixture unexpectedly passed" >&2
 	exit 1
 fi
-grep -F "annotations.furigana must be an object" /tmp/test-lint-vocab-empty-title-furigana.err >/dev/null
+grep -F "annotations.furigana must contain at least one title_ja token or vocabulary pair" /tmp/test-lint-vocab-empty-title-furigana.err >/dev/null
 echo "test-lint-vocab: empty title_ja furigana expected failure mode triggered"
 
-# Negative case: furigana key_terms array is empty.
-empty_key_terms_furigana_root="$tmp_root/empty-key-terms-furigana/server/data/corpus/vocab"
-mkdir -p "$empty_key_terms_furigana_root"
-cp "$clean_root"/*.jsonl "$empty_key_terms_furigana_root/"
-jq -c '.annotations = {"furigana":{"key_terms":[]}}' "$empty_key_terms_furigana_root/N3.jsonl" > "$empty_key_terms_furigana_root/N3.tmp"
-mv "$empty_key_terms_furigana_root/N3.tmp" "$empty_key_terms_furigana_root/N3.jsonl"
-if VOCAB_ROOT="$empty_key_terms_furigana_root" bash "$LINT" >/tmp/test-lint-vocab-empty-key-terms-furigana.out 2>/tmp/test-lint-vocab-empty-key-terms-furigana.err; then
-	echo "test-lint-vocab: empty key_terms furigana fixture unexpectedly passed" >&2
+# Negative case: furigana key_terms is disallowed.
+key_terms_furigana_root="$tmp_root/key-terms-furigana/server/data/corpus/vocab"
+mkdir -p "$key_terms_furigana_root"
+cp "$clean_root"/*.jsonl "$key_terms_furigana_root/"
+jq -c '.annotations = {"furigana":{"key_terms":[{"kanji":"根拠","reading":"こんきょ"}]}}' "$key_terms_furigana_root/N3.jsonl" > "$key_terms_furigana_root/N3.tmp"
+mv "$key_terms_furigana_root/N3.tmp" "$key_terms_furigana_root/N3.jsonl"
+if VOCAB_ROOT="$key_terms_furigana_root" bash "$LINT" >/tmp/test-lint-vocab-key-terms-furigana.out 2>/tmp/test-lint-vocab-key-terms-furigana.err; then
+	echo "test-lint-vocab: key_terms furigana fixture unexpectedly passed" >&2
 	exit 1
 fi
-grep -F "annotations.furigana must be an object" /tmp/test-lint-vocab-empty-key-terms-furigana.err >/dev/null
-echo "test-lint-vocab: empty key_terms furigana expected failure mode triggered"
+grep -F "annotations.furigana.key_terms is disallowed" /tmp/test-lint-vocab-key-terms-furigana.err >/dev/null
+echo "test-lint-vocab: key_terms furigana expected failure mode triggered"
 
-# Negative case: furigana title_ja and key_terms arrays are both empty.
+# Negative case: furigana title_ja and vocabulary arrays are both empty.
 empty_all_furigana_root="$tmp_root/empty-all-furigana/server/data/corpus/vocab"
 mkdir -p "$empty_all_furigana_root"
 cp "$clean_root"/*.jsonl "$empty_all_furigana_root/"
-jq -c '.annotations = {"furigana":{"title_ja":[],"key_terms":[]}}' "$empty_all_furigana_root/N3.jsonl" > "$empty_all_furigana_root/N3.tmp"
+jq -c '.annotations = {"furigana":{"title_ja":[],"vocabulary":[]}}' "$empty_all_furigana_root/N3.jsonl" > "$empty_all_furigana_root/N3.tmp"
 mv "$empty_all_furigana_root/N3.tmp" "$empty_all_furigana_root/N3.jsonl"
 if VOCAB_ROOT="$empty_all_furigana_root" bash "$LINT" >/tmp/test-lint-vocab-empty-all-furigana.out 2>/tmp/test-lint-vocab-empty-all-furigana.err; then
-	echo "test-lint-vocab: empty title_ja and key_terms furigana fixture unexpectedly passed" >&2
+	echo "test-lint-vocab: empty title_ja and vocabulary furigana fixture unexpectedly passed" >&2
 	exit 1
 fi
-grep -F "annotations.furigana must be an object" /tmp/test-lint-vocab-empty-all-furigana.err >/dev/null
-echo "test-lint-vocab: empty title_ja and key_terms furigana expected failure mode triggered"
+grep -F "annotations.furigana must contain at least one title_ja token or vocabulary pair" /tmp/test-lint-vocab-empty-all-furigana.err >/dev/null
+echo "test-lint-vocab: empty title_ja and vocabulary furigana expected failure mode triggered"
 
-# Negative case: furigana kanji is whitespace-only.
+# Negative case: old title_ja Pair[] shape is disallowed.
 whitespace_kanji_furigana_root="$tmp_root/whitespace-kanji-furigana/server/data/corpus/vocab"
 mkdir -p "$whitespace_kanji_furigana_root"
 cp "$clean_root"/*.jsonl "$whitespace_kanji_furigana_root/"
 jq -c '.annotations = {"furigana":{"title_ja":[{"kanji":"   ","reading":"ちが"}]}}' "$whitespace_kanji_furigana_root/N3.jsonl" > "$whitespace_kanji_furigana_root/N3.tmp"
 mv "$whitespace_kanji_furigana_root/N3.tmp" "$whitespace_kanji_furigana_root/N3.jsonl"
 if VOCAB_ROOT="$whitespace_kanji_furigana_root" bash "$LINT" >/tmp/test-lint-vocab-whitespace-kanji-furigana.out 2>/tmp/test-lint-vocab-whitespace-kanji-furigana.err; then
-	echo "test-lint-vocab: whitespace-only kanji furigana fixture unexpectedly passed" >&2
+	echo "test-lint-vocab: old title_ja Pair[] furigana fixture unexpectedly passed" >&2
 	exit 1
 fi
-grep -F "annotations.furigana must be an object" /tmp/test-lint-vocab-whitespace-kanji-furigana.err >/dev/null
-echo "test-lint-vocab: whitespace-only kanji furigana expected failure mode triggered"
+grep -F "annotations.furigana.title_ja must be a Token array" /tmp/test-lint-vocab-whitespace-kanji-furigana.err >/dev/null
+echo "test-lint-vocab: old title_ja Pair[] furigana expected failure mode triggered"
 
-# Negative case: furigana reading is whitespace-only.
+# Negative case: vocabulary reading is whitespace-only.
 whitespace_reading_furigana_root="$tmp_root/whitespace-reading-furigana/server/data/corpus/vocab"
 mkdir -p "$whitespace_reading_furigana_root"
 cp "$clean_root"/*.jsonl "$whitespace_reading_furigana_root/"
-jq -c '.annotations = {"furigana":{"title_ja":[{"kanji":"違","reading":"   "}]}}' "$whitespace_reading_furigana_root/N3.jsonl" > "$whitespace_reading_furigana_root/N3.tmp"
+jq -c '.annotations = {"furigana":{"vocabulary":[{"kanji":"違","reading":"   "}]}}' "$whitespace_reading_furigana_root/N3.jsonl" > "$whitespace_reading_furigana_root/N3.tmp"
 mv "$whitespace_reading_furigana_root/N3.tmp" "$whitespace_reading_furigana_root/N3.jsonl"
 if VOCAB_ROOT="$whitespace_reading_furigana_root" bash "$LINT" >/tmp/test-lint-vocab-whitespace-reading-furigana.out 2>/tmp/test-lint-vocab-whitespace-reading-furigana.err; then
 	echo "test-lint-vocab: whitespace-only reading furigana fixture unexpectedly passed" >&2
 	exit 1
 fi
-grep -F "annotations.furigana must be an object" /tmp/test-lint-vocab-whitespace-reading-furigana.err >/dev/null
+grep -F "annotations.furigana.vocabulary pair 0 must contain non-empty kanji and reading" /tmp/test-lint-vocab-whitespace-reading-furigana.err >/dev/null
 echo "test-lint-vocab: whitespace-only reading furigana expected failure mode triggered"
+
+# Negative case: title_ja Token[] must round-trip to the headword.
+title_round_trip_root="$tmp_root/title-round-trip/server/data/corpus/vocab"
+mkdir -p "$title_round_trip_root"
+cp "$clean_root"/*.jsonl "$title_round_trip_root/"
+jq -c '.headword = "違いない" | .annotations = {"furigana":{"title_ja":[{"t":"ruby","k":"別","r":"べつ"}]}}' "$title_round_trip_root/N3.jsonl" > "$title_round_trip_root/N3.tmp"
+mv "$title_round_trip_root/N3.tmp" "$title_round_trip_root/N3.jsonl"
+if VOCAB_ROOT="$title_round_trip_root" bash "$LINT" >/tmp/test-lint-vocab-title-round-trip.out 2>/tmp/test-lint-vocab-title-round-trip.err; then
+	echo "test-lint-vocab: title round-trip furigana fixture unexpectedly passed" >&2
+	exit 1
+fi
+grep -F "annotations.furigana.title_ja round-trip mismatch" /tmp/test-lint-vocab-title-round-trip.err >/dev/null
+echo "test-lint-vocab: title round-trip furigana expected failure mode triggered"
 
 # Negative case: missing JSONL file for a level.
 missing_root="$tmp_root/missing/server/data/corpus/vocab"
