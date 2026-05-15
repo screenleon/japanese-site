@@ -1589,7 +1589,7 @@ items:
     source: user UX feedback 2026-05-15 — に違いない furigana should cover the full expression
     related: [JS-067, JS-109]
     notes:
-      - "Requested milestone detail: M3-C4."
+      - "Requested milestone detail: M3-C5."
       - Implement as shared-schema spike: `annotations.furigana.title_ja` becomes the existing web `Token[]` union, while `annotations.furigana.vocabulary` remains `FuriganaPair[]`.
       - "Disambig-paren strategy B: title tokens cover only the pattern body; trailing `（…）` disambiguation remains in top-level `title_ja` but not in panel tokens."
       - "Done when: 63 title_ja arrays audited, populated arrays migrated to Token[], renderer uses `<Tokens>`, lint rejects old title Pair[], tests pass, and baked static output deep-equals corpus."
