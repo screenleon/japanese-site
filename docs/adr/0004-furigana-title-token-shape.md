@@ -43,9 +43,40 @@ the generator must not overwrite them. The generator's default split is used onl
 for new files with neither `title_ja` Token[] data nor vocabulary readings to
 reference.
 
-**Lint behavior**: both idioms satisfy the same round-trip invariant:
-`tokens.map(t => t.v ?? t.k).join("")` must equal the source title string. Lint
-does not prefer one idiom over the other.
+## Source-title normalization
+
+For every entry, `title_source` is computed by stripping a SINGLE trailing
+parenthetical block from `title_ja`. Regex (POSIX, JS):
+`/[（(][^）)]*[）)]$/` matched on the full string after surrounding whitespace
+trimming. Title strings without trailing parens are unchanged.
+
+## Round-trip invariant
+
+Both idioms satisfy the same round-trip invariant:
+`tokens.map(t => t.t === "text" ? t.v : t.t === "ruby" ? t.k : t.label).join("") === title_source`.
+
+`title_source` is defined above and is NOT the raw `title_ja`. Lint does not
+prefer one idiom over the other.
+
+## Rationale — why strip the trailing parenthetical
+
+The furigana panel is a reading-hints surface, not the complete title display.
+The entry header still renders the full title, including any trailing
+parenthetical, so learner-facing title information is not lost.
+
+Trailing parentheticals such as disambiguation labels (`（目的）`) and kana
+examples (`（つ・人・枚）`) do not add useful reading hints. Excluding them keeps
+the panel focused on the expression body and avoids noisy or redundant tokens.
+
+## Examples
+
+- `数え方（つ・人・枚）` → source `数え方` → tokens
+  `[{ t: "ruby", k: "数え方", r: "かぞえかた" }]`
+- `〜をおいて（他にない）` → source `〜をおいて` → tokens
+  `[{ t: "text", v: "〜をおいて" }]`, or an equivalent ruby-bearing Token[]
+  if the entry later needs a reading hint.
+- `に違いない` → source `に違いない` (no trailing parens) → tokens
+  `[{ t: "text", v: "に" }, { t: "ruby", k: "違いない", r: "ちがいない" }]`
 
 ## Consequence
 

@@ -235,8 +235,9 @@ schema decision.
 ADR-0004 supersedes the original furigana shape for both grammar and vocab.
 `annotations.furigana.title_ja` is now `Token[]`, using the same `text | ruby |
 term` token union as grammar block content, and must round-trip to the entry
-title/headword. `annotations.furigana.vocabulary` remains
-`Array<{ kanji: string; reading: string }>`. `key_terms` is disallowed.
+source-normalized title/headword (per ADR-0004 §Source-title normalization).
+`annotations.furigana.vocabulary` remains `Array<{ kanji: string; reading:
+string }>`. `key_terms` is disallowed.
 
 Both `scripts/lint-grammar.sh` and `scripts/lint-vocab.sh` enforce this shared
 contract: `title_ja` rejects the old `{ kanji, reading }` Pair[] shape,

@@ -1610,6 +1610,20 @@ items:
       - Touches slug structure, routing, per-sense annotations, quiz selection, classifier data, and grammar list UI.
       - Schema-version major bump candidate; defer until UX alignment confirms the multi-sense entry model.
 
+  - id: JS-112
+    title: Share lint-grammar / lint-vocab Token[] validator
+    status: todo
+    priority: P3
+    milestone: M4
+    theme: schema-refactor
+    area: schema/refactor
+    source: PR-gate finding 2026-05-15 (gate-20260515-231333.md architecture-reviewer medium)
+    related: [JS-110]
+    notes:
+      - "Done when: both lint scripts use a shared Node module for Token[] validation, titleSource, token text extraction, and FuriganaPair validation."
+      - Add unit tests covering the shared validator behavior.
+      - Deferred from JS-110; do not extract the module in the current PR.
+
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.
 done:
