@@ -46,17 +46,33 @@ reference.
 ## Source-title normalization
 
 For every entry, `title_source` is computed by stripping a SINGLE trailing
-parenthetical block from `title_ja`. Regex (POSIX, JS):
-`/[（(][^）)]*[）)]$/` matched on the full string after surrounding whitespace
-trimming. Title strings without trailing parens are unchanged.
+parenthetical block from `title_ja`. Regex (JS):
+`/（[^）]*）$/` matched on the full string. This rule is full-width only:
+it strips Japanese `（...）` parentheticals, does not strip ASCII `(...)`,
+and does not trim surrounding whitespace.
+
+Current corpus titles use full-width Japanese parens. ASCII parens have not
+been encountered in the corpus; future title authors should use full-width
+`（）` to remain compatible with lint.
 
 ## Round-trip invariant
 
-Both idioms satisfy the same round-trip invariant:
+Non-empty title token arrays satisfy the same round-trip invariant:
 `tokens.map(t => t.t === "text" ? t.v : t.t === "ruby" ? t.k : t.label).join("") === title_source`.
 
 `title_source` is defined above and is NOT the raw `title_ja`. Lint does not
 prefer one idiom over the other.
+
+## Empty title_ja policy
+
+A title with no kanji after source-title normalization is rendered with an
+empty `furigana.title_ja: []`. This is consistent with the lint contract:
+empty arrays trivially satisfy round-trip (`[].join("")` === `""`, which is
+permitted when source is kana-only). The renderer hides the furigana panel for
+such entries, since reading hints would be redundant with the entry header.
+
+Authors who wish to surface the kana-only title in the panel anyway MAY
+populate `[{ t: "text", v: <source_title> }]` instead; both forms are accepted.
 
 ## Rationale — why strip the trailing parenthetical
 
@@ -72,9 +88,15 @@ the panel focused on the expression body and avoids noisy or redundant tokens.
 
 - `数え方（つ・人・枚）` → source `数え方` → tokens
   `[{ t: "ruby", k: "数え方", r: "かぞえかた" }]`
-- `〜をおいて（他にない）` → source `〜をおいて` → tokens
-  `[{ t: "text", v: "〜をおいて" }]`, or an equivalent ruby-bearing Token[]
-  if the entry later needs a reading hint.
+- `〜をおいて（他にない）` → title string `〜をおいて（他にない）` →
+  source `〜をおいて`. The source has no kanji, so no ruby tokens are
+  required. The resulting `title_ja` Token[] MAY be `[]` (panel hidden) or
+  `[{ t: "text", v: "〜をおいて" }]` (panel shows a kana-only line). Either is
+  valid per the lint contract: empty arrays are allowed when the source has no
+  kanji, and non-empty Token[] must still round-trip to source. Current corpus
+  uses `[]` for this entry; the panel is hidden, matching the principle that
+  the furigana panel exists for reading hints, not for repeating kana-only
+  patterns already visible in the entry header.
 - `に違いない` → source `に違いない` (no trailing parens) → tokens
   `[{ t: "text", v: "に" }, { t: "ruby", k: "違いない", r: "ちがいない" }]`
 
