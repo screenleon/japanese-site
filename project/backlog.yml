@@ -1529,6 +1529,24 @@ items:
       - Invariant: byte-identical text concatenation per entry (text token v + ruby token k concat == original explanation text).
       - Coordinate with JS-107 on `annotations.furigana.vocabulary[]` retire policy.
 
+  - id: JS-108
+    title: Click-to-reveal Chinese explanation + examples on grammar entry detail page
+    status: todo
+    priority: P2
+    milestone: M3
+    theme: japanese-first
+    area: frontend
+    source: User feedback 2026-05-15 — Japanese-first immersion preference
+    notes:
+      - "User 2026-05-15: 「N3 · 限り（只要／在範圍內） 後面這個中文介紹 跟中文例句 都是要點及 顯示中文說明時才呈現的」"
+      - Aligns with existing DECISIONS.md 2026-04-30 Japanese-first-explanations-with-Chinese-reveal direction, extends it to the grammar entry detail page.
+      - "Scope: hide Chinese-language fields by default on grammar detail page — title_zh tail (the parenthetical 「只要／在範圍內」 part of title), explanation_zh prose, gloss_zh / notes_zh in pattern rows, rule_zh in classifier rules, gloss_zh in any future key_terms (see JS-107). Replace with a 「顯示中文說明」 toggle button that reveals the Chinese surface inline (or expand panel)."
+      - "Likely UI primitive: persistent toggle state per session (localStorage or React context) so user doesn't re-click on every entry. Default = hidden."
+      - "Cross-cuts: GrammarTab.tsx, EntryAnnotations.tsx, ClassifierContrasts.tsx, PatternList component (if extracted), and the per-entry detail page layout. Decide whether toggle is global (one switch app-wide) or per-page (per-entry switch); user preference TBD."
+      - "Consider whether VocabTab gloss_zh field should follow same pattern (probably yes for consistency)."
+      - "NOT in scope: Chinese in non-detail surfaces (e.g. HomePage corpus counts, navigation labels) — those remain visible."
+      - "Blocked-by: none. Independent of JS-106 (inline ruby) and JS-107 (key terms)."
+
   - id: JS-107
     title: Key-terms / lesson-vocab feature design + schema spike
     status: todo
