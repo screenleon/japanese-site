@@ -114,6 +114,7 @@
 | JS-105 | 🔵 active | pm-schema bump v1→v2 for grammar/schema-spike themes | planning/schema | 2026-05-10 | pm-schema frozen at v1 per PR #46 |
 | JS-106 | 🔵 active | Inline ruby migration for grammar `explanation_ja_blocks` (corpus-wide) | content | 2026-05-15 | User feedback 2026-05-15 on 限り detail page; kagiri PoC commit demonstrates target shape |
 | JS-107 | 🔵 active | Key-terms / lesson-vocab feature design + schema | content/backend/frontend | 2026-05-15 | User feedback 2026-05-15 ("我覺得只要是B有需求") — vocabulary[] retire decision |
+| JS-108 | 🔵 active | Click-to-reveal Chinese explanation + examples on grammar entry detail page | frontend | 2026-05-15 | User feedback 2026-05-15 — Japanese-first immersion preference |
 
 ---
 
@@ -1247,4 +1248,30 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Status**: todo
 **Source**: User feedback 2026-05-15 — confirmed B-need exists ("我覺得只要是B有需求")
 **Blocked-by**: discussion with user on exact "key term" definition + selection criteria; NOT blocked on JS-106 but coordinates with it
+<!-- 首次記錄: 2026-05-15 -->
+
+## JS-108 — Click-to-reveal Chinese explanation + examples on grammar entry detail page
+
+**Problem**: Grammar entry detail page (`/grammar/<slug>`) currently shows all Chinese-language fields by default — `title_zh` parenthetical (e.g. 限り→「只要／在範圍內」), `explanation_zh` prose, `gloss_zh` and `notes_zh` in each `pattern[]` row, `rule_zh` in classifier rules. This works against the Japanese-first immersion approach: learners reach for the Chinese before parsing the Japanese, so retention degrades.
+
+**Why**: Aligns with `DECISIONS.md` 2026-04-30 Japanese-first-explanations-with-Chinese-reveal direction. User 2026-05-15 explicitly extends that policy to the grammar entry detail page: "N3 · 限り（只要／在範圍內） 後面這個中文介紹 跟中文例句 都是要點及 顯示中文說明時才呈現的".
+
+**Requirement**:
+1. Hide Chinese-surface fields by default on grammar entry detail page:
+   - `title_zh`'s parenthetical-only suffix (the part after Japanese title) — keep Japanese title visible at all times.
+   - `explanation_zh` paragraph.
+   - `gloss_zh` and `notes_zh` in each `pattern[]` row.
+   - `rule_zh` in classifier rules (`ClassifierContrasts.tsx`).
+   - Future: `gloss_zh` in `key_terms[]` (JS-107) if/when that ships.
+2. Provide a single visible toggle button labeled clearly (suggested: 「中文說明を表示」 / "顯示中文說明" / 「日本語のみ」 switch). On click, reveals all Chinese-surface fields inline. Persistent state preferred: localStorage so the user does not re-click on every entry.
+3. **Decision deferred to implementation**: scope of toggle — global (one app-wide switch flips all Chinese on/off everywhere) vs per-page (each entry has its own switch). Recommend global with localStorage for consistency; user preference TBD.
+4. Consider whether `VocabTab` `gloss_zh` should follow same pattern (probably yes for consistency, but separate ticket if scope creeps).
+5. NOT in scope: Chinese in non-detail surfaces — HomePage corpus counts, navigation labels, tab names, error messages stay visible (those are infrastructure, not learning content).
+
+**Scope notes**: pure frontend change. No corpus / schema / backend modifications. Reuses existing data — just gates rendering on the toggle state.
+
+**Tags**: P2, frontend, japanese-first
+**Status**: todo
+**Source**: User feedback 2026-05-15 — extends 2026-04-30 Japanese-first policy to grammar entry detail page
+**Blocked-by**: none. Independent of JS-106 (inline ruby) and JS-107 (key terms).
 <!-- 首次記錄: 2026-05-15 -->
