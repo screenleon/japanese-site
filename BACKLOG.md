@@ -115,6 +115,8 @@
 | JS-106 | 🔵 active | Inline ruby migration for grammar `explanation_ja_blocks` (corpus-wide) | content | 2026-05-15 | User feedback 2026-05-15 on 限り detail page; kagiri PoC commit demonstrates target shape |
 | JS-107 | 🔵 active | Key-terms / lesson-vocab feature design + schema | content/backend/frontend | 2026-05-15 | User feedback 2026-05-15 ("我覺得只要是B有需求") — vocabulary[] retire decision |
 | JS-108 | 🔵 active | App-wide Japanese-first toggle: hide all `*_zh` surfaces behind a single Chinese-reveal switch | frontend | 2026-05-15 | User feedback 2026-05-15 — "一切都應該優先以日文呈現 使用者有必要時才提供中文內容" |
+| JS-109 | 🟡 in_progress | N3/N4/N5 disambig-meta 漢字從 furigana.title_ja 剔除（22 條） | content | 2026-05-15 | user UX feedback 2026-05-15 post-PR-#59 |
+| JS-110 | 🔵 active | furigana.title_ja 形狀升級為 Token[]，渲染時就地拼接保留 kana 上下文 | schema/frontend | 2026-05-15 | user UX feedback 2026-05-15 — に違いない furigana should cover the full expression |
 
 ---
 
@@ -1275,4 +1277,46 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Status**: todo
 **Source**: User feedback 2026-05-15 — "一切都應該優先以日文呈現 使用者有必要時才提供中文內容". Principle codified in `feedback_native_reviewer_role` memory companion `project_japanese-site_japanese-first.md`.
 **Blocked-by**: none. Independent of JS-106 (inline ruby) and JS-107 (key terms). Both of those become much more usable once Chinese is hidden by default.
+<!-- 首次記錄: 2026-05-15 -->
+
+## JS-109 — N3/N4/N5 disambig-meta 漢字從 furigana.title_ja 剔除（22 條）
+
+**Problem**: JS-067 sends the full `title_ja` string through Kuromoji, so titles such as `ために（目的）` and `で（動作の場所）` emit detached ruby pairs for parenthetical semantic labels. The ふりがな panel then promotes `目的`, `様態`, `動作`, and similar learner-facing disambiguation labels into the panel body, which reads like unrelated dictionary translation noise.
+
+**Why**: The parenthetical kanji are PM-authored semantic labels, not the grammar point's learning target. For kana-only grammar points and particles, an empty `furigana.title_ja` is the correct rendered result because the existing panel already suppresses empty title furigana.
+
+**Requirement**:
+1. Update only the 22 target N3/N4/N5 corpus JSON files.
+2. Modify only `annotations.furigana.title_ja`.
+3. Remove any pair whose `kanji` appears inside the Japanese title's parenthetical disambiguation label; preserve any outside-parentheses title pair.
+4. Keep the `title_ja` text, `explanation_zh`, `explanation_ja_blocks`, and `annotations.furigana.vocabulary` unchanged.
+5. Do not rerun `generate-furigana.mjs`; this is a hand-pruned data fix, not a pipeline rewrite.
+
+**Done when**: `bash scripts/lint-grammar.sh`, `go build ./... && go test ./...`, `npm test`, and `make bake-static` pass; baked `web/public/data/grammar/<level>.json` entries deep-equal source corpus `annotations.furigana.title_ja` for the 22 slugs.
+
+**Tags**: P2, content, M3-C3
+**Status**: in-progress
+**Source**: user UX feedback 2026-05-15 post-PR-#59
+**Refs**: JS-067 (root cause); JS-106 (surfaced via PR #59 N3 inline-ruby rollout); JS-110 (structural follow-up)
+<!-- 首次記錄: 2026-05-15 -->
+
+## JS-110 — furigana.title_ja 形狀升級為 Token[]，渲染時就地拼接保留 kana 上下文
+
+**Problem**: A separate issue remains after JS-109: title furigana currently has detached `{kanji, reading}` pairs, so expressions like `に違いない` cannot render reading coverage with the surrounding kana/context intact.
+
+**Why**: The right fix is a schema and renderer shape change, not another data-only deletion. `furigana.title_ja` needs token-level structure so kana and ruby can be rendered in place as one expression.
+
+**Requirement**:
+1. Run a `/pre-impl` full surface audit before implementation.
+2. Upgrade `furigana.title_ja` to a token shape such as `Token[]`.
+3. Update renderer, API types, lint, generation pipeline, and static bake expectations together.
+4. Preserve kana context when rendering title furigana instead of showing detached ruby lists.
+
+**Scope notes**: filed only. JS-109 does not implement this ticket and does not change schema, renderer, or pipeline.
+
+**Tags**: P2, schema, M3-C4
+**Status**: filed
+**Source**: user UX feedback 2026-05-15 — 「に違いない 的 furigana 應該完整覆蓋」
+**Blocked-on**: `/pre-impl` full surface audit
+**Refs**: JS-067 root shape; JS-109 sister-fix
 <!-- 首次記錄: 2026-05-15 -->

@@ -39,16 +39,7 @@
   ],
   "annotations": {
     "furigana": {
-      "title_ja": [
-        {
-          "kanji": "並列",
-          "reading": "へいれつ"
-        },
-        {
-          "kanji": "相手",
-          "reading": "あいて"
-        }
-      ],
+      "title_ja": [],
       "vocabulary": [
         {
           "kanji": "名詞",

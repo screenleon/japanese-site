@@ -40,16 +40,7 @@
   ],
   "annotations": {
     "furigana": {
-      "title_ja": [
-        {
-          "kanji": "同類",
-          "reading": "どうるい"
-        },
-        {
-          "kanji": "追加",
-          "reading": "ついか"
-        }
-      ],
+      "title_ja": [],
       "vocabulary": [
         {
           "kanji": "意味",

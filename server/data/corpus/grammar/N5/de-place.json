@@ -39,16 +39,7 @@
   ],
   "annotations": {
     "furigana": {
-      "title_ja": [
-        {
-          "kanji": "動作",
-          "reading": "どうさ"
-        },
-        {
-          "kanji": "場所",
-          "reading": "ばしょ"
-        }
-      ],
+      "title_ja": [],
       "vocabulary": [
         {
           "kanji": "動作",

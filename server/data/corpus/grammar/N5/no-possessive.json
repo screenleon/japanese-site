@@ -41,16 +41,7 @@
   ],
   "annotations": {
     "furigana": {
-      "title_ja": [
-        {
-          "kanji": "所有",
-          "reading": "しょゆう"
-        },
-        {
-          "kanji": "所属",
-          "reading": "しょぞく"
-        }
-      ],
+      "title_ja": [],
       "vocabulary": [
         {
           "kanji": "名詞",

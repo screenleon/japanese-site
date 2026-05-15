@@ -51,12 +51,7 @@
   ],
   "annotations": {
     "furigana": {
-      "title_ja": [
-        {
-          "kanji": "逆接",
-          "reading": "ぎゃくせつ"
-        }
-      ],
+      "title_ja": [],
       "vocabulary": [
         {
           "kanji": "時間",
