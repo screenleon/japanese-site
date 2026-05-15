@@ -219,9 +219,10 @@ describe("GrammarTab", () => {
     renderWithChinese(true, <GrammarTab />);
 
     expect(await screen.findByRole("heading", { name: "〜さえ" })).toBeVisible();
+    // example.text_zh comes from getGrammarExamples (separate async call) — await it specifically.
+    expect(await screen.findByText("只要寫名字就好。")).toBeVisible();
     expect(screen.getAllByText("甚至；只要").length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText("測試句型")).toBeVisible();
-    expect(screen.getByText("只要寫名字就好。")).toBeVisible();
     expect(screen.getByText("N3 · 甚至；只要")).toBeVisible();
   });
 
