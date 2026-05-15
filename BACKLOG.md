@@ -1297,7 +1297,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Tags**: P2, content, M3-C3
 **Status**: in-progress
 **Source**: user UX feedback 2026-05-15 post-PR-#59
-**Refs**: JS-067 root cause; JS-106 surfaced via
+**Refs**: JS-067 (root cause); JS-106 (surfaced via PR #59 N3 inline-ruby rollout); JS-110 (structural follow-up)
 <!-- 首次記錄: 2026-05-15 -->
 
 ## JS-110 — furigana.title_ja 形狀升級為 Token[]，渲染時就地拼接保留 kana 上下文
