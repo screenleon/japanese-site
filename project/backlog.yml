@@ -1564,6 +1564,37 @@ items:
       - Coordinate with JS-106 — `key_terms` is a study list, not a pronunciation table; should NOT duplicate inline ruby readings.
       - Design spike deliverable: ADR + schema decision + 4-entry hand-author PoC (suggested PoC slugs: limit-related kagiri / 力-collocation entries to demonstrate (a) + (b) mix).
 
+  - id: JS-109
+    title: Strip disambig-meta kanji from grammar `furigana.title_ja` (22 entries)
+    status: doing
+    priority: P2
+    milestone: M3
+    theme: content
+    area: content
+    source: user UX feedback 2026-05-15 post-PR-#59
+    related: [JS-067, JS-106]
+    notes:
+      - "Requested milestone detail: M3-C3."
+      - Remove only `annotations.furigana.title_ja` pairs whose `kanji` appears inside the Japanese title's parenthetical disambiguation label.
+      - Keep `title_ja` text, `explanation_zh`, `explanation_ja_blocks`, and `annotations.furigana.vocabulary` byte-identical.
+      - "Done when: all 22 target corpus JSON files are updated, `bash scripts/lint-grammar.sh` passes, `go build ./... && go test ./...` passes, `npm test` passes, `make bake-static` passes, and baked grammar rollups match source `furigana.title_ja` for the target slugs."
+
+  - id: JS-110
+    title: Upgrade `furigana.title_ja` shape to Token[] and render with kana context
+    status: todo
+    priority: P2
+    milestone: M3
+    theme: schema
+    area: schema/frontend
+    source: user UX feedback 2026-05-15 — に違いない furigana should cover the full expression
+    blocked_by: [pre-impl audit]
+    related: [JS-067, JS-109]
+    notes:
+      - "Requested milestone detail: M3-C4."
+      - Filed only in this PR; do not implement under JS-109.
+      - "Blocked-on: /pre-impl full surface audit before changing schema, renderer, pipeline, API types, lint, and baked static payloads."
+      - Root shape comes from JS-067; JS-109 is the sister content-only fix for parenthetical meta labels.
+
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.
 done:

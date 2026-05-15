@@ -40,12 +40,7 @@
   ],
   "annotations": {
     "furigana": {
-      "title_ja": [
-        {
-          "kanji": "目的語",
-          "reading": "もくてきご"
-        }
-      ],
+      "title_ja": [],
       "vocabulary": [
         {
           "kanji": "動作",

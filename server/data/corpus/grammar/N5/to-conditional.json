@@ -51,12 +51,7 @@
   ],
   "annotations": {
     "furigana": {
-      "title_ja": [
-        {
-          "kanji": "条件",
-          "reading": "じょうけん"
-        }
-      ],
+      "title_ja": [],
       "vocabulary": [
         {
           "kanji": "条件",

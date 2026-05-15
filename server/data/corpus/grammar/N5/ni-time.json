@@ -40,12 +40,7 @@
   ],
   "annotations": {
     "furigana": {
-      "title_ja": [
-        {
-          "kanji": "時間",
-          "reading": "じかん"
-        }
-      ],
+      "title_ja": [],
       "vocabulary": [
         {
           "kanji": "動作",

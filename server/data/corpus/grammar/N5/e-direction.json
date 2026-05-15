@@ -39,12 +39,7 @@
   ],
   "annotations": {
     "furigana": {
-      "title_ja": [
-        {
-          "kanji": "方向",
-          "reading": "ほうこう"
-        }
-      ],
+      "title_ja": [],
       "vocabulary": [
         {
           "kanji": "方向",

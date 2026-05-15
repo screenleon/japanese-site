@@ -40,12 +40,7 @@
   ],
   "annotations": {
     "furigana": {
-      "title_ja": [
-        {
-          "kanji": "疑問",
-          "reading": "ぎもん"
-        }
-      ],
+      "title_ja": [],
       "vocabulary": [
         {
           "kanji": "質問",

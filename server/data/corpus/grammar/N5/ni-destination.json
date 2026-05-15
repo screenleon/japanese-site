@@ -40,16 +40,7 @@
   ],
   "annotations": {
     "furigana": {
-      "title_ja": [
-        {
-          "kanji": "到着点",
-          "reading": "とうちゃくてん"
-        },
-        {
-          "kanji": "存在場所",
-          "reading": "そんざいばしょ"
-        }
-      ],
+      "title_ja": [],
       "vocabulary": [
         {
           "kanji": "場所",
