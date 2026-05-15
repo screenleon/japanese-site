@@ -62,14 +62,16 @@ describe("EntryAnnotations", () => {
       />
     );
 
-    // Assert
+    // Assert: vocabulary is intentionally NOT rendered in the detached
+    // FuriganaBlock — only title_ja furigana surfaces. (vocabulary[]
+    // corpus data is retained for future inline-ruby migration.)
     expect(screen.getByText("ふりがな")).toBeVisible();
     const ruby = container.querySelectorAll("ruby");
-    expect(ruby).toHaveLength(2);
+    expect(ruby).toHaveLength(1);
     expect(ruby[0]).toHaveTextContent("違ちが");
     expect(ruby[0].querySelector("rt")).toHaveTextContent("ちが");
-    expect(ruby[1]).toHaveTextContent("根拠こんきょ");
-    expect(ruby[1].querySelector("rt")).toHaveTextContent("こんきょ");
+    expect(container.textContent).not.toContain("根拠");
+    expect(container.textContent).not.toContain("こんきょ");
   });
 
   it("filters blank furigana pairs at runtime", () => {
