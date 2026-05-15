@@ -75,6 +75,8 @@ assert_output "kanji compound (義務)" "義務" '[{"kanji":"義務","reading":"
 # 5. Real N3 grammar title with embedded kanji.
 assert_output "grammar title (に違いない)" "に違いない" '[{"kanji":"違","reading":"ちが"}]'
 assert_output "token mode title (に違いない)" "に違いない" '[{"t":"text","v":"に"},{"t":"ruby","k":"違","r":"ちが"},{"t":"text","v":"いない"}]' token
+# corpus hand-authored idiom differs by design — see ADR-0004 §Title-token idioms
+assert_output "ni-chigainai generator idiom" "に違いない" '[{"t":"text","v":"に"},{"t":"ruby","k":"違","r":"ちが"},{"t":"text","v":"いない"}]' token
 assert_output "token mode pure kana" "ようになる" '[{"t":"text","v":"ようになる"}]' token
 
 # 6. Kanji-kana-kanji pattern — split into multiple pairs.

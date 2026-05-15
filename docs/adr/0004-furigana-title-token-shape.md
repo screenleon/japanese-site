@@ -25,6 +25,28 @@ The title tokens use the same token union as `explanation_ja_blocks.tokens`:
 The authoring helper keeps `--emit pair` as the default and adds `--emit token`
 for title data.
 
+## Title-token idioms
+
+**Generator idiom**: `scripts/generate-furigana.mjs --emit token` splits
+okurigana away from kanji-bearing words. For example, `違いない` emits
+`ruby(違,ちが)` plus `text(いない)`.
+
+**Hand-authored idiom**: corpus entries may preserve a larger ruby block when
+that is clearer for the title. For example, a title may use
+`ruby(違いない,ちがいない)`. The reading must be consistent with the existing
+`annotations.furigana.vocabulary` reading, or be a more precise title-specific
+reading.
+
+**Precedence**: when the corpus already contains hand-authored readings from the
+JS-067 pipeline or later manual edits, those readings are authoritative. Re-running
+the generator must not overwrite them. The generator's default split is used only
+for new files with neither `title_ja` Token[] data nor vocabulary readings to
+reference.
+
+**Lint behavior**: both idioms satisfy the same round-trip invariant:
+`tokens.map(t => t.v ?? t.k).join("")` must equal the source title string. Lint
+does not prefer one idiom over the other.
+
 ## Consequence
 
 Renderers can preserve kana context and ruby order for title furigana. Lint and

@@ -99,6 +99,22 @@ clean_root="$tmp_root/clean"
 make_clean_root "$clean_root"
 GRAMMAR_ROOT="$clean_root" bash scripts/lint-grammar.sh >/tmp/test-lint-grammar-clean.log
 
+vocabulary_only_root="$tmp_root/vocabulary-only"
+make_clean_root "$vocabulary_only_root"
+jq 'del(.annotations.furigana.title_ja) | .annotations.furigana.vocabulary = [{"kanji":"根拠","reading":"こんきょ"}]' "$vocabulary_only_root/N3/hazuda.json" > "$vocabulary_only_root/N3/hazuda.tmp"
+mv "$vocabulary_only_root/N3/hazuda.tmp" "$vocabulary_only_root/N3/hazuda.json"
+if ! GRAMMAR_ROOT="$vocabulary_only_root" bash scripts/lint-grammar.sh >"$tmp_root/vocabulary-only.out" 2>"$tmp_root/vocabulary-only.err"; then
+	echo "test-lint-grammar: vocabulary-only fixture unexpectedly failed" >&2
+	cat "$tmp_root/vocabulary-only.err" >&2
+	exit 1
+fi
+if [[ -s "$tmp_root/vocabulary-only.err" ]]; then
+	echo "test-lint-grammar: vocabulary-only fixture emitted findings" >&2
+	cat "$tmp_root/vocabulary-only.err" >&2
+	exit 1
+fi
+echo "test-lint-grammar: vocabulary-only fixture: ok"
+
 assert_bad "i1-schema-version" 'del(.schema_version)' "schema_version must equal integer 2"
 assert_bad "i2-pattern" '.pattern = [{"form":"   ","gloss_zh":"待補"}]' "pattern[0].form must be a non-empty string"
 assert_bad "i3-block" '.explanation_ja_blocks[0].tokens[0] = {"t":"ruby","k":"","r":"こんきょ"}' "explanation_ja_blocks block 0 token 0 ruby.k and ruby.r"

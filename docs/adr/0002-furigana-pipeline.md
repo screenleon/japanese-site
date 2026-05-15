@@ -7,6 +7,8 @@
 
 ## Context
 
+> Superseded — see Supersession 2026-05-15 (JS-110) at bottom of this ADR; title_ja is now Token[], key_terms is renamed vocabulary as FuriganaPair[].
+
 ADR 0001 widened the closed annotations allowlist with `furigana` as a structured value
 `{ title_ja?: Pair[]; key_terms?: Pair[] }`, where each `Pair` has non-whitespace `kanji`
 and `reading` strings. JS-066 shipped the schema, lint, loader, API types, and
@@ -59,6 +61,8 @@ the same execution plan re-run against Mecab output.
 
 ### Test fragments (must produce acceptable output)
 
+> Superseded — see Supersession 2026-05-15 (JS-110) at bottom of this ADR; title_ja is now Token[], key_terms is renamed vocabulary as FuriganaPair[].
+
 Grammar titles:
 
 - `に違いない` — title containing `違` (kanji) plus okurigana
@@ -77,6 +81,8 @@ Key-term examples (extracted from `explanation_ja`):
 - One additional kana-onset key term to verify graceful skip
 
 ### Acceptance criteria
+
+> Superseded — see Supersession 2026-05-15 (JS-110) at bottom of this ADR; title_ja is now Token[], key_terms is renamed vocabulary as FuriganaPair[].
 
 1. Kanji segments are extracted with their attached readings; okurigana stays in
    the headword display (e.g. `違う` → `{ kanji: "違", reading: "ちが" }`, NOT
@@ -102,6 +108,8 @@ Key-term examples (extracted from `explanation_ja`):
 - Final pipeline confirmation (Kuromoji per this ADR) or supersession notice
 
 ## Integration shape
+
+> Superseded — see Supersession 2026-05-15 (JS-110) at bottom of this ADR; title_ja is now Token[], key_terms is renamed vocabulary as FuriganaPair[].
 
 The pipeline runs as a build-time Node script — **not** a runtime dependency.
 
@@ -174,3 +182,5 @@ The active furigana annotation contract is now split by use case:
 `scripts/generate-furigana.mjs` now supports `--emit token` for title authoring
 and keeps `--emit pair` as the default for vocabulary authoring. Invalid emit
 values fail closed with exit code 2.
+
+> Title-token idiom rules: see ADR-0004 §Title-token idioms.
