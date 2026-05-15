@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋そうだ",
+      "gloss_zh": "表示從他人或外部資訊得知的傳聞",
+      "notes_zh": "名詞・な形容詞保留「だ」接「そうだ」，如「学生だそうだ」"
     }
   ],
   "explanation_ja_blocks": [
@@ -73,6 +74,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

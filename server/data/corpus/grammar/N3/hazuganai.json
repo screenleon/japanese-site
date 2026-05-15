@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋はずがない",
+      "gloss_zh": "根據理由判斷某事不可能發生或不可能如此",
+      "notes_zh": "名詞・な形容詞常接「のはずがない」"
     }
   ],
   "explanation_ja_blocks": [
@@ -68,6 +69,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

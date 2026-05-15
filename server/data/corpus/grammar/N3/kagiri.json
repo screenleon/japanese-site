@@ -6,8 +6,12 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形／Vている形／Vない形＋限り",
+      "gloss_zh": "表示只要某條件持續，後項就成立"
+    },
+    {
+      "form": "N＋の＋限り",
+      "gloss_zh": "表示在某個範圍或立場內成立"
     }
   ],
   "explanation_ja_blocks": [
@@ -72,6 +76,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

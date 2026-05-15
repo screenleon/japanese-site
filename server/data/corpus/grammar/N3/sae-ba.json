@@ -6,8 +6,12 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋さえ＋条件形",
+      "gloss_zh": "表示只要最低條件成立，後項就足夠成立"
+    },
+    {
+      "form": "Vます形＋さえすれば",
+      "gloss_zh": "表示只要做某個動作就足夠"
     }
   ],
   "explanation_ja_blocks": [
@@ -56,6 +60,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

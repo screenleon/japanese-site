@@ -6,8 +6,8 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形／Vない形＋ことになっている",
+      "gloss_zh": "表示規則、約定或既定安排中規定要做或不要做"
     }
   ],
   "explanation_ja_blocks": [
@@ -74,6 +74,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

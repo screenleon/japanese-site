@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vた形＋ら",
+      "gloss_zh": "表示假設條件、時間順序，或做了前項後發現後項",
+      "notes_zh": "可用於請求、建議、意志等後項，是最通用的條件形"
     }
   ],
   "explanation_ja_blocks": [
@@ -99,6 +100,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

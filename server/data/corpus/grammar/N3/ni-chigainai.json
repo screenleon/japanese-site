@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋に違いない",
+      "gloss_zh": "根據理由做出強烈判斷，表示一定或肯定如此",
+      "notes_zh": "名詞・な形容詞通常省略「だ」後接「に違いない」"
     }
   ],
   "explanation_ja_blocks": [
@@ -72,6 +73,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

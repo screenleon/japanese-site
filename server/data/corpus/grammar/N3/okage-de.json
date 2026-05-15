@@ -6,8 +6,12 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋おかげで",
+      "gloss_zh": "表示因前項幫助或原因而得到好結果"
+    },
+    {
+      "form": "N＋の＋おかげで",
+      "gloss_zh": "表示多虧某人、某物或某件事才有好結果"
     }
   ],
   "explanation_ja_blocks": [
@@ -66,6 +70,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

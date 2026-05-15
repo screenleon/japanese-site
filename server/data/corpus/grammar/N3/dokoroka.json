@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N／普通形＋どころか",
+      "gloss_zh": "表示別說前項，實際情況甚至是更強烈的後項",
+      "notes_zh": "常用來否定或超出前項預期，後項語氣較強"
     }
   ],
   "explanation_ja_blocks": [
@@ -74,6 +75,5 @@
       ]
     },
     "nuance_note": "Aどころか B：A をはるかに超えて B である、という強い対比を示す基本用法。会話・文章どちらでも使う。"
-  },
-  "audit_status": "pre-redesign"
+  }
 }

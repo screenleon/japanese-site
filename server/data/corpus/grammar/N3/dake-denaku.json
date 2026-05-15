@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N／普通形＋だけでなく",
+      "gloss_zh": "表示不只前項，後項也同樣成立",
+      "notes_zh": "後項常搭配「も」「まで」來追加資訊"
     }
   ],
   "explanation_ja_blocks": [
@@ -39,7 +40,46 @@
     }
   ],
   "annotations": {
-    "mental_model": "「だけでなく」は、一つの範囲で終わらず、別のものにも当てはまると広げる表現です。前の名詞や内容を「それだけではない」といったん越えて、後ろの「も」「まで」で追加情報を足していく感覚です。"
-  },
-  "audit_status": "pre-redesign"
+    "mental_model": "「だけでなく」は、一つの範囲で終わらず、別のものにも当てはまると広げる表現です。前の名詞や内容を「それだけではない」といったん越えて、後ろの「も」「まで」で追加情報を足していく感覚です。",
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "一つ",
+          "reading": "ひとつ"
+        },
+        {
+          "kanji": "当てはまる",
+          "reading": "あてはまる"
+        },
+        {
+          "kanji": "後ろ",
+          "reading": "うしろ"
+        },
+        {
+          "kanji": "日本語",
+          "reading": "にほんご"
+        },
+        {
+          "kanji": "中国語",
+          "reading": "ちゅうごくご"
+        },
+        {
+          "kanji": "話せます",
+          "reading": "はなせます"
+        },
+        {
+          "kanji": "雨",
+          "reading": "あめ"
+        },
+        {
+          "kanji": "風",
+          "reading": "かぜ"
+        },
+        {
+          "kanji": "強い",
+          "reading": "つよい"
+        }
+      ]
+    }
+  }
 }

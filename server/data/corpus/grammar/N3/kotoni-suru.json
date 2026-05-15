@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形／Vない形＋ことにする",
+      "gloss_zh": "表示自己決定做或不做某事",
+      "notes_zh": "也可表示自己定下並維持的習慣"
     }
   ],
   "explanation_ja_blocks": [
@@ -59,6 +60,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

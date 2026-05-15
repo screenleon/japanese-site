@@ -6,8 +6,12 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋たびに",
+      "gloss_zh": "表示每當前項發生，後項也反覆發生"
+    },
+    {
+      "form": "N＋の＋たびに",
+      "gloss_zh": "表示每次遇到某事件或場合，後項都會發生"
     }
   ],
   "explanation_ja_blocks": [
@@ -78,6 +82,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

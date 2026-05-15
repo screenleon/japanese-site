@@ -6,8 +6,8 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vた形＋らどうですか",
+      "gloss_zh": "用條件形提出柔和建議，意思是做某事如何"
     }
   ],
   "explanation_ja_blocks": [
@@ -71,6 +71,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

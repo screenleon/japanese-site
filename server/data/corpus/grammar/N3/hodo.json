@@ -6,8 +6,13 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N／V辞書形＋ほど",
+      "gloss_zh": "表示達到某種程度或以某事物作為比較基準"
+    },
+    {
+      "form": "ば形＋ば＋同語＋ほど",
+      "gloss_zh": "表示越是前項，後項程度越高",
+      "notes_zh": "常見於「高ければ高いほど」「読めば読むほど」等比例變化"
     }
   ],
   "explanation_ja_blocks": [
@@ -70,6 +75,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

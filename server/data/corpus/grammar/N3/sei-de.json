@@ -6,8 +6,12 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋せいで",
+      "gloss_zh": "表示前項造成負面結果，帶責怪或負面評價"
+    },
+    {
+      "form": "N＋の＋せいで",
+      "gloss_zh": "表示都怪某人、某物或某件事造成壞結果"
     }
   ],
   "explanation_ja_blocks": [
@@ -66,6 +70,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

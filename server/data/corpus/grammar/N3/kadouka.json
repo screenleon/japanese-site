@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋かどうか",
+      "gloss_zh": "把不確定的是非內容嵌入句中，表示是否如此",
+      "notes_zh": "名詞・な形容詞通常不接「だ」，直接接「かどうか」"
     }
   ],
   "explanation_ja_blocks": [
@@ -60,6 +61,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }
