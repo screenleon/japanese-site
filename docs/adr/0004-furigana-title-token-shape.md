@@ -65,14 +65,22 @@ prefer one idiom over the other.
 
 ## Empty title_ja policy
 
-A title with no kanji after source-title normalization is rendered with an
-empty `furigana.title_ja: []`. This is consistent with the lint contract:
-empty arrays trivially satisfy round-trip (`[].join("")` === `""`, which is
-permitted when source is kana-only). The renderer hides the furigana panel for
-such entries, since reading hints would be redundant with the entry header.
+Empty `title_ja: []` is allowed only within a `furigana` object that also contains a non-empty `vocabulary: FuriganaPair[]`.
+
+A fully empty `furigana` object (both `title_ja` and `vocabulary` empty or
+missing) is rejected by `scripts/lint-grammar.sh` and `scripts/lint-vocab.sh`
+because such an object carries no authoring intent. Authors who want a
+kana-only title with no vocab hints should omit the `furigana` annotation
+entirely.
+
+In the current corpus, every grammar entry has a non-empty `vocabulary`, so
+kana-only titles (for example, `〜をおいて（他にない）` -> source `〜をおいて`
+after parenthetical strip) safely use `title_ja: []` while their `vocabulary`
+carries the reading hints learners need.
 
 Authors who wish to surface the kana-only title in the panel anyway MAY
-populate `[{ t: "text", v: <source_title> }]` instead; both forms are accepted.
+populate `[{ t: "text", v: <source_title> }]` instead; both forms are accepted
+when the `furigana` object also carries non-empty vocabulary.
 
 ## Rationale — why strip the trailing parenthetical
 
@@ -92,11 +100,12 @@ the panel focused on the expression body and avoids noisy or redundant tokens.
   source `〜をおいて`. The source has no kanji, so no ruby tokens are
   required. The resulting `title_ja` Token[] MAY be `[]` (panel hidden) or
   `[{ t: "text", v: "〜をおいて" }]` (panel shows a kana-only line). Either is
-  valid per the lint contract: empty arrays are allowed when the source has no
-  kanji, and non-empty Token[] must still round-trip to source. Current corpus
-  uses `[]` for this entry; the panel is hidden, matching the principle that
-  the furigana panel exists for reading hints, not for repeating kana-only
-  patterns already visible in the entry header.
+  valid per the lint contract because the entry also has non-empty
+  `vocabulary`; non-empty Token[] must still round-trip to source. Current
+  corpus uses `[]` for this entry while vocabulary carries the reading hints;
+  the panel is hidden, matching the principle that the furigana panel exists
+  for reading hints, not for repeating kana-only patterns already visible in
+  the entry header.
 - `に違いない` → source `に違いない` (no trailing parens) → tokens
   `[{ t: "text", v: "に" }, { t: "ruby", k: "違いない", r: "ちがいない" }]`
 

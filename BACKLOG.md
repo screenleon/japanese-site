@@ -1316,7 +1316,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 
 **Scope notes**: JS-109 remains the sister content-only cleanup. JS-110 is the shared-schema follow-up implemented by this PR, including the `/pre-impl` audit trail captured in the 2026-05-15 mainline PR-gate context.
 
-**Tags**: P2, schema, M3-C4
+**Tags**: P2, schema, M3-C5
 **Status**: doing → done (本 PR)
 **Source**: user UX feedback 2026-05-15 — 「に違いない 的 furigana 應該完整覆蓋」
 **Refs**: JS-067 root shape; JS-109 sister-fix; `/pre-impl` audit 2026-05-15 recorded in mainline meeting context; ADR-0002 supersession 2026-05-15; ADR-0004
