@@ -48,6 +48,14 @@ describe("ClassifierContrasts", () => {
     );
   }
 
+  /**
+   * Verifies Chinese classifier contrast copy stays hidden under the default provider state.
+   * Steps:
+   * 1. Arrange: render contrast cards with Japanese rule blocks and Chinese contrast copy.
+   * 2. Act: use the default ChineseVisibilityProvider state.
+   * 3. Assert: Japanese contrast content, examples, and cross-level badge are visible.
+   * 4. Assert: the Chinese contrast copy is absent from the DOM.
+   */
   it("renders contrast cards with cross-level badge", () => {
     renderContrasts();
 
@@ -59,6 +67,13 @@ describe("ClassifierContrasts", () => {
     expect(screen.queryByText("中文辨析。")).not.toBeInTheDocument();
   });
 
+  /**
+   * Verifies Chinese classifier contrast copy renders when global Chinese visibility is enabled.
+   * Steps:
+   * 1. Arrange: render contrast cards with Japanese rule blocks and Chinese contrast copy.
+   * 2. Act: enable ChineseVisibilityProvider with initialVisible=true.
+   * 3. Assert: the Chinese contrast copy is visible.
+   */
   it("shows Chinese contrast copy when globally enabled", () => {
     renderContrasts(true);
 

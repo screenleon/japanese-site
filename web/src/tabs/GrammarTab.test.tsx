@@ -205,6 +205,14 @@ describe("GrammarTab", () => {
     expect(screen.getByText("名前さえ書けばいい。")).toBeVisible();
   });
 
+  /**
+   * Verifies Chinese grammar surfaces stay hidden under the default provider state.
+   * Steps:
+   * 1. Arrange: mock grammar and examples API responses with Chinese title, pattern, example, and explanation text.
+   * 2. Act: render GrammarTab without enabling the Chinese visibility provider.
+   * 3. Assert: wait for the active Japanese heading so the tab has loaded.
+   * 4. Assert: Chinese title, pattern gloss, example translation, and explanation block are absent.
+   */
   it("hides Chinese grammar surfaces by default", async () => {
     render(<GrammarTab />);
 
@@ -212,9 +220,19 @@ describe("GrammarTab", () => {
     expect(screen.queryByText("甚至；只要")).not.toBeInTheDocument();
     expect(screen.queryByText("測試句型")).not.toBeInTheDocument();
     expect(screen.queryByText("只要寫名字就好。")).not.toBeInTheDocument();
+    expect(screen.queryByText("中文說明")).not.toBeInTheDocument();
+    expect(screen.queryByText("表示極端例或最低條件。")).not.toBeInTheDocument();
     expect(screen.getByText("N3 · 〜さえ")).toBeVisible();
   });
 
+  /**
+   * Verifies Chinese grammar surfaces render when global Chinese visibility is enabled.
+   * Steps:
+   * 1. Arrange: mock grammar and examples API responses with Chinese title, pattern, example, and explanation text.
+   * 2. Act: render GrammarTab inside ChineseVisibilityProvider with initialVisible=true.
+   * 3. Assert: wait for the active Japanese heading and async example translation.
+   * 4. Assert: Chinese title, pattern gloss, example translation, and explanation block are visible.
+   */
   it("shows Chinese grammar surfaces when globally enabled", async () => {
     renderWithChinese(true, <GrammarTab />);
 
@@ -223,6 +241,8 @@ describe("GrammarTab", () => {
     expect(await screen.findByText("只要寫名字就好。")).toBeVisible();
     expect(screen.getAllByText("甚至；只要").length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText("測試句型")).toBeVisible();
+    expect(screen.getByText("中文說明")).toBeVisible();
+    expect(screen.getByText("表示極端例或最低條件。")).toBeVisible();
     expect(screen.getByText("N3 · 甚至；只要")).toBeVisible();
   });
 
