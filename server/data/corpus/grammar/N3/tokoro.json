@@ -6,8 +6,16 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋ところ",
+      "gloss_zh": "表示正要做某動作的階段"
+    },
+    {
+      "form": "Vている形＋ところ",
+      "gloss_zh": "表示正在做某動作的階段"
+    },
+    {
+      "form": "Vた形＋ところ",
+      "gloss_zh": "表示剛剛做完某動作的階段"
     }
   ],
   "explanation_ja_blocks": [
@@ -67,6 +75,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

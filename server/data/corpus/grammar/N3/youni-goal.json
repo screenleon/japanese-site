@@ -6,8 +6,12 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋ように",
+      "gloss_zh": "表示為了能達到某種狀態或能力而做後項"
+    },
+    {
+      "form": "Vない形＋ように",
+      "gloss_zh": "表示為了避免某事發生而做後項"
     }
   ],
   "explanation_ja_blocks": [
@@ -81,6 +85,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

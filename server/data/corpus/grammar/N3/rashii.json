@@ -6,8 +6,12 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋らしい",
+      "gloss_zh": "表示根據聽到的資訊或跡象推測好像如此"
+    },
+    {
+      "form": "N＋らしい",
+      "gloss_zh": "表示具有某名詞典型特徵或很像其應有樣子"
     }
   ],
   "explanation_ja_blocks": [
@@ -63,6 +67,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vて形＋しまう",
+      "gloss_zh": "表示動作完成，也可表示遺憾、後悔或不小心做了某事",
+      "notes_zh": "口語常縮約為〜ちゃう（〜てしまう→食べちゃう）、〜じゃう（〜でしまう→読んじゃう）"
     }
   ],
   "explanation_ja_blocks": [
@@ -60,6 +61,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

@@ -6,8 +6,12 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vて形＋いく",
+      "gloss_zh": "表示動作離開說話者，或變化從現在往未來延續"
+    },
+    {
+      "form": "Vて形＋くる",
+      "gloss_zh": "表示動作朝說話者而來，或變化延續到現在"
     }
   ],
   "explanation_ja_blocks": [
@@ -68,6 +72,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

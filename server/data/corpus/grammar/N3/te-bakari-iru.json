@@ -6,8 +6,8 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vて形＋ばかりいる",
+      "gloss_zh": "表示一直只顧著做同一件事，常帶批評或不滿"
     }
   ],
   "explanation_ja_blocks": [
@@ -66,6 +66,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

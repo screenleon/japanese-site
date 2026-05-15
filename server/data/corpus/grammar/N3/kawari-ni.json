@@ -6,8 +6,12 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋の＋かわりに",
+      "gloss_zh": "表示代替某人、某物或某項安排"
+    },
+    {
+      "form": "V辞書形＋かわりに",
+      "gloss_zh": "表示以做前項作為交換條件，或前後有相對取捨"
     }
   ],
   "explanation_ja_blocks": [
@@ -70,6 +74,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

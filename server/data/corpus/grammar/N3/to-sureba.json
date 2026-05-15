@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋とすれば",
+      "gloss_zh": "先設定某個假設前提，再提出結果、判斷或推論",
+      "notes_zh": "名詞・な形容詞常用「だとすれば」"
     }
   ],
   "explanation_ja_blocks": [
@@ -54,6 +55,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

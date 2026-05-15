@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vて形／いAdjくて／N・なAdjで＋も",
+      "gloss_zh": "表示即使前項成立，後項仍不受影響",
+      "notes_zh": "否定形用「なくても」；名詞・な形容詞用「でも」"
     }
   ],
   "explanation_ja_blocks": [
@@ -91,6 +92,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

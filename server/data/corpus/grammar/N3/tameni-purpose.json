@@ -6,8 +6,13 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋ために",
+      "gloss_zh": "表示為了達成目的而做後項動作",
+      "notes_zh": "前項通常是意志性動作，前後主語多半一致"
+    },
+    {
+      "form": "N＋の＋ために",
+      "gloss_zh": "表示為了某人、某事或某目的"
     }
   ],
   "explanation_ja_blocks": [
@@ -69,6 +74,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

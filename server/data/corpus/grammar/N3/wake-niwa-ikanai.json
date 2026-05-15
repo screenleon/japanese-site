@@ -6,8 +6,12 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋わけにはいかない",
+      "gloss_zh": "表示因社會、道德或情勢理由而不能做某事"
+    },
+    {
+      "form": "Vない形＋わけにはいかない",
+      "gloss_zh": "表示因情勢或責任而不能不做某事"
     }
   ],
   "explanation_ja_blocks": [
@@ -70,6 +74,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

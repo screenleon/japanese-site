@@ -6,8 +6,13 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形／Vている形／Vない形＋限り",
+      "gloss_zh": "表示只要某條件持續，後項就成立"
+    },
+    {
+      "form": "N＋の＋限り",
+      "gloss_zh": "表示以某事物為界限或極限，盡其所能達到",
+      "notes_zh": "常見於「力の限り」「命の限り」「可能の限り」等表達"
     }
   ],
   "explanation_ja_blocks": [
@@ -72,6 +77,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

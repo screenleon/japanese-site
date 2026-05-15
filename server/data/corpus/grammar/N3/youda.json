@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋ようだ",
+      "gloss_zh": "表示根據情況推測似乎如此，或表示比喻像某物",
+      "notes_zh": "名詞接「のようだ」，な形容詞接「なようだ」；語感較書面、客觀，口語常以「みたいだ」替代"
     }
   ],
   "explanation_ja_blocks": [
@@ -67,6 +68,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

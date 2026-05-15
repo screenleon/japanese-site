@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vます形語幹／Adj語幹＋そうだ",
+      "gloss_zh": "根據外觀判斷看起來快要或似乎如此",
+      "notes_zh": "い形容詞去「い」；な形容詞直接接「そうだ」；否定常用「そうにない」"
     }
   ],
   "explanation_ja_blocks": [
@@ -65,6 +66,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }
