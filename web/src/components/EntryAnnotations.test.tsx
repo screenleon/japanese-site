@@ -42,20 +42,20 @@ describe("EntryAnnotations", () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it("renders furigana annotations as ruby pairs", () => {
+  it("renders furigana annotations as title tokens", () => {
     /**
-     * Verifies structured furigana annotations render as ruby pairs with readings.
+     * Verifies structured furigana annotations render title tokens with readings.
      * Steps:
-     * 1. Render an entry annotation block with title and key-term furigana pairs.
+     * 1. Render an entry annotation block with title tokens and vocabulary pairs.
      * 2. Query the generated ruby elements.
-     * 3. Assert each ruby contains the expected kanji and rt reading.
+     * 3. Assert ruby contains the expected kanji and rt reading.
      */
     // Arrange / Act
     const { container } = render(
       <EntryAnnotations
         annotations={{
           furigana: {
-            title_ja: [{ kanji: "違", reading: "ちが" }],
+            title_ja: [{ t: "ruby", k: "違", r: "ちが" }],
             vocabulary: [{ kanji: "根拠", reading: "こんきょ" }],
           },
         }}
@@ -74,13 +74,13 @@ describe("EntryAnnotations", () => {
     expect(container.textContent).not.toContain("こんきょ");
   });
 
-  it("filters blank furigana pairs at runtime", () => {
+  it("renders title tokens with kana context in order", () => {
     /**
-     * Verifies mixed furigana annotations render only non-blank ruby pairs.
+     * Verifies title furigana renders inline with surrounding kana context.
      * Steps:
-     * 1. Render an entry annotation block with one valid and one blank furigana pair.
-     * 2. Query the generated ruby elements.
-     * 3. Assert only the valid ruby pair is rendered.
+     * 1. Render に違いない as text + ruby title tokens.
+     * 2. Query the generated ruby element.
+     * 3. Assert the text order and ruby structure match the intended pattern.
      */
     // Arrange / Act
     const { container } = render(
@@ -88,8 +88,8 @@ describe("EntryAnnotations", () => {
         annotations={{
           furigana: {
             title_ja: [
-              { kanji: "違", reading: "ちが" },
-              { kanji: "   ", reading: "ちが" },
+              { t: "text", v: "に" },
+              { t: "ruby", k: "違いない", r: "ちがいない" },
             ],
           },
         }}
@@ -98,19 +98,42 @@ describe("EntryAnnotations", () => {
 
     // Assert
     expect(screen.getByText("ふりがな")).toBeVisible();
+    expect(container.textContent).toContain("に違いないちがいない");
     const ruby = container.querySelectorAll("ruby");
     expect(ruby).toHaveLength(1);
-    expect(ruby[0]).toHaveTextContent("違ちが");
-    expect(ruby[0].querySelector("rt")).toHaveTextContent("ちが");
+    expect(ruby[0].childNodes[0].textContent).toBe("違いない");
+    expect(ruby[0].querySelector("rt")).toHaveTextContent("ちがいない");
+    expect(ruby[0].previousSibling?.textContent).toBe("に");
   });
 
-  it("filters non-string furigana pairs at runtime", () => {
+  it("filters blank title text tokens at runtime", () => {
     /**
-     * Verifies mixed furigana annotations render only pairs with string kanji and reading values.
+     * Verifies title annotations do not render when all title tokens are blank text.
      * Steps:
-     * 1. Render an entry annotation block with one valid and two non-string furigana pairs.
-     * 2. Query the generated ruby elements.
-     * 3. Assert only the valid ruby pair is rendered.
+     * 1. Render an entry annotation block with one blank title text token.
+     * 2. Assert the furigana annotation block is suppressed.
+     */
+    // Arrange / Act
+    const { container } = render(
+      <EntryAnnotations
+        annotations={{
+          furigana: {
+            title_ja: [{ t: "text", v: "   " }],
+          },
+        }}
+      />
+    );
+
+    // Assert
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it("filters old-shape title furigana at runtime", () => {
+    /**
+     * Verifies old Pair[] title payloads are not treated as renderable title tokens.
+     * Steps:
+     * 1. Render an entry annotation block with an old title pair shape.
+     * 2. Assert the furigana annotation block is suppressed.
      */
     // Arrange / Act
     const { container } = render(
@@ -120,9 +143,8 @@ describe("EntryAnnotations", () => {
             furigana: {
               title_ja: [
                 { kanji: "違", reading: "ちが" },
-                { kanji: null, reading: "ちが" },
               ],
-              vocabulary: [{ kanji: 123, reading: "こんきょ" }],
+              vocabulary: [{ kanji: "根拠", reading: "こんきょ" }],
             },
           } as never
         }
@@ -130,11 +152,7 @@ describe("EntryAnnotations", () => {
     );
 
     // Assert
-    expect(screen.getByText("ふりがな")).toBeVisible();
-    const ruby = container.querySelectorAll("ruby");
-    expect(ruby).toHaveLength(1);
-    expect(ruby[0]).toHaveTextContent("違ちが");
-    expect(ruby[0].querySelector("rt")).toHaveTextContent("ちが");
+    expect(container).toBeEmptyDOMElement();
   });
 
   it("ignores unknown runtime annotation keys", () => {

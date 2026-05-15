@@ -41,8 +41,13 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "通して",
-          "reading": "とおして"
+          "t": "text",
+          "v": "を"
+        },
+        {
+          "t": "ruby",
+          "k": "通して",
+          "r": "とおして"
         }
       ],
       "vocabulary": [

@@ -18,8 +18,9 @@ assert_output() {
 	local label="$1"
 	local input="$2"
 	local expected="$3"
+	local emit="${4:-pair}"
 	local actual
-	actual="$(node "$SCRIPT" --text "$input" 2>&1)"
+	actual="$(node "$SCRIPT" --emit "$emit" --text "$input" 2>&1)"
 	if [[ "$actual" != "$expected" ]]; then
 		echo "test-generate-furigana: '$label' failed" >&2
 		echo "  input:    $input" >&2
@@ -51,6 +52,8 @@ assert_output "kanji compound (義務)" "義務" '[{"kanji":"義務","reading":"
 
 # 5. Real N3 grammar title with embedded kanji.
 assert_output "grammar title (に違いない)" "に違いない" '[{"kanji":"違","reading":"ちが"}]'
+assert_output "token mode title (に違いない)" "に違いない" '[{"t":"text","v":"に"},{"t":"ruby","k":"違","r":"ちが"},{"t":"text","v":"いない"}]' token
+assert_output "token mode pure kana" "ようになる" '[{"t":"text","v":"ようになる"}]' token
 
 # 6. Kanji-kana-kanji pattern — split into multiple pairs.
 assert_output "kanji-kana-kanji (取り戻す)" "取り戻す" '[{"kanji":"取","reading":"と"},{"kanji":"戻","reading":"もど"}]'

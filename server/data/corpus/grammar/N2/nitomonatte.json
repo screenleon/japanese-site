@@ -48,8 +48,13 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "伴って",
-          "reading": "ともなって"
+          "t": "text",
+          "v": "〜に"
+        },
+        {
+          "t": "ruby",
+          "k": "伴って",
+          "r": "ともなって"
         }
       ],
       "vocabulary": [

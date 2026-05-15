@@ -48,8 +48,13 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "関して",
-          "reading": "かんして"
+          "t": "text",
+          "v": "〜について／〜に"
+        },
+        {
+          "t": "ruby",
+          "k": "関して",
+          "r": "かんして"
         }
       ],
       "vocabulary": [

@@ -48,8 +48,13 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "反して",
-          "reading": "はんして"
+          "t": "text",
+          "v": "〜に"
+        },
+        {
+          "t": "ruby",
+          "k": "反して",
+          "r": "はんして"
         }
       ],
       "vocabulary": [

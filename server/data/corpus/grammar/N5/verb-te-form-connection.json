@@ -32,12 +32,22 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "形",
-          "reading": "けい"
+          "t": "text",
+          "v": "て"
         },
         {
-          "kanji": "接続",
-          "reading": "せつぞく"
+          "t": "ruby",
+          "k": "形",
+          "r": "けい"
+        },
+        {
+          "t": "text",
+          "v": "の"
+        },
+        {
+          "t": "ruby",
+          "k": "接続",
+          "r": "せつぞく"
         }
       ],
       "vocabulary": [

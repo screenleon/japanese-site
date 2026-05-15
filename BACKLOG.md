@@ -116,7 +116,8 @@
 | JS-107 | 🔵 active | Key-terms / lesson-vocab feature design + schema | content/backend/frontend | 2026-05-15 | User feedback 2026-05-15 ("我覺得只要是B有需求") — vocabulary[] retire decision |
 | JS-108 | 🔵 active | App-wide Japanese-first toggle: hide all `*_zh` surfaces behind a single Chinese-reveal switch | frontend | 2026-05-15 | User feedback 2026-05-15 — "一切都應該優先以日文呈現 使用者有必要時才提供中文內容" |
 | JS-109 | 🟡 in_progress | N3/N4/N5 disambig-meta 漢字從 furigana.title_ja 剔除（22 條） | content | 2026-05-15 | user UX feedback 2026-05-15 post-PR-#59 |
-| JS-110 | 🔵 active | furigana.title_ja 形狀升級為 Token[]，渲染時就地拼接保留 kana 上下文 | schema/frontend | 2026-05-15 | user UX feedback 2026-05-15 — に違いない furigana should cover the full expression |
+| JS-110 | 🟡 in_progress | furigana.title_ja 形狀升級為 Token[]，渲染時就地拼接保留 kana 上下文 | schema/frontend | 2026-05-15 | user UX feedback 2026-05-15 — に違いない furigana should cover the full expression |
+| JS-111 | 🔵 active | 同形不同義 grammar 條目合併為多義 entry | schema/model-refactor | 2026-05-15 | user 2026-05-15 proposal during JS-110 disambig-paren discussion |
 
 ---
 
@@ -1319,4 +1320,25 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: user UX feedback 2026-05-15 — 「に違いない 的 furigana 應該完整覆蓋」
 **Blocked-on**: `/pre-impl` full surface audit
 **Refs**: JS-067 root shape; JS-109 sister-fix
+<!-- 首次記錄: 2026-05-15 -->
+
+## JS-111 — 同形不同義 grammar 條目合併為多義 entry
+
+**Problem**: Same-form grammar entries such as appearance/hearsay そうだ and particle variants currently require parenthetical disambiguation in `title_ja`, which keeps model ambiguity in the entry list and annotation surfaces.
+
+**Why**: JS-110 makes the furigana panel cleaner, but the underlying same-form/multiple-sense modeling question remains. Solving it touches routing, slugs, annotations, quizzes, classifier data, and list UI, so it belongs in a separate model-refactor spike.
+
+**Requirement**:
+1. Run an independent `/pre-impl` audit before any implementation.
+2. Define a multi-sense entry shape and migration plan.
+3. Align UX for entry headers, sense selection, annotation scoping, and quiz targeting.
+4. Treat any schema-version bump as part of the design, not as a JS-110 follow-up.
+
+**Scope notes**: deferred. Do not stack this work on JS-110.
+
+**Tags**: P3, schema-model-refactor, M4
+**Status**: filed
+**Source**: user 2026-05-15 proposal during JS-110 disambig-paren discussion
+**Blocked-on**: `/pre-impl`, UX alignment
+**Refs**: JS-110; JS-067
 <!-- 首次記錄: 2026-05-15 -->

@@ -32,8 +32,9 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "前に",
-          "reading": "まえに"
+          "t": "ruby",
+          "k": "前に",
+          "r": "まえに"
         }
       ],
       "vocabulary": [

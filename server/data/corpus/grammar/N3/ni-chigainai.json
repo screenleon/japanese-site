@@ -115,8 +115,13 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "違いない",
-          "reading": "ちがいない"
+          "t": "text",
+          "v": "に"
+        },
+        {
+          "t": "ruby",
+          "k": "違いない",
+          "r": "ちがいない"
         }
       ],
       "vocabulary": [

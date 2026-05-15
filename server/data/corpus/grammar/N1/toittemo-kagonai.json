@@ -48,8 +48,17 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "過言",
-          "reading": "かごん"
+          "t": "text",
+          "v": "〜といっても"
+        },
+        {
+          "t": "ruby",
+          "k": "過言",
+          "r": "かごん"
+        },
+        {
+          "t": "text",
+          "v": "ではない"
         }
       ],
       "vocabulary": [

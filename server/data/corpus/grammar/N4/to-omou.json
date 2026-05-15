@@ -32,8 +32,13 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "思う",
-          "reading": "おもう"
+          "t": "text",
+          "v": "と"
+        },
+        {
+          "t": "ruby",
+          "k": "思う",
+          "r": "おもう"
         }
       ],
       "vocabulary": [

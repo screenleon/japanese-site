@@ -32,8 +32,9 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "時刻",
-          "reading": "じこく"
+          "t": "ruby",
+          "k": "時刻",
+          "r": "じこく"
         }
       ],
       "vocabulary": [

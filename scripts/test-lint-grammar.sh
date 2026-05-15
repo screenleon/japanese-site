@@ -60,7 +60,10 @@ JSON
   "annotations": {
     "mental_model": "根拠から当然そうだと見る。",
     "nuance_note": "義務ではなく推量です。",
-    "furigana": {"vocabulary": [{"kanji": "根拠", "reading": "こんきょ"}]},
+    "furigana": {
+      "title_ja": [{"t": "text", "v": "はずだ"}],
+      "vocabulary": [{"kanji": "根拠", "reading": "こんきょ"}]
+    },
     "classifier": {
       "rules": [
         {
@@ -103,6 +106,8 @@ assert_bad "i4-meta" '._meta.license = ""' "_meta.license must be a non-empty st
 assert_bad "i5-legacy-top" '.source = "curated"' "source is disallowed; move to _meta.source"
 assert_bad "i6-annotation-overlap" '.annotations.pattern = "bad"' "annotations key 'pattern' overlaps top-level key"
 assert_bad "i7-furigana-key-terms" '.annotations.furigana.key_terms = [{"kanji":"根拠","reading":"こんきょ"}]' "annotations.furigana.key_terms is disallowed"
+assert_bad "i7-title-old-shape" '.annotations.furigana.title_ja = [{"kanji":"違いない","reading":"ちがいない"}]' "annotations.furigana.title_ja must be a Token array"
+assert_bad "i7-title-round-trip" '.title_ja = "に違いない" | .annotations.furigana.title_ja = [{"t":"ruby","k":"違いない","r":"ちがいない"}]' "annotations.furigana.title_ja round-trip mismatch"
 assert_bad "i8-empty-mental-model" '.annotations.mental_model = "   "' "annotations.mental_model must be a non-empty string"
 assert_bad "i9-classifier-predicate-mirror" '.annotations.classifier.rules[0].error_class = "bad"' "must not contain predicate key 'error_class'"
 assert_bad "i10-bad-contrast" '.classifier_rules[0].contrast.with_pattern = ""' "contrast.with_pattern must be a non-empty string"

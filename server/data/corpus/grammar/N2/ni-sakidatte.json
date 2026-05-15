@@ -48,8 +48,13 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "先立って",
-          "reading": "さきだって"
+          "t": "text",
+          "v": "〜に"
+        },
+        {
+          "t": "ruby",
+          "k": "先立って",
+          "r": "さきだって"
         }
       ],
       "vocabulary": [

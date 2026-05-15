@@ -1581,19 +1581,34 @@ items:
 
   - id: JS-110
     title: Upgrade `furigana.title_ja` shape to Token[] and render with kana context
-    status: todo
+    status: doing
     priority: P2
     milestone: M3
     theme: schema
     area: schema/frontend
     source: user UX feedback 2026-05-15 — に違いない furigana should cover the full expression
-    blocked_by: [pre-impl audit]
     related: [JS-067, JS-109]
     notes:
       - "Requested milestone detail: M3-C4."
-      - Filed only in this PR; do not implement under JS-109.
-      - "Blocked-on: /pre-impl full surface audit before changing schema, renderer, pipeline, API types, lint, and baked static payloads."
+      - Implement as shared-schema spike: `annotations.furigana.title_ja` becomes the existing web `Token[]` union, while `annotations.furigana.vocabulary` remains `FuriganaPair[]`.
+      - "Disambig-paren strategy B: title tokens cover only the pattern body; trailing `（…）` disambiguation remains in top-level `title_ja` but not in panel tokens."
+      - "Done when: 63 title_ja arrays audited, populated arrays migrated to Token[], renderer uses `<Tokens>`, lint rejects old title Pair[], tests pass, and baked static output deep-equals corpus."
       - Root shape comes from JS-067; JS-109 is the sister content-only fix for parenthetical meta labels.
+
+  - id: JS-111
+    title: Merge same-form grammar entries into multi-sense entries
+    status: todo
+    priority: P3
+    milestone: M4
+    theme: schema-model-refactor
+    area: schema/model-refactor
+    source: user 2026-05-15 proposal during JS-110 disambig-paren discussion
+    blocked_by: [pre-impl, UX-alignment]
+    related: [JS-110, JS-067]
+    notes:
+      - Do not stack on JS-110; requires an independent `/pre-impl` audit.
+      - Touches slug structure, routing, per-sense annotations, quiz selection, classifier data, and grammar list UI.
+      - Schema-version major bump candidate; defer until UX alignment confirms the multi-sense entry model.
 
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.

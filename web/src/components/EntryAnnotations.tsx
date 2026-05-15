@@ -4,7 +4,6 @@ import {
   type Annotations,
   type Block,
   type FuriganaAnnotation,
-  type FuriganaPair,
   type Token,
 } from "../apiTypes";
 
@@ -19,59 +18,32 @@ export const LABELS: Record<AnnotationKind, string> = {
   classifier: "辨析",
 };
 
-function hasFuriganaPairs(value: FuriganaAnnotation | undefined) {
+function hasFuriganaTitleTokens(value: FuriganaAnnotation | undefined) {
   if (!value) return false;
-  return filterRenderableFuriganaPairs(value.title_ja).length > 0;
-}
-
-function isRenderableFuriganaPair(pair: unknown): pair is FuriganaPair {
-  if (!pair || typeof pair !== "object") return false;
-  const candidate = pair as Partial<Record<keyof FuriganaPair, unknown>>;
-  return (
-    typeof candidate.kanji === "string" &&
-    typeof candidate.reading === "string" &&
-    candidate.kanji.trim() !== "" &&
-    candidate.reading.trim() !== ""
-  );
-}
-
-function filterRenderableFuriganaPairs(pairs: unknown) {
-  if (!Array.isArray(pairs)) return [];
-  return pairs.filter(isRenderableFuriganaPair);
+  return value.title_ja?.some((token) => {
+    if (!token || typeof token !== "object" || !("t" in token)) return false;
+    if (token.t === "ruby") return token.k.trim() !== "" && token.r.trim() !== "";
+    if (token.t === "text") return token.v.trim() !== "";
+    if (token.t === "term") return token.label.trim() !== "";
+    return false;
+  }) ?? false;
 }
 
 function hasAnnotationValue(kind: AnnotationKind, annotations?: Annotations) {
   const value = annotations?.[kind];
   if (kind === "furigana") {
-    return hasFuriganaPairs(value as FuriganaAnnotation | undefined);
+    return hasFuriganaTitleTokens(value as FuriganaAnnotation | undefined);
   }
   return typeof value === "string" && value.trim().length > 0;
 }
 
-function RubyList({ pairs }: { pairs: FuriganaPair[] }) {
-  return (
-    <>
-      {pairs.map((pair, index) => (
-        <span key={`${pair.kanji}-${pair.reading}-${index}`}>
-          {index > 0 && "、"}
-          <ruby>
-            {pair.kanji}
-            <rt>{pair.reading}</rt>
-          </ruby>
-        </span>
-      ))}
-    </>
-  );
-}
-
 function FuriganaBlock({ value }: { value: FuriganaAnnotation }) {
-  const titlePairs = filterRenderableFuriganaPairs(value.title_ja);
-  if (titlePairs.length === 0) return null;
+  if (!hasFuriganaTitleTokens(value)) return null;
 
   return (
     <div className="space-y-1 text-sm leading-relaxed text-sky-950">
       <div>
-        <RubyList pairs={titlePairs} />
+        <Tokens tokens={value.title_ja ?? []} />
       </div>
     </div>
   );

@@ -48,8 +48,13 @@
     "furigana": {
       "title_ja": [
         {
-          "kanji": "際して",
-          "reading": "さいして"
+          "t": "text",
+          "v": "〜に"
+        },
+        {
+          "t": "ruby",
+          "k": "際して",
+          "r": "さいして"
         }
       ],
       "vocabulary": [
