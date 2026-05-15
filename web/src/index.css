@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+@layer base {
+  rt {
+    font-size: 0.75em;
+    line-height: 1.1;
+  }
+}

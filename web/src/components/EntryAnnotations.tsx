@@ -21,9 +21,7 @@ export const LABELS: Record<AnnotationKind, string> = {
 
 function hasFuriganaPairs(value: FuriganaAnnotation | undefined) {
   if (!value) return false;
-  return [value.title_ja, value.vocabulary].some((pairs) =>
-    filterRenderableFuriganaPairs(pairs).length > 0
-  );
+  return filterRenderableFuriganaPairs(value.title_ja).length > 0;
 }
 
 function isRenderableFuriganaPair(pair: unknown): pair is FuriganaPair {
@@ -68,20 +66,13 @@ function RubyList({ pairs }: { pairs: FuriganaPair[] }) {
 
 function FuriganaBlock({ value }: { value: FuriganaAnnotation }) {
   const titlePairs = filterRenderableFuriganaPairs(value.title_ja);
-  const vocabularyPairs = filterRenderableFuriganaPairs(value.vocabulary);
+  if (titlePairs.length === 0) return null;
 
   return (
     <div className="space-y-1 text-sm leading-relaxed text-sky-950">
-      {titlePairs.length > 0 && (
-        <div>
-          <RubyList pairs={titlePairs} />
-        </div>
-      )}
-      {vocabularyPairs.length > 0 && (
-        <div>
-          <RubyList pairs={vocabularyPairs} />
-        </div>
-      )}
+      <div>
+        <RubyList pairs={titlePairs} />
+      </div>
     </div>
   );
 }
