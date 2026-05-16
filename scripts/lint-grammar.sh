@@ -315,7 +315,7 @@ function validateAnnotations(gp, rel) {
       }
     }
   }
-  for (const key of ["mental_model", "nuance_note"]) {
+  for (const key of ["mental_model", "mental_model_zh", "nuance_note"]) {
     if (gp.annotations[key] !== undefined && !nonEmptyString(gp.annotations[key])) {
       fail(rel, `annotations.${key} must be a non-empty string`);
     }

@@ -121,6 +121,7 @@
   ],
   "annotations": {
     "mental_model": "助詞「を」は、動作が向かって働きかける対象を示します。何を動かす・食べる・見るのかを文の中心に置きます。",
+    "mental_model_zh": "「を」標出動作直接作用的對象，把吃、看、移動的目標放到中心。",
     "furigana": {
       "title_ja": [],
       "vocabulary": [

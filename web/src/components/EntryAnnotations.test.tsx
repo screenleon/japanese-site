@@ -34,6 +34,20 @@ describe("EntryAnnotations", () => {
     expect(screen.queryByText("使い方")).not.toBeInTheDocument();
   });
 
+  it("renders mental_model_zh when explicitly requested", () => {
+    render(
+      <EntryAnnotations
+        annotations={{
+          mental_model_zh: "中文提示作為低等級的理解支架。",
+        }}
+        kinds={["mental_model_zh"]}
+      />
+    );
+
+    expect(screen.getByRole("heading", { name: "考え方のヒント" })).toBeVisible();
+    expect(screen.getByText("中文提示作為低等級的理解支架。")).toBeVisible();
+  });
+
   it("renders nothing when annotations are absent or empty", () => {
     const { container, rerender } = render(<EntryAnnotations />);
     expect(container).toBeEmptyDOMElement();

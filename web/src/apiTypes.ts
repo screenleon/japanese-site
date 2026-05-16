@@ -28,6 +28,7 @@ export const ANNOTATION_KINDS = [
   "particle_pairing",
   "synonym_diff",
   "mental_model",
+  "mental_model_zh",
   "nuance_note",
   "furigana",
   "classifier",

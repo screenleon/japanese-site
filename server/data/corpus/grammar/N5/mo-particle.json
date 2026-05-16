@@ -94,6 +94,7 @@
   ],
   "annotations": {
     "mental_model": "助詞「も」は、すでにある範囲へ同じ仲間を加える印です。一つだけでなく、別のものも含めて見せ、同じ列に並べます。",
+    "mental_model_zh": "「も」把另一個同類加入既有範圍，表示不只一個也包含它。",
     "furigana": {
       "title_ja": [],
       "vocabulary": [

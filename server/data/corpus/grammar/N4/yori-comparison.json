@@ -75,6 +75,7 @@
   ],
   "annotations": {
     "mental_model": "「より」は、比べる相手を基準として差を測る印です。どちらがどう違うかを一方向から見せ、差を浮かび上がらせます。",
+    "mental_model_zh": "「より」設定比較基準，從一方量出另一方的差異與程度。",
     "furigana": {
       "title_ja": [],
       "vocabulary": [

@@ -13,6 +13,7 @@ export const LABELS: Record<AnnotationKind, string> = {
   particle_pairing: "助詞の組み合わせ",
   synonym_diff: "類義語の違い",
   mental_model: "考え方のヒント",
+  mental_model_zh: "考え方のヒント",
   nuance_note: "ニュアンス",
   furigana: "ふりがな",
   classifier: "辨析",

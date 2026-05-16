@@ -48,10 +48,12 @@ export interface GrammarPoint {
 The lint invariants I1-I15 from JS-097 / JS-098 / JS-099 are normative for corpus authoring: schema version, pattern shape, block/token shape, `_meta`, exact top-level keys, annotation allowlist and disjointness, furigana `vocabulary`, classifier mirror parity, native-review requirement for non-null contrasts, audit status, PoC slug cleanliness, and `_TBD` restrictions.
 
 `annotations` remains a closed allowlist: `usage`, `collocations`, `particle_pairing`,
-`synonym_diff`, `mental_model`, `nuance_note`, `furigana`, and `classifier`.
+`synonym_diff`, `mental_model`, `mental_model_zh`, `nuance_note`, `furigana`, and `classifier`.
 `annotations.furigana.key_terms` is renamed to `annotations.furigana.vocabulary`.
 
 ADR-0001's grammar `mental_model` / `nuance_note` dual-write transition ends here. The sole authoring/runtime home is `annotations.mental_model` and `annotations.nuance_note`; SQLite shadow columns remain for one release only.
+
+`annotations.mental_model_zh` is an optional Traditional Chinese scaffold for low-level grammar entries. It is a sibling of `annotations.mental_model`, remains in the opaque annotations blob, and is rendered specially by the frontend only for N5/N4 when Chinese visibility is enabled.
 
 ## Trade-offs
 

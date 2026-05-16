@@ -158,6 +158,7 @@
   ],
   "annotations": {
     "mental_model": "助詞「の」は、前の名詞を後ろの名詞に結びつける所属や性質の印です。何のものかを一つのまとまりにします。",
+    "mental_model_zh": "「の」把前後名詞連成所屬或性質關係，形成一個名詞組。",
     "furigana": {
       "title_ja": [],
       "vocabulary": [

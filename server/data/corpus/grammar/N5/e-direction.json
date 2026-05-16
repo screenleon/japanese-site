@@ -120,6 +120,7 @@
   ],
   "annotations": {
     "mental_model": "助詞「へ」は、到着点よりも向かう方向に目を向けます。気持ちや動きがどちらへ進むかをやわらかく示します。",
+    "mental_model_zh": "「へ」看的不是到達點，而是動作或心情朝哪個方向前進。",
     "furigana": {
       "title_ja": [],
       "vocabulary": [

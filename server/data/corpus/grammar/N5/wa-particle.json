@@ -127,6 +127,7 @@
   ],
   "annotations": {
     "mental_model": "助詞「は」は、これから話す題目を先に置く枠です。その枠を基準に説明や対比を続け、聞き手に見る範囲を知らせます。",
+    "mental_model_zh": "「は」先立起話題框架，再以此為基準展開說明或對比。",
     "furigana": {
       "title_ja": [],
       "vocabulary": [

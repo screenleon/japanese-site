@@ -75,6 +75,7 @@
   ],
   "annotations": {
     "mental_model": "「と」は、名詞どうしを同じ並びに置いて結びます。ものを一つずつ対等に並べ、閉じた組み合わせとして見せます。",
+    "mental_model_zh": "並列的「と」把名詞逐一平等排在一起，形成封閉組合。",
     "furigana": {
       "title_ja": [],
       "vocabulary": [
