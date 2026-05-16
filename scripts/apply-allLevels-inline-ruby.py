@@ -28,6 +28,8 @@ BASE = "03ac4ddc9f5f6afa3bae1e65a3a888cf82c346b7"
 LEVELS = ("N5", "N4", "N2", "N1")
 ROOT = Path("server/data/corpus/grammar")
 AUDIT_PATH = Path("audits/js-106-allLevels-codex-pass-2026-05-16.md")
+AUDIT_START = "<!-- auto-generated below this line -->"
+AUDIT_END = "<!-- end auto-generated -->"
 
 
 def text(v: str) -> dict[str, str]:
@@ -166,6 +168,33 @@ OVERRIDE_READINGS = {
 }
 
 
+COMPOUND_OVERRIDES = {
+    # Native-review fixes from the JS-106 all-levels pass. These must be
+    # merged before tokenization so the longest-match pass sees the compound
+    # surface form as atomic and never falls back to single-kanji readings.
+    "瞬間": "しゅんかん",
+    "迅速": "じんそく",
+    "新聞": "しんぶん",
+    "報告書": "ほうこくしょ",
+}
+
+
+CONTEXTUAL_COMPOUND_OVERRIDES = {
+    # Future review: other 古風 occurrences in N2/ue-wa, N1/bekarazu, and
+    # N1/taru-mono remain intentionally unannotated to preserve the reviewed
+    # corpus. The wrong-reading regression was only the gotoki context below,
+    # where the stale generator split 古 + 風/かぜ.
+    "古風": ("こふう", lambda segment, index: segment.startswith("古風で硬い響き", index)),
+}
+
+
+# Future review candidates from the post-fix compound-boundary sweep, left
+# unchanged to avoid scope creep because the trailing ruby readings are already
+# independently valid in context: 主目的, 不自然, 全社員, 昼ご飯, 朝ご飯.
+# Other adjacency hits were grammar-prose boundaries such as 的行為, 定表現,
+# 式表現, 行関係, 時動作, 低条件, and 局実現.
+
+
 ALLOW_KANA_TERMS = {
     "な形容詞",
     "い形容詞",
@@ -284,7 +313,12 @@ def add_reading(readings: dict[str, str], kanji: str, reading: str) -> None:
         return
     if kanji == "形":
         return
-    if KANA_RE.search(kanji) and kanji not in ALLOW_KANA_TERMS and kanji not in OVERRIDE_READINGS:
+    if (
+        KANA_RE.search(kanji)
+        and kanji not in ALLOW_KANA_TERMS
+        and kanji not in OVERRIDE_READINGS
+        and kanji not in COMPOUND_OVERRIDES
+    ):
         return
     readings[kanji] = reading
 
@@ -300,6 +334,7 @@ def n3_readings() -> dict[str, str]:
                     if token["t"] == "ruby":
                         add_reading(readings, token["k"], token["r"])
     readings.update(OVERRIDE_READINGS)
+    readings.update(COMPOUND_OVERRIDES)
     return readings
 
 
@@ -313,6 +348,7 @@ def entry_readings(entry: dict) -> dict[str, str]:
         add_reading(readings, item.get("kanji", ""), item.get("reading", ""))
     # Overrides win after vocabulary imports so compounds are not split.
     readings.update(OVERRIDE_READINGS)
+    readings.update(COMPOUND_OVERRIDES)
     return readings
 
 
@@ -329,11 +365,48 @@ def flush_text(tokens: list[dict], buf: list[str]) -> None:
     buf.clear()
 
 
+TIME_CONTEXT_JIPPUN_RE = re.compile(r"(?:午前|午後)?[一二三四五六七八九十〇零\d]+時$")
+
+
+def is_jippun_context(segment: str, index: int) -> bool:
+    """Return True when 十分 is the minute reading じっぷん, not generic じゅうぶん.
+
+    Heuristic: emit じっぷん when 十分 is immediately after a kanji/digit hour
+    token plus 時 (三時十分, 午前九時十分), or when it appears in a minute-reading
+    list/prose context near 分 and ぷん (一分、三分、...、十分は「ぷん」...).
+    All other 十分 surfaces keep the generic override/imported reading.
+    """
+    if not segment.startswith("十分", index):
+        return False
+    before = segment[:index]
+    after = segment[index + len("十分") :]
+    if TIME_CONTEXT_JIPPUN_RE.search(before):
+        return True
+    previous_window = before[-8:]
+    next_window = after[:12]
+    return previous_window.endswith(("分、", "分，", "分・")) and "ぷん" in next_window
+
+
 def annotate_segment(segment: str, terms: list[tuple[str, str]]) -> list[dict]:
     tokens: list[dict] = []
     buf: list[str] = []
     i = 0
     while i < len(segment):
+        if is_jippun_context(segment, i):
+            flush_text(tokens, buf)
+            tokens.append(ruby("十分", "じっぷん"))
+            i += len("十分")
+            continue
+        contextual_match = None
+        for kanji, (reading, predicate) in CONTEXTUAL_COMPOUND_OVERRIDES.items():
+            if segment.startswith(kanji, i) and predicate(segment, i):
+                contextual_match = (kanji, reading)
+                break
+        if contextual_match is not None:
+            flush_text(tokens, buf)
+            tokens.append(ruby(contextual_match[0], contextual_match[1]))
+            i += len(contextual_match[0])
+            continue
         match = None
         for kanji, reading in terms:
             if segment.startswith(kanji, i):
@@ -469,20 +542,15 @@ def verify(path: Path, baseline: dict, rewritten: dict) -> None:
 
 
 def write_json(path: Path, entry: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
         json.dumps(entry, ensure_ascii=False, indent=2, sort_keys=False) + "\n",
         encoding="utf-8",
     )
 
 
-def audit(level_counts: dict[str, int], freq: Counter, spot_checks: dict[str, list[str]], ambiguous: list[str]) -> None:
+def audit_body(level_counts: dict[str, int], freq: Counter, spot_checks: dict[str, list[str]], ambiguous: list[str]) -> str:
     lines = [
-        "# JS-106 N5+N4+N2+N1 Inline Ruby — Codex Pass",
-        "",
-        "**Date**: 2026-05-16",
-        "**Author**: codex",
-        "**Scope**: N5, N4, N2, and N1 `explanation_ja_blocks` only. N3 was left untouched.",
-        "",
         "## Per-level Counts",
         "",
         "| Level | Entries rewritten | Entries with ruby |",
@@ -525,44 +593,76 @@ def audit(level_counts: dict[str, int], freq: Counter, spot_checks: dict[str, li
     lines.extend(
         [
             "",
-            "## Verification",
-            "",
-            "- `python3 scripts/apply-allLevels-inline-ruby.py`: exit 0",
-            "- `bash scripts/lint-grammar.sh`: PENDING",
-            "- `make test`: PENDING",
-            "- `cd web && npm test`: PENDING",
-            "",
             "## Process Notes",
             "",
             "- The script verifies every rewritten file against baseline commit `03ac4ddc9f5f6afa3bae1e65a3a888cf82c346b7`.",
             "- For every block, concatenating `text.v` and `ruby.k` in document order matches the baseline text byte-for-byte.",
             "- For every entry, all non-`explanation_ja_blocks` fields match the baseline JSON projection.",
             "- Markdown example bullet lines were kept as trailing text runs unless they are form-definition bullets.",
-            "- Native-perspective review should still focus on N1/N2 readings and any compound where the pedagogical context could prefer a less common reading.",
+            "- Native-review compound fixes are folded into `COMPOUND_OVERRIDES` / `CONTEXTUAL_COMPOUND_OVERRIDES` in `scripts/apply-allLevels-inline-ruby.py`.",
             "",
         ]
     )
-    AUDIT_PATH.write_text("\n".join(lines), encoding="utf-8")
+    return "\n".join(lines)
 
 
-def main() -> int:
-    level_counts: dict[str, int] = {}
-    freq: Counter = Counter()
-    ambiguous: list[str] = []
+def audit(level_counts: dict[str, int], freq: Counter, spot_checks: dict[str, list[str]], ambiguous: list[str]) -> None:
+    # Shape B: native-review notes remain outside the markers; this function
+    # rewrites only the generated summary between them.
+    generated = audit_body(level_counts, freq, spot_checks, ambiguous).rstrip()
+    fallback_header = "\n".join(
+        [
+            "# JS-106 N5+N4+N2+N1 Inline Ruby — Codex Pass",
+            "",
+            "**Date**: 2026-05-16",
+            "**Author**: codex",
+            "**Scope**: N5, N4, N2, and N1 `explanation_ja_blocks` only. N3 was left untouched.",
+            "",
+            "## Audit Reproducibility",
+            "",
+            "Shape B is used: the generator rewrites only the marked auto-generated section. Native-review notes and final verification records stay outside the markers.",
+            "",
+        ]
+    )
+    if AUDIT_PATH.exists():
+        current = AUDIT_PATH.read_text(encoding="utf-8")
+    else:
+        current = fallback_header + AUDIT_START + "\n" + AUDIT_END + "\n"
+    if AUDIT_START not in current or AUDIT_END not in current:
+        current = fallback_header + AUDIT_START + "\n" + AUDIT_END + "\n\n" + current
+    before, rest = current.split(AUDIT_START, 1)
+    _, after = rest.split(AUDIT_END, 1)
+    AUDIT_PATH.write_text(
+        before.rstrip() + "\n\n" + AUDIT_START + "\n" + generated + "\n" + AUDIT_END + after,
+        encoding="utf-8",
+    )
+
+
+def target_paths(root: Path = ROOT) -> list[Path]:
     all_paths: list[Path] = []
-
     for level in LEVELS:
-        paths = sorted((ROOT / level).glob("*.json"))
+        paths = sorted((root / level).glob("*.json"))
         if len(paths) != 40:
             raise AssertionError(f"{level}: expected 40 files, found {len(paths)}")
         all_paths.extend(paths)
+    return all_paths
 
-    for path in all_paths:
+
+def output_path_for(source_path: Path, output_root: Path) -> Path:
+    return output_root / source_path.relative_to(ROOT)
+
+
+def rewrite_all(output_root: Path = ROOT, write_audit: bool = True) -> dict[str, int]:
+    level_counts: dict[str, int] = {}
+    freq: Counter = Counter()
+    ambiguous: list[str] = []
+
+    for path in target_paths(ROOT):
         baseline = load_baseline(path)
         rewritten = copy.deepcopy(baseline)
         rewritten["explanation_ja_blocks"] = rewrite_blocks(baseline)
         verify(path, baseline, rewritten)
-        write_json(path, rewritten)
+        write_json(output_path_for(path, output_root), rewritten)
         pairs = ruby_tokens(rewritten)
         freq.update(pairs)
         level_counts[path.parent.name] = level_counts.get(path.parent.name, 0) + 1
@@ -577,7 +677,13 @@ def main() -> int:
         slugs = sorted(path.stem for path in (ROOT / level).glob("*.json"))
         spot_checks[level] = sorted(rng.sample(slugs, 5))
 
-    audit(level_counts, freq, spot_checks, sorted(set(ambiguous)))
+    if write_audit:
+        audit(level_counts, freq, spot_checks, sorted(set(ambiguous)))
+    return level_counts
+
+
+def main() -> int:
+    level_counts = rewrite_all()
     print(f"rewrote {sum(level_counts.values())} entries")
     return 0
 

@@ -4,6 +4,11 @@
 **Author**: codex
 **Scope**: N5, N4, N2, and N1 `explanation_ja_blocks` only. N3 was left untouched.
 
+## Audit Reproducibility
+
+Shape B is used: the generator rewrites only the marked auto-generated section. Native-review notes and final verification records stay outside the markers.
+
+<!-- auto-generated below this line -->
 ## Per-level Counts
 
 | Level | Entries rewritten | Entries with ruby |
@@ -47,11 +52,11 @@
 | 自然 | しぜん | 17 |
 | 状態 | じょうたい | 16 |
 | 理由 | りゆう | 16 |
-| 聞 | き | 16 |
 | 評価 | ひょうか | 16 |
 | 話し手 | はなして | 16 |
 | 予想 | よそう | 15 |
 | 程度 | ていど | 15 |
+| 聞 | き | 15 |
 | 出来事 | できごと | 14 |
 | 判断 | はんだん | 14 |
 | 否定 | ひてい | 14 |
@@ -68,7 +73,6 @@
 | 内容 | ないよう | 11 |
 | 後ろ | うしろ | 11 |
 | 語幹 | ごかん | 11 |
-| 書 | か | 10 |
 | 条件 | じょうけん | 10 |
 | 過去 | かこ | 10 |
 | 動詞普通形 | どうしふつうけい | 9 |
@@ -82,6 +86,7 @@
 | 基準 | きじゅん | 8 |
 | 存在 | そんざい | 8 |
 | 感情 | かんじょう | 8 |
+| 書 | か | 8 |
 | 期待 | きたい | 8 |
 | 関係 | かんけい | 8 |
 | 事実 | じじつ | 7 |
@@ -92,7 +97,6 @@
 | 普通 | ふつう | 7 |
 | 注意 | ちゅうい | 7 |
 | 話題 | わだい | 7 |
-| 間 | あいだ | 7 |
 | 中心 | ちゅうしん | 6 |
 | 事柄 | ことがら | 6 |
 | 場面 | ばめん | 6 |
@@ -134,6 +138,7 @@
 | 活動 | かつどう | 4 |
 | 禁止 | きんし | 4 |
 | 範囲 | はんい | 4 |
+| 間 | あいだ | 4 |
 | 音楽 | おんがく | 4 |
 | 頻度 | ひんど | 4 |
 | ご飯 | ごはん | 3 |
@@ -168,6 +173,7 @@
 | 理解 | りかい | 3 |
 | 疑問詞 | ぎもんし | 3 |
 | 発音 | はつおん | 3 |
+| 瞬間 | しゅんかん | 3 |
 | 確認 | かくにん | 3 |
 | 種類 | しゅるい | 3 |
 | 複数 | ふくすう | 3 |
@@ -183,9 +189,18 @@
 
 - None from the explicit handoff watchlist were ruby-tagged outside fixed compounds.
 
+## Process Notes
+
+- The script verifies every rewritten file against baseline commit `03ac4ddc9f5f6afa3bae1e65a3a888cf82c346b7`.
+- For every block, concatenating `text.v` and `ruby.k` in document order matches the baseline text byte-for-byte.
+- For every entry, all non-`explanation_ja_blocks` fields match the baseline JSON projection.
+- Markdown example bullet lines were kept as trailing text runs unless they are form-definition bullets.
+- Native-review compound fixes are folded into `COMPOUND_OVERRIDES` / `CONTEXTUAL_COMPOUND_OVERRIDES` in `scripts/apply-allLevels-inline-ruby.py`.
+<!-- end auto-generated -->
+
 ## Native-Review Fixes (main-thread Claude pass)
 
-A compound-boundary sweep (`text{kanji} + ruby{kanji}` adjacency check) found 9 wrong-reading or split-compound issues. All patched via `scripts/fix-allLevels-native-review.py`, each with byte-identity reverification:
+A compound-boundary sweep (`text{kanji} + ruby{kanji}` adjacency check) found 9 wrong-reading or split-compound issues. The historical one-off fixup script was removed after its corrections were folded into `scripts/apply-allLevels-inline-ruby.py`, with byte-identity reverification now covered by `scripts/tests/test_no_drift.py`:
 
 | File | Issue | Before | After |
 |---|---|---|---|
@@ -204,8 +219,8 @@ Sub-optimal-but-not-wrong cases left as-is: 主目的 / 不自然 / 全社員 / 
 ## Verification
 
 - `python3 scripts/apply-allLevels-inline-ruby.py`: exit 0
+- `python3 -m unittest discover -s scripts/tests -v`: exit 0
 - `bash scripts/lint-grammar.sh`: exit 0
-- `make test`: exit 2 in this sandbox because `/home/screenleon/.cache/go-build` is read-only
 - `GOCACHE=/tmp/codex-go-build make test`: exit 0
 - `cd web && npm test`: exit 0
 
