@@ -253,6 +253,7 @@ func TestLoad_StoresAnnotationsTransitionFields(t *testing.T) {
 		}
 	}
 	const mentalModel = "「ている」は、動きが今続いているのか、変化した結果が残っているのかを見る表現だ。"
+	const mentalModelZH = "「ている」用來觀察動作正在持續，或變化後的結果仍保留。"
 	gp := `{
 		"slug": "te-iru",
 		"title_ja": "ている（進行・状態）",
@@ -262,7 +263,8 @@ func TestLoad_StoresAnnotationsTransitionFields(t *testing.T) {
 		"pattern": [{"form": "Vている", "gloss_zh": "正在／狀態"}],
 		"explanation_ja_blocks": [{"kind": "paragraph", "tokens": [{"t": "text", "v": "説明"}]}],
 		"annotations": {
-			"mental_model": "` + mentalModel + `"
+			"mental_model": "` + mentalModel + `",
+			"mental_model_zh": "` + mentalModelZH + `"
 		},
 		"explanation_zh": "進行と結果状態を表す。",
 		"_meta": {"source": "curated", "license": "CC0-1.0", "validated_by": "test", "validator_score": 1.0}
@@ -310,6 +312,13 @@ func TestLoad_StoresAnnotationsTransitionFields(t *testing.T) {
 	if nestedMentalModel != mentalModel {
 		t.Fatalf("annotations.mental_model = %q, want %q", nestedMentalModel, mentalModel)
 	}
+	var nestedMentalModelZH string
+	if err := json.Unmarshal(grammarAnnotations["mental_model_zh"], &nestedMentalModelZH); err != nil {
+		t.Fatalf("decode annotations.mental_model_zh: %v", err)
+	}
+	if nestedMentalModelZH != mentalModelZH {
+		t.Fatalf("annotations.mental_model_zh = %q, want %q", nestedMentalModelZH, mentalModelZH)
+	}
 
 	if err := db.QueryRow(`SELECT annotations FROM vocab WHERE headword = 'お喋り' AND reading = 'おしゃべり'`).Scan(&raw); err != nil {
 		t.Fatalf("select vocab annotations: %v", err)
@@ -334,6 +343,7 @@ func TestNormalizeAnnotations_AllKnownKindsPassThrough(t *testing.T) {
 		"particle_pairing": "particle text",
 		"synonym_diff": "synonym text",
 		"mental_model": "model text",
+		"mental_model_zh": "model zh text",
 		"nuance_note": "nuance text"
 	}`)
 
@@ -344,6 +354,7 @@ func TestNormalizeAnnotations_AllKnownKindsPassThrough(t *testing.T) {
 		"particle_pairing": json.RawMessage(`"particle text"`),
 		"synonym_diff":     json.RawMessage(`"synonym text"`),
 		"mental_model":     json.RawMessage(`"model text"`),
+		"mental_model_zh":  json.RawMessage(`"model zh text"`),
 		"nuance_note":      json.RawMessage(`"nuance text"`),
 	}
 	assertRawMessageMapEqual(t, got, want)

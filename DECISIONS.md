@@ -3,6 +3,17 @@
 This file records active architectural and behavioral decisions for this repository.
 Agents must read it before planning or implementation tasks.
 
+## 2026-05-16 — Optional N5/N4 Chinese mental model scaffold
+
+**Context**: JS-113 added Japanese `annotations.mental_model` strings for N5/N4, but JLPT-001 review noted that some Japanese meta-language is above the comfort boundary for low-level entries. The chosen Phase-A spike adds Traditional Chinese scaffolding for N5/N4 only while keeping N3/N2/N1 Japanese-only.
+
+**Decision**: Add optional `annotations.mental_model_zh` as a sibling of `annotations.mental_model`. The field is an additive annotation kind, validated as a non-empty string when present, stored in the same opaque annotations JSON blob, and rendered by `GrammarTab` only for N5/N4 when Chinese visibility is enabled.
+
+**Constraints introduced**:
+- `mental_model_zh` is optional; entries without it remain valid.
+- The field is scoped to N5/N4 scaffolding for now. Do not add it to N3/N2/N1 unless a future decision changes that policy.
+- N5/N4 paired rendering shows Traditional Chinese as primary and Japanese as secondary only when the Chinese toggle is on; otherwise the existing Japanese-only rendering remains the fallback.
+
 ## 2026-05-16 — JS-110 API-002 in-place evolution override
 
 **Context**: JS-110 migrates `annotations.furigana.title_ja` from `FuriganaPair[]` to `Token[]` in place — a non-additive wire-shape change to the `/api/grammar/<level>` static payload. PR-gate full + targeted reviewers (critic high + architecture high, cross-overlap) flagged this as `rules/domain/backend-api.md` API-002 violation: API-002 requires existing endpoint schema changes to be additive (dual field / versioned path / migration window), not in-place type changes. The `/api/version` milestone was bumped `M3-C4` → `M3-C5` per JS-067/JS-096 pattern, but version bump alone does not satisfy API-002's evolution rule.

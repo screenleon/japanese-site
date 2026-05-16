@@ -97,6 +97,8 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "「それから」は、前の出来事の後に次を足して時間の流れを進めます。話を順番に先へ送り、次の段階へ移します。",
+    "mental_model_zh": "「それから」把故事從前一事件送往下一步，按順序推進。",
     "furigana": {
       "vocabulary": [
         {

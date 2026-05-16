@@ -92,6 +92,8 @@
     }
   ],
   "annotations": {
+    "mental_model": "「ので」は、事情を自然な理由として添えて後ろの結果へつなげます。説明をやわらかく客観寄りに見せます。",
+    "mental_model_zh": "「ので」把情況作為自然理由接到結果，語氣較柔和且偏客觀。",
     "furigana": {
       "title_ja": [],
       "vocabulary": [

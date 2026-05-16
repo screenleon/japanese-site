@@ -122,6 +122,8 @@
     }
   ],
   "annotations": {
+    "mental_model": "「が」は前の内容を受けながら、後ろで違う向きの情報を出すつなぎ目です。予想とずれた面を静かに示します。",
+    "mental_model_zh": "「が」承接前文後，輕輕轉向不同結果，提示和預期有落差。",
     "furigana": {
       "title_ja": [],
       "vocabulary": [

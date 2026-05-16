@@ -101,6 +101,8 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "「わけだ」は、前の事情から納得できる結論として受け取る形です。理由と結果の筋道が見えた感じを示します。",
+    "mental_model_zh": "「わけだ」把前因後果接起來，呈現原來如此的可理解結論。",
     "furigana": {
       "vocabulary": [
         {

@@ -165,6 +165,8 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "形容詞の過去形は、性質や状態を今ではなく過去の場面に置いて見ます。語尾の変化で「その時そうだった」と示します。",
+    "mental_model_zh": "形容詞過去形把性質放回過去場景；尾端變化表示當時是那樣。",
     "furigana": {
       "title_ja": [
         {

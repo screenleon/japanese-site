@@ -99,6 +99,8 @@
     }
   ],
   "annotations": {
+    "mental_model": "助詞「が」は、文の中で新しく見せたい主語に光を当てます。誰が・何がそうなのかをはっきり立て、聞き手の注意を集めます。",
+    "mental_model_zh": "「が」把新要呈現的主語打亮，讓誰或什麼成為注意焦點。",
     "furigana": {
       "title_ja": [],
       "vocabulary": [

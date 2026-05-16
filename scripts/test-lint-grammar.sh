@@ -59,6 +59,7 @@ JSON
   ],
   "annotations": {
     "mental_model": "根拠から当然そうだと見る。",
+    "mental_model_zh": "從根據自然推出應該如此，重點是合乎邏輯的預期。",
     "nuance_note": "義務ではなく推量です。",
     "furigana": {
       "title_ja": [{"t": "text", "v": "はずだ"}],
@@ -125,6 +126,7 @@ assert_bad "i7-furigana-key-terms" '.annotations.furigana.key_terms = [{"kanji":
 assert_bad "i7-title-old-shape" '.annotations.furigana.title_ja = [{"kanji":"違いない","reading":"ちがいない"}]' "annotations.furigana.title_ja must be a Token array"
 assert_bad "i7-title-round-trip" '.title_ja = "に違いない" | .annotations.furigana.title_ja = [{"t":"ruby","k":"違いない","r":"ちがいない"}]' "annotations.furigana.title_ja round-trip mismatch"
 assert_bad "i8-empty-mental-model" '.annotations.mental_model = "   "' "annotations.mental_model must be a non-empty string"
+assert_bad "i8-empty-mental-model-zh" '.annotations.mental_model_zh = "   "' "annotations.mental_model_zh must be a non-empty string"
 assert_bad "i9-classifier-predicate-mirror" '.annotations.classifier.rules[0].error_class = "bad"' "must not contain predicate key 'error_class'"
 assert_bad "i10-bad-contrast" '.classifier_rules[0].contrast.with_pattern = ""' "contrast.with_pattern must be a non-empty string"
 assert_bad "i11-contrast-no-native-review" '._meta.validated_by = "import-curated-v1"' "non-null classifier contrast requires _meta.validated_by"

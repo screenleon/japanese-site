@@ -119,6 +119,8 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "「前に」は、基準になる出来事より先に別の行動を置きます。時間の順番を前側から整理し、後の出来事を基準にします。",
+    "mental_model_zh": "「前に」以前一事件為基準，把另一個行動整理到它之前。",
     "furigana": {
       "title_ja": [
         {

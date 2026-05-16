@@ -124,6 +124,8 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "「いる・ある」は、存在するものの性質に合わせて使い分けます。生きて動くものか、ものとしてあるかを見ます。",
+    "mental_model_zh": "「いる／ある」依存在者性質分用：能活動的生命，或作為物而存在。",
     "furigana": {
       "vocabulary": [
         {

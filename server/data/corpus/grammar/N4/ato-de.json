@@ -92,6 +92,8 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "「あとで」は、先の出来事を終えた後に次の行動を置く時間の順序です。前後関係を落ち着いて並べ、後ろの行動を待ちます。",
+    "mental_model_zh": "「あとで」把下一個行動放在前事完成之後，清楚排列時間先後。",
     "furigana": {
       "title_ja": [
         {

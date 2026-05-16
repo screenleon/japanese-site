@@ -1657,19 +1657,21 @@ items:
       - Deferred from JS-110; do not extract the module in the current PR.
 
   - id: JS-113
-    title: "N5+N4 mental_model rollout (80 entries: 40 N5 + 40 N4, native perspective)"
-    status: todo
+    title: "N5+N4 mental_model rollout (77 entries: 39 N5 + 38 N4, JS-041 seeds excluded, native perspective)"
+    status: done
     priority: P2
     milestone: M3
     theme: mental-model
     area: content
     source: planning:2026-05-16
+    completed_at: "2026-05-16"
     related: [JS-042, JS-071, JS-072, JS-063, JS-100b, JS-100c]
     notes:
-      - Add mental_model guidance to 40 N5 + 40 N4 grammar entries using the JS-042 two-section audit pattern.
-      - Authored from native Japanese perspective per native-perspective rule; native review by Claude main thread.
+      - Add mental_model guidance to 39 N5 + 38 N4 grammar entries using the JS-042 two-section audit pattern; 3 JS-041 plain-form seeds (N5/na-adjective, N4/te-iru, N4/te-kureru) excluded per 2026-05-08 decision.
+      - Authored from native Japanese perspective per native-perspective rule; native review by Claude main thread (abbreviated mode — spot-check + sweep — per strategy-C plan for lower-priority levels).
       - Polite-form (です/ます) canonical register per 2026-05-08 decision for forward mental_model authoring (applies to N4 and N5 slices here).
-      - Fills the N5+N4 gap in the mental_model rollout family (JS-042 N3 ✅, JS-071 N2, JS-072 N1).
+      - Fills the N5+N4 gap in the mental_model rollout family. mental_model coverage now 200/200 across N5/N4/N3/N2/N1 (rollout complete).
+      - Shipped on branch feat/js-113-n5-n4-mental-model. audit at audits/js-113-n5-n4-mental-model-codex-pass-2026-05-16.md (0 revisions).
 
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.

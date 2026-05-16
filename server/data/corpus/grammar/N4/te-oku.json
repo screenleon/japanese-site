@@ -79,6 +79,8 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "「ておく」は、後のために先に動作を済ませて状態を残す形です。未来に備える準備の意識を示し、使える状態にします。",
+    "mental_model_zh": "「ておく」為之後先完成動作並留下可用狀態，帶有準備意識。",
     "furigana": {
       "vocabulary": [
         {

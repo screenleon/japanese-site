@@ -115,6 +115,8 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "「かもしれない」は、確かではない可能性を文の中に残す形です。断定を避けて、ありうる余地を示し、判断を開きます。",
+    "mental_model_zh": "「かもしれない」不下定論，只把可能性留下來讓判斷保持開放。",
     "furigana": {
       "vocabulary": [
         {

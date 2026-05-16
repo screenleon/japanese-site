@@ -124,6 +124,8 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "「でも」は、予想される条件や候補を広く受け入れても結論を保つ印です。範囲をゆるく開き、条件に左右されにくく見ます。",
+    "mental_model_zh": "「でも」即使接受某候選或條件，結論仍不容易被它左右。",
     "furigana": {
       "vocabulary": [
         {

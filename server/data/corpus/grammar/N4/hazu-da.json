@@ -128,6 +128,8 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "「はずだ」は、知っている情報から自然に出る結論を置く形です。直接確認より、筋の通った見込みを示します。",
+    "mental_model_zh": "「はずだ」根據已知資訊推出合理預期，重點是照理應該如此。",
     "furigana": {
       "vocabulary": [
         {

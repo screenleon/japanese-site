@@ -124,6 +124,8 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "「てあげる」は、自分側から相手側へ行為の助けを差し出す向きを示します。恩恵が外へ向かい、相手側に届きます。",
+    "mental_model_zh": "「てあげる」表示自方把幫助往外給出去，恩惠朝對方移動。",
     "furigana": {
       "vocabulary": [
         {

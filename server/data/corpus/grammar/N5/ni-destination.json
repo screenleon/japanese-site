@@ -156,6 +156,8 @@
     }
   ],
   "annotations": {
+    "mental_model": "助詞「に」は、動きや働きが触れる点を示します。行き先や相手を文の中の到達点として置き、接触する場所を意識します。",
+    "mental_model_zh": "「に」標出移動或作用接觸到的點，如目的地、對象或落點。",
     "furigana": {
       "title_ja": [],
       "vocabulary": [

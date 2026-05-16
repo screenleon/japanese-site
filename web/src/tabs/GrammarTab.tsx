@@ -25,6 +25,36 @@ function hasAnnotations(annotations: Annotations) {
   });
 }
 
+function nonBlank(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function MentalModelHint({
+  mentalModel,
+  mentalModelZh,
+}: {
+  mentalModel?: string;
+  mentalModelZh: string;
+}) {
+  return (
+    <aside className="rounded-md border border-sky-200 bg-sky-50 px-4 py-3">
+      <div>
+        <h3 className="text-sm font-semibold text-sky-900">考え方のヒント</h3>
+        <div className="mt-1 space-y-1">
+          <p className="whitespace-pre-wrap text-base leading-relaxed text-sky-950">
+            {mentalModelZh}
+          </p>
+          {mentalModel && (
+            <p className="whitespace-pre-wrap text-sm leading-relaxed text-sky-800">
+              {mentalModel}
+            </p>
+          )}
+        </div>
+      </div>
+    </aside>
+  );
+}
+
 export function GrammarTab({
   initialSlug,
   onSlugConsumed,
@@ -92,6 +122,14 @@ export function GrammarTab({
   const active = levelPoints.find((p) => p.slug === activeSlug) || levelPoints[0] || null;
   const hasChineseExplanation = Boolean(active?.explanation_zh?.trim());
   const { visible: chineseVisible } = useChineseVisibility();
+  const isLowLevel = active ? ["N5", "N4"].includes(active.jlpt_level) : false;
+  const mentalModel = active?.annotations?.mental_model;
+  const mentalModelZh = active?.annotations?.mental_model_zh;
+  const showPairedMentalModel =
+    chineseVisible && isLowLevel && nonBlank(mentalModelZh);
+  const annotationKinds = showPairedMentalModel
+    ? (["furigana", "nuance_note"] as const)
+    : (["furigana", "nuance_note", "mental_model"] as const);
   const relatedPoints = useMemo(() => {
     return (active?.related_slugs || []).map((slug) => ({
       slug,
@@ -233,11 +271,17 @@ export function GrammarTab({
                     {active.jlpt_level} · {chineseVisible ? active.title_zh : active.title_ja}
                   </p>
                 </header>
-                {hasAnnotations(active.annotations ?? {}) && (
-                  <div className="mb-4">
+                {(showPairedMentalModel || hasAnnotations(active.annotations ?? {})) && (
+                  <div className={showPairedMentalModel ? "mb-4 space-y-3" : "mb-4"}>
+                    {showPairedMentalModel && (
+                      <MentalModelHint
+                        mentalModel={nonBlank(mentalModel) ? mentalModel : undefined}
+                        mentalModelZh={mentalModelZh as string}
+                      />
+                    )}
                     <EntryAnnotations
                       annotations={active.annotations}
-                      kinds={["furigana", "nuance_note", "mental_model"]}
+                      kinds={[...annotationKinds]}
                     />
                   </div>
                 )}

@@ -34,6 +34,39 @@ describe("EntryAnnotations", () => {
     expect(screen.queryByText("使い方")).not.toBeInTheDocument();
   });
 
+  it("renders mental_model_zh when explicitly requested", () => {
+    render(
+      <EntryAnnotations
+        annotations={{
+          mental_model_zh: "中文提示作為低等級的理解支架。",
+        }}
+        kinds={["mental_model_zh"]}
+      />
+    );
+
+    expect(screen.getByRole("heading", { name: "考え方のヒント" })).toBeVisible();
+    expect(screen.getByText("中文提示作為低等級的理解支架。")).toBeVisible();
+  });
+
+  it("skips *_zh kinds when caller does not pass an explicit kinds prop", () => {
+    // Defense-in-depth: generic callers (no kinds prop) must not surface
+    // Chinese scaffolds outside their intended reveal policy. *_zh kinds
+    // require explicit opt-in via the paired-display caller pattern.
+    render(
+      <EntryAnnotations
+        annotations={{
+          mental_model: "日本語の説明です。",
+          mental_model_zh: "中文不應該在通用渲染器中出現。",
+        }}
+      />
+    );
+
+    expect(screen.getByText("日本語の説明です。")).toBeVisible();
+    expect(
+      screen.queryByText("中文不應該在通用渲染器中出現。")
+    ).not.toBeInTheDocument();
+  });
+
   it("renders nothing when annotations are absent or empty", () => {
     const { container, rerender } = render(<EntryAnnotations />);
     expect(container).toBeEmptyDOMElement();

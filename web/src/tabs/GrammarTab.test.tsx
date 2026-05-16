@@ -104,6 +104,19 @@ const points = [
   },
 ];
 
+const lowLevelPoint: GrammarPoint = {
+  ...basePoint,
+  slug: "ka-question",
+  title_ja: "か",
+  title_zh: "疑問助詞",
+  jlpt_level: "N5",
+  annotations: {
+    mental_model: "「か」は、文を開いた問いに変える合図です。",
+    mental_model_zh: "句尾的「か」把陳述打開成問題，留下等待回答的空位。",
+  },
+  explanation_zh: "疑問。",
+};
+
 const listGrammar = vi.mocked(api.listGrammar);
 const randomGrammar = vi.mocked(api.randomGrammar);
 const getGrammarExamples = vi.mocked(api.getGrammarExamples!);
@@ -315,6 +328,44 @@ describe("GrammarTab", () => {
         "前件を事実として置いたうえで、後件で予想から外れる結果を示す。逆接を一つの流れとして読むことで、単なる接続詞ではなく判断の向きを意識できる。"
       )
     ).toBeVisible();
+  });
+
+  it("renders low-level mental_model_zh as primary before Japanese when Chinese is enabled", async () => {
+    listGrammar.mockResolvedValueOnce({ points: [lowLevelPoint, ...points], count: points.length + 1 });
+
+    const { container } = renderWithChinese(true, <GrammarTab initialSlug="ka-question" />);
+
+    expect(await screen.findByRole("heading", { name: "か" })).toBeVisible();
+    const chinese = screen.getByText("句尾的「か」把陳述打開成問題，留下等待回答的空位。");
+    const japanese = screen.getByText("「か」は、文を開いた問いに変える合図です。");
+    expect(chinese).toBeVisible();
+    expect(japanese).toBeVisible();
+    expect(chinese.compareDocumentPosition(japanese) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(chinese).toHaveClass("text-base");
+    expect(japanese).toHaveClass("text-sm");
+    expect(container.querySelectorAll("aside h3")).toHaveLength(1);
+  });
+
+  it("keeps N3 mental_model Japanese-only when Chinese is enabled and mental_model_zh is absent", async () => {
+    renderWithChinese(true, <GrammarTab initialSlug="monono" />);
+
+    expect(await screen.findByRole("heading", { name: "ものの" })).toBeVisible();
+    expect(
+      screen.getByText(
+        "前件を事実として置いたうえで、後件で予想から外れる結果を示す。逆接を一つの流れとして読むことで、単なる接続詞ではなく判断の向きを意識できる。"
+      )
+    ).toBeVisible();
+    expect(screen.queryByText("句尾的「か」把陳述打開成問題，留下等待回答的空位。")).not.toBeInTheDocument();
+  });
+
+  it("keeps N5 mental_model Japanese-only when Chinese is disabled", async () => {
+    listGrammar.mockResolvedValueOnce({ points: [lowLevelPoint, ...points], count: points.length + 1 });
+
+    renderWithChinese(false, <GrammarTab initialSlug="ka-question" />);
+
+    expect(await screen.findByRole("heading", { name: "か" })).toBeVisible();
+    expect(screen.getByText("「か」は、文を開いた問いに変える合図です。")).toBeVisible();
+    expect(screen.queryByText("句尾的「か」把陳述打開成問題，留下等待回答的空位。")).not.toBeInTheDocument();
   });
 
   it("omits the mental_model heading when the active grammar point has none", async () => {
