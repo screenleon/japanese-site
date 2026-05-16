@@ -106,12 +106,12 @@
 | JS-097 | 🟡 in_progress | key_terms→vocabulary rename + native-review tightening | schema/content | 2026-05-10 | spike:JS-097/098/099 |
 | JS-098 | 🟡 in_progress | explanation_ja → Block[] engine | schema/frontend | 2026-05-10 | spike:JS-097/098/099 |
 | JS-099 | 🟡 in_progress | classifier_rules editorial expansion + ClassifierContrasts UI | schema/frontend | 2026-05-10 | spike:JS-097/098/099 |
-| JS-100a | ✅ closed 2026-05-16 | N3 grammar v2 content regen slice (40 entries, shipped via PR #56) | content | 2026-05-10 | blocked-on-spike-merge, pr:#56 |
-| JS-100b | 🔵 active | N4 grammar v2 content regen slice (40 entries, clear pre-redesign after native review) | content | 2026-05-10 | blocked-on-spike-merge |
-| JS-100c | 🔵 active | N5 grammar v2 content regen slice (40 entries, clear pre-redesign after native review) | content | 2026-05-10 | blocked-on-spike-merge |
+| JS-100a | ✅ closed 2026-05-16 | N3 grammar v2 content regen slice (40 entries, shipped via PR #56) | content | 2026-05-10 | blocked-on-spike-merge |
+| JS-100b | 🔵 active | N4 grammar v2 content regen slice (40 entries) | content | 2026-05-10 | blocked-on-spike-merge |
+| JS-100c | 🔵 active | N5 grammar v2 content regen slice (40 entries) | content | 2026-05-10 | blocked-on-spike-merge |
 | JS-101 | 🔵 active | N2/N1 grammar v2 gradual content uplift | content | 2026-05-10 | blocked-on-spike-merge |
-| JS-102 | 🔵 active | Drop SQLite legacy shadow columns | backend/schema | 2026-05-10 | blocked-on JS-100/JS-101 content cycle + one release window |
-| JS-103 | 🔵 active | Full 150-entry classifier contrast rollout | content | 2026-05-10 | blocked-on JS-100 |
+| JS-102 | 🔵 active | Drop SQLite legacy shadow columns | backend/schema | 2026-05-10 | blocked-on JS-100b/JS-100c + JS-101 content cycle + one release window |
+| JS-103 | 🔵 active | Full 150-entry classifier contrast rollout | content | 2026-05-10 | blocked-on JS-100b, JS-100c |
 | JS-104 | 🔵 active | Vocab schema_version=2 + Block engine for gloss fields | schema/content | 2026-05-10 | scope-deferred (grammar-only spike) |
 | JS-105 | 🔵 active | pm-schema bump v1→v2 for grammar/schema-spike themes | planning/schema | 2026-05-10 | pm-schema frozen at v1 per PR #46 |
 | JS-106 | 🔵 active | Inline ruby migration for grammar `explanation_ja_blocks` (corpus-wide) | content | 2026-05-15 | User feedback 2026-05-15 on 限り detail page; kagiri PoC commit demonstrates target shape |
@@ -1126,7 +1126,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: spike:JS-097/098/099
 <!-- 首次記錄: 2026-05-10 -->
 
-## JS-100a — N3 grammar v2 content regen slice (40 entries, shipped via PR #56)
+## JS-100a — N3 grammar v2 content regen slice (40 entries, shipped via PR #56) ✅ 2026-05-16
 
 **Problem**: The Phase 2 spike mechanically migrates most non-PoC entries and left N3 entries with `audit_status: "pre-redesign"` before the native-reviewed slice shipped.
 
@@ -1189,12 +1189,12 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 
 **Why**: The shadows keep cached and legacy query paths working for the transition, but keeping them indefinitely preserves dual-shape ambiguity.
 
-**Requirement**: After the JS-100/JS-101 content cycle completes and one release window has elapsed, ship the migration that drops the legacy shadow columns from `grammar_point`.
+**Requirement**: After the JS-100b/JS-100c + JS-101 content cycle completes and one release window has elapsed, ship the migration that drops the legacy shadow columns from `grammar_point`.
 
 **Tags**: P2, backend, schema
 **Status**: todo
-**Blocked by**: JS-100/JS-101 content cycle plus one release window
-**Source**: blocked-on JS-100/JS-101 content cycle + one release window
+**Blocked by**: JS-100b/JS-100c + JS-101 content cycle plus one release window
+**Source**: blocked-on JS-100b/JS-100c + JS-101 content cycle + one release window
 <!-- 首次記錄: 2026-05-10 -->
 
 ## JS-103 — Full 150-entry classifier contrast rollout
@@ -1207,8 +1207,8 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 
 **Tags**: P2, content
 **Status**: todo
-**Blocked by**: JS-100
-**Source**: blocked-on JS-100
+**Blocked by**: JS-100b, JS-100c
+**Source**: blocked-on JS-100b, JS-100c
 <!-- 首次記錄: 2026-05-10 -->
 
 ## JS-104 — Vocab schema_version=2 + Block engine for gloss fields
