@@ -77,7 +77,7 @@
 | JS-068 | 🔵 active | vocab JLPT level-distribution rebalance | content | 2026-05-09 | decisions:2026-05-09 |
 | JS-069 | ✅ closed 2026-05-09 | furigana rollout readiness audit | infra | 2026-05-09 | audit:js-069 |
 | JS-070 | ✅ closed 2026-05-09 | Kuromoji vs Mecab furigana pipeline spike | infra | 2026-05-09 | audit:js-069 |
-| JS-071 | 🔵 active | N2 mental_model rollout (40 條, JS-042 two-section audit pattern, polite-form canonical) | content | 2026-05-09 | planning:2026-05-09 |
+| JS-071 | ✅ closed 2026-05-16 | N2 mental_model rollout (40 條, JS-042 two-section audit pattern, polite-form canonical) | content | 2026-05-09 | planning:2026-05-09 |
 | JS-072 | 🔵 active | N1 mental_model rollout (40 條; audit 比 N3/N2 嚴格因古典語體多) | content | 2026-05-09 | planning:2026-05-09 |
 | JS-073 | 🔵 active | N3 keigo 基礎組 (お〜になる / お〜する / 7 大不規則動詞替換表 + 5-8 條 entry) | content | 2026-05-09 | planning:2026-05-09 |
 | JS-074 | 🔵 active | 授受動詞系 N3 補強 (あげる/くれる/もらう 3 條 + てV 形 3 條, 含 mental_model) | content | 2026-05-09 | planning:2026-05-09 |
@@ -751,7 +751,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: audit:js-069
 <!-- 首次記錄: 2026-05-09 -->
 
-## JS-071 — N2 mental_model rollout (40 條, JS-042 two-section audit pattern, polite-form canonical)
+## JS-071 — N2 mental_model rollout (40 條, JS-042 two-section audit pattern, polite-form canonical) ✅ 2026-05-16
 
 **Problem**: N2 grammar entries still need mental_model coverage after the N3 slice established the rollout pattern.
 
