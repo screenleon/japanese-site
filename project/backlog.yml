@@ -1023,17 +1023,19 @@ items:
 
   - id: JS-071
     title: N2 mental_model rollout (40 條, JS-042 two-section audit pattern, polite-form canonical)
-    status: todo
+    status: done
     priority: P2
     theme: mental-model
     area: content
     source: planning:2026-05-09
+    completed_at: "2026-05-16"
     related: [JS-042, JS-072, JS-063]
     notes:
       - Estimate — 中.
       - Roll out mental_model coverage to 40 N2 grammar entries using the JS-042 two-section audit pattern.
       - Authoring must follow the 2026-05-08 polite-form canonical register decision for N3+ mental_model prose.
       - Coordinate audit format with JS-063 and the broader full-rollout line tracked by JS-042.
+      - Shipped on branch feat/js-071-n2-mental-model; native review by Claude main thread per native-reviewer-role rule (2 entries revised, 7 codex-medium upgraded to high). audit at audits/js-071-n2-mental-model-codex-pass-2026-05-16.md.
 
   - id: JS-072
     title: N1 mental_model rollout (40 條; audit 比 N3/N2 嚴格因古典語體多)
