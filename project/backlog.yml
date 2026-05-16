@@ -1434,8 +1434,22 @@ items:
       - Mirror non-null contrasts into `annotations.classifier.rules[]` with no machine predicates.
       - Render learner-facing contrast cards through `<ClassifierContrasts />`; null contrasts render nothing.
 
-  - id: JS-100
-    title: Full N5/N4/N3 grammar v2 content regen (120 entries)
+  - id: JS-100a
+    title: N3 grammar v2 content regen slice (40 entries, shipped via PR #56)
+    status: done
+    priority: P1
+    milestone: M3
+    theme: content-uplift
+    area: content
+    source: blocked-on-spike-merge
+    completed_at: "2026-05-16"
+    notes:
+      - Shipped via PR #56 (squash bfff0ac, 2026-05-15).
+      - 36/40 N3 entries pattern補齊 + audit_status pre-redesign 移除; dake-denaku補 9 furigana pairs.
+      - Native review by Claude main thread (per native-reviewer-role rule); audit at audits/js-100-n3-pattern-native-review-2026-05-15.md.
+
+  - id: JS-100b
+    title: N4 grammar v2 content regen slice (40 entries)
     status: todo
     priority: P1
     milestone: M3
@@ -1444,9 +1458,23 @@ items:
     source: blocked-on-spike-merge
     blocked_by: [JS-097, JS-098, JS-099]
     notes:
-      - Regenerate and native-review full N5/N4/N3 grammar v2 content for 120 entries.
-      - Remove `audit_status: "pre-redesign"` entry-by-entry only after the entry passes native review.
-      - This is downstream content work, not part of the Phase 2 schema spike.
+      - Regenerate and native-review full N4 grammar v2 content for 40 entries.
+      - Clear `audit_status: "pre-redesign"` entry-by-entry only after each entry passes native review.
+      - Downstream content work, not part of the Phase 2 schema spike.
+
+  - id: JS-100c
+    title: N5 grammar v2 content regen slice (40 entries)
+    status: todo
+    priority: P1
+    milestone: M3
+    theme: content-uplift
+    area: content
+    source: blocked-on-spike-merge
+    blocked_by: [JS-097, JS-098, JS-099]
+    notes:
+      - Regenerate and native-review full N5 grammar v2 content for 40 entries.
+      - Clear `audit_status: "pre-redesign"` entry-by-entry only after each entry passes native review.
+      - Downstream content work, not part of the Phase 2 schema spike.
 
   - id: JS-101
     title: N2/N1 grammar v2 gradual content uplift
@@ -1468,11 +1496,11 @@ items:
     milestone: M3
     theme: schema-cleanup
     area: backend/schema
-    source: blocked-on JS-100/JS-101 content cycle + one release window
-    blocked_by: [JS-100, JS-101]
+    source: blocked-on JS-100b/JS-100c + JS-101 content cycle + one release window
+    blocked_by: [JS-100b, JS-100c, JS-101]
     notes:
       - Drop SQLite legacy shadow columns `mental_model`, `nuance_note`, and `explanation_ja` from `grammar_point`.
-      - Blocked until the JS-100/JS-101 content cycle completes and one release window has elapsed.
+      - Blocked until the JS-100b/JS-100c + JS-101 content cycle completes and one release window has elapsed.
 
   - id: JS-103
     title: Full 150-entry classifier contrast rollout authored by native reviewer
@@ -1481,8 +1509,8 @@ items:
     milestone: M3
     theme: content-uplift
     area: content
-    source: blocked-on JS-100
-    blocked_by: [JS-100]
+    source: blocked-on JS-100b, JS-100c
+    blocked_by: [JS-100b, JS-100c]
     related: [JS-099]
     notes:
       - Author and native-review a full 150-entry classifier contrast rollout.
@@ -1623,6 +1651,21 @@ items:
       - "Done when: both lint scripts use a shared Node module for Token[] validation, titleSource, token text extraction, and FuriganaPair validation."
       - Add unit tests covering the shared validator behavior.
       - Deferred from JS-110; do not extract the module in the current PR.
+
+  - id: JS-113
+    title: "N5+N4 mental_model rollout (80 entries: 40 N5 + 40 N4, native perspective)"
+    status: todo
+    priority: P2
+    milestone: M3
+    theme: mental-model
+    area: content
+    source: planning:2026-05-16
+    related: [JS-042, JS-071, JS-072, JS-063, JS-100b, JS-100c]
+    notes:
+      - Add mental_model guidance to 40 N5 + 40 N4 grammar entries using the JS-042 two-section audit pattern.
+      - Authored from native Japanese perspective per native-perspective rule; native review by Claude main thread.
+      - Polite-form (です/ます) canonical register per 2026-05-08 decision for forward mental_model authoring (applies to N4 and N5 slices here).
+      - Fills the N5+N4 gap in the mental_model rollout family (JS-042 N3 ✅, JS-071 N2, JS-072 N1).
 
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.
