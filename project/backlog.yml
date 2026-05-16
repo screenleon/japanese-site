@@ -1664,7 +1664,7 @@ items:
     notes:
       - Add mental_model guidance to 40 N5 + 40 N4 grammar entries using the JS-042 two-section audit pattern.
       - Authored from native Japanese perspective per native-perspective rule; native review by Claude main thread.
-      - Polite-form (です/ます) canonical register per 2026-05-08 decision (N3+ canonical).
+      - Polite-form (です/ます) canonical register per 2026-05-08 decision for forward mental_model authoring (applies to N4 and N5 slices here).
       - Fills the N5+N4 gap in the mental_model rollout family (JS-042 N3 ✅, JS-071 N2, JS-072 N1).
 
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
