@@ -1039,17 +1039,19 @@ items:
 
   - id: JS-072
     title: N1 mental_model rollout (40 條; audit 比 N3/N2 嚴格因古典語體多)
-    status: todo
+    status: done
     priority: P2
     theme: mental-model
     area: content
     source: planning:2026-05-09
+    completed_at: "2026-05-16"
     related: [JS-042, JS-071, JS-063]
     notes:
       - Estimate — 中.
       - Roll out mental_model coverage to 40 N1 grammar entries with stricter audit than N3/N2 because N1 includes more classical and literary register.
       - Authoring must follow the 2026-05-08 polite-form canonical register decision for N3+ mental_model prose while preserving accurate register notes.
       - Coordinate audit format with JS-063 and the broader full-rollout line tracked by JS-042.
+      - Shipped on branch feat/js-072-n1-mental-model. Scope = 39 entries (yogi-naku-sareru excluded as JS-041 plain-form seed). Native review by Claude main thread per native-reviewer-role; 0 revisions, 8 codex-medium upgraded to native-high, 0 native-perspective violations (cleanest round to date). audit at audits/js-072-n1-mental-model-codex-pass-2026-05-16.md.
 
   - id: JS-073
     title: N3 keigo 基礎組 (お〜になる / お〜する / 7 大不規則動詞替換表 + 5-8 條 entry)
