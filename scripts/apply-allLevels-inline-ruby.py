@@ -533,8 +533,23 @@ def ruby_tokens(entry: dict) -> list[tuple[str, str]]:
 
 
 def verify(path: Path, baseline: dict, rewritten: dict) -> None:
-    if non_explanation_projection(baseline) != non_explanation_projection(rewritten):
-        raise AssertionError(f"{path}: non-explanation fields changed")
+    # Rewritten starts from on-disk corpus (which may carry post-baseline
+    # editorial additions like annotations.mental_model from JS-071); only
+    # explanation_ja_blocks is regenerated. The baseline-equivalence guard
+    # therefore enforces that every non-explanation field present in baseline
+    # is preserved verbatim, but allows the on-disk corpus to carry extra
+    # keys (top-level or nested under annotations) without failing.
+    base_proj = non_explanation_projection(baseline)
+    new_proj = non_explanation_projection(rewritten)
+    for key, value in base_proj.items():
+        if key == "annotations":
+            new_ann = new_proj.get("annotations", {}) or {}
+            for ak, av in (value or {}).items():
+                if new_ann.get(ak) != av:
+                    raise AssertionError(f"{path}: annotations.{ak} drifted from baseline")
+            continue
+        if new_proj.get(key) != value:
+            raise AssertionError(f"{path}: field {key} drifted from baseline")
     if block_texts(baseline["explanation_ja_blocks"]) != block_texts(rewritten["explanation_ja_blocks"]):
         raise AssertionError(f"{path}: explanation text concatenation changed")
     if not ruby_tokens(rewritten):
@@ -597,7 +612,7 @@ def audit_body(level_counts: dict[str, int], freq: Counter, spot_checks: dict[st
             "",
             "- The script verifies every rewritten file against baseline commit `03ac4ddc9f5f6afa3bae1e65a3a888cf82c346b7`.",
             "- For every block, concatenating `text.v` and `ruby.k` in document order matches the baseline text byte-for-byte.",
-            "- For every entry, all non-`explanation_ja_blocks` fields match the baseline JSON projection.",
+            "- For every entry, every non-`explanation_ja_blocks` field present in baseline is preserved verbatim; on-disk corpus may carry additional post-baseline editorial fields (e.g. `annotations.mental_model`) which the regenerator passes through.",
             "- Markdown example bullet lines were kept as trailing text runs unless they are form-definition bullets.",
             "- Native-review compound fixes are folded into `COMPOUND_OVERRIDES` / `CONTEXTUAL_COMPOUND_OVERRIDES` in `scripts/apply-allLevels-inline-ruby.py`.",
             "",
@@ -659,7 +674,7 @@ def rewrite_all(output_root: Path = ROOT, write_audit: bool = True) -> dict[str,
 
     for path in target_paths(ROOT):
         baseline = load_baseline(path)
-        rewritten = copy.deepcopy(baseline)
+        rewritten = copy.deepcopy(load_json(path)) if path.exists() else copy.deepcopy(baseline)
         rewritten["explanation_ja_blocks"] = rewrite_blocks(baseline)
         verify(path, baseline, rewritten)
         write_json(output_path_for(path, output_root), rewritten)

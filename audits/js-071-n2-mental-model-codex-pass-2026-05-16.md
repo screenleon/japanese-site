@@ -106,4 +106,3 @@ Native-review executor: Claude main thread (per native-reviewer-role rule). All 
 - **0 blocked**, **0 concept-fit failures**.
 - Polite-form (です/ます) end consistent across all 40.
 - Compared to JS-042 N3 (5 revised / 40), JS-071 N2 revision rate is lower (2/40) — codex first-pass quality higher this round, attributable to tighter brief constraints (anti-boilerplate clause + explicit native-perspective rule reference + 3 N3 anchor samples pre-specified for tone calibration).
-

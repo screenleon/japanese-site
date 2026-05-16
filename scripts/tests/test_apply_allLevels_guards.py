@@ -63,7 +63,50 @@ class ApplyAllLevelsGuardTest(unittest.TestCase):
 
         with self.assertRaises(AssertionError) as err:
             mod.verify(Path("fixture.json"), baseline, rewritten)
-        self.assertIn("non-explanation fields changed", str(err.exception))
+        self.assertIn("field slug drifted from baseline", str(err.exception))
+
+    def test_verify_allows_post_baseline_additions(self):
+        """verify accepts rewrites that add fields absent from baseline (e.g. annotations.mental_model from JS-071).
+
+        Steps:
+        1. Build matching baseline and rewritten entries; add annotations.mental_model only to rewritten.
+        2. Replace text token with a ruby token so the ruby-emitted invariant holds.
+        3. Call verify; no exception.
+        """
+        baseline = baseline_entry()
+        rewritten = baseline_entry()
+        rewritten["annotations"]["mental_model"] = "「あげく」は、長く迷ったり苦労したりした流れの最後に、望ましくない結果へ行き着く感じです。"
+        rewritten["explanation_ja_blocks"][0]["tokens"] = [
+            {"t": "ruby", "k": "新聞", "r": "しんぶん"},
+            {"t": "text", "v": "を読む。"},
+        ]
+        baseline["explanation_ja_blocks"][0]["tokens"] = [
+            {"t": "text", "v": "新聞を読む。"},
+        ]
+
+        mod.verify(Path("fixture.json"), baseline, rewritten)
+
+    def test_verify_rejects_baseline_annotation_drop(self):
+        """verify rejects rewrites that drop or change an annotation key present in baseline.
+
+        Steps:
+        1. Build baseline with annotations.furigana populated; build rewritten that drops that key.
+        2. Call verify; expect the annotations.furigana drift branch to fire.
+        """
+        baseline = baseline_entry()
+        rewritten = baseline_entry()
+        rewritten["annotations"].pop("furigana")
+        rewritten["explanation_ja_blocks"][0]["tokens"] = [
+            {"t": "ruby", "k": "新聞", "r": "しんぶん"},
+            {"t": "text", "v": "を読む。"},
+        ]
+        baseline["explanation_ja_blocks"][0]["tokens"] = [
+            {"t": "text", "v": "新聞を読む。"},
+        ]
+
+        with self.assertRaises(AssertionError) as err:
+            mod.verify(Path("fixture.json"), baseline, rewritten)
+        self.assertIn("annotations.furigana drifted from baseline", str(err.exception))
 
     def test_verify_raises_on_explanation_text_drift(self):
         """verify rejects rewrites that change concatenated explanation text.
