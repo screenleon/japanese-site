@@ -106,7 +106,9 @@
 | JS-097 | 🟡 in_progress | key_terms→vocabulary rename + native-review tightening | schema/content | 2026-05-10 | spike:JS-097/098/099 |
 | JS-098 | 🟡 in_progress | explanation_ja → Block[] engine | schema/frontend | 2026-05-10 | spike:JS-097/098/099 |
 | JS-099 | 🟡 in_progress | classifier_rules editorial expansion + ClassifierContrasts UI | schema/frontend | 2026-05-10 | spike:JS-097/098/099 |
-| JS-100 | 🔵 active | Full N5/N4/N3 grammar v2 content regen (120 entries) | content | 2026-05-10 | blocked-on-spike-merge |
+| JS-100a | ✅ closed 2026-05-16 | N3 grammar v2 content regen slice (40 entries, shipped via PR #56) | content | 2026-05-10 | blocked-on-spike-merge, pr:#56 |
+| JS-100b | 🔵 active | N4 grammar v2 content regen slice (40 entries, clear pre-redesign after native review) | content | 2026-05-10 | blocked-on-spike-merge |
+| JS-100c | 🔵 active | N5 grammar v2 content regen slice (40 entries, clear pre-redesign after native review) | content | 2026-05-10 | blocked-on-spike-merge |
 | JS-101 | 🔵 active | N2/N1 grammar v2 gradual content uplift | content | 2026-05-10 | blocked-on-spike-merge |
 | JS-102 | 🔵 active | Drop SQLite legacy shadow columns | backend/schema | 2026-05-10 | blocked-on JS-100/JS-101 content cycle + one release window |
 | JS-103 | 🔵 active | Full 150-entry classifier contrast rollout | content | 2026-05-10 | blocked-on JS-100 |
@@ -119,6 +121,7 @@
 | JS-110 | 🟡 in_progress | furigana.title_ja 形狀升級為 Token[]，渲染時就地拼接保留 kana 上下文 | schema/frontend | 2026-05-15 | user UX feedback 2026-05-15 — に違いない furigana should cover the full expression |
 | JS-111 | 🔵 active | 同形不同義 grammar 條目合併為多義 entry | schema/model-refactor | 2026-05-15 | user 2026-05-15 proposal during JS-110 disambig-paren discussion |
 | JS-112 | 🔵 active | lint-grammar / lint-vocab Token[] validator 共用化 | schema/refactor | 2026-05-15 | PR-gate finding 2026-05-15 (gate-20260515-231333.md architecture-reviewer medium) |
+| JS-113 | 🔵 active | N5+N4 mental_model rollout (80 entries: 40 N5 + 40 N4, native perspective) | content | 2026-05-16 | planning:2026-05-16 |
 
 ---
 
@@ -1123,13 +1126,42 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: spike:JS-097/098/099
 <!-- 首次記錄: 2026-05-10 -->
 
-## JS-100 — Full N5/N4/N3 grammar v2 content regen (120 entries)
+## JS-100a — N3 grammar v2 content regen slice (40 entries, shipped via PR #56)
 
-**Problem**: The Phase 2 spike mechanically migrates most non-PoC entries and leaves many N5/N4/N3 entries with `audit_status: "pre-redesign"`.
+**Problem**: The Phase 2 spike mechanically migrates most non-PoC entries and left N3 entries with `audit_status: "pre-redesign"` before the native-reviewed slice shipped.
 
-**Why**: Lower-level grammar is learner-critical and should receive native-reviewed v2 explanations, patterns, furigana vocabulary, and annotation cleanup instead of remaining envelope-only migrated content.
+**Why**: N3 grammar is a high-value bridge level and should receive native-reviewed v2 explanations, patterns, furigana vocabulary, and annotation cleanup instead of remaining envelope-only migrated content.
 
-**Requirement**: Regenerate and native-review full N5/N4/N3 grammar v2 content for 120 entries, removing `audit_status: "pre-redesign"` entry-by-entry as each passes review.
+**Requirement**: Regenerate and native-review the N3 grammar v2 slice for 40 entries, removing `audit_status: "pre-redesign"` entry-by-entry as each passes review.
+
+**Tags**: P1, content
+**Status**: ✅ closed via PR #56 on 2026-05-16
+**Blocked by**: JS-097/098/099 spike merge
+**Source**: blocked-on-spike-merge
+**Refs**: pr:#56
+<!-- 首次記錄: 2026-05-10 -->
+
+## JS-100b — N4 grammar v2 content regen slice (40 entries)
+
+**Problem**: The Phase 2 spike mechanically migrates most non-PoC entries and leaves many N4 entries with `audit_status: "pre-redesign"`.
+
+**Why**: N4 grammar is learner-critical and should receive native-reviewed v2 explanations, patterns, furigana vocabulary, and annotation cleanup instead of remaining envelope-only migrated content.
+
+**Requirement**: Regenerate and native-review the N4 grammar v2 slice for 40 entries, removing `audit_status: "pre-redesign"` entry-by-entry as each passes review.
+
+**Tags**: P1, content
+**Status**: todo
+**Blocked by**: JS-097/098/099 spike merge
+**Source**: blocked-on-spike-merge
+<!-- 首次記錄: 2026-05-10 -->
+
+## JS-100c — N5 grammar v2 content regen slice (40 entries)
+
+**Problem**: The Phase 2 spike mechanically migrates most non-PoC entries and leaves many N5 entries with `audit_status: "pre-redesign"`.
+
+**Why**: N5 grammar is learner-critical and should receive native-reviewed v2 explanations, patterns, furigana vocabulary, and annotation cleanup instead of remaining envelope-only migrated content.
+
+**Requirement**: Regenerate and native-review the N5 grammar v2 slice for 40 entries, removing `audit_status: "pre-redesign"` entry-by-entry as each passes review.
 
 **Tags**: P1, content
 **Status**: todo
@@ -1362,3 +1394,16 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: PR-gate finding 2026-05-15 (`gate-20260515-231333.md` architecture-reviewer medium)
 **Refs**: JS-110 parent
 <!-- 首次記錄: 2026-05-15 -->
+
+## JS-113 — N5+N4 mental_model rollout (80 entries: 40 N5 + 40 N4, native perspective)
+
+**Problem**: N5 and N4 grammar entries still need mental_model coverage after the higher-level rollout family established the authoring pattern.
+
+**Why**: Beginner-facing guidance has the highest learner impact, and native-perspective mental_model prose can explain what a Japanese speaker is tracking without overloading lower-level learners.
+
+**Requirement**: Add mental_model guidance to 80 entries (40 N5 + 40 N4) using the JS-042 two-section audit pattern, coordinate the audit format with JS-063, and keep mental_model prose in polite-form canonical register while authoring from a native Japanese perspective.
+
+**Tags**: P2, mental-model, content, 估計 — 中
+**Source**: planning:2026-05-16
+**Related**: JS-042, JS-071, JS-072, JS-063, JS-100b, JS-100c
+<!-- 首次記錄: 2026-05-16 -->
