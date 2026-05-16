@@ -78,7 +78,7 @@
 | JS-069 | ✅ closed 2026-05-09 | furigana rollout readiness audit | infra | 2026-05-09 | audit:js-069 |
 | JS-070 | ✅ closed 2026-05-09 | Kuromoji vs Mecab furigana pipeline spike | infra | 2026-05-09 | audit:js-069 |
 | JS-071 | ✅ closed 2026-05-16 | N2 mental_model rollout (40 條, JS-042 two-section audit pattern, polite-form canonical) | content | 2026-05-09 | planning:2026-05-09 |
-| JS-072 | 🔵 active | N1 mental_model rollout (40 條; audit 比 N3/N2 嚴格因古典語體多) | content | 2026-05-09 | planning:2026-05-09 |
+| JS-072 | ✅ closed 2026-05-16 | N1 mental_model rollout (40 條; audit 比 N3/N2 嚴格因古典語體多) | content | 2026-05-09 | planning:2026-05-09 |
 | JS-073 | 🔵 active | N3 keigo 基礎組 (お〜になる / お〜する / 7 大不規則動詞替換表 + 5-8 條 entry) | content | 2026-05-09 | planning:2026-05-09 |
 | JS-074 | 🔵 active | 授受動詞系 N3 補強 (あげる/くれる/もらう 3 條 + てV 形 3 條, 含 mental_model) | content | 2026-05-09 | planning:2026-05-09 |
 | JS-075 | 🔵 active | 自他動詞 N3 dedicated entry (開く/開ける、閉まる/閉める、始まる/始める + pattern list) | content | 2026-05-09 | planning:2026-05-09 |
@@ -764,7 +764,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Related**: JS-042, JS-072, JS-063
 <!-- 首次記錄: 2026-05-09 -->
 
-## JS-072 — N1 mental_model rollout (40 條; audit 比 N3/N2 嚴格因古典語體多)
+## JS-072 — N1 mental_model rollout (40 條; audit 比 N3/N2 嚴格因古典語體多) ✅ 2026-05-16
 
 **Problem**: N1 grammar entries need mental_model coverage, but the level contains more classical and literary register than lower slices.
 
