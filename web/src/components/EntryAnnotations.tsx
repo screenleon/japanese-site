@@ -142,8 +142,17 @@ export function EntryAnnotations({
   kinds?: AnnotationKind[];
 }) {
   const allowedKinds = new Set(kinds ?? ANNOTATION_KINDS);
+  // *_zh kinds must be opted in explicitly by the caller (e.g. paired-display
+  // components that gate on Chinese visibility + scope). Generic callers that
+  // pass no `kinds` prop, or rely on the default ANNOTATION_KINDS set, must
+  // not surface Chinese scaffolds outside their intended reveal policy.
+  const callerOptedIn = kinds !== undefined;
   const visibleKinds = ANNOTATION_KINDS.filter(
-    (kind) => kind !== "classifier" && allowedKinds.has(kind) && hasAnnotationValue(kind, annotations)
+    (kind) =>
+      kind !== "classifier" &&
+      allowedKinds.has(kind) &&
+      (callerOptedIn || !kind.endsWith("_zh")) &&
+      hasAnnotationValue(kind, annotations)
   );
 
   if (visibleKinds.length === 0) return null;

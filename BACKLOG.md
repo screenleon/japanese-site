@@ -121,7 +121,7 @@
 | JS-110 | 🟡 in_progress | furigana.title_ja 形狀升級為 Token[]，渲染時就地拼接保留 kana 上下文 | schema/frontend | 2026-05-15 | user UX feedback 2026-05-15 — に違いない furigana should cover the full expression |
 | JS-111 | 🔵 active | 同形不同義 grammar 條目合併為多義 entry | schema/model-refactor | 2026-05-15 | user 2026-05-15 proposal during JS-110 disambig-paren discussion |
 | JS-112 | 🔵 active | lint-grammar / lint-vocab Token[] validator 共用化 | schema/refactor | 2026-05-15 | PR-gate finding 2026-05-15 (gate-20260515-231333.md architecture-reviewer medium) |
-| JS-113 | ✅ closed 2026-05-16 | N5+N4 mental_model rollout (80 entries: 40 N5 + 40 N4, native perspective) | content | 2026-05-16 | planning:2026-05-16 |
+| JS-113 | ✅ closed 2026-05-16 | N5+N4 mental_model rollout (77 entries: 39 N5 + 38 N4, JS-041 seeds excluded, native perspective) | content | 2026-05-16 | planning:2026-05-16 |
 
 ---
 
@@ -1395,13 +1395,13 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Refs**: JS-110 parent
 <!-- 首次記錄: 2026-05-15 -->
 
-## JS-113 — N5+N4 mental_model rollout (80 entries: 40 N5 + 40 N4, native perspective) ✅ 2026-05-16
+## JS-113 — N5+N4 mental_model rollout (77 entries: 39 N5 + 38 N4, JS-041 seeds excluded, native perspective) ✅ 2026-05-16
 
 **Problem**: N5 and N4 grammar entries still need mental_model coverage after the higher-level rollout family established the authoring pattern.
 
 **Why**: Beginner-facing guidance has the highest learner impact, and native-perspective mental_model prose can explain what a Japanese speaker is tracking without overloading lower-level learners.
 
-**Requirement**: Add mental_model guidance to 80 entries (40 N5 + 40 N4) using the JS-042 two-section audit pattern, coordinate the audit format with JS-063, and keep mental_model prose in polite-form canonical register while authoring from a native Japanese perspective.
+**Requirement**: Add mental_model guidance to 77 entries (39 N5 + 38 N4; 3 JS-041 plain-form seeds — N5/na-adjective, N4/te-iru, N4/te-kureru — excluded per 2026-05-08 decision) using the JS-042 two-section audit pattern, coordinate the audit format with JS-063, and keep mental_model prose in polite-form canonical register while authoring from a native Japanese perspective. Phase-A also adds an optional `annotations.mental_model_zh` Traditional Chinese sibling for the same 77 N5/N4 entries, surfaced via paired N5/N4 display under the existing Chinese toggle.
 
 **Tags**: P2, mental-model, content, 估計 — 中
 **Source**: planning:2026-05-16
