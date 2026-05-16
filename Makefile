@@ -1,4 +1,4 @@
-.PHONY: help lint lint-rules lint-grammar lint-vocab backlog-render lint-backlog-render corpus-scale vet test test-dump-grammar-examples test-lint-grammar test-lint-vocab test-validate-backlog-schema clean bake-static dump-grammar-examples build-static preview-static \
+.PHONY: help lint lint-rules lint-grammar lint-vocab backlog-render lint-backlog-render corpus-scale vet test test-python-scripts test-dump-grammar-examples test-lint-grammar test-lint-vocab test-validate-backlog-schema clean bake-static dump-grammar-examples build-static preview-static \
         bootstrap dev start build dist dist-update \
         run web-dev web-build \
         seed-jmdict seed-kanjidic2 seed-jlpt seed-tatoeba seed-derive seed-corpus seed-all \
@@ -17,6 +17,7 @@ help:
 	@echo "  dist-update   Stage into dist/ — build + seed-corpus only (fast, content update)"
 	@echo "  db-update     Reload curated corpus into local dev DB (vocab + grammar questions)"
 	@echo "  test          Go unit tests"
+	@echo "  test-python-scripts Inline-ruby script regression tests"
 	@echo "  test-validate-backlog-schema Backlog schema validator fixtures"
 	@echo "  vet           Go static analysis"
 	@echo "  lint-rules    Layered-rule lint"
@@ -112,8 +113,11 @@ web-build:
 vet:
 	cd server && go vet ./...
 
-test: test-dump-grammar-examples test-lint-grammar test-lint-vocab test-validate-backlog-schema
+test: test-python-scripts test-dump-grammar-examples test-lint-grammar test-lint-vocab test-validate-backlog-schema
 	cd server && go test ./...
+
+test-python-scripts:
+	python3 -m unittest discover -s scripts/tests -v
 
 test-dump-grammar-examples:
 	bash scripts/test-dump-grammar-examples.sh
