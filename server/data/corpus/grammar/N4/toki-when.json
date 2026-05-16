@@ -146,6 +146,7 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "「とき」は、出来事や状態を時間の枠として使います。その枠の中で別の出来事が起きると見て、時間の入口を作ります。",
     "furigana": {
       "vocabulary": [
         {

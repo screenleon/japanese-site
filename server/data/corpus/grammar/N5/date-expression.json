@@ -97,6 +97,7 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "日付の表現は、時間の流れの中から一日を取り出して指す枠です。予定や出来事をその日に結びつけ、時間上の場所を決めます。",
     "furigana": {
       "title_ja": [
         {

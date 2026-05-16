@@ -124,6 +124,7 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "「これ・それ・あれ」は、話し手との距離で物を指す言葉です。近い・相手側・遠いという位置感覚を作ります。",
     "furigana": {
       "title_ja": [
         {

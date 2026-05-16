@@ -101,6 +101,7 @@
     }
   ],
   "annotations": {
+    "mental_model": "助詞「で」は、動作が成り立つ場所・手段・範囲を一つの場として区切ります。その枠の中で何が起きるかを示します。",
     "furigana": {
       "title_ja": [],
       "vocabulary": [

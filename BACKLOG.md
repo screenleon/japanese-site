@@ -121,7 +121,7 @@
 | JS-110 | 🟡 in_progress | furigana.title_ja 形狀升級為 Token[]，渲染時就地拼接保留 kana 上下文 | schema/frontend | 2026-05-15 | user UX feedback 2026-05-15 — に違いない furigana should cover the full expression |
 | JS-111 | 🔵 active | 同形不同義 grammar 條目合併為多義 entry | schema/model-refactor | 2026-05-15 | user 2026-05-15 proposal during JS-110 disambig-paren discussion |
 | JS-112 | 🔵 active | lint-grammar / lint-vocab Token[] validator 共用化 | schema/refactor | 2026-05-15 | PR-gate finding 2026-05-15 (gate-20260515-231333.md architecture-reviewer medium) |
-| JS-113 | 🔵 active | N5+N4 mental_model rollout (80 entries: 40 N5 + 40 N4, native perspective) | content | 2026-05-16 | planning:2026-05-16 |
+| JS-113 | ✅ closed 2026-05-16 | N5+N4 mental_model rollout (80 entries: 40 N5 + 40 N4, native perspective) | content | 2026-05-16 | planning:2026-05-16 |
 
 ---
 
@@ -1395,7 +1395,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Refs**: JS-110 parent
 <!-- 首次記錄: 2026-05-15 -->
 
-## JS-113 — N5+N4 mental_model rollout (80 entries: 40 N5 + 40 N4, native perspective)
+## JS-113 — N5+N4 mental_model rollout (80 entries: 40 N5 + 40 N4, native perspective) ✅ 2026-05-16
 
 **Problem**: N5 and N4 grammar entries still need mental_model coverage after the higher-level rollout family established the authoring pattern.
 

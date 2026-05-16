@@ -119,6 +119,7 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "「前に」は、基準になる出来事より先に別の行動を置きます。時間の順番を前側から整理し、後の出来事を基準にします。",
     "furigana": {
       "title_ja": [
         {

@@ -115,6 +115,7 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "疑問詞は、文の中にまだ決まっていない場所を作ります。何・どこ・誰を相手に埋めてもらい、空いた部分を問いの中心にします。",
     "furigana": {
       "title_ja": [
         {

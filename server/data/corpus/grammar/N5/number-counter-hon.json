@@ -56,6 +56,7 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "本数を数える時は、細長いものを同じ種類のまとまりとして扱います。数と助数詞で対象の形をそろえて見ます。",
     "furigana": {
       "title_ja": [
         {

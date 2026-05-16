@@ -138,6 +138,7 @@
     }
   ],
   "annotations": {
+    "mental_model": "時間の「に」は、出来事が起きる一点を時間の線上に留めます。いつという接点をはっきり示し、出来事をそこに合わせます。",
     "furigana": {
       "title_ja": [],
       "vocabulary": [

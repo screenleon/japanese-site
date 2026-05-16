@@ -110,6 +110,7 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "「までに」は、ある時点を締め切りとしてその前に終える必要を示します。終点より前の完了に焦点を置きます。",
     "furigana": {
       "vocabulary": [
         {

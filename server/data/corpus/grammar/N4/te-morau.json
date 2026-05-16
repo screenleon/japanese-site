@@ -97,6 +97,7 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "「てもらう」は、相手の行為を自分側が受け取る形です。助けを頼む・受ける立場から恩恵を見て、自分側に入れます。",
     "furigana": {
       "vocabulary": [
         {

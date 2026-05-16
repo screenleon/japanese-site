@@ -147,6 +147,7 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "頻度の副詞は、動作がどれくらい繰り返されるかを文に重ねます。一回の出来事より、習慣の濃さや例外の少なさを示します。",
     "furigana": {
       "title_ja": [
         {

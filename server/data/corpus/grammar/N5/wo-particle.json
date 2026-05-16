@@ -120,6 +120,7 @@
     }
   ],
   "annotations": {
+    "mental_model": "助詞「を」は、動作が向かって働きかける対象を示します。何を動かす・食べる・見るのかを文の中心に置きます。",
     "furigana": {
       "title_ja": [],
       "vocabulary": [

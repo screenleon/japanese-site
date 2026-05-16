@@ -142,6 +142,7 @@
     "validator_score": 1
   },
   "annotations": {
+    "mental_model": "「だろう」は、断定しきらずに自分の見込みとして文を置く形です。根拠はあるが確定前の判断を示し、余地を残します。",
     "furigana": {
       "vocabulary": [
         {
