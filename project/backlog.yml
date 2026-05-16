@@ -1038,7 +1038,7 @@ items:
       - Shipped on branch feat/js-071-n2-mental-model; native review by Claude main thread per native-reviewer-role rule (2 entries revised, 7 codex-medium upgraded to high). audit at audits/js-071-n2-mental-model-codex-pass-2026-05-16.md.
 
   - id: JS-072
-    title: N1 mental_model rollout (40 條; audit 比 N3/N2 嚴格因古典語體多)
+    title: N1 mental_model rollout (39 條, JS-041 yogi-naku-sareru seed excluded; audit 比 N3/N2 嚴格因古典語體多)
     status: done
     priority: P2
     theme: mental-model
