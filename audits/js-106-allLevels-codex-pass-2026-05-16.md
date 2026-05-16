@@ -183,6 +183,24 @@
 
 - None from the explicit handoff watchlist were ruby-tagged outside fixed compounds.
 
+## Native-Review Fixes (main-thread Claude pass)
+
+A compound-boundary sweep (`text{kanji} + ruby{kanji}` adjacency check) found 9 wrong-reading or split-compound issues. All patched via `scripts/fix-allLevels-native-review.py`, each with byte-identity reverification:
+
+| File | Issue | Before | After |
+|---|---|---|---|
+| N1/gotoki | 古風 split | text{古} + ruby{風→かぜ} | ruby{古風→こふう} |
+| N1/ga-hayai-ka | 瞬間 split | text{瞬} + ruby{間→あいだ} | ruby{瞬間→しゅんかん} |
+| N1/ga-hayai-ka | 迅速 split | text{迅} + ruby{速→はや} | ruby{迅速→じんそく} |
+| N1/katawara | 瞬間 split | text{瞬} + ruby{間→あいだ} | ruby{瞬間→しゅんかん} |
+| N1/ya-inaya | 瞬間 split | text{瞬} + ruby{間→あいだ} | ruby{瞬間→しゅんかん} |
+| N1/ya-inaya | 新聞 split | text{新} + ruby{聞→き} | ruby{新聞→しんぶん} |
+| N1/ni-katakunai | 報告書 split | text{報告} + ruby{書→か} | ruby{報告書→ほうこくしょ} |
+| N1/sobakara | 報告書 split | text{報告} + ruby{書→か} | ruby{報告書→ほうこくしょ} |
+| N5/time-expression | 十分 reading | ruby{十分→じゅうぶん} (2×) | ruby{十分→じっぷん} (time-of-day context; prose itself states ぷん reading) |
+
+Sub-optimal-but-not-wrong cases left as-is: 主目的 / 不自然 / 全社員 / 非過去形 split where the trailing single-token ruby reading is independently correct (主目的: ruby on 目的 only; 不自然: ruby on 自然 only; etc.). Single-kanji rubies on verb stems (書→か, 思→おも, 聞→き, etc.) match the N3 reference convention.
+
 ## Verification
 
 - `python3 scripts/apply-allLevels-inline-ruby.py`: exit 0
