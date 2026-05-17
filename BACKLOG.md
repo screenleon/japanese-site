@@ -122,7 +122,7 @@
 | JS-111 | 🔵 active | 同形不同義 grammar 條目合併為多義 entry | schema/model-refactor | 2026-05-15 | user 2026-05-15 proposal during JS-110 disambig-paren discussion |
 | JS-112 | 🔵 active | lint-grammar / lint-vocab Token[] validator 共用化 | schema/refactor | 2026-05-15 | PR-gate finding 2026-05-15 (gate-20260515-231333.md architecture-reviewer medium) |
 | JS-113 | ✅ closed 2026-05-16 | N5+N4 mental_model rollout (77 entries: 39 N5 + 38 N4, JS-041 seeds excluded, native perspective) | content | 2026-05-16 | planning:2026-05-16 |
-| JS-114 | 🔵 active | Cross-level inventory dedup: N4↔N5 nagara + N4↔N3 te-shimau/kamo-shirenai/hazu-da consolidate-or-split decision | content/schema | 2026-05-17 | JS-100b native review 2026-05-17 |
+| JS-114 | 🔵 active | Cross-level inventory dedup: N4↔N5 nagara + N4↔N3 te-shimau / kamo-shirenai / hazu-da consolidate-or-split decision | content/schema | 2026-05-17 | JS-100b native review 2026-05-17 |
 
 ---
 
