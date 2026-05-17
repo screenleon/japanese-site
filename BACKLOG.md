@@ -122,6 +122,7 @@
 | JS-111 | 🔵 active | 同形不同義 grammar 條目合併為多義 entry | schema/model-refactor | 2026-05-15 | user 2026-05-15 proposal during JS-110 disambig-paren discussion |
 | JS-112 | 🔵 active | lint-grammar / lint-vocab Token[] validator 共用化 | schema/refactor | 2026-05-15 | PR-gate finding 2026-05-15 (gate-20260515-231333.md architecture-reviewer medium) |
 | JS-113 | ✅ closed 2026-05-16 | N5+N4 mental_model rollout (77 entries: 39 N5 + 38 N4, JS-041 seeds excluded, native perspective) | content | 2026-05-16 | planning:2026-05-16 |
+| JS-114 | 🔵 active | Cross-level inventory dedup: N4↔N5 nagara + N4↔N3 te-shimau/kamo-shirenai/hazu-da consolidate-or-split decision | content/schema | 2026-05-17 | JS-100b native review 2026-05-17 |
 
 ---
 
@@ -1407,3 +1408,28 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: planning:2026-05-16
 **Related**: JS-042, JS-071, JS-072, JS-063, JS-100b, JS-100c
 <!-- 首次記錄: 2026-05-16 -->
+
+## JS-114 — Cross-level inventory dedup: N4↔N5 nagara + N4↔N3 te-shimau / kamo-shirenai / hazu-da consolidate-or-split decision
+
+**Problem**: After JS-100b N4 pattern regen surfaced the cross-level overlap table, four N4 slugs duplicate (or near-duplicate) sibling files in adjacent levels:
+- `N4/nagara.json` ↔ `N5/nagara-simultaneous.json` — same surface (Vます形＋ながら 同時動作).
+- `N4/te-shimau.json` ↔ `N3/teshimau.json` — same surface; N3 already owns the contracted forms (〜ちゃう／〜じゃう).
+- `N4/kamo-shirenai.json` ↔ `N3/kamoshirenai.json` — same surface; N3 owns the contrastive-confidence pairing with `ni-chigainai`.
+- `N4/hazu-da.json` ↔ `N3/hazuda.json` — same surface; `N3/hazuganai.json` owns the negative form.
+
+JS-100b worked around this by authoring N4 as the "basic / canonical register" owner and adding cross-references in `notes_zh`. That is a defensible interim shape but not the long-term resting state.
+
+**Why**: With N4 v2 content shipped, learner navigation will start surfacing both files (e.g., search for ながら returns two entries with overlapping pattern[] rows). Either the duplicate file should be removed and content consolidated, or each file should own a clearly distinct sub-pattern in its `pattern[]` and `classifier_rules[].contrast`. Choosing requires a content-design decision that goes beyond a single-PR scope and is not appropriate to defer indefinitely (per [[known-bug backlog rule]]).
+
+**Requirement**:
+1. Decide per slug: **consolidate** (one file owns, the other is deleted, learner navigation collapses) OR **split** (both files retained, each `pattern[]` and gloss/notes are sharpened to own only its sub-pattern — e.g., N4 owns the basic form, N3 owns 〜ちゃう／〜じゃう as its own pattern row, with no overlap in `pattern[].form` strings).
+2. Plan the corpus surgery (deletions, schema migration, search/index implications, `classifier_rules[].with_slug` references in surrounding files).
+3. Execute the consolidate-or-split per decision, in one PR per slug or one PR per cluster (sizing decision deferred until step 1 lands).
+
+**Done when**: every N4 slug listed above has a documented owner-role in `DECISIONS.md`, redundant content removed from the non-owner file, and `pattern[].form` strings do not overlap across sibling files.
+
+**Tags**: P2, content, schema-design, inventory-cleanup
+**Source**: JS-100b native review 2026-05-17 (audit at audits/js-100b-n4-pattern-native-review-2026-05-17.md §跨檔/系統性觀察 ¶6)
+**Blocked-on**: JS-100b merge (current PR); JS-101 (N2/N1 v2 uplift) before deciding consolidate vs split, since N2/N1 may surface additional sibling overlaps
+**Related**: JS-100b, JS-100c, JS-101, JS-103
+<!-- 首次記錄: 2026-05-17 -->
