@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "（前文）。だから／ですから＋文",
+      "gloss_zh": "承接前一句理由，導出結果、判斷或請求",
+      "notes_zh": "前置詞句使用「〜から」見 N5 kara-reason；本條為承前句的連接副詞用法"
     }
   ],
   "explanation_ja_blocks": [
@@ -162,6 +163,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

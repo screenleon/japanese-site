@@ -6,8 +6,13 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vた形＋ほうがいい",
+      "gloss_zh": "建議最好做某事",
+      "notes_zh": "雖然意思面向未來，動詞常用た形，語氣可帶提醒或勸告"
+    },
+    {
+      "form": "Vない形＋ほうがいい",
+      "gloss_zh": "建議最好不要做某事"
     }
   ],
   "explanation_ja_blocks": [
@@ -157,6 +162,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

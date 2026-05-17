@@ -6,8 +6,19 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vて形＋いる",
+      "gloss_zh": "表示動作正在進行",
+      "notes_zh": "丁寧形「ています」見 N5 te-imasu"
+    },
+    {
+      "form": "Vて形＋いる",
+      "gloss_zh": "表示反覆習慣或目前持續的狀態",
+      "notes_zh": "丁寧形「ています」見 N5 te-imasu"
+    },
+    {
+      "form": "Vて形＋いる",
+      "gloss_zh": "表示動作完成後留下的結果狀態",
+      "notes_zh": "多見於自動詞，如「開いている」「結婚している」；丁寧形「ています」見 N5 te-imasu"
     }
   ],
   "explanation_ja_blocks": [
@@ -174,6 +185,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

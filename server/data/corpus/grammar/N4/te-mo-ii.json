@@ -6,8 +6,13 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vて形＋もいい",
+      "gloss_zh": "表示允許做某事或做某事也沒關係"
+    },
+    {
+      "form": "Vて形＋もいいですか",
+      "gloss_zh": "用於詢問是否可以做某事",
+      "notes_zh": "是請求許可的常用形式"
     }
   ],
   "explanation_ja_blocks": [
@@ -140,6 +145,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

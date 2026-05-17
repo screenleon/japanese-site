@@ -6,8 +6,13 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋って",
+      "gloss_zh": "口語引用或轉述聽到的內容",
+      "notes_zh": "較正式書面語通常用「と」或「という」"
+    },
+    {
+      "form": "N＋って",
+      "gloss_zh": "口語提示話題，表示「說到……／所謂……」"
     }
   ],
   "explanation_ja_blocks": [
@@ -153,6 +158,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

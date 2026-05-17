@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋ものだ",
+      "gloss_zh": "表示一般道理、常識或本來就是如此",
+      "notes_zh": "名詞通常不直接接；な形容詞常用「なものだ」"
+    },
+    {
+      "form": "Vた形＋ものだ",
+      "gloss_zh": "回想過去常常做的事或曾經的狀態",
+      "notes_zh": "帶有懷念或感慨，不只是單純過去事實"
     }
   ],
   "explanation_ja_blocks": [
@@ -175,6 +181,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vて形＋もらう",
+      "gloss_zh": "表示請別人為自己做某事，並從中得到好處",
+      "notes_zh": "主語通常是受惠者；常搭配「人に」標示動作者"
     }
   ],
   "explanation_ja_blocks": [
@@ -127,6 +128,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

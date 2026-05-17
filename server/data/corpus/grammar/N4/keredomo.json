@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形／丁寧形＋けれども／けど",
+      "gloss_zh": "連接轉折、對比或鋪墊背景",
+      "notes_zh": "「けど」較口語，「けれども」較完整；也可用在句尾柔化語氣"
     }
   ],
   "explanation_ja_blocks": [
@@ -157,6 +158,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋かもしれない",
+      "gloss_zh": "表示也許如此，可能性存在但不確定",
+      "notes_zh": "名詞・な形容詞通常省略「だ」後接「かもしれない」；丁寧形「かもしれません」常用；確信度比較見 N3 kamoshirenai 與 ni-chigainai"
     }
   ],
   "explanation_ja_blocks": [
@@ -153,6 +154,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

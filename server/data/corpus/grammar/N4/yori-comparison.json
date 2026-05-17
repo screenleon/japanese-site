@@ -6,8 +6,13 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋より",
+      "gloss_zh": "標示比較基準，表示比該名詞更如何"
+    },
+    {
+      "form": "N＋より＋N＋のほうが＋Adj",
+      "gloss_zh": "表示和前項相比，後項更具有某性質",
+      "notes_zh": "基本比較句型是「AよりBのほうが〜」"
     }
   ],
   "explanation_ja_blocks": [
@@ -101,6 +106,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

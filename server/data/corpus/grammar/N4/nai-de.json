@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vない形＋で",
+      "gloss_zh": "表示不做前項，就在那種狀態下做後項",
+      "notes_zh": "禁止請求形「ないでください」見同級 nai-de-kudasai；本用法不是命令，而是描述並行狀況或方式"
     }
   ],
   "explanation_ja_blocks": [
@@ -101,6 +102,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vた形＋ことがある",
+      "gloss_zh": "表示過去曾經有做過某事的經驗",
+      "notes_zh": "談經驗有無，不用於剛才發生的一次事件；否定常用「Vた形＋ことがない」"
     }
   ],
   "explanation_ja_blocks": [
@@ -119,6 +120,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

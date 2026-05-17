@@ -6,8 +6,16 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vている形＋うちに",
+      "gloss_zh": "趁某動作或狀態正在持續時做後項"
+    },
+    {
+      "form": "いAdj＋うちに／なAdj＋な＋うちに／N＋の＋うちに",
+      "gloss_zh": "趁某性質、狀態或期間還成立時做後項"
+    },
+    {
+      "form": "Vない形＋うちに",
+      "gloss_zh": "趁某事還沒發生以前做後項"
     }
   ],
   "explanation_ja_blocks": [
@@ -148,6 +156,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

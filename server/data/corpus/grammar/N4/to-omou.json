@@ -6,8 +6,13 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋と思う",
+      "gloss_zh": "表示說話者的想法、意見或推測",
+      "notes_zh": "名詞・な形容詞通常保留「だ」，如「学生だと思う」"
+    },
+    {
+      "form": "普通形＋と思っている",
+      "gloss_zh": "表示較持續的想法、信念或打算"
     }
   ],
   "explanation_ja_blocks": [
@@ -177,6 +182,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

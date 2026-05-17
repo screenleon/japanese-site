@@ -6,8 +6,18 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vます形語幹＋すぎる",
+      "gloss_zh": "表示動作或狀態超過適當程度"
+    },
+    {
+      "form": "いAdj語幹＋すぎる",
+      "gloss_zh": "表示性質程度太過",
+      "notes_zh": "い形容詞去「い」後接；「いい」通常作「よすぎる」"
+    },
+    {
+      "form": "なAdj＋すぎる",
+      "gloss_zh": "表示な形容詞所示性質太過",
+      "notes_zh": "直接接語幹，如「静かすぎる」「便利すぎる」"
     }
   ],
   "explanation_ja_blocks": [
@@ -149,6 +159,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

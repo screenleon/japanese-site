@@ -6,8 +6,13 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋までに",
+      "gloss_zh": "表示在某個期限以前完成一次性動作",
+      "notes_zh": "N 多為時間點或期限；「まで」表示持續到該時點，「までに」表示最晚完成時限"
+    },
+    {
+      "form": "V辞書形＋までに",
+      "gloss_zh": "表示在某動作或事件發生以前完成後項"
     }
   ],
   "explanation_ja_blocks": [
@@ -144,6 +149,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

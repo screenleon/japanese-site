@@ -6,8 +6,13 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋わけだ",
+      "gloss_zh": "理解理由後，表示結果自然如此或難怪如此",
+      "notes_zh": "名詞・な形容詞常接「なわけだ」；用於整理因果，不是單純主張"
+    },
+    {
+      "form": "普通形＋というわけだ",
+      "gloss_zh": "換句話說，歸納前文得到某結論"
     }
   ],
   "explanation_ja_blocks": [
@@ -139,6 +144,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

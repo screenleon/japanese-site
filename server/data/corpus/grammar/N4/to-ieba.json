@@ -6,8 +6,13 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋といえば／といったら",
+      "gloss_zh": "表示說到某話題，就引出相關聯想或代表例"
+    },
+    {
+      "form": "普通形＋といえば",
+      "gloss_zh": "承接對方或前文提到的內容，轉入相關話題",
+      "notes_zh": "名詞用法最基本；普通形用法較像「說到這件事」的話題接續"
     }
   ],
   "explanation_ja_blocks": [
@@ -157,6 +162,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

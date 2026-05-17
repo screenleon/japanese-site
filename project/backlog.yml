@@ -1673,6 +1673,25 @@ items:
       - Fills the N5+N4 gap in the mental_model rollout family. mental_model coverage now 200/200 across N5/N4/N3/N2/N1 (rollout complete).
       - Shipped on branch feat/js-113-n5-n4-mental-model. audit at audits/js-113-n5-n4-mental-model-codex-pass-2026-05-16.md (0 revisions).
 
+  - id: JS-114
+    title: "Cross-level inventory dedup: N4↔N5 nagara + N4↔N3 te-shimau / kamo-shirenai / hazu-da consolidate-or-split decision"
+    status: todo
+    priority: P2
+    milestone: M3
+    theme: content
+    area: content/schema
+    source: JS-100b native review 2026-05-17
+    blocked_by: [JS-100b, JS-101]
+    related: [JS-100b, JS-100c, JS-101, JS-103]
+    notes:
+      - Four N4 slugs duplicate (or near-duplicate) sibling files in adjacent levels - N4/nagara <-> N5/nagara-simultaneous; N4/te-shimau <-> N3/teshimau; N4/kamo-shirenai <-> N3/kamoshirenai; N4/hazu-da <-> N3/hazuda+hazuganai.
+      - JS-100b authored N4 as the basic/canonical register owner with cross-references in notes_zh; that is a defensible interim shape but not the long-term resting state.
+      - Decide per slug - consolidate (one file owns, the other is deleted) OR split (both files retained, each pattern[] sharpened to own only its sub-pattern, no overlap in pattern[].form strings).
+      - Plan corpus surgery - deletions, schema migration, search/index implications, classifier_rules[].with_slug references in surrounding files.
+      - Done when - every N4 slug has documented owner-role in DECISIONS.md, redundant content removed from non-owner, pattern[].form strings do not overlap across sibling files.
+      - Blocked until JS-100b merges and JS-101 (N2/N1 v2 uplift) lands to surface any additional sibling overlaps.
+      - Source - JS-100b native review 2026-05-17 audit at audits/js-100b-n4-pattern-native-review-2026-05-17.md §跨檔/系統性觀察 ¶6.
+
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.
 done:

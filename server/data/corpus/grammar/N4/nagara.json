@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vます形＋ながら",
+      "gloss_zh": "表示一邊做前項，一邊做後項",
+      "notes_zh": "後項通常是主要動作，前後項主語通常相同"
     }
   ],
   "explanation_ja_blocks": [
@@ -176,6 +177,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }
