@@ -539,9 +539,22 @@ def verify(path: Path, baseline: dict, rewritten: dict) -> None:
     # therefore enforces that every non-explanation field present in baseline
     # is preserved verbatim, but allows the on-disk corpus to carry extra
     # keys (top-level or nested under annotations) without failing.
+    #
+    # Exception: stub-state entries (baseline pattern[*].form == "_TBD" or
+    # audit_status == "pre-redesign") are owned by the JS-100 content-regen
+    # family. For those entries, the `pattern` and `audit_status` fields are
+    # expected to diverge from baseline once content is authored. Skip the
+    # drift check for exactly those two keys when baseline is stub-state;
+    # other non-explanation fields remain protected from tool side effects.
+    baseline_is_stub = baseline.get("audit_status") == "pre-redesign" or any(
+        row.get("form") == "_TBD" for row in baseline.get("pattern", []) or []
+    )
+    stub_owned_keys = {"pattern", "audit_status"} if baseline_is_stub else set()
     base_proj = non_explanation_projection(baseline)
     new_proj = non_explanation_projection(rewritten)
     for key, value in base_proj.items():
+        if key in stub_owned_keys:
+            continue
         if key == "annotations":
             new_ann = new_proj.get("annotations", {}) or {}
             for ak, av in (value or {}).items():
