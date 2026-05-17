@@ -6,8 +6,13 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vて形＋おく",
+      "gloss_zh": "為了之後的目的預先做好某事"
+    },
+    {
+      "form": "Vて形＋おく",
+      "gloss_zh": "讓某狀態保持不變",
+      "notes_zh": "口語常縮約為「〜とく」（しておく→しとく）"
     }
   ],
   "explanation_ja_blocks": [
@@ -105,6 +110,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

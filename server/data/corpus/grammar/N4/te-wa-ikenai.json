@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vて形＋はいけない",
+      "gloss_zh": "表示禁止或不允許做某事",
+      "notes_zh": "丁寧形常作「〜てはいけません」；口語常縮約為「〜ちゃいけない／〜じゃいけない」"
     }
   ],
   "explanation_ja_blocks": [
@@ -88,6 +89,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

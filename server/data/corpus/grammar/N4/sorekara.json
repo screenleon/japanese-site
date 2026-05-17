@@ -6,8 +6,12 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "文＋それから＋文",
+      "gloss_zh": "表示時間順序上的然後、接著"
+    },
+    {
+      "form": "N＋、それから＋N",
+      "gloss_zh": "追加項目或話題，表示還有下一項"
     }
   ],
   "explanation_ja_blocks": [
@@ -135,6 +139,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

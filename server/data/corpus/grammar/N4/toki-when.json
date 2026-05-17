@@ -6,8 +6,17 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋とき",
+      "gloss_zh": "表示做前項時，或即將做前項時",
+      "notes_zh": "Vた形＋とき表示完成後的時點；本條 V辞書形 涵蓋當時與即將時"
+    },
+    {
+      "form": "Vた形＋とき",
+      "gloss_zh": "表示做完前項之後那個時候"
+    },
+    {
+      "form": "N＋の＋とき／いAdj＋とき／なAdj＋な＋とき",
+      "gloss_zh": "表示某名詞、性質或狀態成立的時候"
     }
   ],
   "explanation_ja_blocks": [
@@ -184,6 +193,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

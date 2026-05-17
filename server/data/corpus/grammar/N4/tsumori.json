@@ -6,8 +6,17 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋つもりだ",
+      "gloss_zh": "表示打算或計畫做某事"
+    },
+    {
+      "form": "Vない形＋つもりだ",
+      "gloss_zh": "表示打算不做某事"
+    },
+    {
+      "form": "N＋の＋つもりだ",
+      "gloss_zh": "表示自以為是某身分或狀態",
+      "notes_zh": "如「学生のつもりで勉強する」；與動詞的計畫用法不同"
     }
   ],
   "explanation_ja_blocks": [
@@ -144,6 +153,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

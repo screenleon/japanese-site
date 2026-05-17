@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋でも",
+      "gloss_zh": "舉出一個輕量例子，表示「……之類的」",
+      "notes_zh": "常用於提案，如「お茶でも飲みませんか」；不是限定只能選該名詞"
+    },
+    {
+      "form": "N＋でも",
+      "gloss_zh": "表示連前項這樣的對象也成立",
+      "notes_zh": "「子どもでも分かる」等用法帶有最低限度或意外感"
     }
   ],
   "explanation_ja_blocks": [
@@ -162,6 +168,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

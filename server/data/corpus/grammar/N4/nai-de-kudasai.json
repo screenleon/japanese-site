@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vない形＋でください",
+      "gloss_zh": "表示請對方不要做某事",
+      "notes_zh": "非命令的並行用法見同級 nai-de；比「てはいけません」較像請求"
     }
   ],
   "explanation_ja_blocks": [
@@ -131,6 +132,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

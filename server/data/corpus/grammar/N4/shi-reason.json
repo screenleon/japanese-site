@@ -6,8 +6,13 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋し",
+      "gloss_zh": "列舉理由或事實，暗示還有其他理由",
+      "notes_zh": "名詞・な形容詞接「だし」；單一直接理由「〜から」見 N5 kara-reason；本條偏列舉、含蓄"
+    },
+    {
+      "form": "普通形＋し、普通形＋し",
+      "gloss_zh": "表示又有前項理由，又有後項理由，理由疊加成立"
     }
   ],
   "explanation_ja_blocks": [
@@ -148,6 +153,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

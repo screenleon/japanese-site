@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vて形＋あげる",
+      "gloss_zh": "表示說話者或自己這邊的人為別人做某事",
+      "notes_zh": "帶有施惠語感；對上位者直接說可能顯得把恩惠往自己身上放大"
     }
   ],
   "explanation_ja_blocks": [
@@ -158,6 +159,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

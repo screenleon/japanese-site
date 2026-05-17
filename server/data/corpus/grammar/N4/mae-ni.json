@@ -6,8 +6,13 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋前に",
+      "gloss_zh": "表示在做前項動作之前先做後項",
+      "notes_zh": "動詞固定為辞書形，不能用た形（× 行ったまえに）"
+    },
+    {
+      "form": "N＋の＋前に",
+      "gloss_zh": "表示在某事件、時間或場所之前"
     }
   ],
   "explanation_ja_blocks": [
@@ -164,6 +169,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

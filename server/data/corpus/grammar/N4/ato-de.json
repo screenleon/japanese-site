@@ -6,8 +6,13 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vた形＋後で",
+      "gloss_zh": "表示某動作完成之後，再做後項動作"
+    },
+    {
+      "form": "N＋の＋後で",
+      "gloss_zh": "表示某事件或時間點之後",
+      "notes_zh": "「後で」偏向具體事件之後的時間順序；要表達期限以前用「までに」"
     }
   ],
   "explanation_ja_blocks": [
@@ -125,6 +130,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

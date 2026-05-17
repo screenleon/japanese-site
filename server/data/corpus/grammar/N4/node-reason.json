@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋ので",
+      "gloss_zh": "表示原因或理由，後項是自然結果或說明",
+      "notes_zh": "名詞・な形容詞接「なので」；比「から」柔和，常用於請求或客觀說明"
     }
   ],
   "explanation_ja_blocks": [
@@ -131,6 +132,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

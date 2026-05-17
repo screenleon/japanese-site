@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vて形＋ください",
+      "gloss_zh": "表示禮貌地請對方做某事",
+      "notes_zh": "て形の作り方は N5 te-form 参照；比命令形柔和，但仍是直接請求"
     }
   ],
   "explanation_ja_blocks": [
@@ -145,6 +146,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋んです／のです",
+      "gloss_zh": "用來補充說明理由、背景或情況",
+      "notes_zh": "名詞・な形容詞接「なんです／なのです」；「んです」較口語，「のです」較書面"
+    },
+    {
+      "form": "普通形＋んですか／のですか",
+      "gloss_zh": "要求對方說明原因或背景",
+      "notes_zh": "問句可顯得追問，需注意語氣"
     }
   ],
   "explanation_ja_blocks": [
@@ -148,6 +154,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

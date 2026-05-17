@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vて形＋みる",
+      "gloss_zh": "表示先試著做某事，觀察結果如何",
+      "notes_zh": "不是「看」的實義動詞，而是試行；丁寧形常作「〜てみます」"
     }
   ],
   "explanation_ja_blocks": [
@@ -137,6 +138,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

@@ -6,8 +6,9 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋べきだ",
+      "gloss_zh": "表示基於道理、規則或責任判斷應該做某事",
+      "notes_zh": "「する」可用「するべきだ」或較凝縮的「すべきだ」；直接對人使用語氣較強"
     }
   ],
   "explanation_ja_blocks": [
@@ -184,6 +185,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }
