@@ -284,7 +284,7 @@
   "_meta": {
     "source": "curated",
     "license": "CC-BY-SA-4.0",
-    "validated_by": "import-curated-v1",
+    "validated_by": "native-reviewer-v1",
     "validator_score": 1
   },
   "annotations": {
@@ -323,6 +323,55 @@
         {
           "kanji": "希望",
           "reading": "きぼう"
+        }
+      ]
+    },
+    "classifier": {
+      "rules": [
+        {
+          "with_pattern": "はずがない",
+          "rule_ja_blocks": [
+            {
+              "kind": "paragraph",
+              "tokens": [
+                {
+                  "t": "text",
+                  "v": "「はずだ」は根拠から見て「そうだろう」と肯定的に判断します。「はずがない」は同じ根拠判断でも、「そうである可能性はない」と強く否定します。"
+                }
+              ]
+            }
+          ],
+          "rule_zh": "「はずだ」是照理應該；「はずがない」是照理不可能。",
+          "examples": [
+            {
+              "use_this": "田中さんはもう着いたはずです。",
+              "use_alt": "田中さんがもう着いたはずがありません。",
+              "gloss_zh": "前者表示照理已到；後者表示照理不可能已到。"
+            }
+          ]
+        },
+        {
+          "with_pattern": "わけだ",
+          "with_slug": "wake-da",
+          "rule_ja_blocks": [
+            {
+              "kind": "paragraph",
+              "tokens": [
+                {
+                  "t": "text",
+                  "v": "「はずだ」は情報から予測して「当然そうだ」と見る表現です。「わけだ」は前に出た事情を受けて、「だからそういう結論になるのか」と納得する表現です。"
+                }
+              ]
+            }
+          ],
+          "rule_zh": "「はずだ」偏向推測應然；「わけだ」偏向理解原因後的邏輯結論。",
+          "examples": [
+            {
+              "use_this": "店の電気が消えているから、今日は休みのはずです。",
+              "use_alt": "店長が出張中です。だから今日は休みなわけです。",
+              "gloss_zh": "前者由跡象推測；後者由原因理解結論。"
+            }
+          ]
         }
       ]
     }

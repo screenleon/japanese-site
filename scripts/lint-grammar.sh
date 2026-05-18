@@ -68,7 +68,7 @@ const legacyHints = {
   validator_score: "move to _meta.validator_score",
   key_terms: "move to annotations.furigana.vocabulary",
 };
-const pocSlugs = new Set(["youni-naru", "hazuda", "monono", "youni-suru"]);
+const pocSlugs = new Set(["youni-naru", "youni-suru"]);
 const tokenKinds = new Set(["text", "ruby", "term"]);
 const blockKinds = new Set(["paragraph", "list", "callout"]);
 const calloutTones = new Set(["info", "warn", "tip"]);
@@ -450,11 +450,18 @@ function validateFile(file) {
       for (const to of gp.related_slugs) related.push([gp.slug, to]);
     }
   }
-  if (gp.audit_status !== undefined && gp.audit_status !== "pre-redesign") {
-    fail(rel, 'audit_status must equal exactly "pre-redesign" when present');
+  if (
+    gp.audit_status !== undefined &&
+    gp.audit_status !== "pre-redesign" &&
+    gp.audit_status !== "post-dedup-naive"
+  ) {
+    fail(rel, 'audit_status must be one of "pre-redesign" or "post-dedup-naive" when present');
   }
-  if (pocSlugs.has(gp.slug) && gp.audit_status === "pre-redesign") {
-    fail(rel, "PoC entries must not carry audit_status: pre-redesign");
+  if (
+    pocSlugs.has(gp.slug) &&
+    (gp.audit_status === "pre-redesign" || gp.audit_status === "post-dedup-naive")
+  ) {
+    fail(rel, 'PoC entries must not carry audit_status: "pre-redesign" or "post-dedup-naive"');
   }
   const hasTBD = Array.isArray(gp.pattern) && gp.pattern.some((row) => row?.form === "_TBD" || row?.gloss_zh === "待補");
   if (hasTBD && gp.audit_status !== "pre-redesign") {
