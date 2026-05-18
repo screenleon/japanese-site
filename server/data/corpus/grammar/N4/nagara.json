@@ -1,7 +1,7 @@
 {
   "slug": "nagara",
   "title_ja": "ながら",
-  "title_zh": "ながら（一邊）",
+  "title_zh": "ながら（一邊）\n\n---\n(merged from N5/nagara-simultaneous)\n\nながら（一邊……一邊……）",
   "jlpt_level": "N4",
   "schema_version": 2,
   "pattern": [
@@ -9,6 +9,10 @@
       "form": "Vます形＋ながら",
       "gloss_zh": "表示一邊做前項，一邊做後項",
       "notes_zh": "後項通常是主要動作，前後項主語通常相同"
+    },
+    {
+      "form": "_TBD",
+      "gloss_zh": "待補"
     }
   ],
   "explanation_ja_blocks": [
@@ -124,9 +128,99 @@
           "v": "になります。"
         }
       ]
+    },
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ながら」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "二つ",
+          "r": "ふたつ"
+        },
+        {
+          "t": "text",
+          "v": "の"
+        },
+        {
+          "t": "ruby",
+          "k": "動作",
+          "r": "どうさ"
+        },
+        {
+          "t": "text",
+          "v": "を同時にすることを表します。"
+        },
+        {
+          "t": "ruby",
+          "k": "動詞",
+          "r": "どうし"
+        },
+        {
+          "t": "text",
+          "v": "の"
+        },
+        {
+          "t": "ruby",
+          "k": "ます形",
+          "r": "ますけい"
+        },
+        {
+          "t": "text",
+          "v": "から「ます」を取って、「"
+        },
+        {
+          "t": "ruby",
+          "k": "音楽",
+          "r": "おんがく"
+        },
+        {
+          "t": "text",
+          "v": "を"
+        },
+        {
+          "t": "ruby",
+          "k": "聞",
+          "r": "き"
+        },
+        {
+          "t": "text",
+          "v": "きながら"
+        },
+        {
+          "t": "ruby",
+          "k": "勉強",
+          "r": "べんきょう"
+        },
+        {
+          "t": "text",
+          "v": "します」や「歩きながら話します」のように使います。主な"
+        },
+        {
+          "t": "ruby",
+          "k": "動作",
+          "r": "どうさ"
+        },
+        {
+          "t": "text",
+          "v": "は"
+        },
+        {
+          "t": "ruby",
+          "k": "後ろ",
+          "r": "うしろ"
+        },
+        {
+          "t": "text",
+          "v": "の文に来ます。"
+        }
+      ]
     }
   ],
-  "explanation_zh": "「動詞ます形語幹 + ながら」表示兩個動作同時進行，意思是「一邊……一邊……」。後面的動作通常是主要動作。",
+  "explanation_zh": "「動詞ます形語幹 + ながら」表示兩個動作同時進行，意思是「一邊……一邊……」。後面的動作通常是主要動作。\n\n---\n(merged from N5/nagara-simultaneous)\n\n「ながら」接在動詞ます形去掉ます之後，表示同一主語同時做兩個動作。",
   "_meta": {
     "source": "curated",
     "license": "CC-BY-SA-4.0",
@@ -139,6 +233,25 @@
         "て"
       ],
       "error_class": "wrong-pattern",
+      "contrast": null
+    },
+    {
+      "if_answer_contains_any": [
+        "て"
+      ],
+      "error_class": "used-te-form",
+      "contrast": null
+    },
+    {
+      "if_answer_suffix_any": [
+        "ます"
+      ],
+      "error_class": "kept-masu",
+      "contrast": null
+    },
+    {
+      "default": true,
+      "error_class": "wrong-simultaneous-form",
       "contrast": null
     }
   ],
@@ -177,5 +290,6 @@
         }
       ]
     }
-  }
+  },
+  "audit_status": "post-dedup-naive"
 }
