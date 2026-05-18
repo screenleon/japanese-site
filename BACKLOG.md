@@ -123,6 +123,8 @@
 | JS-112 | 🔵 active | lint-grammar / lint-vocab Token[] validator 共用化 | schema/refactor | 2026-05-15 | PR-gate finding 2026-05-15 (gate-20260515-231333.md architecture-reviewer medium) |
 | JS-113 | ✅ closed 2026-05-16 | N5+N4 mental_model rollout (77 entries: 39 N5 + 38 N4, JS-041 seeds excluded, native perspective) | content | 2026-05-16 | planning:2026-05-16 |
 | JS-114 | 🔵 active | Cross-level inventory dedup: N4↔N5 nagara + N4↔N3 te-shimau / kamo-shirenai / hazu-da consolidate-or-split decision | content/schema | 2026-05-17 | JS-100b native review 2026-05-17 |
+| JS-114b | 🔵 active | editorial polish on JS-114a merged entries + native-review re-authorization | content | 2026-05-18 | JS-114a P3 |
+| JS-115 | 🔵 active | Grammar reading UI restructure | frontend | 2026-05-18 | user feedback 2026-05-18 |
 
 ---
 
@@ -1433,3 +1435,38 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 **Blocked-on**: JS-100b merge (current PR); JS-101 (N2/N1 v2 uplift) before deciding consolidate vs split, since N2/N1 may surface additional sibling overlaps
 **Related**: JS-100b, JS-100c, JS-101, JS-103
 <!-- 首次記錄: 2026-05-17 -->
+
+## JS-114b — editorial polish on JS-114a merged entries + native-review re-authorization
+
+**Problem**: P3 editorial follow-up is still blocked on post-dedup cleanup. The existing merged entries carry interim wording and provisional metadata from earlier edits.
+
+**Why**: JS-114a intentionally separated schema migration and corpus renames from prose polish. Learner-facing content quality still needs one focused pass before next content wave.
+
+**Requirement**:
+1. Polish 5 post-dedup-naive entries (N4/hazu-da, N4/kamo-shirenai, N4/te-shimau, N2/mono-no, N4/nagara): remove `(merged from <path>)` markers; integrate prose.
+2. Differentiate N3/mono-da-norm (basic social norm) vs N2/mono-da-emotion (admiration / というものだ).
+3. Differentiate N3/wake-da-result (basic conclusion) vs N2/wake-da-nuance.
+4. Author NEW entry N3/nagara-contrast (逆接 ながら); distinguish from noni/keredomo.
+5. REVERT the `_meta.validated_by: "native-reviewer-v1"` stamp on N4/hazu-da and re-author inherited classifier contrasts.
+6. Re-run native review pass for the five entries.
+
+**Tags**: P2, content
+**Source**: JS-114a P3
+<!-- 首次記錄: 2026-05-18 -->
+
+## JS-115 — Grammar reading UI restructure
+
+**Problem**: The current grammar reading layout mixes multiple annotation blocks under one grid, with furigana and core note types competing for cognitive priority.
+
+**Why**: The user requested clearer study flow: phrase-level info should read top-down in semantic order, with meta blocks decoupled from structural examples.
+
+**Requirement**:
+1. Pull furigana out of `EntryAnnotations` grid into independent block directly under title.
+2. Split `mental_model` (考え方のヒント) into independent block.
+3. Split `nuance_note` (ニュアンス) into independent block.
+4. Move examples directly below 句型.
+5. Add entry_type schema field (form / category / concept) to skip furigana rendering for meta-grammar entries.
+
+**Tags**: P3, frontend, grammar
+**Source**: user feedback 2026-05-18
+<!-- 首次記錄: 2026-05-18 -->

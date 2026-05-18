@@ -3,6 +3,21 @@
 This file records active architectural and behavioral decisions for this repository.
 Agents must read it before planning or implementation tasks.
 
+## 2026-05-18 — JS-114a cross-level grammar dedup + slug standardization (breaking URL change under audience-of-one API-002 override)
+
+**Context**: JS-114a P1+P2 landed cross-level grammar slug and JLPT-level normalization for 11 grammar entries, including both moved slugs and canonical splits/merges (mono-no family). This requires production URL-key changes in `/grammar/{slug}` and quiz selection by slug. It is part of the same workstream as `JS-114a` and is intentionally not additive in URL surface.
+
+**Decision**: Treat this as a controlled breaking URL change under the project’s audience-of-one API-002 override, and ship it with `/api/version.milestone = M3-C6`.
+
+**Rationale**:
+- **Scope (audience-of-one)**: japanese-site is a personal study tool with a single user (`feedback_japanese_site_audience` memory); no external clients rely on the URL surface, so URL-breaking changes do not require additive evolution per the per-PR audience-of-one carve-out documented at `feedback_api002_audience_of_one_override`.
+- **Breaking-change preference**: per the project's standing preference for clean schema-level changes over compat hacks (`feedback_breaking_change_for_maintainability`), 9 grammar slugs are renamed and 7 entries change JLPT level; SRS deep-link URLs (e.g. `/grammar/N3/teshimau`) will 404 until clients refresh.
+- **Cached-client blast radius**: minimal — single browser cache on local device.
+  The `/api/version` milestone bump M3-C5 → M3-C6 surfaces the schema change to any client cache that checks the version field on startup.
+- **Rollback plan**: `git revert` the PR's merge commit. Migration 0022 includes a documented down-strategy; `/api/version` downgrades to M3-C5; no client-side migration is required since corpus is the source of truth for slug existence.
+
+Affected slugs: N3 hazuda → N4 hazu-da; N3 hazuganai → N4 hazu-ga-nai; N3 kamoshirenai → N4 kamo-shirenai; N3 teshimau → N4 te-shimau; N4 mono-da → N3 mono-da-norm; N2 monoda → N2 mono-da-emotion; N4 wake-da → N3 wake-da-result; N2 wakeda → N2 wake-da-nuance; N3 monono → N2 mono-no; N2 monono-formal → N2 mono-no; N5 nagara-simultaneous → N4 nagara.
+
 ## 2026-05-16 — Optional N5/N4 Chinese mental model scaffold
 
 **Context**: JS-113 added Japanese `annotations.mental_model` strings for N5/N4, but JLPT-001 review noted that some Japanese meta-language is above the comfort boundary for low-level entries. The chosen Phase-A spike adds Traditional Chinese scaffolding for N5/N4 only while keeping N3/N2/N1 Japanese-only.
