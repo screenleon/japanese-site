@@ -61,7 +61,7 @@ The schema is more verbose, and mechanical migrations create many `audit_status:
 
 ## Migration Path
 
-This spike hand-authors four N3 PoC entries: `youni-naru`, `hazuda`, `monono`, and `youni-suru`. The remaining grammar corpus is mechanically converted to v2 envelopes with `_TBD` pattern stubs where needed and `audit_status: "pre-redesign"`.
+This spike hand-authors four N3 PoC entries: `youni-naru`, `hazu-da`, `mono-no`, and `youni-suru`. The remaining grammar corpus is mechanically converted to v2 envelopes with `_TBD` pattern stubs where needed and `audit_status: "pre-redesign"`.
 
 Downstream tickets own full N5/N4/N3 regeneration, N2/N1 gradual uplift, SQLite shadow-column removal, and full classifier contrast rollout.
 

@@ -3,3 +3,8 @@
 {"text_ja":"この店は少し高い___。","text_zh":"這家店可能有點貴。","blank":"かもしれない","is_correct":1,"hint":"い形容詞 + かもしれない","source":"curated","license":"CC-BY-SA-4.0"}
 {"text_ja":"明日は休み___。","text_zh":"明天也許是假日。","blank":"かもしれません","is_correct":1,"hint":"名詞は「だ」を付けない","source":"curated","license":"CC-BY-SA-4.0"}
 {"text_ja":"この答えは正しくない___。","text_zh":"這個答案可能不正確。","blank":"かもしれません","is_correct":1,"hint":"確かではない可能性","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"午後から雨が降る___しれません。","text_zh":"下午可能會下雨。","blank":"かも","is_correct":1,"hint":"はっきり分からない可能性","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この問題は少し難しい___しれない。","text_zh":"這個問題也許有點難。","blank":"かも","is_correct":1,"hint":"可能性がある","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"田中さんはもう帰った___しれません。","text_zh":"田中也許已經回去了。","blank":"かも","is_correct":1,"hint":"た形 + かもしれない","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"道が混んでいるので、少し遅れる___しれません。","text_zh":"路上很塞，所以可能會晚一點。","blank":"かも","is_correct":1,"hint":"不確かな予定","source":"curated","license":"CC-BY-SA-4.0"}
+{"text_ja":"この店は今日は休み___しれない。","text_zh":"這間店今天也許休息。","blank":"かも","is_correct":1,"hint":"名詞の後","source":"curated","license":"CC-BY-SA-4.0"}
