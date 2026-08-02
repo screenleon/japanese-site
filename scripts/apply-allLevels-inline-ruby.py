@@ -26,7 +26,7 @@ from pathlib import Path
 
 # Non-explanation field freeze + explanation source text for ruby regen.
 # Rebaselined after JS-114a merge-marker cleanup (was 03ac4ddc… / 769122b…).
-BASE = "c1ef2569b2a4758abe1a2df5b5255a809aaf4716"
+BASE = "d7dc2f1a94f5e50deb516434b9b645d18743265c"
 LEVELS = ("N5", "N4", "N2", "N1")
 # Post JS-114a cross-level dedup inventory (nagara-simultaneous absorbed into N4/nagara, etc.).
 # Guard fails if a level drifts from these counts so silent corpus shrink/grow is caught.
