@@ -1660,4 +1660,3 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 **Source**: docs/adr/0005-kokugo-track.md
 **Blocked by**: JS-132
 <!-- 首次記錄: 2026-08-02 -->
-

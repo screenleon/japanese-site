@@ -436,6 +436,15 @@ func TestMigrate_0018_FeedbackTemplateDokorokaRekey(t *testing.T) {
 }
 
 func TestMigrate_0022_GrammarSlugDedupPreservation(t *testing.T) {
+	// Behavior: JS-114a slug renames preserve questions, attempts, feedback,
+	// grammar examples, and read_log counters through collision and pure-rename paths.
+	//
+	// Steps:
+	// 1. Migrate through 0021 and seed source/destination grammar rows, examples,
+	//    questions (including old deterministic ids), attempts, feedback, and read_log.
+	// 2. Apply remaining migrations (including 0022 SQL + question-id rekey).
+	// 3. Assert no question/attempt loss, rekeyed grammar_point fields, examples
+	//    reattached to the canonical slug, and question ids match corpus.QuestionID.
 	db := newMemoryDB(t)
 	defer db.Close()
 
@@ -528,21 +537,28 @@ func TestMigrate_0022_GrammarSlugDedupPreservation(t *testing.T) {
 	if qCount != 5 {
 		t.Fatalf("question count = %d, want 5 (no deletes)", qCount)
 	}
-	assertQ := func(id, wantGP, wantLevel string) {
+	assertByPrompt := func(prompt, wantGP, wantLevel string) {
 		t.Helper()
-		var gp, level string
-		if err := db.QueryRow(`SELECT grammar_point, jlpt_level FROM question WHERE id=?`, id).Scan(&gp, &level); err != nil {
-			t.Fatalf("load question %s: %v", id, err)
+		var id, gp, level string
+		if err := db.QueryRow(
+			`SELECT id, grammar_point, jlpt_level FROM question WHERE prompt=?`,
+			prompt,
+		).Scan(&id, &gp, &level); err != nil {
+			t.Fatalf("load question prompt=%s: %v", prompt, err)
 		}
 		if gp != wantGP || level != wantLevel {
-			t.Fatalf("question %s = %s/%s, want %s/%s", id, level, gp, wantLevel, wantGP)
+			t.Fatalf("question %s = %s/%s, want %s/%s", prompt, level, gp, wantLevel, wantGP)
+		}
+		wantID := corpus.QuestionID(wantGP, prompt, "ans")
+		if id != wantID {
+			t.Fatalf("question id for %s = %s, want deterministic %s", prompt, id, wantID)
 		}
 	}
-	assertQ("q-monono-1", "mono-no", "N2")
-	assertQ("q-monono-2", "mono-no", "N2")
-	assertQ("q-formal-1", "mono-no", "N2")
-	assertQ("q-target-1", "mono-no", "N2")
-	assertQ("q-hazuganai-1", "hazu-ga-nai", "N4")
+	assertByPrompt("prompt-q-monono-1", "mono-no", "N2")
+	assertByPrompt("prompt-q-monono-2", "mono-no", "N2")
+	assertByPrompt("prompt-q-formal-1", "mono-no", "N2")
+	assertByPrompt("prompt-q-target-1", "mono-no", "N2")
+	assertByPrompt("prompt-q-hazuganai-1", "hazu-ga-nai", "N4")
 
 	// attempts still attached (CASCADE would have removed them if questions deleted)
 	var attemptCount int
@@ -551,6 +567,31 @@ func TestMigrate_0022_GrammarSlugDedupPreservation(t *testing.T) {
 	}
 	if attemptCount != 3 {
 		t.Fatalf("attempt count = %d, want 3", attemptCount)
+	}
+	// Seeded attempts must reference rekeyed ids, not the pre-migration seeds.
+	for _, oldID := range []string{"q-monono-1", "q-formal-1", "q-hazuganai-1"} {
+		var n int
+		_ = db.QueryRow(`SELECT COUNT(*) FROM attempt WHERE question_id=?`, oldID).Scan(&n)
+		if n != 0 {
+			t.Fatalf("attempt still points at pre-rekey id %s", oldID)
+		}
+	}
+	// Each seeded attempt must land on the deterministic post-rename id.
+	for _, tc := range []struct {
+		gp, prompt string
+	}{
+		{"mono-no", "prompt-q-monono-1"},
+		{"mono-no", "prompt-q-formal-1"},
+		{"hazu-ga-nai", "prompt-q-hazuganai-1"},
+	} {
+		want := corpus.QuestionID(tc.gp, tc.prompt, "ans")
+		var n int
+		if err := db.QueryRow(`SELECT COUNT(*) FROM attempt WHERE question_id=?`, want).Scan(&n); err != nil {
+			t.Fatalf("attempt count for %s: %v", want, err)
+		}
+		if n != 1 {
+			t.Fatalf("attempt count for rekeyed id %s = %d, want 1", want, n)
+		}
 	}
 
 	// --- feedback templates ---

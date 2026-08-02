@@ -20,6 +20,13 @@ const fixturePath = join(
 );
 
 describe("kokugoTypes / corpus fixture", () => {
+  // Behavior: Kokugo type exports and the library-use L1 fixture stay aligned
+  // with ADR-0005 closed v1 enums and the four task kinds.
+  //
+  // Steps:
+  // 1. Assert schema version and closed enum membership for stage/support/tasks.
+  // 2. Load server/data/corpus/kokugo/e5-6/library-use.json as KokugoUnit.
+  // 3. Assert stage, task kinds, Block text, and _meta provenance fields.
   it("exports v1 closed enums from ADR-0005", () => {
     expect(KOKUGO_SCHEMA_VERSION).toBe(1);
     expect([...KOKUGO_STAGES_V1]).toEqual(["e5-6"]);

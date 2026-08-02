@@ -39,7 +39,7 @@ Every learner session combines:
 
 These axes are independent. Support may inject furigana, in-Japanese glosses, and Chinese reveal defaults; it must not rewrite the stage’s cognitive demand into “childish tasks.”
 
-Reserved stage enum (content not authored in v1):  
+Reserved stage enum (content not authored in v1):
 `e1-2`, `e3-4`, `j1`, `j2`, `j3`, `h-modern`, `h-culture`.
 
 ### Content model (target shape for JS-129)
@@ -99,10 +99,10 @@ interface KokugoTask {
 
 A unit is complete only when the learner has finished:
 
-1. prediction  
-2. reading the passage  
-3. required structured tasks  
-4. artifact draft + checklist  
+1. prediction
+2. reading the passage
+3. required structured tasks
+4. artifact draft + checklist
 5. one revision (save before/after)
 
 North-star metric: weekly completed full cycles (read → evidence → express → revise).

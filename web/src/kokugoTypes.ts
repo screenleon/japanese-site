@@ -99,14 +99,35 @@ export type KokugoTaskPayload =
   | ParagraphRolePayload
   | SummaryChoicePayload;
 
-export interface KokugoTask {
-  id: string;
-  skill: KokugoSkill;
-  kind: KokugoTaskKindV1;
-  payload: KokugoTaskPayload;
-  /** Optional deterministic rubric notes for future graders; free-form for now. */
-  rubric?: Record<string, unknown>;
-}
+export type KokugoTask =
+  | {
+      id: string;
+      skill: KokugoSkill;
+      kind: "predict";
+      payload: PredictPayload;
+      rubric?: Record<string, unknown>;
+    }
+  | {
+      id: string;
+      skill: KokugoSkill;
+      kind: "evidence-highlight";
+      payload: EvidenceHighlightPayload;
+      rubric?: Record<string, unknown>;
+    }
+  | {
+      id: string;
+      skill: KokugoSkill;
+      kind: "paragraph-role";
+      payload: ParagraphRolePayload;
+      rubric?: Record<string, unknown>;
+    }
+  | {
+      id: string;
+      skill: KokugoSkill;
+      kind: "summary-choice";
+      payload: SummaryChoicePayload;
+      rubric?: Record<string, unknown>;
+    };
 
 export interface KokugoArtifact {
   kind: KokugoArtifactKind;

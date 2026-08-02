@@ -15,8 +15,10 @@
 -- | N5        | nagara-simultaneous   | N4        | nagara                |
 --
 -- Preservation policy:
--- 1) question rows always rekey grammar_point + jlpt_level (id is independent PK;
---    never DELETE questions; attempts reference question.id with ON DELETE CASCADE).
+-- 1) question rows always rekey grammar_point + jlpt_level (never bulk-DELETE
+--    questions in SQL). After this file runs, migrate.go rewrites question.id to
+--    corpus.QuestionID(new_slug, prompt, expected) and remounts attempts so a
+--    later seed-corpus orphan sweep does not CASCADE-delete learner history.
 -- 2) feedback_template rekeys grammar_point; on (grammar_point, error_class)
 --    collision keep the destination row and drop only the obsolete source row.
 -- 3) read_log merges counters when both old and new slugs exist, then drops source.

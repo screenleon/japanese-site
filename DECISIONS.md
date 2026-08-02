@@ -25,30 +25,30 @@ Agents must read it before planning or implementation tasks.
    A learner may study `stage=e5-6` with `support=n3`. JLPT level must **not** gate which stage is selectable.
 
 3. **MVP pedagogical loop (v1 unit must implement)**
-   1. Pre-reading prediction  
-   2. Full-text reading (Block[] + optional support overlays)  
-   3. Structured tasks (deterministic grade where possible)  
-   4. Short written artifact + checklist (no LLM score)  
-   5. One revision pass (before/after compare + checklist)  
+   1. Pre-reading prediction
+   2. Full-text reading (Block[] + optional support overlays)
+   3. Structured tasks (deterministic grade where possible)
+   4. Short written artifact + checklist (no LLM score)
+   5. One revision pass (before/after compare + checklist)
    Phase-2 additions (not v1 blockers): evidence highlight UI polish, classmate answers, skill map, read-aloud.
 
-4. **v1 task kinds (closed)**  
-   `predict` · `evidence-highlight` · `paragraph-role` · `summary-choice`  
+4. **v1 task kinds (closed)**
+   `predict` · `evidence-highlight` · `paragraph-role` · `summary-choice`
    Deferred: `classmate-response`, `rewrite` (as separate engine), `read-aloud`, `argument-map`, free multi-text compare.
 
-5. **Grading policy**  
+5. **Grading policy**
    Deterministic span/choice/role checks + artifact checklists only. LLM natural-language grading remains M4 / out of scope for kokugo v1 (same deferral as free-form translation production).
 
-6. **Deployment scope**  
+6. **Deployment scope**
    Full unit cycle (attempts, artifacts, revision) ships in **local API mode only**. Static mode (JS-018) may later browse unit text; it does **not** gain IndexedDB full progress in v1. Revisiting JS-018 for offline progress requires a separate decision.
 
-7. **Audience**  
+7. **Audience**
    v1 remains audience-of-one. Classmate answers are curated content, not multi-user social. No accounts / sync / public multi-learner framing required for MVP.
 
-8. **Content policy**  
+8. **Content policy**
    Units are original, public-domain, or explicitly licensed. MEXT 学習指導要領 / 補習校資料 may inform **lesson structure** only — do not copy textbook passages. Every unit carries `_meta.source` / `license` / optional `validated_by`.
 
-9. **Content volume plan**  
+9. **Content volume plan**
    Do **not** author 12 units before the loop works. Sequence: schema + **1 PoC unit** → 3–4 units → optional expansion. PoC genre: adult-readable expository/opinion on a public theme (e.g. school library use), tone not childish, still tagged `e5-6` for skill shape.
 
 10. **Boundary with existing tickets**
@@ -57,7 +57,7 @@ Agents must read it before planning or implementation tasks.
     - **JS-090** (audio/dictation): optional later dependency for read-aloud; not a v1 blocker.
     - **JS-115**: grammar reading UI only — unrelated numbering collision avoided by using **JS-126+** for kokugo.
 
-11. **Success metric (north star)**  
+11. **Success metric (north star)**
     Weekly count of completed full cycles: 閱讀 → 根據 → 表達 → 修改. Secondary: first-unit completion, 7-day return, revision rate, drop-off step, support-axis usage.
 
 **Rationale**: School 国語 is language-activity centered, not “JLPT with grade labels.” Dual axes preserve adult cognition while scaffolding language. Narrow task surface and local-only progress keep the build inside current architecture without reopening M4 or multi-user product scope.

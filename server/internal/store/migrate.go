@@ -150,6 +150,16 @@ func applyOrVerify(db *DB, name string, body []byte, want string) error {
 	if _, err := tx.Exec(string(body)); err != nil {
 		return fmt.Errorf("apply %s: %w", name, err)
 	}
+	// JS-114a: after slug fields are rekeyed in SQL, rewrite deterministic
+	// question ids so a subsequent curated corpus load does not orphan-sweep
+	// legacy ids and CASCADE-delete learner attempts.
+	if name == "0022_grammar_slug_dedup.sql" {
+		if n, err := rekeyGrammarQuestionIDs(tx); err != nil {
+			return fmt.Errorf("apply %s question id rekey: %w", name, err)
+		} else if n > 0 {
+			slog.Info("rekeyed grammar question ids after slug dedup", "count", n)
+		}
+	}
 	if err := tx.Commit(); err != nil {
 		return fmt.Errorf("commit %s: %w", name, err)
 	}
@@ -159,6 +169,85 @@ func applyOrVerify(db *DB, name string, body []byte, want string) error {
 	// .sql comments.
 	slog.Info("applied migration", "version", name, "checksum", want)
 	return nil
+}
+
+// rekeyGrammarQuestionIDs updates question.id to corpus.QuestionID after
+// grammar_point slug renames so attempt history survives seed-corpus reloads.
+// Returns the number of source rows that required an id change.
+func rekeyGrammarQuestionIDs(tx *sql.Tx) (int, error) {
+	rows, err := tx.Query(`
+		SELECT id, grammar_point, prompt, expected
+		FROM question
+		WHERE content_type = 'grammar'`)
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+
+	type qrow struct {
+		id, gp, prompt, expected string
+	}
+	var list []qrow
+	for rows.Next() {
+		var r qrow
+		if err := rows.Scan(&r.id, &r.gp, &r.prompt, &r.expected); err != nil {
+			return 0, err
+		}
+		list = append(list, r)
+	}
+	if err := rows.Err(); err != nil {
+		return 0, err
+	}
+
+	changed := 0
+	for _, r := range list {
+		want := questionID(r.gp, r.prompt, r.expected)
+		if want == r.id {
+			continue
+		}
+		var destExists int
+		if err := tx.QueryRow(`SELECT COUNT(*) FROM question WHERE id = ?`, want).Scan(&destExists); err != nil {
+			return changed, err
+		}
+		if destExists == 0 {
+			// Clone row under the canonical id, then remount attempts, then drop legacy.
+			if _, err := tx.Exec(`
+				INSERT INTO question (
+					id, kind, jlpt_level, grammar_point, prompt, expected, hint,
+					source, license, validated_by, validator_score, validated_at,
+					created_at, payload, content_type
+				)
+				SELECT
+					?, kind, jlpt_level, grammar_point, prompt, expected, hint,
+					source, license, validated_by, validator_score, validated_at,
+					created_at, payload, content_type
+				FROM question WHERE id = ?`, want, r.id); err != nil {
+				return changed, fmt.Errorf("clone question %s -> %s: %w", r.id, want, err)
+			}
+		}
+		if _, err := tx.Exec(`UPDATE attempt SET question_id = ? WHERE question_id = ?`, want, r.id); err != nil {
+			return changed, fmt.Errorf("move attempts %s -> %s: %w", r.id, want, err)
+		}
+		if _, err := tx.Exec(`DELETE FROM question WHERE id = ?`, r.id); err != nil {
+			return changed, fmt.Errorf("delete obsolete question %s: %w", r.id, err)
+		}
+		changed++
+	}
+	return changed, nil
+}
+
+// questionID mirrors corpus.QuestionID (sha256(slug|trim(prompt)|trim(expected))[:8]
+// as 16 hex chars). Duplicated here to avoid an import cycle: corpus load_test
+// imports store, so store must not import corpus.
+func questionID(slug, prompt, expected string) string {
+	h := sha256.New()
+	h.Write([]byte(slug))
+	h.Write([]byte("|"))
+	h.Write([]byte(strings.TrimSpace(prompt)))
+	h.Write([]byte("|"))
+	h.Write([]byte(strings.TrimSpace(expected)))
+	sum := h.Sum(nil)
+	return hex.EncodeToString(sum[:8])
 }
 
 func checksumOf(body []byte) string {
