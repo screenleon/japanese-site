@@ -435,6 +435,138 @@ func TestMigrate_0018_FeedbackTemplateDokorokaRekey(t *testing.T) {
 	}
 }
 
+func TestMigrate_0022_BackupPreflightRejectsMissingAndNonSQLite(t *testing.T) {
+	// Behavior: with learner attempts present, 0022 must refuse to start unless
+	// ALLOW is set or a verified pre-0022 SQLite backup path is provided.
+	//
+	// Steps:
+	// 1. Migrate through 0021, seed an attempt-bearing question.
+	// 2. Attempt full Migrate with no ALLOW and no backup → error; 0022 not applied.
+	// 3. Point backup at a non-SQLite file → error; with ALLOW=1 → success.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", "")
+	db := newMemoryDB(t)
+	defer db.Close()
+	migrateThrough(t, db, "0021_grammar_v2.sql")
+	if _, err := db.Exec(`INSERT INTO question
+		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+		VALUES ('seed-q', 'cloze', 'N3', 'hazuda', 'p', 'e', 'test', 'CC0', 'grammar')`); err != nil {
+		t.Fatalf("seed q: %v", err)
+	}
+	if _, err := db.Exec(`INSERT INTO attempt (question_id, user_answer, correct) VALUES ('seed-q', 'x', 0)`); err != nil {
+		t.Fatalf("seed attempt: %v", err)
+	}
+
+	if err := Migrate(db); err == nil {
+		t.Fatal("expected migrate to fail without backup/ALLOW")
+	}
+	var applied int
+	_ = db.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&applied)
+	if applied != 0 {
+		t.Fatalf("0022 applied despite preflight failure: %d", applied)
+	}
+
+	// Non-SQLite backup rejected.
+	junk := filepath.Join(t.TempDir(), "not-a-db.txt")
+	if err := os.WriteFile(junk, []byte("hello"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", junk)
+	if err := Migrate(db); err == nil {
+		t.Fatal("expected migrate to fail for non-SQLite backup")
+	}
+
+	// ALLOW opt-in succeeds.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "1")
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", "")
+	if err := Migrate(db); err != nil {
+		t.Fatalf("migrate with ALLOW: %v", err)
+	}
+	_ = db.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&applied)
+	if applied != 1 {
+		t.Fatalf("0022 not applied under ALLOW: %d", applied)
+	}
+}
+
+func TestMigrate_0022_BackupPreflightAcceptsPre0022SQLite(t *testing.T) {
+	// Behavior: a distinct pre-0022 SQLite backup satisfies the preflight.
+	//
+	// Steps:
+	// 1. Build a backup DB migrated only through 0021.
+	// 2. Build a live DB with attempts, point BACKUP_PATH at the backup file.
+	// 3. Migrate succeeds and applies 0022.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
+	bakPath := filepath.Join(t.TempDir(), "pre.sqlite")
+	bak, err := Open(bakPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	migrateThrough(t, bak, "0021_grammar_v2.sql")
+	bak.Close()
+
+	livePath := filepath.Join(t.TempDir(), "live.sqlite")
+	live, err := Open(livePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer live.Close()
+	migrateThrough(t, live, "0021_grammar_v2.sql")
+	if _, err := live.Exec(`INSERT INTO question
+		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+		VALUES ('seed-q', 'cloze', 'N3', 'hazuda', 'p', 'e', 'test', 'CC0', 'grammar')`); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := live.Exec(`INSERT INTO attempt (question_id, user_answer, correct) VALUES ('seed-q', 'x', 0)`); err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", bakPath)
+	if err := Migrate(live); err != nil {
+		t.Fatalf("migrate with valid backup: %v", err)
+	}
+}
+
+func TestMigrate_0022_QuestionIDCollisionPreservesAttempts(t *testing.T) {
+	// Behavior: when the canonical question id already exists, rekey merges
+	// attempts onto that id and drops the obsolete row.
+	//
+	// Steps:
+	// 1. Seed destination at the post-rename QuestionID and a legacy source row
+	//    that will rekey to the same id, each with an attempt.
+	// 2. Apply 0022 with ALLOW.
+	// 3. Assert one question row at the canonical id and two attempts.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "1")
+	db := newMemoryDB(t)
+	defer db.Close()
+	migrateThrough(t, db, "0021_grammar_v2.sql")
+
+	wantID := corpus.QuestionID("hazu-ga-nai", "shared-prompt", "ans")
+	if _, err := db.Exec(`INSERT INTO question
+		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+		VALUES (?, 'cloze', 'N4', 'hazu-ga-nai', 'shared-prompt', 'ans', 'test', 'CC0', 'grammar')`, wantID); err != nil {
+		t.Fatalf("seed dest: %v", err)
+	}
+	if _, err := db.Exec(`INSERT INTO question
+		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+		VALUES ('legacy-src', 'cloze', 'N3', 'hazuganai', 'shared-prompt', 'ans', 'test', 'CC0', 'grammar')`); err != nil {
+		t.Fatalf("seed src: %v", err)
+	}
+	if _, err := db.Exec(`INSERT INTO attempt (question_id, user_answer, correct)
+		VALUES (?, 'a', 1), ('legacy-src', 'b', 0)`, wantID); err != nil {
+		t.Fatalf("seed attempts: %v", err)
+	}
+	if err := Migrate(db); err != nil {
+		t.Fatalf("migrate: %v", err)
+	}
+	var qn, an int
+	_ = db.QueryRow(`SELECT COUNT(*) FROM question WHERE id=?`, wantID).Scan(&qn)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM attempt WHERE question_id=?`, wantID).Scan(&an)
+	var legacy int
+	_ = db.QueryRow(`SELECT COUNT(*) FROM question WHERE id='legacy-src'`).Scan(&legacy)
+	if qn != 1 || an != 2 || legacy != 0 {
+		t.Fatalf("collision rekey: q=%d attempts=%d legacy=%d want 1/2/0", qn, an, legacy)
+	}
+}
+
 func TestMigrate_0022_GrammarSlugDedupPreservation(t *testing.T) {
 	// Behavior: JS-114a slug renames preserve questions, attempts, feedback,
 	// grammar examples, and read_log counters through collision and pure-rename paths.

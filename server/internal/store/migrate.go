@@ -176,8 +176,8 @@ func applyOrVerify(db *DB, name string, body []byte, want string) error {
 }
 
 // requireSlugMigrationBackup blocks 0022 on non-empty learner history unless
-// an operator-supplied backup path is verified, or an explicit allow flag is set
-// (tests / empty personal DBs). See DECISIONS.md JS-114a rollback plan.
+// an operator-supplied SQLite backup is verified as a distinct pre-0022 copy,
+// or an explicit test/dev allow flag is set. See DECISIONS.md JS-114a.
 func requireSlugMigrationBackup(tx *sql.Tx) error {
 	var attempts int
 	if err := tx.QueryRow(`SELECT COUNT(*) FROM attempt`).Scan(&attempts); err != nil {
@@ -198,10 +198,20 @@ func requireSlugMigrationBackup(tx *sql.Tx) error {
 	path := os.Getenv("JAPANESE_SITE_DB_BACKUP_PATH")
 	if path == "" {
 		return fmt.Errorf(
-			"learner attempts present (%d): set JAPANESE_SITE_DB_BACKUP_PATH to a pre-upgrade SQLite copy, or JAPANESE_SITE_ALLOW_SLUG_MIGRATION=1 to opt in",
+			"learner attempts present (%d): set JAPANESE_SITE_DB_BACKUP_PATH to a pre-upgrade SQLite copy (not the live DB), or JAPANESE_SITE_ALLOW_SLUG_MIGRATION=1 for empty-risk opt-in",
 			attempts,
 		)
 	}
+	if err := verifyPre0022SQLiteBackup(path); err != nil {
+		return err
+	}
+	slog.Info("slug migration backup verified", "path", path, "attempts", attempts)
+	return nil
+}
+
+// verifyPre0022SQLiteBackup opens path as SQLite and requires that migration
+// 0022 has not already been applied. Rejects empty/non-SQLite files.
+func verifyPre0022SQLiteBackup(path string) error {
 	st, err := os.Stat(path)
 	if err != nil {
 		return fmt.Errorf("JAPANESE_SITE_DB_BACKUP_PATH %q: %w", path, err)
@@ -209,8 +219,44 @@ func requireSlugMigrationBackup(tx *sql.Tx) error {
 	if st.Size() == 0 {
 		return fmt.Errorf("JAPANESE_SITE_DB_BACKUP_PATH %q is empty", path)
 	}
-	slog.Info("slug migration backup verified",
-		"path", path, "bytes", st.Size(), "attempts", attempts)
+	// Header check: SQLite magic string.
+	f, err := os.Open(path)
+	if err != nil {
+		return fmt.Errorf("open backup %q: %w", path, err)
+	}
+	defer f.Close()
+	hdr := make([]byte, 16)
+	n, _ := f.Read(hdr)
+	if n < 16 || string(hdr) != "SQLite format 3\x00" {
+		return fmt.Errorf("JAPANESE_SITE_DB_BACKUP_PATH %q is not a SQLite database", path)
+	}
+
+	bak, err := sql.Open("sqlite", path+"?mode=ro&_pragma=query_only(1)")
+	if err != nil {
+		return fmt.Errorf("open backup sqlite %q: %w", path, err)
+	}
+	defer bak.Close()
+	if err := bak.Ping(); err != nil {
+		return fmt.Errorf("ping backup %q: %w", path, err)
+	}
+	var applied int
+	err = bak.QueryRow(
+		`SELECT COUNT(*) FROM schema_migrations WHERE version = ?`,
+		"0022_grammar_slug_dedup.sql",
+	).Scan(&applied)
+	if err != nil {
+		// Missing schema_migrations is acceptable for very old backups.
+		if !strings.Contains(err.Error(), "no such table") {
+			return fmt.Errorf("inspect backup migrations %q: %w", path, err)
+		}
+		applied = 0
+	}
+	if applied > 0 {
+		return fmt.Errorf(
+			"JAPANESE_SITE_DB_BACKUP_PATH %q already has 0022 applied — not a pre-upgrade snapshot",
+			path,
+		)
+	}
 	return nil
 }
 

@@ -41,7 +41,7 @@ export interface GrammarPoint {
   classifier_rules?: ClassifierRule[];
   related_slugs?: string[];
   annotations?: Annotations;
-  audit_status?: "pre-redesign";
+  audit_status?: "pre-redesign" | "post-dedup-naive";
 }
 ```
 
