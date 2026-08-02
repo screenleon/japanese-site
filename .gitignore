@@ -42,3 +42,5 @@ prompt-budget.local.yml
 .codex-briefs/
 __pycache__/
 *.pyc
+
+.pm-dispatch
