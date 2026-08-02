@@ -123,7 +123,8 @@ async function expectMainEntryWithoutExamples(errorText: RegExp) {
     screen.getByText("口語・くだけた逆接。前文の予想と異なる結果を続ける。")
   ).toBeVisible();
   expect(screen.getByRole("heading", { name: "考え方のヒント" })).toBeVisible();
-  expect(screen.getByText("相關用法")).toBeVisible();
+  // Fixture has no related_slugs; section must not appear after cross-level dedup.
+  expect(screen.queryByText("相關用法")).not.toBeInTheDocument();
   expect(screen.queryByText("例文")).not.toBeInTheDocument();
   expect(screen.queryByText("例文を表示できません。")).not.toBeInTheDocument();
   expect(screen.queryByText(errorText)).not.toBeInTheDocument();

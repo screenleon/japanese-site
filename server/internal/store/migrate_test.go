@@ -435,6 +435,142 @@ func TestMigrate_0018_FeedbackTemplateDokorokaRekey(t *testing.T) {
 	}
 }
 
+func TestMigrate_0022_GrammarSlugDedupPreservation(t *testing.T) {
+	db := newMemoryDB(t)
+	defer db.Close()
+
+	migrateThrough(t, db, "0021_grammar_v2.sql")
+
+	// Minimal grammar_point seeds: source + destination collision for mono-no family,
+	// and a pure rename source (hazuganai → hazu-ga-nai with no destination).
+	seedGP := func(slug, level string) {
+		t.Helper()
+		if _, err := db.Exec(`INSERT INTO grammar_point
+			(slug, title_ja, title_zh, jlpt_level, explanation_zh, source, license)
+			VALUES (?, ?, ?, ?, 'test', 'test', 'CC0')`,
+			slug, slug+"-ja", slug+"-zh", level); err != nil {
+			t.Fatalf("seed grammar_point %s/%s: %v", level, slug, err)
+		}
+	}
+	seedGP("monono", "N3")
+	seedGP("monono-formal", "N2")
+	seedGP("mono-no", "N2") // destination already present (collision)
+	seedGP("hazuganai", "N3")
+
+	// Questions: multiple source rows under monono + monono-formal, plus one under mono-no.
+	// question.id is independent; migration must rekey grammar_point, never delete rows.
+	insertQ := func(id, gp, level string) {
+		t.Helper()
+		if _, err := db.Exec(`INSERT INTO question
+			(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+			VALUES (?, 'cloze', ?, ?, ?, 'ans', 'test', 'CC0', 'grammar')`,
+			id, level, gp, "prompt-"+id); err != nil {
+			t.Fatalf("seed question %s: %v", id, err)
+		}
+	}
+	insertQ("q-monono-1", "monono", "N3")
+	insertQ("q-monono-2", "monono", "N3")
+	insertQ("q-formal-1", "monono-formal", "N2")
+	insertQ("q-target-1", "mono-no", "N2")
+	insertQ("q-hazuganai-1", "hazuganai", "N3")
+
+	if _, err := db.Exec(`INSERT INTO attempt (question_id, user_answer, correct, error_class)
+		VALUES ('q-monono-1', 'x', 0, 'test-err'),
+		       ('q-formal-1', 'y', 1, NULL),
+		       ('q-hazuganai-1', 'z', 0, 'test-err')`); err != nil {
+		t.Fatalf("seed attempts: %v", err)
+	}
+
+	// Feedback templates: unique + colliding error_class on destination.
+	if _, err := db.Exec(`INSERT INTO feedback_template (grammar_point, error_class, body_zh, source, license)
+		VALUES ('monono', 'only-old', 'from monono', 'test', 'CC0'),
+		       ('monono', 'shared', 'old shared', 'test', 'CC0'),
+		       ('mono-no', 'shared', 'keep dest shared', 'test', 'CC0'),
+		       ('hazuganai', 'custom-rekey-test', 'rename me', 'test', 'CC0')`); err != nil {
+		t.Fatalf("seed feedback: %v", err)
+	}
+
+	// read_log: merge monono into existing mono-no; pure rename hazuganai.
+	if _, err := db.Exec(`INSERT INTO read_log (content_type, slug, first_read_at, last_read_at, read_count)
+		VALUES ('grammar', 'monono', '2026-01-01T00:00:00Z', '2026-01-02T00:00:00Z', 3),
+		       ('grammar', 'mono-no', '2026-01-03T00:00:00Z', '2026-01-04T00:00:00Z', 5),
+		       ('grammar', 'hazuganai', '2026-01-01T00:00:00Z', '2026-01-01T00:00:00Z', 2)`); err != nil {
+		t.Fatalf("seed read_log: %v", err)
+	}
+
+	if err := Migrate(db); err != nil {
+		t.Fatalf("migrate 0022: %v", err)
+	}
+
+	// --- questions preserved and rekeyed ---
+	var qCount int
+	if err := db.QueryRow(`SELECT COUNT(*) FROM question`).Scan(&qCount); err != nil {
+		t.Fatalf("count questions: %v", err)
+	}
+	if qCount != 5 {
+		t.Fatalf("question count = %d, want 5 (no deletes)", qCount)
+	}
+	assertQ := func(id, wantGP, wantLevel string) {
+		t.Helper()
+		var gp, level string
+		if err := db.QueryRow(`SELECT grammar_point, jlpt_level FROM question WHERE id=?`, id).Scan(&gp, &level); err != nil {
+			t.Fatalf("load question %s: %v", id, err)
+		}
+		if gp != wantGP || level != wantLevel {
+			t.Fatalf("question %s = %s/%s, want %s/%s", id, level, gp, wantLevel, wantGP)
+		}
+	}
+	assertQ("q-monono-1", "mono-no", "N2")
+	assertQ("q-monono-2", "mono-no", "N2")
+	assertQ("q-formal-1", "mono-no", "N2")
+	assertQ("q-target-1", "mono-no", "N2")
+	assertQ("q-hazuganai-1", "hazu-ga-nai", "N4")
+
+	// attempts still attached (CASCADE would have removed them if questions deleted)
+	var attemptCount int
+	if err := db.QueryRow(`SELECT COUNT(*) FROM attempt`).Scan(&attemptCount); err != nil {
+		t.Fatalf("count attempts: %v", err)
+	}
+	if attemptCount != 3 {
+		t.Fatalf("attempt count = %d, want 3", attemptCount)
+	}
+
+	// --- feedback templates ---
+	var oldMononoFB, onlyOld, sharedDest, hazuFB, hazuganaiFB int
+	_ = db.QueryRow(`SELECT COUNT(*) FROM feedback_template WHERE grammar_point='monono'`).Scan(&oldMononoFB)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM feedback_template WHERE grammar_point='mono-no' AND error_class='only-old'`).Scan(&onlyOld)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM feedback_template WHERE grammar_point='mono-no' AND error_class='shared' AND body_zh='keep dest shared'`).Scan(&sharedDest)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM feedback_template WHERE grammar_point='hazu-ga-nai' AND error_class='custom-rekey-test'`).Scan(&hazuFB)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM feedback_template WHERE grammar_point='hazuganai'`).Scan(&hazuganaiFB)
+	if oldMononoFB != 0 || onlyOld != 1 || sharedDest != 1 || hazuFB != 1 || hazuganaiFB != 0 {
+		t.Fatalf("feedback rekey: monono=%d only-old=%d sharedDest=%d hazu=%d hazuganai=%d",
+			oldMononoFB, onlyOld, sharedDest, hazuFB, hazuganaiFB)
+	}
+
+	// --- grammar_point: obsolete sources gone; destination kept; pure rename applied ---
+	var mononoGP, formalGP, monoNoGP, hazuganaiGP, hazuGaNaiGP int
+	_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_point WHERE slug='monono'`).Scan(&mononoGP)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_point WHERE slug='monono-formal'`).Scan(&formalGP)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_point WHERE slug='mono-no' AND jlpt_level='N2'`).Scan(&monoNoGP)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_point WHERE slug='hazuganai'`).Scan(&hazuganaiGP)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_point WHERE slug='hazu-ga-nai' AND jlpt_level='N4'`).Scan(&hazuGaNaiGP)
+	if mononoGP != 0 || formalGP != 0 || monoNoGP != 1 || hazuganaiGP != 0 || hazuGaNaiGP != 1 {
+		t.Fatalf("grammar_point: monono=%d formal=%d mono-no=%d hazuganai=%d hazu-ga-nai=%d",
+			mononoGP, formalGP, monoNoGP, hazuganaiGP, hazuGaNaiGP)
+	}
+
+	// --- read_log merge + rename ---
+	var mononoRL, monoNoCount, hazuganaiRL, hazuGaNaiCount int
+	_ = db.QueryRow(`SELECT COUNT(*) FROM read_log WHERE content_type='grammar' AND slug='monono'`).Scan(&mononoRL)
+	_ = db.QueryRow(`SELECT read_count FROM read_log WHERE content_type='grammar' AND slug='mono-no'`).Scan(&monoNoCount)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM read_log WHERE content_type='grammar' AND slug='hazuganai'`).Scan(&hazuganaiRL)
+	_ = db.QueryRow(`SELECT read_count FROM read_log WHERE content_type='grammar' AND slug='hazu-ga-nai'`).Scan(&hazuGaNaiCount)
+	if mononoRL != 0 || monoNoCount != 8 || hazuganaiRL != 0 || hazuGaNaiCount != 2 {
+		t.Fatalf("read_log: monono=%d mono-no count=%d hazuganai=%d hazu-ga-nai count=%d",
+			mononoRL, monoNoCount, hazuganaiRL, hazuGaNaiCount)
+	}
+}
+
 func newMemoryDB(t *testing.T) *DB {
 	t.Helper()
 	db, err := Open(":memory:")

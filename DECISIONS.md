@@ -85,7 +85,10 @@ Agents must read it before planning or implementation tasks.
 - **Breaking-change preference**: per the project's standing preference for clean schema-level changes over compat hacks (`feedback_breaking_change_for_maintainability`), 9 grammar slugs are renamed and 7 entries change JLPT level; SRS deep-link URLs (e.g. `/grammar/N3/teshimau`) will 404 until clients refresh.
 - **Cached-client blast radius**: minimal — single browser cache on local device.
   The `/api/version` milestone bump M3-C5 → M3-C6 surfaces the schema change to any client cache that checks the version field on startup.
-- **Rollback plan**: `git revert` the PR's merge commit. Migration 0022 includes a documented down-strategy; `/api/version` downgrades to M3-C5; no client-side migration is required since corpus is the source of truth for slug existence.
+- **Rollback plan (DB-aware)**: Schema migrations are **forward-only**. `git revert` of the merge commit restores application code and the `/api/version` milestone string only; it does **not** reverse an already-applied migration 0022 on a live SQLite file.
+  - **Preferred recovery**: restore a pre-upgrade `japanese-site.sqlite` backup, **or** rebuild the DB from L1 corpus via `make seed` / `make seed-corpus` (corpus is the source of truth for slug existence; learner attempts that referenced deleted/orphan state may still need the backup path).
+  - **Operator steps**: stop API → replace DB with backup (or delete DB + reseed) → start binary matching the restored schema set.
+  - **Migration 0022 data policy**: rekey `question` and `feedback_template` (never bulk-delete questions); merge `read_log`; only drop obsolete `grammar_point` source rows when the canonical destination slug already exists.
 
 Affected slugs: N3 hazuda → N4 hazu-da; N3 hazuganai → N4 hazu-ga-nai; N3 kamoshirenai → N4 kamo-shirenai; N3 teshimau → N4 te-shimau; N4 mono-da → N3 mono-da-norm; N2 monoda → N2 mono-da-emotion; N4 wake-da → N3 wake-da-result; N2 wakeda → N2 wake-da-nuance; N3 monono → N2 mono-no; N2 monono-formal → N2 mono-no; N5 nagara-simultaneous → N4 nagara.
 
