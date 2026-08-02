@@ -207,7 +207,11 @@ func requireSlugMigrationBackup(tx *sql.Tx) error {
 		return err
 	}
 	// Reject using the live database path as its own "backup".
-	if live := os.Getenv("JAPANESE_SITE_DB_PATH"); live != "" {
+	live := os.Getenv("JAPANESE_SITE_DB_PATH")
+	if live == "" {
+		live = liveDBPath
+	}
+	if live != "" && live != ":memory:" {
 		absLive, err1 := filepath.Abs(live)
 		absBak, err2 := filepath.Abs(path)
 		if err1 == nil && err2 == nil && absLive == absBak {
