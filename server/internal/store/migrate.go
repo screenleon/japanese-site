@@ -343,8 +343,20 @@ func rekeyGrammarQuestionIDs(tx *sql.Tx) (int, error) {
 		return 0, err
 	}
 
+	// Only rows whose grammar_point is a JS-114a rename destination are in
+	// scope. Unrelated grammar questions must not be rewritten even if their
+	// stored id happens not to match the current hash formula.
+	affected := map[string]struct{}{
+		"hazu-da": {}, "hazu-ga-nai": {}, "kamo-shirenai": {}, "te-shimau": {},
+		"mono-da-norm": {}, "mono-da-emotion": {}, "wake-da-result": {}, "wake-da-nuance": {},
+		"mono-no": {}, "nagara": {},
+	}
+
 	changed := 0
 	for _, r := range list {
+		if _, ok := affected[r.gp]; !ok {
+			continue
+		}
 		want := questionID(r.gp, r.prompt, r.expected)
 		if want == r.id {
 			continue
