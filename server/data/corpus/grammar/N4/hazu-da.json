@@ -1,7 +1,7 @@
 {
   "slug": "hazu-da",
   "title_ja": "はずだ",
-  "title_zh": "はずだ（應該／照理說）\n\n---\n(merged from N3/hazuda)\n\nはずだ（應該）",
+  "title_zh": "はずだ（應該／照理說）",
   "jlpt_level": "N4",
   "schema_version": 2,
   "pattern": [
@@ -280,11 +280,11 @@
       ]
     }
   ],
-  "explanation_zh": "「はずだ」表示根據已知資訊或理由推斷「照理應該如此」。不是單純希望，而是有根據的判斷。\n\n---\n(merged from N3/hazuda)\n\n「はずだ」表示根據理由或資訊推測「照理應該如此」。",
+  "explanation_zh": "「はずだ」表示根據已知資訊或理由推斷「照理應該如此」。不是單純希望，而是有根據的判斷。",
   "_meta": {
     "source": "curated",
     "license": "CC-BY-SA-4.0",
-    "validated_by": "native-reviewer-v1",
+    "validated_by": "post-dedup-pending-review",
     "validator_score": 1
   },
   "annotations": {

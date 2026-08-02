@@ -1,7 +1,7 @@
 {
   "slug": "kamo-shirenai",
   "title_ja": "かもしれない",
-  "title_zh": "かもしれない（也許／可能）\n\n---\n(merged from N3/kamoshirenai)\n\nかもしれない（也許）",
+  "title_zh": "かもしれない（也許／可能）",
   "jlpt_level": "N4",
   "schema_version": 2,
   "pattern": [
@@ -149,7 +149,7 @@
       ]
     }
   ],
-  "explanation_zh": "「普通形 + かもしれない」表示不確定的可能性，常譯為「也許／可能」。語氣比「だろう」更不確定、更柔和。\n\n---\n(merged from N3/kamoshirenai)\n\n「かもしれない」表示不確定的可能性，意思是「也許、可能」。",
+  "explanation_zh": "「普通形 + かもしれない」表示不確定的可能性，常譯為「也許／可能」。語氣比「だろう」更不確定、更柔和。",
   "_meta": {
     "source": "curated",
     "license": "CC-BY-SA-4.0",

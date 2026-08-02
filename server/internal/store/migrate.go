@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io/fs"
 	"log/slog"
+	"os"
 	"sort"
 	"strings"
 )
@@ -150,10 +151,13 @@ func applyOrVerify(db *DB, name string, body []byte, want string) error {
 	if _, err := tx.Exec(string(body)); err != nil {
 		return fmt.Errorf("apply %s: %w", name, err)
 	}
-	// JS-114a: after slug fields are rekeyed in SQL, rewrite deterministic
-	// question ids so a subsequent curated corpus load does not orphan-sweep
-	// legacy ids and CASCADE-delete learner attempts.
+	// JS-114a: require a verified pre-upgrade backup when learner history exists,
+	// then rewrite deterministic question ids so a subsequent curated corpus load
+	// does not orphan-sweep legacy ids and CASCADE-delete learner attempts.
 	if name == "0022_grammar_slug_dedup.sql" {
+		if err := requireSlugMigrationBackup(tx); err != nil {
+			return fmt.Errorf("apply %s backup preflight: %w", name, err)
+		}
 		if n, err := rekeyGrammarQuestionIDs(tx); err != nil {
 			return fmt.Errorf("apply %s question id rekey: %w", name, err)
 		} else if n > 0 {
@@ -168,6 +172,45 @@ func applyOrVerify(db *DB, name string, body []byte, want string) error {
 	// attempt) are visible in the operator's startup log without parsing
 	// .sql comments.
 	slog.Info("applied migration", "version", name, "checksum", want)
+	return nil
+}
+
+// requireSlugMigrationBackup blocks 0022 on non-empty learner history unless
+// an operator-supplied backup path is verified, or an explicit allow flag is set
+// (tests / empty personal DBs). See DECISIONS.md JS-114a rollback plan.
+func requireSlugMigrationBackup(tx *sql.Tx) error {
+	var attempts int
+	if err := tx.QueryRow(`SELECT COUNT(*) FROM attempt`).Scan(&attempts); err != nil {
+		// attempt table may not exist on ancient DBs; treat as empty.
+		if strings.Contains(err.Error(), "no such table") {
+			return nil
+		}
+		return err
+	}
+	if attempts == 0 {
+		return nil
+	}
+	if os.Getenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION") == "1" {
+		slog.Warn("applying 0022 with JAPANESE_SITE_ALLOW_SLUG_MIGRATION=1",
+			"attempts", attempts)
+		return nil
+	}
+	path := os.Getenv("JAPANESE_SITE_DB_BACKUP_PATH")
+	if path == "" {
+		return fmt.Errorf(
+			"learner attempts present (%d): set JAPANESE_SITE_DB_BACKUP_PATH to a pre-upgrade SQLite copy, or JAPANESE_SITE_ALLOW_SLUG_MIGRATION=1 to opt in",
+			attempts,
+		)
+	}
+	st, err := os.Stat(path)
+	if err != nil {
+		return fmt.Errorf("JAPANESE_SITE_DB_BACKUP_PATH %q: %w", path, err)
+	}
+	if st.Size() == 0 {
+		return fmt.Errorf("JAPANESE_SITE_DB_BACKUP_PATH %q is empty", path)
+	}
+	slog.Info("slug migration backup verified",
+		"path", path, "bytes", st.Size(), "attempts", attempts)
 	return nil
 }
 

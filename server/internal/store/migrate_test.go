@@ -445,6 +445,7 @@ func TestMigrate_0022_GrammarSlugDedupPreservation(t *testing.T) {
 	// 2. Apply remaining migrations (including 0022 SQL + question-id rekey).
 	// 3. Assert no question/attempt loss, rekeyed grammar_point fields, examples
 	//    reattached to the canonical slug, and question ids match corpus.QuestionID.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "1")
 	db := newMemoryDB(t)
 	defer db.Close()
 
