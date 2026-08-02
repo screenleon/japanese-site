@@ -32,6 +32,10 @@ func main() {
 	}
 	defer db.Close()
 
+	// Expose live DB path so migration 0022 backup preflight can refuse
+	// JAPANESE_SITE_DB_BACKUP_PATH pointing at the same file.
+	_ = os.Setenv("JAPANESE_SITE_DB_PATH", cfg.DBPath)
+
 	if err := store.Migrate(db); err != nil {
 		logger.Error("migrate failed", "err", err)
 		os.Exit(1)

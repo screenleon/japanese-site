@@ -453,7 +453,9 @@ for (const file of files.sort()) {
     data = JSON.parse(fs.readFileSync(file, "utf8"));
   } catch (err) {
     fail(path.relative(rootDir, file), `invalid JSON: ${err.message}`);
-    continue;
+    // Fail-fast on unparseable units so later units are not scanned under a
+    // partially trusted inventory (and so CI does not hide the first parse error).
+    process.exit(exitCode);
   }
   validateUnit(data, file);
 }

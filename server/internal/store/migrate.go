@@ -9,6 +9,7 @@ import (
 	"io/fs"
 	"log/slog"
 	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 )
@@ -205,8 +206,37 @@ func requireSlugMigrationBackup(tx *sql.Tx) error {
 	if err := verifyPre0022SQLiteBackup(path); err != nil {
 		return err
 	}
+	// Reject using the live database path as its own "backup".
+	if live := os.Getenv("JAPANESE_SITE_DB_PATH"); live != "" {
+		absLive, err1 := filepath.Abs(live)
+		absBak, err2 := filepath.Abs(path)
+		if err1 == nil && err2 == nil && absLive == absBak {
+			return fmt.Errorf(
+				"JAPANESE_SITE_DB_BACKUP_PATH must not be the live database path %q",
+				absLive,
+			)
+		}
+		if same, err := sameFile(live, path); err == nil && same {
+			return fmt.Errorf(
+				"JAPANESE_SITE_DB_BACKUP_PATH %q is the same file as the live database",
+				path,
+			)
+		}
+	}
 	slog.Info("slug migration backup verified", "path", path, "attempts", attempts)
 	return nil
+}
+
+func sameFile(a, b string) (bool, error) {
+	sa, err := os.Stat(a)
+	if err != nil {
+		return false, err
+	}
+	sb, err := os.Stat(b)
+	if err != nil {
+		return false, err
+	}
+	return os.SameFile(sa, sb), nil
 }
 
 // verifyPre0022SQLiteBackup opens path as SQLite and requires that migration
