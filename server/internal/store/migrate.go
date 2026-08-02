@@ -203,31 +203,52 @@ func requireSlugMigrationBackup(tx *sql.Tx) error {
 			attempts,
 		)
 	}
+	// Reject live-as-backup first (seed and API both open the live path before Migrate).
+	if err := rejectLiveDBAsBackup(path); err != nil {
+		return err
+	}
 	if err := verifyPre0022SQLiteBackup(path); err != nil {
 		return err
 	}
-	// Reject using the live database path as its own "backup".
+	slog.Info("slug migration backup verified", "path", path, "attempts", attempts)
+	return nil
+}
+
+// rejectLiveDBAsBackup ensures the recovery snapshot is not the database about
+// to be rewritten. live path comes from JAPANESE_SITE_DB_PATH or the last Open().
+func rejectLiveDBAsBackup(backupPath string) error {
 	live := os.Getenv("JAPANESE_SITE_DB_PATH")
 	if live == "" {
 		live = liveDBPath
 	}
-	if live != "" && live != ":memory:" {
-		absLive, err1 := filepath.Abs(live)
-		absBak, err2 := filepath.Abs(path)
-		if err1 == nil && err2 == nil && absLive == absBak {
+	if live == "" || live == ":memory:" {
+		// No known live path — still reject if backup is a path that looks like
+		// the process already has open; cannot compare further.
+		return nil
+	}
+	absLive, err1 := filepath.Abs(live)
+	absBak, err2 := filepath.Abs(backupPath)
+	if err1 == nil && err2 == nil && absLive == absBak {
+		return fmt.Errorf(
+			"JAPANESE_SITE_DB_BACKUP_PATH must not be the live database path %q",
+			absLive,
+		)
+	}
+	if same, err := sameFile(live, backupPath); err == nil && same {
+		return fmt.Errorf(
+			"JAPANESE_SITE_DB_BACKUP_PATH %q is the same file as the live database %q",
+			backupPath, live,
+		)
+	}
+	// Also compare cleaned paths (trailing slashes / relative components).
+	if err1 == nil && err2 == nil {
+		if filepath.Clean(absLive) == filepath.Clean(absBak) {
 			return fmt.Errorf(
 				"JAPANESE_SITE_DB_BACKUP_PATH must not be the live database path %q",
 				absLive,
 			)
 		}
-		if same, err := sameFile(live, path); err == nil && same {
-			return fmt.Errorf(
-				"JAPANESE_SITE_DB_BACKUP_PATH %q is the same file as the live database",
-				path,
-			)
-		}
 	}
-	slog.Info("slug migration backup verified", "path", path, "attempts", attempts)
 	return nil
 }
 
