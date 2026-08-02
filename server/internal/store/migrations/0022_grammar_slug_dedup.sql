@@ -21,8 +21,9 @@
 --    collision keep the destination row and drop only the obsolete source row.
 -- 3) read_log merges counters when both old and new slugs exist, then drops source.
 -- 4) grammar_point rekeys when destination slug is free; when destination already
---    exists (corpus already seeded canonical row), drop only the obsolete source
---    grammar_point row AFTER dependents are rekeyed.
+--    exists (corpus already seeded canonical row), reassign grammar_example rows
+--    from the source id onto the destination id, then drop only the obsolete
+--    source grammar_point row (after questions/feedback/read_log are rekeyed).
 --
 -- Rollback / recovery (NOT "git revert alone"):
 -- - Schema migrations are forward-only; git revert of app code does not reverse DB.
@@ -584,73 +585,118 @@ UPDATE grammar_point
 SET slug='wake-da-nuance', jlpt_level='N2'
 WHERE slug='wakeda' AND jlpt_level='N2';
 
--- Conflict-aware (destination may already exist from corpus seed):
+-- Conflict-aware (destination may already exist from corpus seed).
+-- Before dropping a source grammar_point row, reassign its grammar_example
+-- children to the destination id so learner-visible examples are preserved.
+
+-- hazuda → hazu-da
 UPDATE grammar_point
 SET slug='hazu-da', jlpt_level='N4'
 WHERE slug='hazuda' AND jlpt_level='N3'
   AND NOT EXISTS (
     SELECT 1 FROM grammar_point WHERE slug='hazu-da'
   );
+UPDATE grammar_example
+SET grammar_point_id = (SELECT id FROM grammar_point WHERE slug='hazu-da' LIMIT 1)
+WHERE grammar_point_id IN (
+    SELECT id FROM grammar_point WHERE slug='hazuda' AND jlpt_level='N3'
+  )
+  AND EXISTS (SELECT 1 FROM grammar_point WHERE slug='hazu-da');
 DELETE FROM grammar_point
 WHERE slug='hazuda' AND jlpt_level='N3'
   AND EXISTS (
     SELECT 1 FROM grammar_point WHERE slug='hazu-da'
   );
 
+-- kamoshirenai → kamo-shirenai
 UPDATE grammar_point
 SET slug='kamo-shirenai', jlpt_level='N4'
 WHERE slug='kamoshirenai' AND jlpt_level='N3'
   AND NOT EXISTS (
     SELECT 1 FROM grammar_point WHERE slug='kamo-shirenai'
   );
+UPDATE grammar_example
+SET grammar_point_id = (SELECT id FROM grammar_point WHERE slug='kamo-shirenai' LIMIT 1)
+WHERE grammar_point_id IN (
+    SELECT id FROM grammar_point WHERE slug='kamoshirenai' AND jlpt_level='N3'
+  )
+  AND EXISTS (SELECT 1 FROM grammar_point WHERE slug='kamo-shirenai');
 DELETE FROM grammar_point
 WHERE slug='kamoshirenai' AND jlpt_level='N3'
   AND EXISTS (
     SELECT 1 FROM grammar_point WHERE slug='kamo-shirenai'
   );
 
+-- teshimau → te-shimau
 UPDATE grammar_point
 SET slug='te-shimau', jlpt_level='N4'
 WHERE slug='teshimau' AND jlpt_level='N3'
   AND NOT EXISTS (
     SELECT 1 FROM grammar_point WHERE slug='te-shimau'
   );
+UPDATE grammar_example
+SET grammar_point_id = (SELECT id FROM grammar_point WHERE slug='te-shimau' LIMIT 1)
+WHERE grammar_point_id IN (
+    SELECT id FROM grammar_point WHERE slug='teshimau' AND jlpt_level='N3'
+  )
+  AND EXISTS (SELECT 1 FROM grammar_point WHERE slug='te-shimau');
 DELETE FROM grammar_point
 WHERE slug='teshimau' AND jlpt_level='N3'
   AND EXISTS (
     SELECT 1 FROM grammar_point WHERE slug='te-shimau'
   );
 
+-- monono → mono-no
 UPDATE grammar_point
 SET slug='mono-no', jlpt_level='N2'
 WHERE slug='monono' AND jlpt_level='N3'
   AND NOT EXISTS (
     SELECT 1 FROM grammar_point WHERE slug='mono-no'
   );
+UPDATE grammar_example
+SET grammar_point_id = (SELECT id FROM grammar_point WHERE slug='mono-no' LIMIT 1)
+WHERE grammar_point_id IN (
+    SELECT id FROM grammar_point WHERE slug='monono' AND jlpt_level='N3'
+  )
+  AND EXISTS (SELECT 1 FROM grammar_point WHERE slug='mono-no');
 DELETE FROM grammar_point
 WHERE slug='monono' AND jlpt_level='N3'
   AND EXISTS (
     SELECT 1 FROM grammar_point WHERE slug='mono-no'
   );
 
+-- monono-formal → mono-no
 UPDATE grammar_point
 SET slug='mono-no', jlpt_level='N2'
 WHERE slug='monono-formal' AND jlpt_level='N2'
   AND NOT EXISTS (
     SELECT 1 FROM grammar_point WHERE slug='mono-no'
   );
+UPDATE grammar_example
+SET grammar_point_id = (SELECT id FROM grammar_point WHERE slug='mono-no' LIMIT 1)
+WHERE grammar_point_id IN (
+    SELECT id FROM grammar_point WHERE slug='monono-formal' AND jlpt_level='N2'
+  )
+  AND EXISTS (SELECT 1 FROM grammar_point WHERE slug='mono-no');
 DELETE FROM grammar_point
 WHERE slug='monono-formal' AND jlpt_level='N2'
   AND EXISTS (
     SELECT 1 FROM grammar_point WHERE slug='mono-no'
   );
 
+-- nagara-simultaneous → nagara
 UPDATE grammar_point
 SET slug='nagara', jlpt_level='N4'
 WHERE slug='nagara-simultaneous' AND jlpt_level='N5'
   AND NOT EXISTS (
     SELECT 1 FROM grammar_point WHERE slug='nagara'
   );
+UPDATE grammar_example
+SET grammar_point_id = (SELECT id FROM grammar_point WHERE slug='nagara' LIMIT 1)
+WHERE grammar_point_id IN (
+    SELECT id FROM grammar_point WHERE slug='nagara-simultaneous' AND jlpt_level='N5'
+  )
+  AND EXISTS (SELECT 1 FROM grammar_point WHERE slug='nagara');
 DELETE FROM grammar_point
 WHERE slug='nagara-simultaneous' AND jlpt_level='N5'
   AND EXISTS (

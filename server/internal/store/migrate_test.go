@@ -457,6 +457,24 @@ func TestMigrate_0022_GrammarSlugDedupPreservation(t *testing.T) {
 	seedGP("mono-no", "N2") // destination already present (collision)
 	seedGP("hazuganai", "N3")
 
+	// Examples on both collision source and destination — must survive reassignment.
+	seedEx := func(gpSlug, text string) {
+		t.Helper()
+		var id int
+		if err := db.QueryRow(`SELECT id FROM grammar_point WHERE slug=?`, gpSlug).Scan(&id); err != nil {
+			t.Fatalf("lookup gp %s: %v", gpSlug, err)
+		}
+		if _, err := db.Exec(`INSERT INTO grammar_example
+			(grammar_point_id, text_ja, source, license)
+			VALUES (?, ?, 'test', 'CC0')`, id, text); err != nil {
+			t.Fatalf("seed example for %s: %v", gpSlug, err)
+		}
+	}
+	seedEx("monono", "source-monono-example")
+	seedEx("monono-formal", "source-formal-example")
+	seedEx("mono-no", "dest-mono-no-example")
+	seedEx("hazuganai", "source-hazuganai-example")
+
 	// Questions: multiple source rows under monono + monono-formal, plus one under mono-no.
 	// question.id is independent; migration must rekey grammar_point, never delete rows.
 	insertQ := func(id, gp, level string) {
@@ -557,6 +575,28 @@ func TestMigrate_0022_GrammarSlugDedupPreservation(t *testing.T) {
 	if mononoGP != 0 || formalGP != 0 || monoNoGP != 1 || hazuganaiGP != 0 || hazuGaNaiGP != 1 {
 		t.Fatalf("grammar_point: monono=%d formal=%d mono-no=%d hazuganai=%d hazu-ga-nai=%d",
 			mononoGP, formalGP, monoNoGP, hazuganaiGP, hazuGaNaiGP)
+	}
+
+	// --- grammar_example: collision sources reattached to destination; pure rename kept ---
+	var monoNoEx, hazuEx, totalEx int
+	_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_example ge
+		JOIN grammar_point gp ON gp.id = ge.grammar_point_id
+		WHERE gp.slug='mono-no'`).Scan(&monoNoEx)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_example ge
+		JOIN grammar_point gp ON gp.id = ge.grammar_point_id
+		WHERE gp.slug='hazu-ga-nai'`).Scan(&hazuEx)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_example`).Scan(&totalEx)
+	// monono + monono-formal + dest mono-no = 3 on mono-no; hazuganai = 1 on hazu-ga-nai
+	if monoNoEx != 3 || hazuEx != 1 || totalEx != 4 {
+		t.Fatalf("grammar_example preservation: mono-no=%d hazu-ga-nai=%d total=%d want 3/1/4",
+			monoNoEx, hazuEx, totalEx)
+	}
+	for _, text := range []string{"source-monono-example", "source-formal-example", "dest-mono-no-example"} {
+		var n int
+		_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_example WHERE text_ja=?`, text).Scan(&n)
+		if n != 1 {
+			t.Fatalf("example %q count=%d, want 1", text, n)
+		}
 	}
 
 	// --- read_log merge + rename ---

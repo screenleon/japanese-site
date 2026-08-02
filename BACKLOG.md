@@ -129,7 +129,7 @@
 | JS-127 | ✅ closed 2026-08-02 | 学年 × 日語支援雙軸 taxonomy | architecture | 2026-08-02 | DECISIONS.md#2026-08-02-school-kokugo-track |
 | JS-128 | ✅ closed 2026-08-02 | 與 JS-083 / JS-084 / JS-090 的邊界 | architecture | 2026-08-02 | DECISIONS.md#2026-08-02-school-kokugo-track |
 | JS-129 | ✅ closed 2026-08-02 | KokugoUnit / KokugoTask schema + lint + L1 路徑 | architecture | 2026-08-02 | docs/adr/0005-kokugo-track.md |
-| JS-130 | 🔵 active | 国語 PoC 單元（e5-6 說明／意見文 × 完整循環） | content | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-130 | ✅ closed 2026-08-02 | 国語 PoC 單元（e5-6 說明／意見文 × 完整循環） | content | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-131 | 🔵 active | 国語最小循環 UI | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-132 | 🔵 active | 国語 local API 進度與作品保存 | backend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-133 | 🔵 active | 国語 Reader 精讀標記強化 | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
@@ -1512,17 +1512,10 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 **See**: docs/adr/0005-kokugo-track.md, server/data/corpus/kokugo/README.md
 <!-- 首次記錄: 2026-08-02 -->
 
-## JS-130 — 国語 PoC 單元（e5-6 說明／意見文 × 完整循環）
+## JS-130 — 国語 PoC 單元（e5-6 說明／意見文 × 完整循環） ✅ 2026-08-02
 
-**Problem**: 需要一篇可跑完整教學循環的原創單元來驗證產品差異。
-
-**Why**: 先 1 單元勝過未驗證前寫 12 單元。
-
-**Requirement**: 成人可讀公共主題（如図書室／公共議題）、四種 v1 task kind、短產出 + checklist；原創或明確授權。
-
-**Tags**: P1, kokugo, content
-**Source**: docs/adr/0005-kokugo-track.md
-**Blocked by**: JS-129
+**Outcome**: 已以 `e5-6/library-use.json` 交付第一個完整循環 PoC（預測／證據／段落角色／摘要選擇 + artifact checklist；`_meta.validated_by` 已填）。與 JS-129 同批落地；後續單元包見 JS-135。
+**See**: docs/adr/0005-kokugo-track.md, server/data/corpus/kokugo/e5-6/library-use.json
 <!-- 首次記錄: 2026-08-02 -->
 
 ## JS-131 — 国語最小循環 UI

@@ -62,7 +62,16 @@ if command -v jq >/dev/null 2>&1; then
 	expect_fail "gold-missing" '.tasks[1].payload.gold_quotes = ["この文は本文にありません"]'
 	expect_fail "role-len" '.tasks[2].payload.gold_by_paragraph_index = ["問題","原因"]'
 	expect_fail "no-meta-license" 'del(._meta.license)'
+	expect_fail "no-meta-validated-by" 'del(._meta.validated_by)'
+	expect_fail "empty-validated-by" '._meta.validated_by = ""'
 	expect_fail "unknown-top" '.extra_field = true'
+	expect_fail "dup-task-id" '.tasks[1].id = .tasks[0].id'
+	expect_fail "bad-token" '.text[0].tokens = [{"t":"bogus","v":"x"}]'
+	expect_fail "summary-wrong-correct" '.tasks[3].payload.correct_id = "missing"'
+	expect_fail "artifact-min-gt-max" '.artifact.min_chars = 200 | .artifact.max_chars = 50'
+	expect_fail "artifact-empty-checklist" '.artifact.checklist = []'
+	expect_fail "choices-too-few" '.tasks[0].payload.choices = [{"id":"a","text_ja":"only one"}]'
+	expect_fail "empty-choice-id" '.tasks[0].payload.choices[0].id = ""'
 else
 	echo "test-lint-kokugo: jq not found; skipping structured negative cases" >&2
 fi

@@ -88,7 +88,8 @@ Agents must read it before planning or implementation tasks.
 - **Rollback plan (DB-aware)**: Schema migrations are **forward-only**. `git revert` of the merge commit restores application code and the `/api/version` milestone string only; it does **not** reverse an already-applied migration 0022 on a live SQLite file.
   - **Preferred recovery**: restore a pre-upgrade `japanese-site.sqlite` backup, **or** rebuild the DB from L1 corpus via `make seed` / `make seed-corpus` (corpus is the source of truth for slug existence; learner attempts that referenced deleted/orphan state may still need the backup path).
   - **Operator steps**: stop API → replace DB with backup (or delete DB + reseed) → start binary matching the restored schema set.
-  - **Migration 0022 data policy**: rekey `question` and `feedback_template` (never bulk-delete questions); merge `read_log`; only drop obsolete `grammar_point` source rows when the canonical destination slug already exists.
+  - **Migration 0022 data policy**: rekey `question` and `feedback_template` (never bulk-delete questions); merge `read_log`; on `grammar_point` collision reassign `grammar_example` rows to the destination id before dropping the obsolete source row.
+  - **Pre-upgrade operator checklist**: copy `server/data/japanese-site.sqlite` (or the deployed DB path) to a timestamped backup **before** starting a binary that will apply 0022; verify restore by stopping the server and replacing the live file with the backup.
 
 Affected slugs: N3 hazuda → N4 hazu-da; N3 hazuganai → N4 hazu-ga-nai; N3 kamoshirenai → N4 kamo-shirenai; N3 teshimau → N4 te-shimau; N4 mono-da → N3 mono-da-norm; N2 monoda → N2 mono-da-emotion; N4 wake-da → N3 wake-da-result; N2 wakeda → N2 wake-da-nuance; N3 monono → N2 mono-no; N2 monono-formal → N2 mono-no; N5 nagara-simultaneous → N4 nagara.
 

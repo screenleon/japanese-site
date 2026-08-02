@@ -1785,16 +1785,17 @@ items:
 
   - id: JS-130
     title: "Kokugo PoC unit (e5-6 expository, ~1 full cycle)"
-    status: todo
+    status: done
     priority: P1
     theme: kokugo
     area: content
     source: "docs/adr/0005-kokugo-track.md"
+    completed_at: "2026-08-02"
     blocked_by: [JS-129]
     related: [JS-131, JS-132]
     notes:
-      - One adult-readable library/public-theme unit; original licensed content; tasks covering all four v1 kinds + short artifact checklist.
-      - Not 12 units; prove loop only.
+      - Delivered as server/data/corpus/kokugo/e5-6/library-use.json with JS-129 (four v1 task kinds + artifact + validated_by).
+      - Intentional single PoC unit; further content packs remain JS-135.
 
   - id: JS-131
     title: "Kokugo minimal cycle UI (predict → read → tasks → artifact → revise)"

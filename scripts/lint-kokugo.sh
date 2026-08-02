@@ -342,8 +342,10 @@ function validateMeta(meta, rel) {
   }
   if (!nonEmptyString(meta.source)) fail(rel, "_meta.source required");
   if (!nonEmptyString(meta.license)) fail(rel, "_meta.license required");
-  if (meta.validated_by !== undefined && !nonEmptyString(meta.validated_by)) {
-    fail(rel, "_meta.validated_by must be non-empty when set");
+  // Content contract (project-manifest Constraint 2 / corpus-storage): every
+  // learner-facing L1 row carries validated_by so reviewed content is accountable.
+  if (!nonEmptyString(meta.validated_by)) {
+    fail(rel, "_meta.validated_by required (non-empty string)");
   }
   if (meta.validator_score !== undefined && typeof meta.validator_score !== "number") {
     fail(rel, "_meta.validator_score must be a number when set");
