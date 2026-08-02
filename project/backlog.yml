@@ -1202,12 +1202,13 @@ items:
     area: architecture
     source: planning:2026-05-09
     blocked_by: [JS-080]
-    related: [JS-080]
+    related: [JS-080, JS-128, JS-139, JS-126]
     notes:
       - Estimate — 大.
       - Spike 5 N1+ reading meta-skill entries and decide whether they belong in a new reading_strategy table or as a grammar variant.
       - Include schema, lint, and rendering implications in the spike.
       - Blocked on JS-080 because N1+ level representation must be settled first.
+      - 2026-08-02 kokugo boundary: 日本語-track bridge drill, NOT School Kokugo unit engine (JS-126 / ADR-0005). Rescope narrative in JS-139 after JS-129.
 
   - id: JS-084
     title: Keigo module schema + UI spike (B 方案 — 新 corpus type / 新 NavCard tab / lint / staticApi)
@@ -1691,6 +1692,210 @@ items:
       - Done when - every N4 slug has documented owner-role in DECISIONS.md, redundant content removed from non-owner, pattern[].form strings do not overlap across sibling files.
       - Blocked until JS-100b merges and JS-101 (N2/N1 v2 uplift) lands to surface any additional sibling overlaps.
       - Source - JS-100b native review 2026-05-17 audit at audits/js-100b-n4-pattern-native-review-2026-05-17.md §跨檔/系統性觀察 ¶6.
+
+  - id: JS-126
+    title: "School Kokugo product contract (track split, MVP scope, metrics)"
+    status: done
+    priority: P1
+    theme: kokugo
+    area: architecture
+    source: "DECISIONS.md#2026-08-02-school-kokugo-track"
+    completed_at: "2026-08-02"
+    related: [JS-127, JS-128, JS-129, JS-018, JS-083]
+    notes:
+      - Freeze two-track product (日本語学習 vs 国語教室), audience-of-one, local-API full cycle, static out of full progress.
+      - North-star metric: weekly completed read→evidence→express→revise cycles.
+      - Closed by DECISIONS 2026-08-02 + ADR-0005.
+
+  - id: JS-127
+    title: "Dual-axis taxonomy stage × support"
+    status: done
+    priority: P1
+    theme: kokugo
+    area: architecture
+    source: "DECISIONS.md#2026-08-02-school-kokugo-track"
+    completed_at: "2026-08-02"
+    related: [JS-126, JS-129]
+    notes:
+      - stage v1 content allowlist e5-6; support profiles heavy|n3|standard|none independent of JLPT gate.
+      - Closed by DECISIONS 2026-08-02 + ADR-0005.
+
+  - id: JS-128
+    title: "Boundary map JS-083 / JS-084 / JS-090 vs Kokugo track"
+    status: done
+    priority: P1
+    theme: kokugo
+    area: architecture
+    source: "DECISIONS.md#2026-08-02-school-kokugo-track"
+    completed_at: "2026-08-02"
+    related: [JS-083, JS-084, JS-090, JS-126]
+    notes:
+      - JS-083 bridge drills on 日本語 track; JS-084 parallel module pattern; JS-090 optional audio later.
+      - Closed by DECISIONS 2026-08-02 + ADR-0005.
+
+  - id: JS-129
+    title: "KokugoUnit / KokugoTask schema + lint + L1 corpus path"
+    status: done
+    priority: P1
+    theme: kokugo
+    area: architecture
+    source: "docs/adr/0005-kokugo-track.md"
+    completed_at: "2026-08-02"
+    blocked_by: [JS-126, JS-127, JS-128]
+    related: [JS-130, JS-131, JS-084]
+    notes:
+      - Implement ADR-0005 schema under server/data/corpus/kokugo/** with source/license.
+      - Lint allowlists for stage e5-6, task kinds predict|evidence-highlight|paragraph-role|summary-choice, Block[] text.
+      - Do NOT add kokugo to QuizContentType cloze loop; separate load path (pattern like keigo module).
+      - Shipped: web/src/kokugoTypes.ts, scripts/lint-kokugo.sh, test-lint-kokugo, e5-6/library-use.json fixture, make lint-kokugo.
+
+  - id: JS-130
+    title: "Kokugo PoC unit (e5-6 expository, ~1 full cycle)"
+    status: todo
+    priority: P1
+    theme: kokugo
+    area: content
+    source: "docs/adr/0005-kokugo-track.md"
+    blocked_by: [JS-129]
+    related: [JS-131, JS-132]
+    notes:
+      - One adult-readable library/public-theme unit; original licensed content; tasks covering all four v1 kinds + short artifact checklist.
+      - Not 12 units; prove loop only.
+
+  - id: JS-131
+    title: "Kokugo minimal cycle UI (predict → read → tasks → artifact → revise)"
+    status: todo
+    priority: P1
+    theme: kokugo
+    area: frontend
+    source: "docs/adr/0005-kokugo-track.md"
+    blocked_by: [JS-129, JS-130]
+    related: [JS-132, JS-133]
+    notes:
+      - New nav surface; capabilities-aware; Japanese-first.
+      - Deterministic task grading only; no LLM.
+      - Phase-1 UI can be functional over polished reader chrome.
+
+  - id: JS-132
+    title: "Kokugo local API progress + artifact store"
+    status: todo
+    priority: P1
+    theme: kokugo
+    area: backend
+    source: "docs/adr/0005-kokugo-track.md"
+    blocked_by: [JS-129]
+    related: [JS-131, JS-017]
+    notes:
+      - Persist unit progress, task attempts, artifact drafts, revision pair in SQLite for API mode.
+      - Static mode remains without full progress (JS-018 unchanged).
+
+  - id: JS-133
+    title: "Kokugo reader polish (highlight, paragraph notes)"
+    status: todo
+    priority: P2
+    theme: kokugo
+    area: frontend
+    source: "docs/adr/0005-kokugo-track.md"
+    blocked_by: [JS-131]
+    related: [JS-134]
+    notes:
+      - Evidence highlight UX and paragraph-role affordances beyond minimal widgets.
+
+  - id: JS-134
+    title: "Kokugo classmate answers + revision compare flow"
+    status: todo
+    priority: P2
+    theme: kokugo
+    area: frontend
+    source: "docs/adr/0005-kokugo-track.md"
+    blocked_by: [JS-131]
+    related: [JS-130, JS-135]
+    notes:
+      - Curated classmate answers revealed after learner response; before/after revision UI.
+
+  - id: JS-135
+    title: "Kokugo unit pack 2 (3–4 units after PoC)"
+    status: todo
+    priority: P2
+    theme: kokugo
+    area: content
+    source: "docs/adr/0005-kokugo-track.md"
+    blocked_by: [JS-130, JS-131]
+    related: [JS-136]
+    notes:
+      - Mix story / expository-opinion / light poetry-or-culture; still e5-6 only.
+
+  - id: JS-136
+    title: "Kokugo skill map + skill review queue"
+    status: todo
+    priority: P2
+    theme: kokugo
+    area: product
+    source: "docs/adr/0005-kokugo-track.md"
+    blocked_by: [JS-132, JS-131]
+    related: [JS-083, JS-007]
+    notes:
+      - Surface skill-level progress; feed weak skills into review without collapsing into cloze SRS only.
+
+  - id: JS-137
+    title: "Kokugo read-aloud (depends on audio path)"
+    status: todo
+    priority: P3
+    theme: kokugo
+    area: frontend
+    source: "docs/adr/0005-kokugo-track.md"
+    blocked_by: [JS-131, JS-090]
+    related: [JS-090]
+    notes:
+      - Optional Phase 3; reuse JS-090 audio infrastructure when ready.
+
+  - id: JS-138
+    title: "Kokugo ↔ JLPT vocab/grammar deep-links"
+    status: todo
+    priority: P3
+    theme: kokugo
+    area: product
+    source: "docs/adr/0005-kokugo-track.md"
+    blocked_by: [JS-130, JS-131]
+    related: [JS-107]
+    notes:
+      - Unit key terms can open vocab/grammar study surfaces; Japanese-first.
+
+  - id: JS-139
+    title: "Rescope JS-083 as 日本語-track reading bridge drills"
+    status: todo
+    priority: P3
+    theme: kokugo
+    area: architecture
+    source: "docs/adr/0005-kokugo-track.md"
+    blocked_by: [JS-128, JS-129]
+    related: [JS-083, JS-136]
+    notes:
+      - Align JS-083 requirement text with bridge role after kokugo schema exists.
+
+  - id: JS-140
+    title: "Kokugo content license + age-appropriateness + native review checklist"
+    status: todo
+    priority: P2
+    theme: kokugo
+    area: content
+    source: "docs/adr/0005-kokugo-track.md"
+    blocked_by: [JS-129]
+    related: [JS-130, JS-135]
+    notes:
+      - Authoring checklist before multi-unit expansion; no textbook copies.
+
+  - id: JS-141
+    title: "Optional revisit JS-018 static progress for kokugo (IndexedDB)"
+    status: todo
+    priority: P3
+    theme: kokugo
+    area: architecture
+    source: "docs/adr/0005-kokugo-track.md"
+    blocked_by: [JS-132]
+    related: [JS-018]
+    notes:
+      - Explicit decision required; not in v1. Only if portfolio static must support long-term study.
 
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
 # Post-v1 closures stay in items[] with status: done + completed_at.

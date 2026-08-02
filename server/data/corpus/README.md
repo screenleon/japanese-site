@@ -17,6 +17,8 @@ corpus/
 │   └── <level>.jsonl
 ├── kanji/
 │   └── <level>.jsonl
+├── kokugo/                         # School Kokugo track (ADR-0005)
+│   └── <stage>/<unit-id>.json      # v1 stage: e5-6 only; see kokugo/README.md
 ├── feedback-templates/
 │   └── <grammar-point>.errors.json
 ├── lesson-plans/
