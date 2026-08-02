@@ -24,8 +24,18 @@ from collections import Counter
 from pathlib import Path
 
 
-BASE = "03ac4ddc9f5f6afa3bae1e65a3a888cf82c346b7"
+# Non-explanation field freeze + explanation source text for ruby regen.
+# Rebaselined after JS-114a cross-level slug/content merges (was 03ac4ddc…).
+BASE = "769122b3718f05513b203631aff2bf77860dc9aa"
 LEVELS = ("N5", "N4", "N2", "N1")
+# Post JS-114a cross-level dedup inventory (nagara-simultaneous absorbed into N4/nagara, etc.).
+# Guard fails if a level drifts from these counts so silent corpus shrink/grow is caught.
+EXPECTED_COUNTS = {
+    "N5": 39,
+    "N4": 39,
+    "N2": 40,
+    "N1": 40,
+}
 ROOT = Path("server/data/corpus/grammar")
 AUDIT_PATH = Path("audits/js-106-allLevels-codex-pass-2026-05-16.md")
 AUDIT_START = "<!-- auto-generated below this line -->"
@@ -670,8 +680,9 @@ def target_paths(root: Path = ROOT) -> list[Path]:
     all_paths: list[Path] = []
     for level in LEVELS:
         paths = sorted((root / level).glob("*.json"))
-        if len(paths) != 40:
-            raise AssertionError(f"{level}: expected 40 files, found {len(paths)}")
+        expected = EXPECTED_COUNTS[level]
+        if len(paths) != expected:
+            raise AssertionError(f"{level}: expected {expected} files, found {len(paths)}")
         all_paths.extend(paths)
     return all_paths
 
