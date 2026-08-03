@@ -367,10 +367,21 @@ describe("KokugoTab", () => {
   });
 
   it("JS-133: paragraph-role submits roles assigned on the passage", async () => {
+    /**
+     * Behavior: initial roles[] length equals paragraph count; submit preserves order.
+     * 1. Open unit with two paragraphs + list/callout noise + structure task.
+     * 2. Assert two role selects; set 問題/原因; submit.
+     * 3. Expect API body roles length 2 matching selections.
+     */
     const roleUnit: KokugoUnit = {
       ...sampleUnit,
       text: [
+        { kind: "callout", tokens: [{ t: "text", v: "ヒント" }] },
         { kind: "paragraph", tokens: [{ t: "text", v: "問題の段落。" }] },
+        {
+          kind: "list",
+          items: [{ tokens: [{ t: "text", v: "メモ" }] }],
+        },
         { kind: "paragraph", tokens: [{ t: "text", v: "原因の段落。" }] },
       ],
       tasks: [
@@ -404,6 +415,8 @@ describe("KokugoTab", () => {
     renderTab();
     fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
     await screen.findByText("段落の役割");
+    expect(screen.getByText("ヒント")).toBeVisible();
+    expect(screen.getAllByLabelText(/段落 \d+ の役割/)).toHaveLength(2);
     fireEvent.change(screen.getByLabelText("段落 1 の役割"), {
       target: { value: "問題" },
     });

@@ -70,7 +70,7 @@ Build the frontend bundle and serve SPA + API from the Go process on a single po
 make start
 ```
 
-→ http://localhost:8080  
+→ http://localhost:8080
 (`STATIC_DIR=../web/dist`, same process as `./bin/api`)
 
 ### Backend-only / frontend-only

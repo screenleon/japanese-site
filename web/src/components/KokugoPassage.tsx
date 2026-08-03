@@ -105,39 +105,38 @@ export function buildPassageModel(blocks: Block[]): PassageParagraph[] {
     }));
 }
 
+export type GoldCoverage =
+  | { status: "ok" }
+  | { status: "missing_from_plain"; count: number };
+
 /**
- * Gold that is already a substring of some sentence needs no extra UI — the
- * learner taps that sentence. Gold that spans multiple sentences is also OK
- * without extras: multi-select + server compactSpace join still matches.
- *
- * Only when gold is **not** present in any paragraph plain text do we emit a
- * defensive fallback chip (lint should prevent this in real corpus). We never
- * surface an in-text gold string as a labeled “answer chip” (would spoil).
+ * Check gold quotes against passage plain text.
+ * - Present in a sentence or spanning plain: OK (learner multi-selects sentences).
+ * - Missing from all paragraph plain: **fail closed** — never surface the gold
+ *   string as a selectable chip (would spoil the answer). Callers may show a
+ *   generic corpus-inconsistency notice via `missing_from_plain`.
  */
-export function ensureGoldSelectable(
+export function assessGoldCoverage(
   model: PassageParagraph[],
   goldQuotes: string[]
-): PassageSentence[] {
-  const all = model.flatMap((p) => p.sentences);
-  const extras: PassageSentence[] = [];
+): GoldCoverage {
+  let missing = 0;
   for (const gold of goldQuotes) {
     const g = gold.trim();
     if (!g) continue;
-    if (all.some((s) => s.text.includes(g)) || extras.some((s) => s.text.includes(g))) {
-      continue;
-    }
-    // Spanning or multi-sentence gold already in plain: no spoiler chip.
-    if (model.some((p) => p.plain.includes(g))) {
-      continue;
-    }
-    extras.push({
-      key: `gold:orphan:${extras.length}`,
-      paraIndex: -1,
-      sentIndex: -1,
-      text: g,
-    });
+    if (model.some((p) => p.plain.includes(g))) continue;
+    missing += 1;
   }
-  return extras;
+  if (missing > 0) return { status: "missing_from_plain", count: missing };
+  return { status: "ok" };
+}
+
+/** @deprecated Prefer assessGoldCoverage — kept as empty-array alias (no spoiler chips). */
+export function ensureGoldSelectable(
+  _model: PassageParagraph[],
+  _goldQuotes: string[]
+): PassageSentence[] {
+  return [];
 }
 
 const ROLE_STYLE: Record<string, string> = {
@@ -246,15 +245,12 @@ export function KokugoPassage({
         })),
     [stream]
   );
-  const goldExtras = useMemo(() => {
-    if (mode !== "sentence-select" || !goldQuotes?.length) return [] as PassageSentence[];
-    return ensureGoldSelectable(model, goldQuotes);
+  const goldCoverage = useMemo(() => {
+    if (mode !== "sentence-select" || !goldQuotes?.length) {
+      return { status: "ok" } as GoldCoverage;
+    }
+    return assessGoldCoverage(model, goldQuotes);
   }, [mode, goldQuotes, model]);
-
-  const orphanGold = useMemo(
-    () => goldExtras.filter((g) => g.paraIndex < 0),
-    [goldExtras]
-  );
 
   if (blocks.length === 0) {
     return (
@@ -290,8 +286,6 @@ export function KokugoPassage({
         const role = roles?.[paraIndex];
         const border =
           mode === "paragraph-role" ? roleBorderClass(role) : "border-slate-100 bg-slate-50/40";
-        const paraGold = goldExtras.filter((g) => g.paraIndex === paraIndex);
-
         return (
           <div
             key={`para-${paraIndex}`}
@@ -341,15 +335,6 @@ export function KokugoPassage({
                     />
                   ))}
                 </p>
-                {paraGold.map((sent) => (
-                  <SentenceChip
-                    key={sent.key}
-                    sentence={sent}
-                    selected={selectedKeys?.has(sent.key) ?? false}
-                    onToggle={onToggleSentence}
-                    variant="fallback"
-                  />
-                ))}
               </div>
             ) : (
               <div className="text-sm leading-8 text-slate-900">
@@ -360,16 +345,15 @@ export function KokugoPassage({
         );
       })}
 
-      {mode === "sentence-select" &&
-        orphanGold.map((sent) => (
-          <SentenceChip
-            key={sent.key}
-            sentence={sent}
-            selected={selectedKeys?.has(sent.key) ?? false}
-            onToggle={onToggleSentence}
-            variant="fallback"
-          />
-        ))}
+      {mode === "sentence-select" && goldCoverage.status === "missing_from_plain" && (
+        <p
+          className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-950"
+          role="status"
+          data-corpus-inconsistency="gold_missing"
+        >
+          この課題の根拠データに不整合があります（本文に無い引用）。採点はサーバー側で判定されます。引用文そのものは表示しません。
+        </p>
+      )}
     </article>
   );
 }
