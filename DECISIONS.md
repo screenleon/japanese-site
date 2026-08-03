@@ -9,11 +9,11 @@ Agents must read it before planning or implementation tasks.
 
 **Decision**:
 
-1. **Shared `KokugoPassage`** (`web/src/components/KokugoPassage.tsx`) models paragraph → sentence surface text (`plainFromTokens` + `splitJapaneseSentences`) and renders three modes: `readonly`, `sentence-select`, `paragraph-role`.
-2. **Evidence** — learner taps sentences *in the passage*; submit still `{ quotes: string[] }` (optional gold fallback chips via `ensureGoldSelectable` if a gold string is not isolated by the splitter). Grader containment rules unchanged.
-3. **Paragraph roles** — role `<select>` sits on each passage paragraph with role-tinted borders; submit still `{ roles: string[] }` in paragraph order.
+1. **Shared `KokugoPassage`** (`web/src/components/KokugoPassage.tsx`) walks full `Block[]` in order: paragraph blocks get interactive chrome; `list`/`callout` stay visible via `BlockRenderer`. Paragraph → sentence surface text uses `plainFromTokens` + `splitJapaneseSentences`. Modes: `readonly`, `sentence-select`, `paragraph-role`.
+2. **Evidence** — learner taps sentences *in the passage*; submit still `{ quotes: string[] }` (orphan-only gold fallback chips if gold is missing from plain text; no in-text answer spoiler). Grader containment rules unchanged.
+3. **Paragraph roles** — role `<select>` sits on each **paragraph** block with role-tinted borders; submit still `{ roles: string[] }` in paragraph order (list/callout do not consume role slots).
 4. **Read phase** — same component, readonly + paragraph index labels (no answer writes).
-5. **Out of scope** — free character-offset spans, classmates (JS-134), skill map (JS-136), schema/grader changes.
+5. **Out of scope** — free-form paragraph notes, free character-offset spans, classmates (JS-134), skill map (JS-136), schema/grader changes.
 
 **Consequences**: No API or SQLite migration. Static `capabilities.kokugo` still off. Follow-ups can hang classmate reveals on the same sentence keys.
 

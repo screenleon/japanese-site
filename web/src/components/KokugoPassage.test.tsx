@@ -130,4 +130,35 @@ describe("KokugoPassage UI", () => {
       expect.objectContaining({ key: "gold:orphan:0", paraIndex: -1, text: "本文に無い金句" })
     );
   });
+
+  it("keeps list/callout blocks visible and stable paragraph indices", () => {
+    const mixed: Block[] = [
+      { kind: "callout", tone: "info", tokens: [{ t: "text", v: "注意書き" }] },
+      { kind: "paragraph", tokens: [{ t: "text", v: "第一段落です。" }] },
+      {
+        kind: "list",
+        items: [{ tokens: [{ t: "text", v: "箇条書き" }] }],
+      },
+      { kind: "paragraph", tokens: [{ t: "text", v: "第二段落です。" }] },
+    ];
+    const model = buildPassageModel(mixed);
+    expect(model.map((p) => p.paraIndex)).toEqual([0, 1]);
+    expect(model[0].sentences[0].key).toBe("0:0");
+    expect(model[1].sentences[0].key).toBe("1:0");
+
+    render(
+      <KokugoPassage
+        blocks={mixed}
+        mode="paragraph-role"
+        roles={["問題", "結論"]}
+        roleOptions={["問題", "原因", "提案", "結論"]}
+      />
+    );
+    expect(screen.getByText("注意書き")).toBeVisible();
+    expect(screen.getByText("箇条書き")).toBeVisible();
+    expect(screen.getByText("第一段落です。")).toBeVisible();
+    expect(screen.getByText("第二段落です。")).toBeVisible();
+    expect(screen.getByLabelText("段落 1 の役割")).toBeVisible();
+    expect(screen.getByLabelText("段落 2 の役割")).toBeVisible();
+  });
 });

@@ -141,4 +141,4 @@ make clean             # remove build artifacts and dev SQLite
 | `project/project-manifest.md` | Repo constraints and validation |
 | `AGENTS.md` | Agent operating playbook |
 
-Current product focus after JS-131/132 (minimal 国語 cycle): **JS-133** reader polish (evidence highlight + paragraph-role UX), then classmates / more units / skill map (JS-134..136). M4 LLM connector remains deferred until re-authorized.
+**JS-133 shipped** (in-passage evidence highlight + paragraph-role marking). Next 国語 work: **JS-134** classmates / revision compare, **JS-135** unit pack 2, **JS-136** skill map. M4 LLM connector remains deferred until re-authorized.

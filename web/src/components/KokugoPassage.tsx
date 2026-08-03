@@ -1,6 +1,7 @@
 // JS-133 — in-passage reader for 国語 evidence highlight + paragraph roles.
 // Keeps grading contracts unchanged: quotes[] / roles[] surface strings.
 // UI-001: prop-driven / no persistent selection state here (tabs own Maps).
+// ADR-0005: unit.text is Block[]; non-paragraph kinds stay visible via BlockRenderer.
 
 import { useMemo } from "react";
 import type { Block, Token } from "../apiTypes";
@@ -10,7 +11,7 @@ import { BlockRenderer } from "./EntryAnnotations";
 export interface PassageSentence {
   /** Stable key: `${paraIndex}:${sentIndex}` or `gold:…` for fallback chips. */
   key: string;
-  /** Paragraph index, or -1 for orphan gold not found in any paragraph plain. */
+  /** Paragraph index among paragraph blocks only, or -1 for orphan gold. */
   paraIndex: number;
   sentIndex: number;
   text: string;
@@ -22,6 +23,21 @@ export interface PassageParagraph {
   plain: string;
   sentences: PassageSentence[];
 }
+
+/** Ordered stream item preserving full Block[] for rendering. */
+export type PassageStreamItem =
+  | {
+      kind: "paragraph";
+      paraIndex: number;
+      block: Extract<Block, { kind: "paragraph" }>;
+      plain: string;
+      sentences: PassageSentence[];
+    }
+  | {
+      kind: "other";
+      blockIndex: number;
+      block: Exclude<Block, { kind: "paragraph" }>;
+    };
 
 /** Flatten Block tokens to surface Japanese (kanji base for ruby). */
 export function plainFromTokens(tokens: Token[]): string {
@@ -51,21 +67,42 @@ export function countParagraphs(blocks: Block[]): number {
   return blocks.reduce((n, b) => n + (b.kind === "paragraph" ? 1 : 0), 0);
 }
 
-/** Build paragraph → sentence model from unit.text (paragraph blocks only, in order). */
-export function buildPassageModel(blocks: Block[]): PassageParagraph[] {
-  const paragraphs = blocks.filter(
-    (b): b is Extract<Block, { kind: "paragraph" }> => b.kind === "paragraph"
-  );
-  return paragraphs.map((block, paraIndex) => {
-    const plain = plainFromTokens(block.tokens);
-    const sentences = splitJapaneseSentences(plain).map((text, sentIndex) => ({
-      key: `${paraIndex}:${sentIndex}`,
-      paraIndex,
-      sentIndex,
-      text,
-    }));
-    return { paraIndex, block, plain, sentences };
+/** Build ordered stream: all Block kinds in place; paragraph indices stable. */
+export function buildPassageStream(blocks: Block[]): PassageStreamItem[] {
+  let paraIndex = 0;
+  return blocks.map((block, blockIndex) => {
+    if (block.kind === "paragraph") {
+      const plain = plainFromTokens(block.tokens);
+      const sentences = splitJapaneseSentences(plain).map((text, sentIndex) => ({
+        key: `${paraIndex}:${sentIndex}`,
+        paraIndex,
+        sentIndex,
+        text,
+      }));
+      const item: PassageStreamItem = {
+        kind: "paragraph",
+        paraIndex,
+        block,
+        plain,
+        sentences,
+      };
+      paraIndex += 1;
+      return item;
+    }
+    return { kind: "other", blockIndex, block };
   });
+}
+
+/** Paragraph-only model (selection / roles). Derived from the full stream. */
+export function buildPassageModel(blocks: Block[]): PassageParagraph[] {
+  return buildPassageStream(blocks)
+    .filter((item): item is Extract<PassageStreamItem, { kind: "paragraph" }> => item.kind === "paragraph")
+    .map(({ paraIndex, block, plain, sentences }) => ({
+      paraIndex,
+      block,
+      plain,
+      sentences,
+    }));
 }
 
 /**
@@ -193,7 +230,22 @@ export function KokugoPassage({
   className = "",
   showParagraphIndex = true,
 }: KokugoPassageProps) {
-  const model = useMemo(() => buildPassageModel(blocks), [blocks]);
+  const stream = useMemo(() => buildPassageStream(blocks), [blocks]);
+  const model = useMemo(
+    () =>
+      stream
+        .filter(
+          (item): item is Extract<PassageStreamItem, { kind: "paragraph" }> =>
+            item.kind === "paragraph"
+        )
+        .map(({ paraIndex, block, plain, sentences }) => ({
+          paraIndex,
+          block,
+          plain,
+          sentences,
+        })),
+    [stream]
+  );
   const goldExtras = useMemo(() => {
     if (mode !== "sentence-select" || !goldQuotes?.length) return [] as PassageSentence[];
     return ensureGoldSelectable(model, goldQuotes);
@@ -204,7 +256,7 @@ export function KokugoPassage({
     [goldExtras]
   );
 
-  if (model.length === 0) {
+  if (blocks.length === 0) {
     return (
       <article
         className={`rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-500 ${className}`}
@@ -220,32 +272,46 @@ export function KokugoPassage({
       className={`space-y-4 rounded-lg border border-slate-200 bg-white p-4 leading-8 ${className}`}
       aria-label="本文"
     >
-      {model.map((para) => {
-        const role = roles?.[para.paraIndex];
+      {stream.map((item) => {
+        if (item.kind === "other") {
+          return (
+            <div
+              key={`other-${item.blockIndex}`}
+              className="rounded-md border border-slate-100 bg-white px-1 py-1"
+              data-block-kind={item.block.kind}
+              data-block-index={item.blockIndex}
+            >
+              <BlockRenderer blocks={[item.block]} />
+            </div>
+          );
+        }
+
+        const { paraIndex, block, sentences } = item;
+        const role = roles?.[paraIndex];
         const border =
           mode === "paragraph-role" ? roleBorderClass(role) : "border-slate-100 bg-slate-50/40";
-        const paraGold = goldExtras.filter((g) => g.paraIndex === para.paraIndex);
+        const paraGold = goldExtras.filter((g) => g.paraIndex === paraIndex);
 
         return (
           <div
-            key={para.paraIndex}
+            key={`para-${paraIndex}`}
             className={`rounded-md border-l-4 pl-3 pr-2 py-2 ${border}`}
-            data-para-index={para.paraIndex}
+            data-para-index={paraIndex}
           >
             <div className="mb-1 flex flex-wrap items-center gap-2">
               {showParagraphIndex && (
                 <span className="text-[11px] font-medium uppercase tracking-wide text-slate-500">
-                  段落 {para.paraIndex + 1}
+                  段落 {paraIndex + 1}
                 </span>
               )}
               {mode === "paragraph-role" && roleOptions && roleOptions.length > 0 && (
                 <label className="flex items-center gap-1.5 text-xs text-slate-700">
-                  <span className="sr-only">段落 {para.paraIndex + 1} の役割</span>
+                  <span className="sr-only">段落 {paraIndex + 1} の役割</span>
                   <select
                     className="rounded border border-slate-300 bg-white px-2 py-0.5 text-xs font-medium"
                     value={role ?? roleOptions[0] ?? ""}
-                    aria-label={`段落 ${para.paraIndex + 1} の役割`}
-                    onChange={(e) => onRoleChange?.(para.paraIndex, e.target.value)}
+                    aria-label={`段落 ${paraIndex + 1} の役割`}
+                    onChange={(e) => onRoleChange?.(paraIndex, e.target.value)}
                   >
                     {roleOptions.map((r) => (
                       <option key={r} value={r}>
@@ -265,7 +331,7 @@ export function KokugoPassage({
             {mode === "sentence-select" ? (
               <div className="text-sm leading-8 text-slate-900">
                 <p>
-                  {para.sentences.map((sent) => (
+                  {sentences.map((sent) => (
                     <SentenceChip
                       key={sent.key}
                       sentence={sent}
@@ -287,7 +353,7 @@ export function KokugoPassage({
               </div>
             ) : (
               <div className="text-sm leading-8 text-slate-900">
-                <BlockRenderer blocks={[para.block]} />
+                <BlockRenderer blocks={[block]} />
               </div>
             )}
           </div>

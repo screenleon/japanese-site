@@ -1556,9 +1556,9 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 
 **Why**: 證據標記與段落角色是国語差異化核心。
 
-**Requirement**: highlight UX、段落筆記／角色標記打磨。
+**Requirement** (this ship): in-passage evidence **highlight** + **paragraph-role** marking polish. Free-form paragraph *notes* are **out of scope** for JS-133 (deferred; not closed as notes capture).
 
-**Outcome**: 新增 `KokugoPassage`：本文上點句選根拠（`quotes[]`）、段落旁角色選擇＋色標（`roles[]`）；讀取階段顯示段落編號。評分 API 契約不變。
+**Outcome**: 新增 `KokugoPassage`：本文上點句選根拠（`quotes[]`）、段落旁角色選擇＋色標（`roles[]`）；讀取階段顯示段落編號；非 paragraph 的 `list`/`callout` 仍經 `BlockRenderer` 顯示。評分 API 契約不變。
 
 **Tags**: P2, kokugo, frontend
 **Source**: docs/adr/0005-kokugo-track.md
