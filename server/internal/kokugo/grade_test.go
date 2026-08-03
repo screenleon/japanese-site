@@ -100,6 +100,7 @@ func TestGradeArtifactProgressiveWriting(t *testing.T) {
 }
 
 func TestGradeArtifactOptionalBounds(t *testing.T) {
+	// Both bounds positive (closed range).
 	unit := map[string]any{
 		"artifact": map[string]any{
 			"kind":      "short-proposal",
@@ -119,6 +120,52 @@ func TestGradeArtifactOptionalBounds(t *testing.T) {
 	got = GradeArtifact(unit, padRunes("x", 11), []bool{true}, 0)
 	if got.Correct == nil || *got.Correct {
 		t.Fatalf("above max should fail when max>0: %+v", got)
+	}
+}
+
+func TestGradeArtifactOneSidedBounds(t *testing.T) {
+	// min only: max_chars=0 means no upper bound.
+	minOnly := map[string]any{
+		"artifact": map[string]any{
+			"kind":      "short-proposal",
+			"min_chars": float64(5),
+			"max_chars": float64(0),
+			"checklist": []any{},
+		},
+	}
+	got := GradeArtifact(minOnly, "abcd", nil, 0) // 4 < 5
+	if got.Correct == nil || *got.Correct {
+		t.Fatalf("min-only: below min should fail: %+v", got)
+	}
+	got = GradeArtifact(minOnly, "abcde", nil, 0)
+	if got.Correct == nil || !*got.Correct {
+		t.Fatalf("min-only: at min should pass: %+v", got)
+	}
+	got = GradeArtifact(minOnly, padRunes("y", 200), nil, 0)
+	if got.Correct == nil || !*got.Correct {
+		t.Fatalf("min-only: long body should pass when max=0: %+v", got)
+	}
+
+	// max only: min_chars=0 means no lower bound beyond non-empty.
+	maxOnly := map[string]any{
+		"artifact": map[string]any{
+			"kind":      "short-proposal",
+			"min_chars": float64(0),
+			"max_chars": float64(10),
+			"checklist": []any{},
+		},
+	}
+	got = GradeArtifact(maxOnly, "a", nil, 0)
+	if got.Correct == nil || !*got.Correct {
+		t.Fatalf("max-only: short non-empty should pass: %+v", got)
+	}
+	got = GradeArtifact(maxOnly, padRunes("z", 10), nil, 0)
+	if got.Correct == nil || !*got.Correct {
+		t.Fatalf("max-only: exactly max should pass: %+v", got)
+	}
+	got = GradeArtifact(maxOnly, padRunes("z", 11), nil, 0)
+	if got.Correct == nil || *got.Correct {
+		t.Fatalf("max-only: above max should fail: %+v", got)
 	}
 }
 
