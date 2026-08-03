@@ -147,6 +147,19 @@ describe("KokugoPassage UI", () => {
     },
   ];
 
+  it("renders explicit empty state when blocks is empty", () => {
+    /**
+     * Behavior: empty Block[] shows the no-passage article, not a blank panel.
+     * 1. Render KokugoPassage with blocks=[].
+     * 2. Find article labeled 本文.
+     * 3. Assert the empty-state copy 本文がありません。 is visible.
+     */
+    render(<KokugoPassage blocks={[]} mode="readonly" />);
+    const article = screen.getByRole("article", { name: "本文" });
+    expect(article).toBeVisible();
+    expect(article).toHaveTextContent("本文がありません。");
+  });
+
   it("toggles sentence selection in sentence-select mode", () => {
     /**
      * Behavior: tapping a sentence toggles selection callback.
