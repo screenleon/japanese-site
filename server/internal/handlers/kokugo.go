@@ -163,6 +163,10 @@ func (h *kokugoHandlers) putProgress(w http.ResponseWriter, r *http.Request) {
 	}
 	p, err := store.UpdateKokugoProgress(r.Context(), h.db, stage, id, body.Step, body.Status)
 	if err != nil {
+		if errors.Is(err, store.ErrKokugoCompletedLocked) {
+			writeJSON(w, http.StatusConflict, map[string]string{"error": "completed_locked"})
+			return
+		}
 		if strings.Contains(err.Error(), "invalid status") {
 			writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid_status"})
 			return
@@ -313,6 +317,10 @@ func (h *kokugoHandlers) putArtifact(w http.ResponseWriter, r *http.Request) {
 		}
 		if errors.Is(err, store.ErrKokugoStaleWrite) {
 			writeJSON(w, http.StatusConflict, map[string]string{"error": "stale_write"})
+			return
+		}
+		if errors.Is(err, store.ErrKokugoCompletedLocked) {
+			writeJSON(w, http.StatusConflict, map[string]string{"error": "completed_locked"})
 			return
 		}
 		httpError(w, r, http.StatusInternalServerError, "internal", err)

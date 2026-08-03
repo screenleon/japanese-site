@@ -859,3 +859,52 @@ func TestKokugoRejectionBranchesLeaveDBUnchanged(t *testing.T) {
 		})
 	}
 }
+
+func TestKokugoCompletedLockedRejectsRegression(t *testing.T) {
+	// Behavior: after full cycle completion, client cannot regress step/status.
+	// Steps:
+	// 1. Complete unit (tasks + draft + revision).
+	// 2. PUT progress step=artifact (simulate concurrent 下書きに戻る).
+	// 3. Assert 409 completed_locked and status remains completed.
+	db := newHandlerTestDB(t)
+	mux := registerKokugoMux(t, db, store.NewSQLiteProgressStore(db))
+	submitLibraryUseTasks(t, mux)
+	if putArtifact(t, mux, map[string]any{
+		"revision": 0, "body": goodArtifactBody, "checklist_checked": []bool{true, true, true},
+	}).Code != 200 {
+		t.Fatal("draft")
+	}
+	if putArtifact(t, mux, map[string]any{
+		"revision": 1, "body": goodArtifactBody, "checklist_checked": []bool{true, true, true},
+	}).Code != 200 {
+		t.Fatal("rev1")
+	}
+
+	req := httptest.NewRequest(
+		http.MethodPut,
+		"/api/kokugo/progress/e5-6/library-use",
+		bytes.NewBufferString(`{"step":"artifact","status":"in_progress"}`),
+	)
+	req.Header.Set("Content-Type", "application/json")
+	rec := httptest.NewRecorder()
+	mux.ServeHTTP(rec, req)
+	if rec.Code != http.StatusConflict || !bytes.Contains(rec.Body.Bytes(), []byte(`completed_locked`)) {
+		t.Fatalf("want 409 completed_locked, got %d %s", rec.Code, rec.Body.String())
+	}
+
+	req2 := httptest.NewRequest(http.MethodGet, "/api/kokugo/progress/e5-6/library-use", nil)
+	rec2 := httptest.NewRecorder()
+	mux.ServeHTTP(rec2, req2)
+	var state struct {
+		Progress *struct {
+			Status string `json:"status"`
+			Step   string `json:"step"`
+		} `json:"progress"`
+	}
+	if err := json.Unmarshal(rec2.Body.Bytes(), &state); err != nil {
+		t.Fatal(err)
+	}
+	if state.Progress == nil || state.Progress.Status != "completed" {
+		t.Fatalf("status must stay completed: %s", rec2.Body.String())
+	}
+}
