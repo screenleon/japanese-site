@@ -451,6 +451,7 @@ export function KokugoTab() {
 
       {phase === "task" && currentTask && (
         <TaskStep
+          key={currentTask.id}
           task={currentTask}
           unit={unit}
           onSubmit={(answer) => void submitTask(answer, "next-task")}
