@@ -68,7 +68,7 @@ const legacyHints = {
   validator_score: "move to _meta.validator_score",
   key_terms: "move to annotations.furigana.vocabulary",
 };
-const pocSlugs = new Set(["youni-naru", "hazuda", "monono", "youni-suru"]);
+const pocSlugs = new Set(["youni-naru", "youni-suru"]);
 const tokenKinds = new Set(["text", "ruby", "term"]);
 const blockKinds = new Set(["paragraph", "list", "callout"]);
 const calloutTones = new Set(["info", "warn", "tip"]);
@@ -268,6 +268,20 @@ function validateMeta(gp, rel) {
   ) {
     fail(rel, "_meta.validator_score must be a number in [0,1]");
   }
+  // Provisional handoff markers must not claim a full-pass score.
+  // "pending-review" covers post-dedup-pending-review and similar identifiers;
+  // native-reviewer-v*-pending is allowed (contrast gate uses that prefix).
+  const vb = String(gp._meta.validated_by || "");
+  if (
+    /pending-review/i.test(vb) &&
+    typeof gp._meta.validator_score === "number" &&
+    gp._meta.validator_score >= 1
+  ) {
+    fail(
+      rel,
+      '_meta.validated_by containing "pending-review" must not set validator_score to a full-pass value (1); complete review or omit the score',
+    );
+  }
 }
 
 function validateAnnotations(gp, rel) {
@@ -450,11 +464,18 @@ function validateFile(file) {
       for (const to of gp.related_slugs) related.push([gp.slug, to]);
     }
   }
-  if (gp.audit_status !== undefined && gp.audit_status !== "pre-redesign") {
-    fail(rel, 'audit_status must equal exactly "pre-redesign" when present');
+  if (
+    gp.audit_status !== undefined &&
+    gp.audit_status !== "pre-redesign" &&
+    gp.audit_status !== "post-dedup-naive"
+  ) {
+    fail(rel, 'audit_status must be one of "pre-redesign" or "post-dedup-naive" when present');
   }
-  if (pocSlugs.has(gp.slug) && gp.audit_status === "pre-redesign") {
-    fail(rel, "PoC entries must not carry audit_status: pre-redesign");
+  if (
+    pocSlugs.has(gp.slug) &&
+    (gp.audit_status === "pre-redesign" || gp.audit_status === "post-dedup-naive")
+  ) {
+    fail(rel, 'PoC entries must not carry audit_status: "pre-redesign" or "post-dedup-naive"');
   }
   const hasTBD = Array.isArray(gp.pattern) && gp.pattern.some((row) => row?.form === "_TBD" || row?.gloss_zh === "待補");
   if (hasTBD && gp.audit_status !== "pre-redesign") {

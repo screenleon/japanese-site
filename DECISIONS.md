@@ -3,6 +3,97 @@
 This file records active architectural and behavioral decisions for this repository.
 Agents must read it before planning or implementation tasks.
 
+## 2026-08-02 — School Kokugo track (国語教室): product contract, dual axes, MVP scope
+
+**Context**: The project wants to combine JLPT-style 日本語学習 with Japanese school 国語 learning (reading → evidence → expression → revision), without collapsing school yearbands into JLPT levels. Audience remains personal (`audience-of-one`). M4 free-form LLM grading stays deferred. Static deployment (JS-018) remains a portfolio / read-only mirror without full learning loops.
+
+**Decision**:
+
+1. **Two tracks, shared infrastructure**
+   - **Track A — 日本語学習**: existing grammar / vocab / kanji / quiz / SRS.
+   - **Track B — 国語教室**: new module for school-style reading cycles (`KokugoUnit`).
+   - Shared: Block/Token/Ruby (ADR-0003), Japanese-first + Chinese reveal, content tiers (source/license/validated_by), local progress patterns.
+   - Kokugo is **not** a third `QuizContentType` value on the cloze quiz loop. It is a separate corpus type + UI surface (same engineering pattern family as the planned Keigo module, JS-084).
+
+2. **Dual axes (must stay independent)**
+
+   | Axis | Controls | v1 values |
+   |------|----------|-----------|
+   | `stage` (国語學習階段) | Text theme, thinking depth, task shape | Only **`e5-6`** content ships. Other stages may exist as closed-enum reservations only. |
+   | `support` (日語支援) | Furigana density, vocab glosses, Chinese reveal defaults | `heavy` \| `n3` \| `standard` \| `none` |
+
+   A learner may study `stage=e5-6` with `support=n3`. JLPT level must **not** gate which stage is selectable.
+
+3. **MVP pedagogical loop (v1 unit must implement)**
+   1. Pre-reading prediction
+   2. Full-text reading (Block[] + optional support overlays)
+   3. Structured tasks (deterministic grade where possible)
+   4. Short written artifact + checklist (no LLM score)
+   5. One revision pass (before/after compare + checklist)
+   Phase-2 additions (not v1 blockers): evidence highlight UI polish, classmate answers, skill map, read-aloud.
+
+4. **v1 task kinds (closed)**
+   `predict` · `evidence-highlight` · `paragraph-role` · `summary-choice`
+   Deferred: `classmate-response`, `rewrite` (as separate engine), `read-aloud`, `argument-map`, free multi-text compare.
+
+5. **Grading policy**
+   Deterministic span/choice/role checks + artifact checklists only. LLM natural-language grading remains M4 / out of scope for kokugo v1 (same deferral as free-form translation production).
+
+6. **Deployment scope**
+   Full unit cycle (attempts, artifacts, revision) ships in **local API mode only**. Static mode (JS-018) may later browse unit text; it does **not** gain IndexedDB full progress in v1. Revisiting JS-018 for offline progress requires a separate decision.
+
+7. **Audience**
+   v1 remains audience-of-one. Classmate answers are curated content, not multi-user social. No accounts / sync / public multi-learner framing required for MVP.
+
+8. **Content policy**
+   Units are original, public-domain, or explicitly licensed. MEXT 学習指導要領 / 補習校資料 may inform **lesson structure** only — do not copy textbook passages. Every unit carries `_meta.source` / `license` / optional `validated_by`.
+
+9. **Content volume plan**
+   Do **not** author 12 units before the loop works. Sequence: schema + **1 PoC unit** → 3–4 units → optional expansion. PoC genre: adult-readable expository/opinion on a public theme (e.g. school library use), tone not childish, still tagged `e5-6` for skill shape.
+
+10. **Boundary with existing tickets**
+    - **JS-083** (N1+ 読解 meta-skill): bridge / short drills on the 日本語 track; not the kokugo unit engine. Schema choice deferred until kokugo ADR lands; may later deep-link skills.
+    - **JS-084** (Keigo module): parallel “new corpus type” engineering precedent; content stays separate.
+    - **JS-090** (audio/dictation): optional later dependency for read-aloud; not a v1 blocker.
+    - **JS-115**: grammar reading UI only — unrelated numbering collision avoided by using **JS-126+** for kokugo.
+
+11. **Success metric (north star)**
+    Weekly count of completed full cycles: 閱讀 → 根據 → 表達 → 修改. Secondary: first-unit completion, 7-day return, revision rate, drop-off step, support-axis usage.
+
+**Rationale**: School 国語 is language-activity centered, not “JLPT with grade labels.” Dual axes preserve adult cognition while scaffolding language. Narrow task surface and local-only progress keep the build inside current architecture without reopening M4 or multi-user product scope.
+
+**Constraints introduced**:
+- New L1 path expected: `server/data/corpus/kokugo/**` (exact layout in ADR-0005 / JS-129).
+- Do not extend `QuizContentType = "grammar" | "vocab"` with `"kokugo"` for the main unit loop.
+- v1 content stage allowlist is `{e5-6}` only.
+- v1 support profiles are the four values above.
+- Full kokugo progress is API-mode only until a future decision revises JS-018.
+- Free-form LLM scoring is forbidden for kokugo v1 ship criteria.
+
+**Backlog**: JS-126..JS-136 (Phase 0–2). Phase 0 (JS-126..128) closed by this entry + ADR-0005.
+
+**Refs**: `docs/adr/0005-kokugo-track.md`, JS-018, JS-083, JS-084, JS-090, ADR-0003, ROADMAP.md § 国語教室.
+
+## 2026-05-18 — JS-114a cross-level grammar dedup + slug standardization (breaking URL change under audience-of-one API-002 override)
+
+**Context**: JS-114a P1+P2 landed cross-level grammar slug and JLPT-level normalization for 11 grammar entries, including both moved slugs and canonical splits/merges (mono-no family). This requires production URL-key changes in `/grammar/{slug}` and quiz selection by slug. It is part of the same workstream as `JS-114a` and is intentionally not additive in URL surface.
+
+**Decision**: Treat this as a controlled breaking URL change under the project’s audience-of-one API-002 override, and ship it with `/api/version.milestone = M3-C6`.
+
+**Rationale**:
+- **Scope (audience-of-one)**: japanese-site is a personal study tool with a single user (`feedback_japanese_site_audience` memory); no external clients rely on the URL surface, so URL-breaking changes do not require additive evolution per the per-PR audience-of-one carve-out documented at `feedback_api002_audience_of_one_override`.
+- **Breaking-change preference**: per the project's standing preference for clean schema-level changes over compat hacks (`feedback_breaking_change_for_maintainability`), 9 grammar slugs are renamed and 7 entries change JLPT level; SRS deep-link URLs (e.g. `/grammar/N3/teshimau`) will 404 until clients refresh.
+- **Cached-client blast radius**: minimal — single browser cache on local device.
+  The `/api/version` milestone bump M3-C5 → M3-C6 surfaces the schema change to any client cache that checks the version field on startup.
+- **Rollback plan (DB-aware)**: Schema migrations are **forward-only**. `git revert` of the merge commit restores application code and the `/api/version` milestone string only; it does **not** reverse an already-applied migration 0022 on a live SQLite file.
+  - **Preferred recovery**: restore a pre-upgrade `japanese-site.sqlite` backup, **or** rebuild the DB from L1 corpus via `make seed` / `make seed-corpus` (corpus is the source of truth for slug existence; learner attempts that referenced deleted/orphan state may still need the backup path).
+  - **Operator steps**: stop API → replace DB with backup (or delete DB + reseed) → start binary matching the restored schema set.
+  - **Migration 0022 data policy**: rekey `question` and `feedback_template` (never bulk-delete questions); merge `read_log`; on `grammar_point` collision reassign `grammar_example` rows to the destination id before dropping the obsolete source row.
+  - **Pre-upgrade operator checklist**: copy the live SQLite file to a **distinct** timestamped path **before** starting a binary/`make seed` that will apply 0022. With learner `attempt` rows present, startup requires either `JAPANESE_SITE_DB_BACKUP_PATH` pointing at a readable pre-0022 SQLite snapshot (magic header + openable + `schema_migrations` without 0022, **not the live DB path / same inode / hard-link alias**, **attempt COUNT matching the live DB**, **and matching learner-history fingerprint** of ordered attempt identities) or explicit `JAPANESE_SITE_ALLOW_SLUG_MIGRATION=1` (dev/test only). An empty, unrelated, or equal-count-but-different-history pre-0022 file is rejected. Backup identity is checked against the migrating `db.Path` (instance-scoped), then `JAPANESE_SITE_DB_PATH`. Restore by stopping the server and replacing the live file with the backup.
+
+Affected slugs: N3 hazuda → N4 hazu-da; N3 hazuganai → N4 hazu-ga-nai; N3 kamoshirenai → N4 kamo-shirenai; N3 teshimau → N4 te-shimau; N4 mono-da → N3 mono-da-norm; N2 monoda → N2 mono-da-emotion; N4 wake-da → N3 wake-da-result; N2 wakeda → N2 wake-da-nuance; N3 monono → N2 mono-no; N2 monono-formal → N2 mono-no; N5 nagara-simultaneous → N4 nagara.
+
+
 ## 2026-05-16 — Optional N5/N4 Chinese mental model scaffold
 
 **Context**: JS-113 added Japanese `annotations.mental_model` strings for N5/N4, but JLPT-001 review noted that some Japanese meta-language is above the comfort boundary for low-level entries. The chosen Phase-A spike adds Traditional Chinese scaffolding for N5/N4 only while keeping N3/N2/N1 Japanese-only.

@@ -47,7 +47,7 @@ const points = [
   },
   {
     ...basePoint,
-    slug: "monono",
+    slug: "mono-no",
     title_ja: "ものの",
     title_zh: "ものの（雖然／但是）",
     jlpt_level: "N3",
@@ -56,7 +56,6 @@ const points = [
       mental_model:
         "前件を事実として置いたうえで、後件で予想から外れる結果を示す。逆接を一つの流れとして読むことで、単なる接続詞ではなく判断の向きを意識できる。",
     },
-    related_slugs: ["monono-formal"],
     explanation_zh: "雖然但是。",
   },
   {
@@ -66,18 +65,6 @@ const points = [
     title_zh: "decoy N2 entry",
     jlpt_level: "N2",
     explanation_zh: "如果 related-slug navigation 沒有設定 active slug，會落到這一筆。",
-  },
-  {
-    ...basePoint,
-    slug: "monono-formal",
-    title_ja: "〜ものの",
-    title_zh: "〜ものの（雖然…但是…）",
-    jlpt_level: "N2",
-    annotations: {
-      nuance_note: "文語的な逆接で、書き言葉や改まった場面で使う。",
-    },
-    related_slugs: ["monono"],
-    explanation_zh: "書面逆接。",
   },
   {
     ...basePoint,
@@ -136,7 +123,8 @@ async function expectMainEntryWithoutExamples(errorText: RegExp) {
     screen.getByText("口語・くだけた逆接。前文の予想と異なる結果を続ける。")
   ).toBeVisible();
   expect(screen.getByRole("heading", { name: "考え方のヒント" })).toBeVisible();
-  expect(screen.getByText("相關用法")).toBeVisible();
+  // Fixture has no related_slugs; section must not appear after cross-level dedup.
+  expect(screen.queryByText("相關用法")).not.toBeInTheDocument();
   expect(screen.queryByText("例文")).not.toBeInTheDocument();
   expect(screen.queryByText("例文を表示できません。")).not.toBeInTheDocument();
   expect(screen.queryByText(errorText)).not.toBeInTheDocument();
@@ -264,10 +252,10 @@ describe("GrammarTab", () => {
       new ApiError(404, "Not Found", "not_found")
     );
 
-    render(<GrammarTab initialSlug="monono" />);
+    render(<GrammarTab initialSlug="mono-no" />);
 
     await expectMainEntryWithoutExamples(/not_found/);
-    expect(getGrammarExamples).toHaveBeenCalledWith("monono");
+    expect(getGrammarExamples).toHaveBeenCalledWith("mono-no");
     expect(getGrammarExamples).toHaveBeenCalledTimes(1);
     expect(warn).toHaveBeenCalledWith(
       "grammar examples fetch failed",
@@ -280,13 +268,13 @@ describe("GrammarTab", () => {
       new ApiError(500, "Server Error", "http_error")
     );
 
-    render(<GrammarTab initialSlug="monono" />);
+    render(<GrammarTab initialSlug="mono-no" />);
 
     expect(await screen.findByRole("heading", { name: "ものの" })).toBeVisible();
     expect(await screen.findByText("例文を表示できません。")).toBeVisible();
     expect(screen.queryByText(/http_error/)).not.toBeInTheDocument();
     expect(screen.queryByRole("alert")).toBeNull();
-    expect(getGrammarExamples).toHaveBeenCalledWith("monono");
+    expect(getGrammarExamples).toHaveBeenCalledWith("mono-no");
     expect(getGrammarExamples).toHaveBeenCalledTimes(1);
     expect(warn).toHaveBeenCalledWith(
       "grammar examples fetch failed",
@@ -297,13 +285,13 @@ describe("GrammarTab", () => {
   it("examples network reject — page renders main entry without crashing", async () => {
     getGrammarExamples.mockRejectedValue(new Error("network down"));
 
-    render(<GrammarTab initialSlug="monono" />);
+    render(<GrammarTab initialSlug="mono-no" />);
 
     expect(await screen.findByRole("heading", { name: "ものの" })).toBeVisible();
     expect(await screen.findByText("例文を表示できません。")).toBeVisible();
     expect(screen.queryByText(/network down/)).not.toBeInTheDocument();
     expect(screen.queryByRole("alert")).toBeNull();
-    expect(getGrammarExamples).toHaveBeenCalledWith("monono");
+    expect(getGrammarExamples).toHaveBeenCalledWith("mono-no");
     expect(getGrammarExamples).toHaveBeenCalledTimes(1);
     expect(warn).toHaveBeenCalledWith(
       "grammar examples fetch failed",
@@ -312,7 +300,7 @@ describe("GrammarTab", () => {
   });
 
   it("renders nuance_note for the active grammar point", async () => {
-    render(<GrammarTab initialSlug="monono" />);
+    render(<GrammarTab initialSlug="mono-no" />);
 
     expect(
       await screen.findByText("口語・くだけた逆接。前文の予想と異なる結果を続ける。")
@@ -320,7 +308,7 @@ describe("GrammarTab", () => {
   });
 
   it("renders mental_model for the active grammar point", async () => {
-    render(<GrammarTab initialSlug="monono" />);
+    render(<GrammarTab initialSlug="mono-no" />);
 
     expect(await screen.findByRole("heading", { name: "考え方のヒント" })).toBeVisible();
     expect(
@@ -347,7 +335,7 @@ describe("GrammarTab", () => {
   });
 
   it("keeps N3 mental_model Japanese-only when Chinese is enabled and mental_model_zh is absent", async () => {
-    renderWithChinese(true, <GrammarTab initialSlug="monono" />);
+    renderWithChinese(true, <GrammarTab initialSlug="mono-no" />);
 
     expect(await screen.findByRole("heading", { name: "ものの" })).toBeVisible();
     expect(
@@ -396,18 +384,13 @@ describe("GrammarTab", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("renders related grammar buttons and navigates to the variant", async () => {
-    render(<GrammarTab initialSlug="monono" />);
+  it("omits related grammar buttons when no related slugs are present", async () => {
+    render(<GrammarTab initialSlug="mono-no" />);
 
     expect(await screen.findByRole("heading", { name: "ものの" })).toBeVisible();
-    expect(screen.getByText("相關用法")).toBeVisible();
 
-    fireEvent.click(screen.getByRole("button", { name: "〜ものの (N2)" }));
-
-    await waitFor(() => {
-      expect(screen.getByRole("heading", { name: "〜ものの" })).toBeVisible();
-    });
-    expect(screen.queryByRole("heading", { name: "デコイ" })).not.toBeInTheDocument();
-    expect(getGrammarExamples).toHaveBeenLastCalledWith("monono-formal");
+    expect(screen.queryByText("相關用法")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "〜ものの (N2)" })).not.toBeInTheDocument();
+    expect(getGrammarExamples).toHaveBeenLastCalledWith("mono-no");
   });
 });

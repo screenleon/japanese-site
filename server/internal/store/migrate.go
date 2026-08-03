@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"io/fs"
 	"log/slog"
+	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 )
@@ -150,6 +152,19 @@ func applyOrVerify(db *DB, name string, body []byte, want string) error {
 	if _, err := tx.Exec(string(body)); err != nil {
 		return fmt.Errorf("apply %s: %w", name, err)
 	}
+	// JS-114a: require a verified pre-upgrade backup when learner history exists,
+	// then rewrite deterministic question ids so a subsequent curated corpus load
+	// does not orphan-sweep legacy ids and CASCADE-delete learner attempts.
+	if name == "0022_grammar_slug_dedup.sql" {
+		if err := requireSlugMigrationBackup(tx, db.Path); err != nil {
+			return fmt.Errorf("apply %s backup preflight: %w", name, err)
+		}
+		if n, err := rekeyGrammarQuestionIDs(tx); err != nil {
+			return fmt.Errorf("apply %s question id rekey: %w", name, err)
+		} else if n > 0 {
+			slog.Info("rekeyed grammar question ids after slug dedup", "count", n)
+		}
+	}
 	if err := tx.Commit(); err != nil {
 		return fmt.Errorf("commit %s: %w", name, err)
 	}
@@ -159,6 +174,326 @@ func applyOrVerify(db *DB, name string, body []byte, want string) error {
 	// .sql comments.
 	slog.Info("applied migration", "version", name, "checksum", want)
 	return nil
+}
+
+// requireSlugMigrationBackup blocks 0022 on non-empty learner history unless
+// an operator-supplied SQLite backup is verified as a distinct pre-0022 copy of
+// this live database (same attempt count), or an explicit test/dev allow flag is
+// set. migratingPath is the DB instance being migrated (db.Path). See DECISIONS.md JS-114a.
+func requireSlugMigrationBackup(tx *sql.Tx, migratingPath string) error {
+	var attempts int
+	if err := tx.QueryRow(`SELECT COUNT(*) FROM attempt`).Scan(&attempts); err != nil {
+		// attempt table may not exist on ancient DBs; treat as empty.
+		if strings.Contains(err.Error(), "no such table") {
+			return nil
+		}
+		return err
+	}
+	if attempts == 0 {
+		return nil
+	}
+	if os.Getenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION") == "1" {
+		slog.Warn("applying 0022 with JAPANESE_SITE_ALLOW_SLUG_MIGRATION=1",
+			"attempts", attempts)
+		return nil
+	}
+	path := os.Getenv("JAPANESE_SITE_DB_BACKUP_PATH")
+	if path == "" {
+		return fmt.Errorf(
+			"learner attempts present (%d): set JAPANESE_SITE_DB_BACKUP_PATH to a pre-upgrade SQLite copy of this database (not the live DB), or JAPANESE_SITE_ALLOW_SLUG_MIGRATION=1 for empty-risk opt-in",
+			attempts,
+		)
+	}
+	// Reject live-as-backup first (seed and API both open the live path before Migrate).
+	if err := rejectLiveDBAsBackup(path, migratingPath); err != nil {
+		return err
+	}
+	liveFP, liveN, err := learnerHistoryFingerprint(tx)
+	if err != nil {
+		return fmt.Errorf("fingerprint live learner history: %w", err)
+	}
+	if liveN != attempts {
+		return fmt.Errorf("internal: live attempt count %d != fingerprint rows %d", attempts, liveN)
+	}
+	if err := verifyPre0022SQLiteBackup(path, attempts, liveFP); err != nil {
+		return err
+	}
+	slog.Info("slug migration backup verified", "path", path, "attempts", attempts)
+	return nil
+}
+
+// learnerHistoryFingerprint returns a stable sha256 of ordered attempt identity
+// rows (id, question_id, user_answer, correct, error_class) so a backup must
+// match the live learner history, not merely share an attempt COUNT.
+// Querier is *sql.Tx or *sql.DB.
+func learnerHistoryFingerprint(q interface {
+	Query(query string, args ...any) (*sql.Rows, error)
+}) (digest string, n int, err error) {
+	rows, err := q.Query(`
+		SELECT id, question_id, user_answer, correct, COALESCE(error_class, '')
+		FROM attempt
+		ORDER BY id`)
+	if err != nil {
+		if strings.Contains(err.Error(), "no such table") {
+			return hex.EncodeToString(sha256.New().Sum(nil)), 0, nil
+		}
+		return "", 0, err
+	}
+	defer rows.Close()
+	h := sha256.New()
+	for rows.Next() {
+		var id int64
+		var qid, answer, errClass string
+		var correct int
+		if err := rows.Scan(&id, &qid, &answer, &correct, &errClass); err != nil {
+			return "", 0, err
+		}
+		// Fixed field order; tab separators cannot appear in integer fields.
+		fmt.Fprintf(h, "%d\t%s\t%s\t%d\t%s\n", id, qid, answer, correct, errClass)
+		n++
+	}
+	if err := rows.Err(); err != nil {
+		return "", 0, err
+	}
+	return hex.EncodeToString(h.Sum(nil)), n, nil
+}
+
+// rejectLiveDBAsBackup ensures the recovery snapshot is not the database about
+// to be rewritten. Prefer the migrating DB instance path, then JAPANESE_SITE_DB_PATH.
+func rejectLiveDBAsBackup(backupPath, migratingPath string) error {
+	// Instance-scoped first so multi-DB processes do not use another Open()'s path.
+	candidates := make([]string, 0, 2)
+	if migratingPath != "" && migratingPath != ":memory:" {
+		candidates = append(candidates, migratingPath)
+	}
+	if env := os.Getenv("JAPANESE_SITE_DB_PATH"); env != "" && env != ":memory:" {
+		candidates = append(candidates, env)
+	}
+	// Fall back only when the migrating store has no path of its own (legacy callers).
+	if len(candidates) == 0 && liveDBPath != "" && liveDBPath != ":memory:" {
+		candidates = append(candidates, liveDBPath)
+	}
+	for _, live := range candidates {
+		if err := rejectSamePathOrFile(backupPath, live); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func rejectSamePathOrFile(backupPath, live string) error {
+	if live == "" || live == ":memory:" {
+		return nil
+	}
+	absLive, err1 := filepath.Abs(live)
+	absBak, err2 := filepath.Abs(backupPath)
+	if err1 == nil && err2 == nil && absLive == absBak {
+		return fmt.Errorf(
+			"JAPANESE_SITE_DB_BACKUP_PATH must not be the live database path %q",
+			absLive,
+		)
+	}
+	if same, err := sameFile(live, backupPath); err == nil && same {
+		return fmt.Errorf(
+			"JAPANESE_SITE_DB_BACKUP_PATH %q is the same file as the live database %q",
+			backupPath, live,
+		)
+	}
+	// Also compare cleaned paths (trailing slashes / relative components).
+	if err1 == nil && err2 == nil {
+		if filepath.Clean(absLive) == filepath.Clean(absBak) {
+			return fmt.Errorf(
+				"JAPANESE_SITE_DB_BACKUP_PATH must not be the live database path %q",
+				absLive,
+			)
+		}
+	}
+	return nil
+}
+
+func sameFile(a, b string) (bool, error) {
+	sa, err := os.Stat(a)
+	if err != nil {
+		return false, err
+	}
+	sb, err := os.Stat(b)
+	if err != nil {
+		return false, err
+	}
+	return os.SameFile(sa, sb), nil
+}
+
+// verifyPre0022SQLiteBackup opens path as SQLite and requires that migration
+// 0022 has not already been applied, that the backup's attempt count matches
+// the live database, and that the learner-history fingerprint matches (so an
+// unrelated pre-0022 DB with the same attempt COUNT cannot satisfy preflight).
+// Rejects empty/non-SQLite files.
+func verifyPre0022SQLiteBackup(path string, liveAttempts int, liveFingerprint string) error {
+	st, err := os.Stat(path)
+	if err != nil {
+		return fmt.Errorf("JAPANESE_SITE_DB_BACKUP_PATH %q: %w", path, err)
+	}
+	if st.Size() == 0 {
+		return fmt.Errorf("JAPANESE_SITE_DB_BACKUP_PATH %q is empty", path)
+	}
+	// Header check: SQLite magic string.
+	f, err := os.Open(path)
+	if err != nil {
+		return fmt.Errorf("open backup %q: %w", path, err)
+	}
+	defer f.Close()
+	hdr := make([]byte, 16)
+	n, _ := f.Read(hdr)
+	if n < 16 || string(hdr) != "SQLite format 3\x00" {
+		return fmt.Errorf("JAPANESE_SITE_DB_BACKUP_PATH %q is not a SQLite database", path)
+	}
+
+	bak, err := sql.Open("sqlite", path+"?mode=ro&_pragma=query_only(1)")
+	if err != nil {
+		return fmt.Errorf("open backup sqlite %q: %w", path, err)
+	}
+	defer bak.Close()
+	if err := bak.Ping(); err != nil {
+		return fmt.Errorf("ping backup %q: %w", path, err)
+	}
+	var applied int
+	err = bak.QueryRow(
+		`SELECT COUNT(*) FROM schema_migrations WHERE version = ?`,
+		"0022_grammar_slug_dedup.sql",
+	).Scan(&applied)
+	if err != nil {
+		// Missing schema_migrations is acceptable for very old backups.
+		if !strings.Contains(err.Error(), "no such table") {
+			return fmt.Errorf("inspect backup migrations %q: %w", path, err)
+		}
+		applied = 0
+	}
+	if applied > 0 {
+		return fmt.Errorf(
+			"JAPANESE_SITE_DB_BACKUP_PATH %q already has 0022 applied — not a pre-upgrade snapshot",
+			path,
+		)
+	}
+	var bakAttempts int
+	err = bak.QueryRow(`SELECT COUNT(*) FROM attempt`).Scan(&bakAttempts)
+	if err != nil {
+		if strings.Contains(err.Error(), "no such table") {
+			bakAttempts = 0
+		} else {
+			return fmt.Errorf("inspect backup attempts %q: %w", path, err)
+		}
+	}
+	if bakAttempts != liveAttempts {
+		return fmt.Errorf(
+			"JAPANESE_SITE_DB_BACKUP_PATH %q attempt count %d does not match live %d — backup must be a pre-upgrade copy of this database (not an unrelated pre-0022 file)",
+			path, bakAttempts, liveAttempts,
+		)
+	}
+	bakFP, bakN, err := learnerHistoryFingerprint(bak)
+	if err != nil {
+		return fmt.Errorf("fingerprint backup learner history %q: %w", path, err)
+	}
+	if bakN != bakAttempts {
+		return fmt.Errorf("internal: backup attempt count %d != fingerprint rows %d", bakAttempts, bakN)
+	}
+	if bakFP != liveFingerprint {
+		return fmt.Errorf(
+			"JAPANESE_SITE_DB_BACKUP_PATH %q learner-history fingerprint does not match live — backup must be a copy of this database (same attempt identities), not an unrelated pre-0022 file with a similar row count",
+			path,
+		)
+	}
+	return nil
+}
+
+// rekeyGrammarQuestionIDs updates question.id to corpus.QuestionID after
+// grammar_point slug renames so attempt history survives seed-corpus reloads.
+// Returns the number of source rows that required an id change.
+func rekeyGrammarQuestionIDs(tx *sql.Tx) (int, error) {
+	rows, err := tx.Query(`
+		SELECT id, grammar_point, prompt, expected
+		FROM question
+		WHERE content_type = 'grammar'`)
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+
+	type qrow struct {
+		id, gp, prompt, expected string
+	}
+	var list []qrow
+	for rows.Next() {
+		var r qrow
+		if err := rows.Scan(&r.id, &r.gp, &r.prompt, &r.expected); err != nil {
+			return 0, err
+		}
+		list = append(list, r)
+	}
+	if err := rows.Err(); err != nil {
+		return 0, err
+	}
+
+	// Only rows whose grammar_point is a JS-114a rename destination are in
+	// scope. Unrelated grammar questions must not be rewritten even if their
+	// stored id happens not to match the current hash formula.
+	affected := map[string]struct{}{
+		"hazu-da": {}, "hazu-ga-nai": {}, "kamo-shirenai": {}, "te-shimau": {},
+		"mono-da-norm": {}, "mono-da-emotion": {}, "wake-da-result": {}, "wake-da-nuance": {},
+		"mono-no": {}, "nagara": {},
+	}
+
+	changed := 0
+	for _, r := range list {
+		if _, ok := affected[r.gp]; !ok {
+			continue
+		}
+		want := questionID(r.gp, r.prompt, r.expected)
+		if want == r.id {
+			continue
+		}
+		var destExists int
+		if err := tx.QueryRow(`SELECT COUNT(*) FROM question WHERE id = ?`, want).Scan(&destExists); err != nil {
+			return changed, err
+		}
+		if destExists == 0 {
+			// Clone row under the canonical id, then remount attempts, then drop legacy.
+			if _, err := tx.Exec(`
+				INSERT INTO question (
+					id, kind, jlpt_level, grammar_point, prompt, expected, hint,
+					source, license, validated_by, validator_score, validated_at,
+					created_at, payload, content_type
+				)
+				SELECT
+					?, kind, jlpt_level, grammar_point, prompt, expected, hint,
+					source, license, validated_by, validator_score, validated_at,
+					created_at, payload, content_type
+				FROM question WHERE id = ?`, want, r.id); err != nil {
+				return changed, fmt.Errorf("clone question %s -> %s: %w", r.id, want, err)
+			}
+		}
+		if _, err := tx.Exec(`UPDATE attempt SET question_id = ? WHERE question_id = ?`, want, r.id); err != nil {
+			return changed, fmt.Errorf("move attempts %s -> %s: %w", r.id, want, err)
+		}
+		if _, err := tx.Exec(`DELETE FROM question WHERE id = ?`, r.id); err != nil {
+			return changed, fmt.Errorf("delete obsolete question %s: %w", r.id, err)
+		}
+		changed++
+	}
+	return changed, nil
+}
+
+// questionID mirrors corpus.QuestionID (sha256(slug|trim(prompt)|trim(expected))[:8]
+// as 16 hex chars). Duplicated here to avoid an import cycle: corpus load_test
+// imports store, so store must not import corpus.
+func questionID(slug, prompt, expected string) string {
+	h := sha256.New()
+	h.Write([]byte(slug))
+	h.Write([]byte("|"))
+	h.Write([]byte(strings.TrimSpace(prompt)))
+	h.Write([]byte("|"))
+	h.Write([]byte(strings.TrimSpace(expected)))
+	sum := h.Sum(nil)
+	return hex.EncodeToString(sum[:8])
 }
 
 func checksumOf(body []byte) string {

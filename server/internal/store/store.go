@@ -9,7 +9,14 @@ import (
 
 type DB struct {
 	*sql.DB
+	// Path is the filesystem path passed to Open (empty for :memory:).
+	Path string
 }
+
+// liveDBPath is the last path passed to Open in this process. Migration 0022
+// backup preflight prefers the migrating db.Path, then JAPANESE_SITE_DB_PATH;
+// liveDBPath is only a last-resort fallback for legacy callers without Path.
+var liveDBPath string
 
 func Open(path string) (*DB, error) {
 	// busy_timeout(5000) keeps concurrent writers (e.g., HTTP handler logging
@@ -24,5 +31,8 @@ func Open(path string) (*DB, error) {
 	if err := db.Ping(); err != nil {
 		return nil, fmt.Errorf("ping: %w", err)
 	}
-	return &DB{db}, nil
+	if path != "" && path != ":memory:" {
+		liveDBPath = path
+	}
+	return &DB{DB: db, Path: path}, nil
 }

@@ -39,6 +39,9 @@ prompt-budget.local.yml
 .codex
 .agent-trace/
 .gate-results/
+.dispatch-results/
 .codex-briefs/
 __pycache__/
 *.pyc
+
+.pm-dispatch

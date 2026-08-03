@@ -120,6 +120,7 @@ assert_bad "i1-schema-version" 'del(.schema_version)' "schema_version must equal
 assert_bad "i2-pattern" '.pattern = [{"form":"   ","gloss_zh":"待補"}]' "pattern[0].form must be a non-empty string"
 assert_bad "i3-block" '.explanation_ja_blocks[0].tokens[0] = {"t":"ruby","k":"","r":"こんきょ"}' "explanation_ja_blocks block 0 token 0 ruby.k and ruby.r"
 assert_bad "i4-meta" '._meta.license = ""' "_meta.license must be a non-empty string"
+assert_bad "i4-pending-review-pass" '._meta.validated_by = "post-dedup-pending-review" | ._meta.validator_score = 1' 'pending-review" must not set validator_score'
 assert_bad "i5-legacy-top" '.source = "curated"' "source is disallowed; move to _meta.source"
 assert_bad "i6-annotation-overlap" '.annotations.pattern = "bad"' "annotations key 'pattern' overlaps top-level key"
 assert_bad "i7-furigana-key-terms" '.annotations.furigana.key_terms = [{"kanji":"根拠","reading":"こんきょ"}]' "annotations.furigana.key_terms is disallowed"
@@ -131,12 +132,12 @@ assert_bad "i9-classifier-predicate-mirror" '.annotations.classifier.rules[0].er
 assert_bad "i10-bad-contrast" '.classifier_rules[0].contrast.with_pattern = ""' "contrast.with_pattern must be a non-empty string"
 assert_bad "i11-contrast-no-native-review" '._meta.validated_by = "import-curated-v1"' "non-null classifier contrast requires _meta.validated_by"
 assert_bad "i12-mirror-mismatch" '.annotations.classifier.rules[0].with_pattern = "別物"' "must deep-equal classifier_rules"
-assert_bad "i13-bad-audit-status" '.audit_status = "reviewed"' "audit_status must equal exactly"
+assert_bad "i13-bad-audit-status" '.audit_status = "reviewed"' "must be one of"
 assert_bad "i15-tbd-clean" '.pattern = [{"form":"_TBD","gloss_zh":"待補"}]' "permitted only with audit_status"
 
 i14_root="$tmp_root/i14-poc-audit"
 make_clean_root "$i14_root"
-jq '.audit_status = "pre-redesign"' "$i14_root/N3/hazuda.json" > "$i14_root/N3/hazuda.tmp"
+jq '.slug = "youni-suru" | .audit_status = "pre-redesign"' "$i14_root/N3/hazuda.json" > "$i14_root/N3/hazuda.tmp"
 mv "$i14_root/N3/hazuda.tmp" "$i14_root/N3/hazuda.json"
 if GRAMMAR_ROOT="$i14_root" bash scripts/lint-grammar.sh >"$tmp_root/i14.out" 2>"$tmp_root/i14.err"; then
 	echo "test-lint-grammar: i14 fixture unexpectedly passed" >&2

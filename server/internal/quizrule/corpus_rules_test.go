@@ -35,8 +35,12 @@ func TestCorpusClassifierRules(t *testing.T) {
 		{"N3", "contrast-noni", "降っても", "used-temo"},
 		{"N3", "contrast-noni", "が", "used-kedo"},
 		// N2
-		{"N2", "wakeda", "はずだ", "used-hazu"},
-		{"N2", "monoda", "ことだ", "used-koto"},
+		{"N2", "wake-da-nuance", "はずだ", "used-hazu"},
+		{"N2", "mono-da-emotion", "ことだ", "used-koto"},
+		// mono-no: first-match; used-kedo must precede default after missing-target.
+		{"N2", "mono-no", "正しいけど難しい", "missing-target-pattern"},
+		{"N2", "mono-no", "正しいものの、難しいけど", "used-kedo"},
+		{"N2", "mono-no", "正しいものの、まだ難しい", "generic"},
 		{"N2", "dokoroka-formal", "ばかりか", "used-bakarika"},
 		{"N2", "nikanshite", "にとって", "used-nitotte"},
 		{"N2", "tsutsu", "聞きながら", "used-nagara"},
@@ -49,7 +53,7 @@ func TestCorpusClassifierRules(t *testing.T) {
 		{"N1", "toittemo-kagonai", "大げさ", "used-oogesa"},
 		{"N1", "yogi-naku-sareru", "ざるを得ない", "used-zaruwoenai"},
 		// Unknown/unmatched falls through.
-		{"N2", "wakeda", "neither hazu nor koto", "generic"},
+	{"N2", "wake-da-nuance", "neither hazu nor koto", "generic"},
 	}
 
 	for _, tc := range cases {

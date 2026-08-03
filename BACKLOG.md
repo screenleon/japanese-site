@@ -123,6 +123,24 @@
 | JS-112 | 🔵 active | lint-grammar / lint-vocab Token[] validator 共用化 | schema/refactor | 2026-05-15 | PR-gate finding 2026-05-15 (gate-20260515-231333.md architecture-reviewer medium) |
 | JS-113 | ✅ closed 2026-05-16 | N5+N4 mental_model rollout (77 entries: 39 N5 + 38 N4, JS-041 seeds excluded, native perspective) | content | 2026-05-16 | planning:2026-05-16 |
 | JS-114 | 🔵 active | Cross-level inventory dedup: N4↔N5 nagara + N4↔N3 te-shimau / kamo-shirenai / hazu-da consolidate-or-split decision | content/schema | 2026-05-17 | JS-100b native review 2026-05-17 |
+| JS-114b | 🔵 active | editorial polish on JS-114a merged entries + native-review re-authorization | content | 2026-05-18 | JS-114a P3 |
+| JS-115 | 🔵 active | Grammar reading UI restructure | frontend | 2026-05-18 | user feedback 2026-05-18 |
+| JS-126 | ✅ closed 2026-08-02 | School Kokugo 產品契約（雙 track、MVP 範圍、指標） | architecture | 2026-08-02 | DECISIONS.md#2026-08-02-school-kokugo-track |
+| JS-127 | ✅ closed 2026-08-02 | 学年 × 日語支援雙軸 taxonomy | architecture | 2026-08-02 | DECISIONS.md#2026-08-02-school-kokugo-track |
+| JS-128 | ✅ closed 2026-08-02 | 與 JS-083 / JS-084 / JS-090 的邊界 | architecture | 2026-08-02 | DECISIONS.md#2026-08-02-school-kokugo-track |
+| JS-129 | ✅ closed 2026-08-02 | KokugoUnit / KokugoTask schema + lint + L1 路徑 | architecture | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-130 | ✅ closed 2026-08-02 | 国語 PoC 單元（e5-6 說明／意見文 × 完整循環） | content | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-131 | 🔵 active | 国語最小循環 UI | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-132 | 🔵 active | 国語 local API 進度與作品保存 | backend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-133 | 🔵 active | 国語 Reader 精讀標記強化 | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-134 | 🔵 active | 模擬同學答案與改稿對照 | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-135 | 🔵 active | 国語單元包 2（PoC 後 3–4 單元） | content | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-136 | 🔵 active | 技能地圖與国語技能複習 | product | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-137 | 🔵 active | 国語音讀（依賴音訊路徑） | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-138 | 🔵 active | 国語 ↔ JLPT 語彙／文法 deep-link | product | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-139 | 🔵 active | 重寫 JS-083 為日本語 track 讀解短練 | architecture | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-140 | 🔵 active | 国語內容授權／適切性／母語審查 checklist | content | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-141 | 🔵 active | （可選）重訪 JS-018 靜態進度 | architecture | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 
 ---
 
@@ -920,7 +938,8 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Tags**: P3, n1-plus, architecture, 估計 — 大
 **Source**: planning:2026-05-09
 **Blocked by**: JS-080
-**Related**: JS-080
+**Related**: JS-080, JS-128, JS-139, JS-126
+**Note (2026-08-02)**: 日本語-track bridge drill only — not the School Kokugo unit engine (ADR-0005). Narrative rescope tracked in JS-139.
 <!-- 首次記錄: 2026-05-09 -->
 
 ## JS-084 — Keigo module schema + UI spike (B 方案 — 新 corpus type / 新 NavCard tab / lint / staticApi)
@@ -1433,3 +1452,211 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 **Blocked-on**: JS-100b merge (current PR); JS-101 (N2/N1 v2 uplift) before deciding consolidate vs split, since N2/N1 may surface additional sibling overlaps
 **Related**: JS-100b, JS-100c, JS-101, JS-103
 <!-- 首次記錄: 2026-05-17 -->
+
+## JS-114b — editorial polish on JS-114a merged entries + native-review re-authorization
+
+**Problem**: P3 editorial follow-up is still blocked on post-dedup cleanup. The existing merged entries carry interim wording and provisional metadata from earlier edits.
+
+**Why**: JS-114a intentionally separated schema migration and corpus renames from prose polish. Learner-facing content quality still needs one focused pass before next content wave.
+
+**Requirement**:
+1. Polish 5 post-dedup-naive entries (N4/hazu-da, N4/kamo-shirenai, N4/te-shimau, N2/mono-no, N4/nagara): remove `(merged from <path>)` markers; integrate prose.
+2. Differentiate N3/mono-da-norm (basic social norm) vs N2/mono-da-emotion (admiration / というものだ).
+3. Differentiate N3/wake-da-result (basic conclusion) vs N2/wake-da-nuance.
+4. Author NEW entry N3/nagara-contrast (逆接 ながら); distinguish from noni/keredomo.
+5. REVERT the `_meta.validated_by: "native-reviewer-v1"` stamp on N4/hazu-da and re-author inherited classifier contrasts.
+6. Re-run native review pass for the five entries.
+
+**Tags**: P2, content
+**Source**: JS-114a P3
+<!-- 首次記錄: 2026-05-18 -->
+
+## JS-115 — Grammar reading UI restructure
+
+**Problem**: The current grammar reading layout mixes multiple annotation blocks under one grid, with furigana and core note types competing for cognitive priority.
+
+**Why**: The user requested clearer study flow: phrase-level info should read top-down in semantic order, with meta blocks decoupled from structural examples.
+
+**Requirement**:
+1. Pull furigana out of `EntryAnnotations` grid into independent block directly under title.
+2. Split `mental_model` (考え方のヒント) into independent block.
+3. Split `nuance_note` (ニュアンス) into independent block.
+4. Move examples directly below 句型.
+5. Add entry_type schema field (form / category / concept) to skip furigana rendering for meta-grammar entries.
+
+**Tags**: P3, frontend, grammar
+**Source**: user feedback 2026-05-18
+<!-- 首次記錄: 2026-05-18 -->
+
+## JS-126 — School Kokugo 產品契約（雙 track、MVP 範圍、指標） ✅ 2026-08-02
+
+**Outcome**: 已凍結兩條路線（日本語学習 / 国語教室）、audience-of-one、完整循環僅 local API、靜態版不承擔完整進度、北極星指標為每週完成的讀→據→寫→改循環。
+**See**: DECISIONS.md#2026-08-02-school-kokugo-track, docs/adr/0005-kokugo-track.md
+<!-- 首次記錄: 2026-08-02 -->
+
+## JS-127 — 学年 × 日語支援雙軸 taxonomy ✅ 2026-08-02
+
+**Outcome**: v1 內容 stage 僅 `e5-6`；support 為 `heavy | n3 | standard | none`，與 JLPT 解耦。
+**See**: DECISIONS.md#2026-08-02-school-kokugo-track, docs/adr/0005-kokugo-track.md
+<!-- 首次記錄: 2026-08-02 -->
+
+## JS-128 — 與 JS-083 / JS-084 / JS-090 的邊界 ✅ 2026-08-02
+
+**Outcome**: JS-083 為日本語 track 讀解短練；JS-084 為平行 module 工程先例；JS-090 為後續音讀依賴。国語單元引擎獨立。
+**See**: DECISIONS.md#2026-08-02-school-kokugo-track, docs/adr/0005-kokugo-track.md
+<!-- 首次記錄: 2026-08-02 -->
+
+## JS-129 — KokugoUnit / KokugoTask schema + lint + L1 路徑 ✅ 2026-08-02
+
+**Outcome**: 已落地 `web/src/kokugoTypes.ts`、`scripts/lint-kokugo.sh`、`make lint-kokugo` / `test-lint-kokugo`、L1 路徑 `server/data/corpus/kokugo/e5-6/` 與 fixture 單元 `library-use.json`（含四種 v1 task + artifact）。未接入 QuizContentType / bake-static / runtime API。
+**See**: docs/adr/0005-kokugo-track.md, server/data/corpus/kokugo/README.md
+<!-- 首次記錄: 2026-08-02 -->
+
+## JS-130 — 国語 PoC 單元（e5-6 說明／意見文 × 完整循環） ✅ 2026-08-02
+
+**Outcome**: 已以 `e5-6/library-use.json` 交付第一個完整循環 PoC（預測／證據／段落角色／摘要選擇 + artifact checklist；`_meta.validated_by` 已填）。與 JS-129 同批落地；後續單元包見 JS-135。
+**See**: docs/adr/0005-kokugo-track.md, server/data/corpus/kokugo/e5-6/library-use.json
+<!-- 首次記錄: 2026-08-02 -->
+
+## JS-131 — 国語最小循環 UI
+
+**Problem**: 尚無導航與流程承載 predict → read → tasks → artifact → revise。
+
+**Why**: schema 與 PoC 需可被學習者實際走完。
+
+**Requirement**: 新 nav surface、capabilities 感知、日文優先、僅 deterministic 評分；UI 可先功能後美化。
+
+**Tags**: P1, kokugo, frontend
+**Source**: docs/adr/0005-kokugo-track.md
+**Blocked by**: JS-129, JS-130
+<!-- 首次記錄: 2026-08-02 -->
+
+## JS-132 — 国語 local API 進度與作品保存
+
+**Problem**: 單元進度、作答、草稿與改稿需持久化。
+
+**Why**: 沒有本地進度就無法形成完整循環與複習。
+
+**Requirement**: SQLite 保存 unit/task/artifact/revision；靜態模式維持 JS-018（無完整進度）。
+
+**Tags**: P1, kokugo, backend
+**Source**: docs/adr/0005-kokugo-track.md
+**Blocked by**: JS-129
+<!-- 首次記錄: 2026-08-02 -->
+
+## JS-133 — 国語 Reader 精讀標記強化
+
+**Problem**: Phase-1 可能只有最小 widget，精讀手感不足。
+
+**Why**: 證據標記與段落角色是国語差異化核心。
+
+**Requirement**: highlight UX、段落筆記／角色標記打磨。
+
+**Tags**: P2, kokugo, frontend
+**Source**: docs/adr/0005-kokugo-track.md
+**Blocked by**: JS-131
+<!-- 首次記錄: 2026-08-02 -->
+
+## JS-134 — 模擬同學答案與改稿對照
+
+**Problem**: 單人站需模擬「以文章為根據交流」。
+
+**Why**: 同學答案與改稿是教室循環的後半段。
+
+**Requirement**: 作答後揭示編寫同學答案；修改前後對照。
+
+**Tags**: P2, kokugo, frontend
+**Source**: docs/adr/0005-kokugo-track.md
+**Blocked by**: JS-131
+<!-- 首次記錄: 2026-08-02 -->
+
+## JS-135 — 国語單元包 2（PoC 後 3–4 單元）
+
+**Problem**: 單一 PoC 無法驗證題材多樣性與留存。
+
+**Why**: 在引擎穩定後再擴內容。
+
+**Requirement**: 故事／說明意見／輕詩歌或文化各至少覆蓋；仍限 e5-6。
+
+**Tags**: P2, kokugo, content
+**Source**: docs/adr/0005-kokugo-track.md
+**Blocked by**: JS-130, JS-131
+<!-- 首次記錄: 2026-08-02 -->
+
+## JS-136 — 技能地圖與国語技能複習
+
+**Problem**: 僅單元完成率看不出閱讀技能進步。
+
+**Why**: 技能維度是留存與複習的核心。
+
+**Requirement**: skill map + 弱技能複習佇列；勿只併回 cloze SRS。
+
+**Tags**: P2, kokugo, product
+**Source**: docs/adr/0005-kokugo-track.md
+**Blocked by**: JS-131, JS-132
+<!-- 首次記錄: 2026-08-02 -->
+
+## JS-137 — 国語音讀（依賴音訊路徑）
+
+**Problem**: 音讀是国語課常見活動，目前無基建。
+
+**Why**: 可延後；依賴 JS-090。
+
+**Requirement**: 朗讀／錄音播放接上音訊路徑。
+
+**Tags**: P3, kokugo, frontend
+**Source**: docs/adr/0005-kokugo-track.md
+**Blocked by**: JS-131, JS-090
+<!-- 首次記錄: 2026-08-02 -->
+
+## JS-138 — 国語 ↔ JLPT 語彙／文法 deep-link
+
+**Problem**: 兩 track 若不互通，生詞與文法複習斷裂。
+
+**Why**: Bridge 可提高 JLPT 路線價值。
+
+**Requirement**: 單元關鍵語可跳轉 vocab/grammar 學習面。
+
+**Tags**: P3, kokugo, product
+**Source**: docs/adr/0005-kokugo-track.md
+**Blocked by**: JS-130, JS-131
+<!-- 首次記錄: 2026-08-02 -->
+
+## JS-139 — 重寫 JS-083 為日本語 track 讀解短練
+
+**Problem**: JS-083 原文仍像「另一套讀解 content type」，易與国語教室混淆。
+
+**Why**: 邊界已在 JS-128 決定，需更新 ticket 敘事。
+
+**Requirement**: 將 JS-083 定位為 bridge drills，對齊 ADR-0005。
+
+**Tags**: P3, kokugo, architecture
+**Source**: docs/adr/0005-kokugo-track.md
+**Blocked by**: JS-128, JS-129
+<!-- 首次記錄: 2026-08-02 -->
+
+## JS-140 — 国語內容授權／適切性／母語審查 checklist
+
+**Problem**: 多單元擴充前缺統一內容品質門檻。
+
+**Why**: 不可複製教科書；需可重複的審查清單。
+
+**Requirement**: 授權、學年適切、母語者／native-perspective 檢查表。
+
+**Tags**: P2, kokugo, content
+**Source**: docs/adr/0005-kokugo-track.md
+**Blocked by**: JS-129
+<!-- 首次記錄: 2026-08-02 -->
+
+## JS-141 — （可選）重訪 JS-018 靜態進度
+
+**Problem**: 若未來要在 GitHub Pages 長期學国語，現靜態定位不足。
+
+**Why**: v1 明確不做；需獨立決策。
+
+**Requirement**: 決定是否允許 IndexedDB 等本地進度；預設維持 JS-018。
+
+**Tags**: P3, kokugo, architecture
+**Source**: docs/adr/0005-kokugo-track.md
+**Blocked by**: JS-132
+<!-- 首次記錄: 2026-08-02 -->

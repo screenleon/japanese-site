@@ -435,6 +435,668 @@ func TestMigrate_0018_FeedbackTemplateDokorokaRekey(t *testing.T) {
 	}
 }
 
+func TestMigrate_0022_BackupPreflightRejectsMissingAndNonSQLite(t *testing.T) {
+	// Behavior: with learner attempts present, 0022 must refuse to start unless
+	// ALLOW is set or a verified pre-0022 SQLite backup path is provided.
+	//
+	// Steps:
+	// 1. Migrate through 0021, seed an attempt-bearing question.
+	// 2. Attempt full Migrate with no ALLOW and no backup → error; 0022 not applied.
+	// 3. Point backup at a non-SQLite file → error; with ALLOW=1 → success.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", "")
+	db := newMemoryDB(t)
+	defer db.Close()
+	migrateThrough(t, db, "0021_grammar_v2.sql")
+	if _, err := db.Exec(`INSERT INTO question
+		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+		VALUES ('seed-q', 'cloze', 'N3', 'hazuda', 'p', 'e', 'test', 'CC0', 'grammar')`); err != nil {
+		t.Fatalf("seed q: %v", err)
+	}
+	if _, err := db.Exec(`INSERT INTO attempt (question_id, user_answer, correct) VALUES ('seed-q', 'x', 0)`); err != nil {
+		t.Fatalf("seed attempt: %v", err)
+	}
+
+	if err := Migrate(db); err == nil {
+		t.Fatal("expected migrate to fail without backup/ALLOW")
+	}
+	var applied int
+	_ = db.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&applied)
+	if applied != 0 {
+		t.Fatalf("0022 applied despite preflight failure: %d", applied)
+	}
+
+	// Non-SQLite backup rejected.
+	junk := filepath.Join(t.TempDir(), "not-a-db.txt")
+	if err := os.WriteFile(junk, []byte("hello"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", junk)
+	if err := Migrate(db); err == nil {
+		t.Fatal("expected migrate to fail for non-SQLite backup")
+	}
+
+	// ALLOW opt-in succeeds.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "1")
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", "")
+	if err := Migrate(db); err != nil {
+		t.Fatalf("migrate with ALLOW: %v", err)
+	}
+	_ = db.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&applied)
+	if applied != 1 {
+		t.Fatalf("0022 not applied under ALLOW: %d", applied)
+	}
+}
+
+func TestMigrate_0022_RejectsLiveDatabaseAsBackup(t *testing.T) {
+	// Behavior: nominating the live SQLite path as JAPANESE_SITE_DB_BACKUP_PATH
+	// must fail when learner attempts exist (seed/API must not self-backup).
+	//
+	// Steps:
+	// 1. Open a file-backed DB, migrate through 0021, seed an attempt.
+	// 2. Set BACKUP_PATH to the same live path (and clear ALLOW).
+	// 3. Migrate fails and 0022 remains unapplied.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
+	livePath := filepath.Join(t.TempDir(), "live.sqlite")
+	live, err := Open(livePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer live.Close()
+	migrateThrough(t, live, "0021_grammar_v2.sql")
+	if _, err := live.Exec(`INSERT INTO question
+		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+		VALUES ('seed-q', 'cloze', 'N3', 'hazuda', 'p', 'e', 'test', 'CC0', 'grammar')`); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := live.Exec(`INSERT INTO attempt (question_id, user_answer, correct) VALUES ('seed-q', 'x', 0)`); err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("JAPANESE_SITE_DB_PATH", livePath)
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", livePath)
+	if err := Migrate(live); err == nil {
+		t.Fatal("expected migrate to reject live DB as its own backup")
+	}
+	var applied int
+	_ = live.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&applied)
+	if applied != 0 {
+		t.Fatalf("0022 applied despite live-as-backup: %d", applied)
+	}
+}
+
+func TestMigrate_0022_RejectsUnrelatedPre0022Backup(t *testing.T) {
+	// Behavior: a distinct pre-0022 SQLite file that is not a copy of the live
+	// learner-bearing database (different attempt count) must be rejected.
+	//
+	// Steps:
+	// 1. Build an empty pre-0022 backup (schema only, no attempts).
+	// 2. Build a live DB with attempts; point BACKUP_PATH at the empty backup.
+	// 3. Migrate fails and 0022 remains unapplied.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
+	bakPath := filepath.Join(t.TempDir(), "unrelated-pre.sqlite")
+	bak, err := Open(bakPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	migrateThrough(t, bak, "0021_grammar_v2.sql")
+	bak.Close()
+
+	livePath := filepath.Join(t.TempDir(), "live.sqlite")
+	live, err := Open(livePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer live.Close()
+	migrateThrough(t, live, "0021_grammar_v2.sql")
+	if _, err := live.Exec(`INSERT INTO question
+		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+		VALUES ('seed-q', 'cloze', 'N3', 'hazuda', 'p', 'e', 'test', 'CC0', 'grammar')`); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := live.Exec(`INSERT INTO attempt (question_id, user_answer, correct) VALUES ('seed-q', 'x', 0)`); err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", bakPath)
+	if err := Migrate(live); err == nil {
+		t.Fatal("expected migrate to reject unrelated pre-0022 backup")
+	}
+	var applied int
+	_ = live.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&applied)
+	if applied != 0 {
+		t.Fatalf("0022 applied despite unrelated backup: %d", applied)
+	}
+}
+
+func TestMigrate_0022_RejectsEqualCountDifferentHistory(t *testing.T) {
+	// Behavior: a distinct pre-0022 DB with the same attempt COUNT but different
+	// attempt identities must not satisfy preflight (fingerprint mismatch).
+	//
+	// Steps:
+	// 1. Build live and bak through 0021, each with one attempt on different questions.
+	// 2. Point BACKUP_PATH at bak; Migrate fails; 0022 unapplied on live.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
+	dir := t.TempDir()
+
+	seedOne := func(path, qid, answer string) {
+		t.Helper()
+		db, err := Open(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		migrateThrough(t, db, "0021_grammar_v2.sql")
+		if _, err := db.Exec(`INSERT INTO question
+			(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+			VALUES (?, 'cloze', 'N3', 'hazuda', 'p', 'e', 'test', 'CC0', 'grammar')`, qid); err != nil {
+			t.Fatal(err)
+		}
+		if _, err := db.Exec(`INSERT INTO attempt (question_id, user_answer, correct) VALUES (?, ?, 0)`, qid, answer); err != nil {
+			t.Fatal(err)
+		}
+		if err := db.Close(); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	livePath := filepath.Join(dir, "live.sqlite")
+	bakPath := filepath.Join(dir, "other.sqlite")
+	seedOne(livePath, "live-q", "live-ans")
+	seedOne(bakPath, "bak-q", "bak-ans")
+
+	live, err := Open(livePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer live.Close()
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", bakPath)
+	if err := Migrate(live); err == nil {
+		t.Fatal("expected migrate to reject equal-count different-history backup")
+	}
+	var applied int
+	_ = live.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&applied)
+	if applied != 0 {
+		t.Fatalf("0022 applied despite fingerprint mismatch: %d", applied)
+	}
+}
+
+func TestMigrate_0022_BackupPreflightAcceptsLiveCopy(t *testing.T) {
+	// Behavior: a distinct file copy of the attempt-bearing live DB satisfies
+	// preflight; after migration the backup still holds recoverable attempts.
+	//
+	// Steps:
+	// 1. Build live through 0021, seed an attempt, close, copy file to backup.
+	// 2. Reopen live, point BACKUP_PATH at the copy, Migrate succeeds.
+	// 3. Backup still has the attempt row and lacks 0022 (restorable).
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
+	t.Setenv("JAPANESE_SITE_DB_PATH", "")
+	dir := t.TempDir()
+	livePath := filepath.Join(dir, "live.sqlite")
+	live, err := Open(livePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	migrateThrough(t, live, "0021_grammar_v2.sql")
+	if _, err := live.Exec(`INSERT INTO question
+		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+		VALUES ('seed-q', 'cloze', 'N3', 'hazuda', 'p', 'e', 'test', 'CC0', 'grammar')`); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := live.Exec(`INSERT INTO attempt (question_id, user_answer, correct) VALUES ('seed-q', 'x', 0)`); err != nil {
+		t.Fatal(err)
+	}
+	if err := live.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	bakPath := filepath.Join(dir, "live-copy.sqlite")
+	if err := copyFile(livePath, bakPath); err != nil {
+		t.Fatalf("copy backup: %v", err)
+	}
+
+	live, err = Open(livePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer live.Close()
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", bakPath)
+	if err := Migrate(live); err != nil {
+		t.Fatalf("migrate with live copy backup: %v", err)
+	}
+	var applied int
+	_ = live.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&applied)
+	if applied != 1 {
+		t.Fatalf("0022 not applied: %d", applied)
+	}
+
+	// Backup remains a restorable pre-upgrade snapshot.
+	bak, err := Open(bakPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer bak.Close()
+	var bakAttempts, bak0022 int
+	_ = bak.QueryRow(`SELECT COUNT(*) FROM attempt`).Scan(&bakAttempts)
+	_ = bak.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&bak0022)
+	if bakAttempts != 1 || bak0022 != 0 {
+		t.Fatalf("backup restorable state: attempts=%d 0022=%d want 1/0", bakAttempts, bak0022)
+	}
+}
+
+func TestMigrate_0022_RejectsHardLinkAliasAsBackup(t *testing.T) {
+	// Behavior: a hard-link alias of the live DB must be rejected (same inode),
+	// even when the path string differs from JAPANESE_SITE_DB_PATH.
+	//
+	// Steps:
+	// 1. Open file-backed live, migrate through 0021, seed attempt.
+	// 2. Create a hard link with a different path; set BACKUP_PATH to the link.
+	// 3. Migrate fails; 0022 unapplied.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
+	dir := t.TempDir()
+	livePath := filepath.Join(dir, "live.sqlite")
+	live, err := Open(livePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer live.Close()
+	migrateThrough(t, live, "0021_grammar_v2.sql")
+	if _, err := live.Exec(`INSERT INTO question
+		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+		VALUES ('seed-q', 'cloze', 'N3', 'hazuda', 'p', 'e', 'test', 'CC0', 'grammar')`); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := live.Exec(`INSERT INTO attempt (question_id, user_answer, correct) VALUES ('seed-q', 'x', 0)`); err != nil {
+		t.Fatal(err)
+	}
+	aliasPath := filepath.Join(dir, "live-alias.sqlite")
+	if err := os.Link(livePath, aliasPath); err != nil {
+		t.Skipf("hard link not supported: %v", err)
+	}
+	t.Setenv("JAPANESE_SITE_DB_PATH", livePath)
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", aliasPath)
+	if err := Migrate(live); err == nil {
+		t.Fatal("expected migrate to reject hard-link alias of live DB")
+	}
+	var applied int
+	_ = live.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&applied)
+	if applied != 0 {
+		t.Fatalf("0022 applied despite hard-link alias backup: %d", applied)
+	}
+}
+
+func TestMigrate_0022_RejectsAlreadyMigratedBackup(t *testing.T) {
+	// Behavior: a distinct SQLite backup that already records 0022 is not a
+	// pre-upgrade snapshot and must be rejected without applying 0022 on live.
+	//
+	// Steps:
+	// 1. Build live through 0021 with attempts; copy to backup path.
+	// 2. Open backup, apply full Migrate with ALLOW so backup has 0022.
+	// 3. Point live BACKUP_PATH at the migrated backup; Migrate fails; live lacks 0022.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
+	dir := t.TempDir()
+	livePath := filepath.Join(dir, "live.sqlite")
+	live, err := Open(livePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	migrateThrough(t, live, "0021_grammar_v2.sql")
+	if _, err := live.Exec(`INSERT INTO question
+		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+		VALUES ('seed-q', 'cloze', 'N3', 'hazuda', 'p', 'e', 'test', 'CC0', 'grammar')`); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := live.Exec(`INSERT INTO attempt (question_id, user_answer, correct) VALUES ('seed-q', 'x', 0)`); err != nil {
+		t.Fatal(err)
+	}
+	if err := live.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	bakPath := filepath.Join(dir, "already-migrated.sqlite")
+	if err := copyFile(livePath, bakPath); err != nil {
+		t.Fatalf("copy: %v", err)
+	}
+	bak, err := Open(bakPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "1")
+	if err := Migrate(bak); err != nil {
+		t.Fatalf("migrate backup with ALLOW: %v", err)
+	}
+	bak.Close()
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
+
+	live, err = Open(livePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer live.Close()
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", bakPath)
+	if err := Migrate(live); err == nil {
+		t.Fatal("expected migrate to reject already-migrated backup")
+	}
+	var applied int
+	_ = live.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&applied)
+	if applied != 0 {
+		t.Fatalf("0022 applied on live despite migrated backup: %d", applied)
+	}
+}
+
+func TestMigrate_0022_RejectsMigratingDBAsBackupWithoutEnv(t *testing.T) {
+	// Behavior: backup identity uses the migrating DB instance path, not only
+	// the process-global last-opened path. With JAPANESE_SITE_DB_PATH unset and
+	// another DB opened after the live DB, nominating the live file as backup
+	// must still fail.
+	//
+	// Steps:
+	// 1. Open live, migrate through 0021, seed attempt.
+	// 2. Open a second file-backed DB (overwrites liveDBPath global).
+	// 3. Clear JAPANESE_SITE_DB_PATH; set BACKUP_PATH to live path; Migrate fails.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
+	t.Setenv("JAPANESE_SITE_DB_PATH", "")
+	dir := t.TempDir()
+	livePath := filepath.Join(dir, "live.sqlite")
+	live, err := Open(livePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer live.Close()
+	migrateThrough(t, live, "0021_grammar_v2.sql")
+	if _, err := live.Exec(`INSERT INTO question
+		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+		VALUES ('seed-q', 'cloze', 'N3', 'hazuda', 'p', 'e', 'test', 'CC0', 'grammar')`); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := live.Exec(`INSERT INTO attempt (question_id, user_answer, correct) VALUES ('seed-q', 'x', 0)`); err != nil {
+		t.Fatal(err)
+	}
+
+	otherPath := filepath.Join(dir, "other.sqlite")
+	other, err := Open(otherPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer other.Close()
+
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", livePath)
+	if err := Migrate(live); err == nil {
+		t.Fatal("expected migrate to reject migrating DB as its own backup without env")
+	}
+	var applied int
+	_ = live.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&applied)
+	if applied != 0 {
+		t.Fatalf("0022 applied despite instance-scoped live-as-backup: %d", applied)
+	}
+}
+
+// copyFile copies src to dst for SQLite backup tests (files must not be open for write).
+func copyFile(src, dst string) error {
+	in, err := os.ReadFile(src)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(dst, in, 0o644)
+}
+
+func TestMigrate_0022_QuestionIDCollisionPreservesAttempts(t *testing.T) {
+	// Behavior: when the canonical question id already exists, rekey merges
+	// attempts onto that id and drops the obsolete row.
+	//
+	// Steps:
+	// 1. Seed destination at the post-rename QuestionID and a legacy source row
+	//    that will rekey to the same id, each with an attempt.
+	// 2. Apply 0022 with ALLOW.
+	// 3. Assert one question row at the canonical id and two attempts.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "1")
+	db := newMemoryDB(t)
+	defer db.Close()
+	migrateThrough(t, db, "0021_grammar_v2.sql")
+
+	wantID := corpus.QuestionID("hazu-ga-nai", "shared-prompt", "ans")
+	if _, err := db.Exec(`INSERT INTO question
+		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+		VALUES (?, 'cloze', 'N4', 'hazu-ga-nai', 'shared-prompt', 'ans', 'test', 'CC0', 'grammar')`, wantID); err != nil {
+		t.Fatalf("seed dest: %v", err)
+	}
+	if _, err := db.Exec(`INSERT INTO question
+		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+		VALUES ('legacy-src', 'cloze', 'N3', 'hazuganai', 'shared-prompt', 'ans', 'test', 'CC0', 'grammar')`); err != nil {
+		t.Fatalf("seed src: %v", err)
+	}
+	if _, err := db.Exec(`INSERT INTO attempt (question_id, user_answer, correct)
+		VALUES (?, 'a', 1), ('legacy-src', 'b', 0)`, wantID); err != nil {
+		t.Fatalf("seed attempts: %v", err)
+	}
+	if err := Migrate(db); err != nil {
+		t.Fatalf("migrate: %v", err)
+	}
+	var qn, an int
+	_ = db.QueryRow(`SELECT COUNT(*) FROM question WHERE id=?`, wantID).Scan(&qn)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM attempt WHERE question_id=?`, wantID).Scan(&an)
+	var legacy int
+	_ = db.QueryRow(`SELECT COUNT(*) FROM question WHERE id='legacy-src'`).Scan(&legacy)
+	if qn != 1 || an != 2 || legacy != 0 {
+		t.Fatalf("collision rekey: q=%d attempts=%d legacy=%d want 1/2/0", qn, an, legacy)
+	}
+}
+
+func TestMigrate_0022_GrammarSlugDedupPreservation(t *testing.T) {
+	// Behavior: JS-114a slug renames preserve questions, attempts, feedback,
+	// grammar examples, and read_log counters through collision and pure-rename paths.
+	//
+	// Steps:
+	// 1. Migrate through 0021 and seed source/destination grammar rows, examples,
+	//    questions (including old deterministic ids), attempts, feedback, and read_log.
+	// 2. Apply remaining migrations (including 0022 SQL + question-id rekey).
+	// 3. Assert no question/attempt loss, rekeyed grammar_point fields, examples
+	//    reattached to the canonical slug, and question ids match corpus.QuestionID.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "1")
+	db := newMemoryDB(t)
+	defer db.Close()
+
+	migrateThrough(t, db, "0021_grammar_v2.sql")
+
+	// Minimal grammar_point seeds: source + destination collision for mono-no family,
+	// and a pure rename source (hazuganai → hazu-ga-nai with no destination).
+	seedGP := func(slug, level string) {
+		t.Helper()
+		if _, err := db.Exec(`INSERT INTO grammar_point
+			(slug, title_ja, title_zh, jlpt_level, explanation_zh, source, license)
+			VALUES (?, ?, ?, ?, 'test', 'test', 'CC0')`,
+			slug, slug+"-ja", slug+"-zh", level); err != nil {
+			t.Fatalf("seed grammar_point %s/%s: %v", level, slug, err)
+		}
+	}
+	seedGP("monono", "N3")
+	seedGP("monono-formal", "N2")
+	seedGP("mono-no", "N2") // destination already present (collision)
+	seedGP("hazuganai", "N3")
+
+	// Examples on both collision source and destination — must survive reassignment.
+	seedEx := func(gpSlug, text string) {
+		t.Helper()
+		var id int
+		if err := db.QueryRow(`SELECT id FROM grammar_point WHERE slug=?`, gpSlug).Scan(&id); err != nil {
+			t.Fatalf("lookup gp %s: %v", gpSlug, err)
+		}
+		if _, err := db.Exec(`INSERT INTO grammar_example
+			(grammar_point_id, text_ja, source, license)
+			VALUES (?, ?, 'test', 'CC0')`, id, text); err != nil {
+			t.Fatalf("seed example for %s: %v", gpSlug, err)
+		}
+	}
+	seedEx("monono", "source-monono-example")
+	seedEx("monono-formal", "source-formal-example")
+	seedEx("mono-no", "dest-mono-no-example")
+	seedEx("hazuganai", "source-hazuganai-example")
+
+	// Questions: multiple source rows under monono + monono-formal, plus one under mono-no.
+	// question.id is independent; migration must rekey grammar_point, never delete rows.
+	insertQ := func(id, gp, level string) {
+		t.Helper()
+		if _, err := db.Exec(`INSERT INTO question
+			(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+			VALUES (?, 'cloze', ?, ?, ?, 'ans', 'test', 'CC0', 'grammar')`,
+			id, level, gp, "prompt-"+id); err != nil {
+			t.Fatalf("seed question %s: %v", id, err)
+		}
+	}
+	insertQ("q-monono-1", "monono", "N3")
+	insertQ("q-monono-2", "monono", "N3")
+	insertQ("q-formal-1", "monono-formal", "N2")
+	insertQ("q-target-1", "mono-no", "N2")
+	insertQ("q-hazuganai-1", "hazuganai", "N3")
+
+	if _, err := db.Exec(`INSERT INTO attempt (question_id, user_answer, correct, error_class)
+		VALUES ('q-monono-1', 'x', 0, 'test-err'),
+		       ('q-formal-1', 'y', 1, NULL),
+		       ('q-hazuganai-1', 'z', 0, 'test-err')`); err != nil {
+		t.Fatalf("seed attempts: %v", err)
+	}
+
+	// Feedback templates: unique + colliding error_class on destination.
+	if _, err := db.Exec(`INSERT INTO feedback_template (grammar_point, error_class, body_zh, source, license)
+		VALUES ('monono', 'only-old', 'from monono', 'test', 'CC0'),
+		       ('monono', 'shared', 'old shared', 'test', 'CC0'),
+		       ('mono-no', 'shared', 'keep dest shared', 'test', 'CC0'),
+		       ('hazuganai', 'custom-rekey-test', 'rename me', 'test', 'CC0')`); err != nil {
+		t.Fatalf("seed feedback: %v", err)
+	}
+
+	// read_log: merge monono into existing mono-no; pure rename hazuganai.
+	if _, err := db.Exec(`INSERT INTO read_log (content_type, slug, first_read_at, last_read_at, read_count)
+		VALUES ('grammar', 'monono', '2026-01-01T00:00:00Z', '2026-01-02T00:00:00Z', 3),
+		       ('grammar', 'mono-no', '2026-01-03T00:00:00Z', '2026-01-04T00:00:00Z', 5),
+		       ('grammar', 'hazuganai', '2026-01-01T00:00:00Z', '2026-01-01T00:00:00Z', 2)`); err != nil {
+		t.Fatalf("seed read_log: %v", err)
+	}
+
+	if err := Migrate(db); err != nil {
+		t.Fatalf("migrate 0022: %v", err)
+	}
+
+	// --- questions preserved and rekeyed ---
+	var qCount int
+	if err := db.QueryRow(`SELECT COUNT(*) FROM question`).Scan(&qCount); err != nil {
+		t.Fatalf("count questions: %v", err)
+	}
+	if qCount != 5 {
+		t.Fatalf("question count = %d, want 5 (no deletes)", qCount)
+	}
+	assertByPrompt := func(prompt, wantGP, wantLevel string) {
+		t.Helper()
+		var id, gp, level string
+		if err := db.QueryRow(
+			`SELECT id, grammar_point, jlpt_level FROM question WHERE prompt=?`,
+			prompt,
+		).Scan(&id, &gp, &level); err != nil {
+			t.Fatalf("load question prompt=%s: %v", prompt, err)
+		}
+		if gp != wantGP || level != wantLevel {
+			t.Fatalf("question %s = %s/%s, want %s/%s", prompt, level, gp, wantLevel, wantGP)
+		}
+		wantID := corpus.QuestionID(wantGP, prompt, "ans")
+		if id != wantID {
+			t.Fatalf("question id for %s = %s, want deterministic %s", prompt, id, wantID)
+		}
+	}
+	assertByPrompt("prompt-q-monono-1", "mono-no", "N2")
+	assertByPrompt("prompt-q-monono-2", "mono-no", "N2")
+	assertByPrompt("prompt-q-formal-1", "mono-no", "N2")
+	assertByPrompt("prompt-q-target-1", "mono-no", "N2")
+	assertByPrompt("prompt-q-hazuganai-1", "hazu-ga-nai", "N4")
+
+	// attempts still attached (CASCADE would have removed them if questions deleted)
+	var attemptCount int
+	if err := db.QueryRow(`SELECT COUNT(*) FROM attempt`).Scan(&attemptCount); err != nil {
+		t.Fatalf("count attempts: %v", err)
+	}
+	if attemptCount != 3 {
+		t.Fatalf("attempt count = %d, want 3", attemptCount)
+	}
+	// Seeded attempts must reference rekeyed ids, not the pre-migration seeds.
+	for _, oldID := range []string{"q-monono-1", "q-formal-1", "q-hazuganai-1"} {
+		var n int
+		_ = db.QueryRow(`SELECT COUNT(*) FROM attempt WHERE question_id=?`, oldID).Scan(&n)
+		if n != 0 {
+			t.Fatalf("attempt still points at pre-rekey id %s", oldID)
+		}
+	}
+	// Each seeded attempt must land on the deterministic post-rename id.
+	for _, tc := range []struct {
+		gp, prompt string
+	}{
+		{"mono-no", "prompt-q-monono-1"},
+		{"mono-no", "prompt-q-formal-1"},
+		{"hazu-ga-nai", "prompt-q-hazuganai-1"},
+	} {
+		want := corpus.QuestionID(tc.gp, tc.prompt, "ans")
+		var n int
+		if err := db.QueryRow(`SELECT COUNT(*) FROM attempt WHERE question_id=?`, want).Scan(&n); err != nil {
+			t.Fatalf("attempt count for %s: %v", want, err)
+		}
+		if n != 1 {
+			t.Fatalf("attempt count for rekeyed id %s = %d, want 1", want, n)
+		}
+	}
+
+	// --- feedback templates ---
+	var oldMononoFB, onlyOld, sharedDest, hazuFB, hazuganaiFB int
+	_ = db.QueryRow(`SELECT COUNT(*) FROM feedback_template WHERE grammar_point='monono'`).Scan(&oldMononoFB)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM feedback_template WHERE grammar_point='mono-no' AND error_class='only-old'`).Scan(&onlyOld)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM feedback_template WHERE grammar_point='mono-no' AND error_class='shared' AND body_zh='keep dest shared'`).Scan(&sharedDest)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM feedback_template WHERE grammar_point='hazu-ga-nai' AND error_class='custom-rekey-test'`).Scan(&hazuFB)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM feedback_template WHERE grammar_point='hazuganai'`).Scan(&hazuganaiFB)
+	if oldMononoFB != 0 || onlyOld != 1 || sharedDest != 1 || hazuFB != 1 || hazuganaiFB != 0 {
+		t.Fatalf("feedback rekey: monono=%d only-old=%d sharedDest=%d hazu=%d hazuganai=%d",
+			oldMononoFB, onlyOld, sharedDest, hazuFB, hazuganaiFB)
+	}
+
+	// --- grammar_point: obsolete sources gone; destination kept; pure rename applied ---
+	var mononoGP, formalGP, monoNoGP, hazuganaiGP, hazuGaNaiGP int
+	_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_point WHERE slug='monono'`).Scan(&mononoGP)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_point WHERE slug='monono-formal'`).Scan(&formalGP)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_point WHERE slug='mono-no' AND jlpt_level='N2'`).Scan(&monoNoGP)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_point WHERE slug='hazuganai'`).Scan(&hazuganaiGP)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_point WHERE slug='hazu-ga-nai' AND jlpt_level='N4'`).Scan(&hazuGaNaiGP)
+	if mononoGP != 0 || formalGP != 0 || monoNoGP != 1 || hazuganaiGP != 0 || hazuGaNaiGP != 1 {
+		t.Fatalf("grammar_point: monono=%d formal=%d mono-no=%d hazuganai=%d hazu-ga-nai=%d",
+			mononoGP, formalGP, monoNoGP, hazuganaiGP, hazuGaNaiGP)
+	}
+
+	// --- grammar_example: collision sources reattached to destination; pure rename kept ---
+	var monoNoEx, hazuEx, totalEx int
+	_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_example ge
+		JOIN grammar_point gp ON gp.id = ge.grammar_point_id
+		WHERE gp.slug='mono-no'`).Scan(&monoNoEx)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_example ge
+		JOIN grammar_point gp ON gp.id = ge.grammar_point_id
+		WHERE gp.slug='hazu-ga-nai'`).Scan(&hazuEx)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_example`).Scan(&totalEx)
+	// monono + monono-formal + dest mono-no = 3 on mono-no; hazuganai = 1 on hazu-ga-nai
+	if monoNoEx != 3 || hazuEx != 1 || totalEx != 4 {
+		t.Fatalf("grammar_example preservation: mono-no=%d hazu-ga-nai=%d total=%d want 3/1/4",
+			monoNoEx, hazuEx, totalEx)
+	}
+	for _, text := range []string{"source-monono-example", "source-formal-example", "dest-mono-no-example"} {
+		var n int
+		_ = db.QueryRow(`SELECT COUNT(*) FROM grammar_example WHERE text_ja=?`, text).Scan(&n)
+		if n != 1 {
+			t.Fatalf("example %q count=%d, want 1", text, n)
+		}
+	}
+
+	// --- read_log merge + rename ---
+	var mononoRL, monoNoCount, hazuganaiRL, hazuGaNaiCount int
+	_ = db.QueryRow(`SELECT COUNT(*) FROM read_log WHERE content_type='grammar' AND slug='monono'`).Scan(&mononoRL)
+	_ = db.QueryRow(`SELECT read_count FROM read_log WHERE content_type='grammar' AND slug='mono-no'`).Scan(&monoNoCount)
+	_ = db.QueryRow(`SELECT COUNT(*) FROM read_log WHERE content_type='grammar' AND slug='hazuganai'`).Scan(&hazuganaiRL)
+	_ = db.QueryRow(`SELECT read_count FROM read_log WHERE content_type='grammar' AND slug='hazu-ga-nai'`).Scan(&hazuGaNaiCount)
+	if mononoRL != 0 || monoNoCount != 8 || hazuganaiRL != 0 || hazuGaNaiCount != 2 {
+		t.Fatalf("read_log: monono=%d mono-no count=%d hazuganai=%d hazu-ga-nai count=%d",
+			mononoRL, monoNoCount, hazuganaiRL, hazuGaNaiCount)
+	}
+}
+
 func newMemoryDB(t *testing.T) *DB {
 	t.Helper()
 	db, err := Open(":memory:")

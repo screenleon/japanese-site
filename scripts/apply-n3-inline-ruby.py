@@ -7,12 +7,9 @@ Authored by Claude main thread per JS-106. Token readings hand-authored
 against standard JLPT N3+ pedagogy conventions. The script self-verifies
 byte-identical text concat per entry before writing.
 
-Run from repo root:
-    python3 scripts/apply-n3-inline-ruby.py
-
-After this runs successfully, `bash scripts/lint-grammar.sh N3` should pass
-and `git diff --stat server/data/corpus/grammar/N3/` should show exactly
-38 modified files.
+Historical one-shot (JS-106). After JS-114a slug dedup this entrypoint is
+**retired**: invoking it exits 0 with no writes. Forward regeneration lives in
+`scripts/apply-allLevels-inline-ruby.py`.
 """
 
 import json
@@ -969,18 +966,64 @@ def concat_block(b):
     raise SystemExit(f"unexpected block kind {b['kind']!r}")
 
 
+# JS-114a moved/deleted some historical N3 slugs. Map to current paths or skip.
+# Preflight uses these so the script never partially writes then dies mid-loop.
+SLUG_PATH_OVERRIDES = {
+    # deleted from N3 / absorbed elsewhere after JS-114a — skip (no write)
+    "hazuda": None,
+    "hazuganai": None,
+    "kamoshirenai": None,
+    "monono": None,
+    "teshimau": None,
+}
+
+
+def resolve_path(n3_dir: str, root: str, slug: str):
+    if slug in SLUG_PATH_OVERRIDES:
+        return SLUG_PATH_OVERRIDES[slug]
+    return os.path.join(n3_dir, f"{slug}.json")
+
+
 def main():
+    # One-shot JS-106 authoring helper. After JS-114a slug dedup the inventory is
+    # stale relative to the living corpus; re-running would either miss paths or
+    # rewrite against drifted explanation text. Do not write anything.
+    print(
+        "apply-n3-inline-ruby.py: retired after JS-114a (no writes). "
+        "Use scripts/apply-allLevels-inline-ruby.py for forward regeneration.",
+        file=sys.stderr,
+    )
+    # Non-zero so automation cannot treat this as a successful regeneration.
+    sys.exit(2)
+
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     n3_dir = os.path.join(root, "server", "data", "corpus", "grammar", "N3")
 
     failed = []
     written = []
 
+    # Preflight: resolve every target and abort before any write if inventory is stale.
+    targets = []
     for slug, new_blocks in NEW_BLOCKS.items():
-        path = os.path.join(n3_dir, f"{slug}.json")
+        path = resolve_path(n3_dir, root, slug)
+        if path is None:
+            # Explicitly retired after JS-114a slug dedup — not an error.
+            continue
         if not os.path.exists(path):
             failed.append(f"{slug}: file missing at {path}")
             continue
+        targets.append((slug, path, new_blocks))
+
+    if failed:
+        for msg in failed:
+            print(msg, file=sys.stderr)
+        print(
+            f"preflight failed: {len(failed)} missing target(s); no files written",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    for slug, path, new_blocks in targets:
         with open(path, encoding="utf-8") as f:
             d = json.load(f)
 

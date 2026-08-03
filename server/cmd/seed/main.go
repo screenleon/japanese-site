@@ -118,6 +118,8 @@ func ensureDB(o opts) (*store.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	// Expose live path for migration 0022 backup preflight (same as api main).
+	_ = os.Setenv("JAPANESE_SITE_DB_PATH", cfg.DBPath)
 	db, err := store.Open(cfg.DBPath)
 	if err != nil {
 		return nil, err

@@ -11,7 +11,7 @@ describe("ClassifierContrasts", () => {
           primaryPattern="普通形＋はずだ"
           points={[
             {
-              slug: "wakeda",
+              slug: "wake-da-nuance",
               title_ja: "わけだ",
               title_zh: "理所當然",
               jlpt_level: "N2",
@@ -34,7 +34,7 @@ describe("ClassifierContrasts", () => {
                 },
                 {
                   with_pattern: "わけだ",
-                  with_slug: "wakeda",
+                  with_slug: "wake-da-nuance",
                   rule_ja_blocks: [
                     { kind: "paragraph", tokens: [{ t: "text", v: "推量と納得の違い。" }] },
                   ],

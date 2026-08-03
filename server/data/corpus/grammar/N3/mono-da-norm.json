@@ -1,8 +1,8 @@
 {
-  "slug": "mono-da",
+  "slug": "mono-da-norm",
   "title_ja": "ものだ",
   "title_zh": "ものだ（本來就／常常）",
-  "jlpt_level": "N4",
+  "jlpt_level": "N3",
   "schema_version": 2,
   "pattern": [
     {

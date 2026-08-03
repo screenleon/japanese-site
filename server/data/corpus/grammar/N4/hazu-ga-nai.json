@@ -1,8 +1,8 @@
 {
-  "slug": "hazuganai",
+  "slug": "hazu-ga-nai",
   "title_ja": "はずがない",
   "title_zh": "はずがない（不可能）",
-  "jlpt_level": "N3",
+  "jlpt_level": "N4",
   "schema_version": 2,
   "pattern": [
     {
@@ -53,7 +53,16 @@
         },
         {
           "t": "text",
-          "v": "なはずがない」のように、話し手の"
+          "v": "なはずがない」のように、"
+        },
+        {
+          "t": "ruby",
+          "k": "話し手",
+          "r": "はなして"
+        },
+        {
+          "t": "text",
+          "v": "の"
         },
         {
           "t": "ruby",

@@ -12,7 +12,7 @@ describe("BlockRenderer", () => {
             tokens: [
               { t: "text", v: "plain" },
               { t: "ruby", k: "根拠", r: "こんきょ" },
-              { t: "term", kind: "grammar", slug: "hazuda", label: "はずだ" },
+              { t: "term", kind: "grammar", slug: "hazu-da", label: "はずだ" },
             ],
           },
           { kind: "list", items: [{ tokens: [{ t: "text", v: "item" }] }] },

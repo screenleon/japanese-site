@@ -1,4 +1,4 @@
-.PHONY: help lint lint-rules lint-grammar lint-vocab backlog-render lint-backlog-render corpus-scale vet test test-python-scripts test-dump-grammar-examples test-lint-grammar test-lint-vocab test-validate-backlog-schema clean bake-static dump-grammar-examples build-static preview-static \
+.PHONY: help lint lint-rules lint-grammar lint-vocab lint-kokugo backlog-render lint-backlog-render corpus-scale vet test test-python-scripts test-dump-grammar-examples test-lint-grammar test-lint-vocab test-lint-kokugo test-validate-backlog-schema clean bake-static dump-grammar-examples build-static preview-static \
         bootstrap dev start build dist dist-update \
         run web-dev web-build \
         seed-jmdict seed-kanjidic2 seed-jlpt seed-tatoeba seed-derive seed-corpus seed-all \
@@ -21,6 +21,8 @@ help:
 	@echo "  test-validate-backlog-schema Backlog schema validator fixtures"
 	@echo "  vet           Go static analysis"
 	@echo "  lint-rules    Layered-rule lint"
+	@echo "  lint-kokugo   Validate School Kokugo unit JSON (ADR-0005)"
+	@echo "  test-lint-kokugo Kokugo lint positive/negative fixtures"
 	@echo "  backlog-render Regenerate BACKLOG.md index + status headings"
 	@echo "  lint-backlog-render Verify BACKLOG.md generated sections are current"
 	@echo "  corpus-scale  Report corpus scale against current learning-content floors"
@@ -113,7 +115,7 @@ web-build:
 vet:
 	cd server && go vet ./...
 
-test: test-python-scripts test-dump-grammar-examples test-lint-grammar test-lint-vocab test-validate-backlog-schema
+test: test-python-scripts test-dump-grammar-examples test-lint-grammar test-lint-vocab test-lint-kokugo test-validate-backlog-schema
 	cd server && go test ./...
 
 test-python-scripts:
@@ -127,6 +129,9 @@ test-lint-grammar:
 
 test-lint-vocab:
 	bash scripts/test-lint-vocab.sh
+
+test-lint-kokugo:
+	bash scripts/test-lint-kokugo.sh
 
 test-validate-backlog-schema:
 	bash scripts/test-validate-backlog-schema.sh
@@ -166,7 +171,7 @@ preview-static: bake-static dump-grammar-examples
 	echo "Serving static bundle on http://localhost:$$PORT  ・  Ctrl-C to stop" && \
 	npm run preview -- --host 127.0.0.1 --port "$$PORT" --strictPort
 
-lint: lint-rules lint-vocab
+lint: lint-rules lint-vocab lint-kokugo
 
 lint-rules:
 	bash scripts/lint-rules.sh
@@ -177,6 +182,9 @@ lint-grammar:
 
 lint-vocab:
 	bash scripts/lint-vocab.sh
+
+lint-kokugo:
+	bash scripts/lint-kokugo.sh
 
 backlog-render:
 	node scripts/generate-backlog-md.mjs

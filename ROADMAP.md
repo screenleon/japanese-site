@@ -40,6 +40,40 @@ need an LLM.
 - [ ] Three new question kinds: `translation-zh-ja`, `translation-ja-zh`,
       `sentence-production`. Each has its own LLM prompt template.
 
+## 国語教室 (School Kokugo track)
+
+Second learning track beside JLPT 日本語学習. Product contract:
+`DECISIONS.md` → 2026-08-02 School Kokugo track; architecture:
+`docs/adr/0005-kokugo-track.md`. Backlog: JS-126..JS-141.
+
+**Positioning**: foreign-language learners experience school-style reading,
+evidence, short expression, and revision at adult thinking depth, with a
+separate **日語支援** axis (furigana / glosses / Chinese). Not “JLPT with
+school-year labels.”
+
+**v1 decisions (locked)**:
+- Stage content allowlist: `e5-6` only; support profiles
+  `heavy | n3 | standard | none`.
+- Full unit cycle only in **local API** mode; JS-018 static stays
+  portfolio / no full progress.
+- Deterministic tasks + artifact checklists; **no** LLM scoring (M4 still
+  deferred).
+- Delivery: schema (JS-129) → **1 PoC unit** (JS-130) → minimal UI +
+  progress (JS-131/132) → polish and more units (JS-133..136). Do **not**
+  author twelve units before the loop works.
+
+**Deferred**: read-aloud (JS-137), JLPT deep-links (JS-138), static
+IndexedDB progress (JS-141), multi-user classmates.
+
+- [x] **Phase 0 product contract + dual-axis taxonomy + boundary map**
+      (JS-126..128, ADR-0005).
+- [x] **KokugoUnit schema, lint, L1 path** (JS-129; fixture unit
+      `e5-6/library-use.json`).
+- [ ] **PoC content polish + minimal cycle UI + local progress**
+      (JS-130..132). JS-130 may refine the fixture; UI/API still open.
+- [ ] **Reader polish, classmate answers, unit pack 2, skill map**
+      (JS-133..136).
+
 ## Quiz / content depth
 
 Active recall is the user's stated core need; depth here returns the most

@@ -161,6 +161,8 @@ class ApplyAllLevelsGuardTest(unittest.TestCase):
         self.assertTrue(result.endswith(mod.AUDIT_END + after))
         self.assertIn("| N5 | 1 | 1 |", result)
         self.assertNotIn("old body", result)
+        # Audit process notes must cite the active BASE pin, not a stale commit.
+        self.assertIn(f"baseline commit `{mod.BASE}`", result)
 
     def test_audit_inserts_markers_when_missing(self):
         """audit prepends fallback markers when an existing audit file has no marker pair.
@@ -198,51 +200,59 @@ class ApplyAllLevelsGuardTest(unittest.TestCase):
         self.assertIn("| 新聞 | しんぶん | 3 |", result)
         self.assertIn("\n" + mod.AUDIT_END + "\n", result)
 
-    def test_target_paths_returns_160_when_each_level_has_40(self):
-        """target_paths returns all 160 grammar files when every target level has 40 files.
+    def test_target_paths_returns_all_when_each_level_matches_expected(self):
+        """target_paths returns every file when each level matches EXPECTED_COUNTS.
 
         Steps:
-        1. Create a temporary grammar root with 40 JSON files in each target level.
+        1. Create a temporary grammar root with EXPECTED_COUNTS[level] JSON files per level.
         2. Call target_paths on the temporary grammar root.
-        3. Assert 160 paths are returned across the four levels.
+        3. Assert total path count equals sum(EXPECTED_COUNTS) across the four levels.
         """
         root = grammar_root(self.tmpdir.name)
         for level in mod.LEVELS:
-            write_level_files(root, level, 40)
+            write_level_files(root, level, mod.EXPECTED_COUNTS[level])
 
         paths = mod.target_paths(root)
 
-        self.assertEqual(len(paths), 160)
+        self.assertEqual(len(paths), sum(mod.EXPECTED_COUNTS.values()))
         self.assertEqual({path.parent.name for path in paths}, set(mod.LEVELS))
 
     def test_target_paths_raises_when_level_short_by_one(self):
-        """target_paths rejects a level with 39 grammar files.
+        """target_paths rejects a level one file below its expected count.
 
         Steps:
-        1. Create a temporary grammar root where N4 has 39 JSON files and other levels have 40.
+        1. Create a temporary grammar root where N4 is one short of EXPECTED_COUNTS['N4'].
         2. Call target_paths on the temporary grammar root.
-        3. Assert the N4 count-guard AssertionError reports 39 files.
+        3. Assert the N4 count-guard AssertionError reports the short count.
         """
         root = grammar_root(self.tmpdir.name)
         for level in mod.LEVELS:
-            write_level_files(root, level, 39 if level == "N4" else 40)
+            count = mod.EXPECTED_COUNTS[level]
+            write_level_files(root, level, count - 1 if level == "N4" else count)
 
-        with self.assertRaisesRegex(AssertionError, r"N4: expected 40 files, found 39"):
+        want = mod.EXPECTED_COUNTS["N4"]
+        with self.assertRaisesRegex(
+            AssertionError, rf"N4: expected {want} files, found {want - 1}"
+        ):
             mod.target_paths(root)
 
     def test_target_paths_raises_when_level_long_by_one(self):
-        """target_paths rejects a level with 41 grammar files.
+        """target_paths rejects a level one file above its expected count.
 
         Steps:
-        1. Create a temporary grammar root where N2 has 41 JSON files and other levels have 40.
+        1. Create a temporary grammar root where N2 is one over EXPECTED_COUNTS['N2'].
         2. Call target_paths on the temporary grammar root.
-        3. Assert the N2 count-guard AssertionError reports 41 files.
+        3. Assert the N2 count-guard AssertionError reports the long count.
         """
         root = grammar_root(self.tmpdir.name)
         for level in mod.LEVELS:
-            write_level_files(root, level, 41 if level == "N2" else 40)
+            count = mod.EXPECTED_COUNTS[level]
+            write_level_files(root, level, count + 1 if level == "N2" else count)
 
-        with self.assertRaisesRegex(AssertionError, r"N2: expected 40 files, found 41"):
+        want = mod.EXPECTED_COUNTS["N2"]
+        with self.assertRaisesRegex(
+            AssertionError, rf"N2: expected {want} files, found {want + 1}"
+        ):
             mod.target_paths(root)
 
     def test_rewrite_tokens_rejects_term_token(self):

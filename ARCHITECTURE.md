@@ -16,6 +16,7 @@
                 │  │  - sentence        │  │  ← shipped
                 │  │  - grammar         │  │  ← shipped
                 │  │  - quiz            │  │  ← shipped
+                │  │  - kokugo          │  │  ← planned (JS-129+)
                 │  │  - apikey          │  │  ← M4 (planned)
                 │  │  - connector       │  │  ← M4 (planned)
                 │  └────────┬───────────┘  │
@@ -32,6 +33,17 @@
 │  shipped (M3)   │ │   M4 planned    │ │   M4 planned    │
 └─────────────────┘ └─────────────────┘ └─────────────────┘
 ```
+
+### Learning tracks
+
+| Track | Role | Status |
+|-------|------|--------|
+| 日本語学習 | JLPT grammar / vocab / kanji / cloze quiz | shipped |
+| 国語教室 | School-style unit cycle (read → evidence → write → revise) | Phase 0 decided; implement JS-129+ |
+
+Kokugo is a separate corpus/module (see `docs/adr/0005-kokugo-track.md`), not a third
+`QuizContentType` on the cloze loop. Full unit progress is local API only; JS-018
+static deployment stays portfolio / read-only for that loop.
 
 ## Three execution paths (mirrors agent-native-pm)
 
