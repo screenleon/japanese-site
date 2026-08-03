@@ -85,4 +85,19 @@ if KOKUGO_ROOT="$empty" bash "$LINT" >/tmp/test-lint-kokugo-empty.log 2>&1; then
 fi
 echo "test-lint-kokugo: empty root failed as expected"
 
+# Malformed JSON must fail with a parse diagnostic (nonzero exit).
+malformed="$tmp_root/malformed-json"
+mkdir -p "$malformed/e5-6"
+printf '{ this is not valid json\n' >"$malformed/e5-6/library-use.json"
+if KOKUGO_ROOT="$malformed" bash "$LINT" >/tmp/test-lint-kokugo-malformed.log 2>/tmp/test-lint-kokugo-malformed.err; then
+	echo "test-lint-kokugo: malformed JSON should fail" >&2
+	exit 1
+fi
+if ! grep -qE 'invalid JSON' /tmp/test-lint-kokugo-malformed.err /tmp/test-lint-kokugo-malformed.log 2>/dev/null; then
+	echo "test-lint-kokugo: malformed JSON did not emit invalid JSON diagnostic" >&2
+	cat /tmp/test-lint-kokugo-malformed.err /tmp/test-lint-kokugo-malformed.log >&2
+	exit 1
+fi
+echo "test-lint-kokugo: malformed JSON failed as expected"
+
 echo "test-lint-kokugo: all checks passed"

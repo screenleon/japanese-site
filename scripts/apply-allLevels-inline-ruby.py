@@ -633,7 +633,7 @@ def audit_body(level_counts: dict[str, int], freq: Counter, spot_checks: dict[st
             "",
             "## Process Notes",
             "",
-            "- The script verifies every rewritten file against baseline commit `03ac4ddc9f5f6afa3bae1e65a3a888cf82c346b7`.",
+            f"- The script verifies every rewritten file against baseline commit `{BASE}`.",
             "- For every block, concatenating `text.v` and `ruby.k` in document order matches the baseline text byte-for-byte.",
             "- For every entry, every non-`explanation_ja_blocks` field present in baseline is preserved verbatim; on-disk corpus may carry additional post-baseline editorial fields (e.g. `annotations.mental_model`) which the regenerator passes through.",
             "- Markdown example bullet lines were kept as trailing text runs unless they are form-definition bullets.",

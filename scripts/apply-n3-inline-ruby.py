@@ -993,7 +993,8 @@ def main():
         "Use scripts/apply-allLevels-inline-ruby.py for forward regeneration.",
         file=sys.stderr,
     )
-    sys.exit(0)
+    # Non-zero so automation cannot treat this as a successful regeneration.
+    sys.exit(2)
 
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     n3_dir = os.path.join(root, "server", "data", "corpus", "grammar", "N3")

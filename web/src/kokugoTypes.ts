@@ -2,9 +2,20 @@
 // Separate from QuizContentType / cloze loop. Corpus lives at
 // server/data/corpus/kokugo/** and is validated by scripts/lint-kokugo.sh.
 
-import type { Block, Meta } from "./apiTypes";
+import type { Block } from "./apiTypes";
 
 export const KOKUGO_SCHEMA_VERSION = 1 as const;
+
+/**
+ * Kokugo L1 provenance — stricter than shared Meta: lint-kokugo requires
+ * non-empty validated_by on every unit (project-manifest Constraint 2).
+ */
+export interface KokugoMeta {
+  source: string;
+  license: string;
+  validated_by: string;
+  validator_score?: number;
+}
 
 /** v1 authored content allowlist (ADR-0005). Other stages are reserved only. */
 export const KOKUGO_STAGES_V1 = ["e5-6"] as const;
@@ -155,5 +166,5 @@ export interface KokugoUnit {
   artifact?: KokugoArtifact;
   /** Phase 2 — allowed as array but not deeply validated in v1 lint. */
   classmates?: unknown[];
-  _meta: Meta;
+  _meta: KokugoMeta;
 }

@@ -161,6 +161,8 @@ class ApplyAllLevelsGuardTest(unittest.TestCase):
         self.assertTrue(result.endswith(mod.AUDIT_END + after))
         self.assertIn("| N5 | 1 | 1 |", result)
         self.assertNotIn("old body", result)
+        # Audit process notes must cite the active BASE pin, not a stale commit.
+        self.assertIn(f"baseline commit `{mod.BASE}`", result)
 
     def test_audit_inserts_markers_when_missing(self):
         """audit prepends fallback markers when an existing audit file has no marker pair.

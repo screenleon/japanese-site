@@ -208,11 +208,54 @@ func requireSlugMigrationBackup(tx *sql.Tx, migratingPath string) error {
 	if err := rejectLiveDBAsBackup(path, migratingPath); err != nil {
 		return err
 	}
-	if err := verifyPre0022SQLiteBackup(path, attempts); err != nil {
+	liveFP, liveN, err := learnerHistoryFingerprint(tx)
+	if err != nil {
+		return fmt.Errorf("fingerprint live learner history: %w", err)
+	}
+	if liveN != attempts {
+		return fmt.Errorf("internal: live attempt count %d != fingerprint rows %d", attempts, liveN)
+	}
+	if err := verifyPre0022SQLiteBackup(path, attempts, liveFP); err != nil {
 		return err
 	}
 	slog.Info("slug migration backup verified", "path", path, "attempts", attempts)
 	return nil
+}
+
+// learnerHistoryFingerprint returns a stable sha256 of ordered attempt identity
+// rows (id, question_id, user_answer, correct, error_class) so a backup must
+// match the live learner history, not merely share an attempt COUNT.
+// Querier is *sql.Tx or *sql.DB.
+func learnerHistoryFingerprint(q interface {
+	Query(query string, args ...any) (*sql.Rows, error)
+}) (digest string, n int, err error) {
+	rows, err := q.Query(`
+		SELECT id, question_id, user_answer, correct, COALESCE(error_class, '')
+		FROM attempt
+		ORDER BY id`)
+	if err != nil {
+		if strings.Contains(err.Error(), "no such table") {
+			return hex.EncodeToString(sha256.New().Sum(nil)), 0, nil
+		}
+		return "", 0, err
+	}
+	defer rows.Close()
+	h := sha256.New()
+	for rows.Next() {
+		var id int64
+		var qid, answer, errClass string
+		var correct int
+		if err := rows.Scan(&id, &qid, &answer, &correct, &errClass); err != nil {
+			return "", 0, err
+		}
+		// Fixed field order; tab separators cannot appear in integer fields.
+		fmt.Fprintf(h, "%d\t%s\t%s\t%d\t%s\n", id, qid, answer, correct, errClass)
+		n++
+	}
+	if err := rows.Err(); err != nil {
+		return "", 0, err
+	}
+	return hex.EncodeToString(h.Sum(nil)), n, nil
 }
 
 // rejectLiveDBAsBackup ensures the recovery snapshot is not the database about
@@ -281,10 +324,11 @@ func sameFile(a, b string) (bool, error) {
 }
 
 // verifyPre0022SQLiteBackup opens path as SQLite and requires that migration
-// 0022 has not already been applied, and that the backup's attempt count matches
-// the live database (so an unrelated empty/pre-0022 file cannot satisfy preflight).
+// 0022 has not already been applied, that the backup's attempt count matches
+// the live database, and that the learner-history fingerprint matches (so an
+// unrelated pre-0022 DB with the same attempt COUNT cannot satisfy preflight).
 // Rejects empty/non-SQLite files.
-func verifyPre0022SQLiteBackup(path string, liveAttempts int) error {
+func verifyPre0022SQLiteBackup(path string, liveAttempts int, liveFingerprint string) error {
 	st, err := os.Stat(path)
 	if err != nil {
 		return fmt.Errorf("JAPANESE_SITE_DB_BACKUP_PATH %q: %w", path, err)
@@ -343,6 +387,19 @@ func verifyPre0022SQLiteBackup(path string, liveAttempts int) error {
 		return fmt.Errorf(
 			"JAPANESE_SITE_DB_BACKUP_PATH %q attempt count %d does not match live %d — backup must be a pre-upgrade copy of this database (not an unrelated pre-0022 file)",
 			path, bakAttempts, liveAttempts,
+		)
+	}
+	bakFP, bakN, err := learnerHistoryFingerprint(bak)
+	if err != nil {
+		return fmt.Errorf("fingerprint backup learner history %q: %w", path, err)
+	}
+	if bakN != bakAttempts {
+		return fmt.Errorf("internal: backup attempt count %d != fingerprint rows %d", bakAttempts, bakN)
+	}
+	if bakFP != liveFingerprint {
+		return fmt.Errorf(
+			"JAPANESE_SITE_DB_BACKUP_PATH %q learner-history fingerprint does not match live — backup must be a copy of this database (same attempt identities), not an unrelated pre-0022 file with a similar row count",
+			path,
 		)
 	}
 	return nil

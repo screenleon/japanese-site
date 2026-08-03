@@ -567,6 +567,57 @@ func TestMigrate_0022_RejectsUnrelatedPre0022Backup(t *testing.T) {
 	}
 }
 
+func TestMigrate_0022_RejectsEqualCountDifferentHistory(t *testing.T) {
+	// Behavior: a distinct pre-0022 DB with the same attempt COUNT but different
+	// attempt identities must not satisfy preflight (fingerprint mismatch).
+	//
+	// Steps:
+	// 1. Build live and bak through 0021, each with one attempt on different questions.
+	// 2. Point BACKUP_PATH at bak; Migrate fails; 0022 unapplied on live.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
+	dir := t.TempDir()
+
+	seedOne := func(path, qid, answer string) {
+		t.Helper()
+		db, err := Open(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		migrateThrough(t, db, "0021_grammar_v2.sql")
+		if _, err := db.Exec(`INSERT INTO question
+			(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+			VALUES (?, 'cloze', 'N3', 'hazuda', 'p', 'e', 'test', 'CC0', 'grammar')`, qid); err != nil {
+			t.Fatal(err)
+		}
+		if _, err := db.Exec(`INSERT INTO attempt (question_id, user_answer, correct) VALUES (?, ?, 0)`, qid, answer); err != nil {
+			t.Fatal(err)
+		}
+		if err := db.Close(); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	livePath := filepath.Join(dir, "live.sqlite")
+	bakPath := filepath.Join(dir, "other.sqlite")
+	seedOne(livePath, "live-q", "live-ans")
+	seedOne(bakPath, "bak-q", "bak-ans")
+
+	live, err := Open(livePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer live.Close()
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", bakPath)
+	if err := Migrate(live); err == nil {
+		t.Fatal("expected migrate to reject equal-count different-history backup")
+	}
+	var applied int
+	_ = live.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&applied)
+	if applied != 0 {
+		t.Fatalf("0022 applied despite fingerprint mismatch: %d", applied)
+	}
+}
+
 func TestMigrate_0022_BackupPreflightAcceptsLiveCopy(t *testing.T) {
 	// Behavior: a distinct file copy of the attempt-bearing live DB satisfies
 	// preflight; after migration the backup still holds recoverable attempts.
