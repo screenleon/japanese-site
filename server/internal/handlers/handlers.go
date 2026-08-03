@@ -5,9 +5,11 @@ import (
 	"errors"
 	"log/slog"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
+	"github.com/screenleon/japanese-site/server/internal/kokugo"
 	"github.com/screenleon/japanese-site/server/internal/quiz"
 	"github.com/screenleon/japanese-site/server/internal/store"
 )
@@ -17,12 +19,38 @@ import (
 // exhaustion / slow-body attacks.
 const maxAnswerBodyBytes = 4 << 10
 
+// RegisterOpts configures optional API surfaces (kokugo corpus path, etc.).
+type RegisterOpts struct {
+	// KokugoDir is the path to data/corpus/kokugo. Empty disables unit listing
+	// (progress endpoints still register but return empty/disabled).
+	KokugoDir string
+}
+
 func Register(mux *http.ServeMux, db *store.DB, ps store.ProgressStore) {
+	RegisterWithOpts(mux, db, ps, RegisterOpts{})
+}
+
+// RegisterWithOpts is the full registration entry used by cmd/api.
+func RegisterWithOpts(mux *http.ServeMux, db *store.DB, ps store.ProgressStore, opts RegisterOpts) {
 	// Single ClozeGrader instance per process. It's stateless beyond the
 	// store-backed lookup ports, so all /api/quiz/answer calls share it.
 	grader := &quiz.ClozeGrader{
 		Feedback:        store.FeedbackStore{DB: db},
 		ClassifierRules: store.ClassifierRuleStore{DB: db},
+	}
+
+	// Kokugo is enabled only when the configured corpus root exists as a directory.
+	// Explicit empty path disables; missing path is treated as disabled (risk-F001).
+	kokugoRoot := strings.TrimSpace(opts.KokugoDir)
+	kokugoAvailable := false
+	if kokugoRoot != "" {
+		if st, err := os.Stat(kokugoRoot); err == nil && st.IsDir() {
+			kokugoAvailable = true
+		} else {
+			slog.Warn("kokugo corpus dir unavailable; disabling kokugo capability",
+				"path", kokugoRoot, "err", err)
+			kokugoRoot = ""
+		}
 	}
 
 	mux.HandleFunc("GET /healthz", health)
@@ -42,7 +70,10 @@ func Register(mux *http.ServeMux, db *store.DB, ps store.ProgressStore) {
 	mux.HandleFunc("GET /api/quiz/due-count", quizDueCount(db))
 	mux.HandleFunc("POST /api/read/{type}/{slug}", markRead(ps))
 	mux.HandleFunc("GET /api/progress", progress(db, ps))
-	mux.HandleFunc("GET /api/capabilities", capabilities(ps))
+	mux.HandleFunc("GET /api/capabilities", capabilities(ps, kokugoAvailable))
+
+	registerKokugo(mux, db, kokugo.Loader{Root: kokugoRoot}, ps.Enabled())
+
 	// Catch-all for /api/* — return JSON 404 instead of falling through
 	// to the SPA index.html.
 	mux.HandleFunc("/api/", func(w http.ResponseWriter, r *http.Request) {
@@ -375,7 +406,8 @@ func health(w http.ResponseWriter, _ *http.Request) {
 func version(w http.ResponseWriter, _ *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]string{
 		"name":      "japanese-site",
-		"milestone": "M3-C6",
+		// M3-C7: Kokugo track API (/api/kokugo/**) + capabilities.kokugo (JS-131/132).
+		"milestone": "M3-C7",
 	})
 }
 

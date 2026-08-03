@@ -1097,6 +1097,86 @@ func TestMigrate_0022_GrammarSlugDedupPreservation(t *testing.T) {
 	}
 }
 
+func TestMigrate_0023_KokugoProgressUpgrade(t *testing.T) {
+	// Behavior: pre-0023 DB upgrades once to kokugo tables; second Migrate is idempotent.
+	// Steps:
+	// 1. Apply migrations through 0022 only (no kokugo tables).
+	// 2. Run Migrate (applies 0023); assert tables/indexes/constraints usable.
+	// 3. Run Migrate again; assert still healthy and rows writable.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "1")
+	db := newMemoryDB(t)
+	defer db.Close()
+
+	migrateThrough(t, db, "0022_grammar_slug_dedup.sql")
+	for _, tbl := range []string{"kokugo_unit_progress", "kokugo_task_attempt", "kokugo_artifact"} {
+		var n int
+		if err := db.QueryRow(
+			`SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name=?`, tbl,
+		).Scan(&n); err != nil {
+			t.Fatal(err)
+		}
+		if n != 0 {
+			t.Fatalf("pre-0023 must not have %s", tbl)
+		}
+	}
+
+	if err := Migrate(db); err != nil {
+		t.Fatalf("first Migrate (upgrade to 0023): %v", err)
+	}
+	assertKokugo0023Schema(t, db)
+
+	if err := Migrate(db); err != nil {
+		t.Fatalf("second Migrate (idempotent): %v", err)
+	}
+	assertKokugo0023Schema(t, db)
+
+	// Usable write path through store helpers.
+	ctx := context.Background()
+	if _, err := EnsureKokugoProgress(ctx, db, "e5-6", "u1", "predict"); err != nil {
+		t.Fatalf("progress: %v", err)
+	}
+	art, err := SaveKokugoArtifact(ctx, db, "e5-6", "u1", 0, "draft body", []byte(`[true]`), SaveKokugoArtifactOpts{})
+	if err != nil {
+		t.Fatalf("artifact: %v", err)
+	}
+	if art.Version != 1 || art.Revision != 0 {
+		t.Fatalf("artifact=%+v", art)
+	}
+	// revision CHECK rejects invalid revision at SQL layer via store validation.
+	if _, err := SaveKokugoArtifact(ctx, db, "e5-6", "u1", 2, "x", []byte(`[]`), SaveKokugoArtifactOpts{}); err == nil {
+		t.Fatal("expected invalid revision rejection")
+	}
+}
+
+func assertKokugo0023Schema(t *testing.T, db *DB) {
+	t.Helper()
+	for _, tbl := range []string{"kokugo_unit_progress", "kokugo_task_attempt", "kokugo_artifact"} {
+		var name string
+		if err := db.QueryRow(
+			`SELECT name FROM sqlite_master WHERE type='table' AND name=?`, tbl,
+		).Scan(&name); err != nil {
+			t.Fatalf("table %s missing: %v", tbl, err)
+		}
+	}
+	for _, idx := range []string{"idx_kokugo_progress_stage", "idx_kokugo_attempt_unit_task"} {
+		var name string
+		if err := db.QueryRow(
+			`SELECT name FROM sqlite_master WHERE type='index' AND name=?`, idx,
+		).Scan(&name); err != nil {
+			t.Fatalf("index %s missing: %v", idx, err)
+		}
+	}
+	var applied int
+	if err := db.QueryRow(
+		`SELECT COUNT(*) FROM schema_migrations WHERE version='0023_kokugo_progress.sql'`,
+	).Scan(&applied); err != nil {
+		t.Fatal(err)
+	}
+	if applied != 1 {
+		t.Fatalf("0023 migration rows=%d", applied)
+	}
+}
+
 func newMemoryDB(t *testing.T) *DB {
 	t.Helper()
 	db, err := Open(":memory:")

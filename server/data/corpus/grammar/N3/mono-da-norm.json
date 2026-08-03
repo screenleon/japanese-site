@@ -1,19 +1,19 @@
 {
   "slug": "mono-da-norm",
   "title_ja": "ものだ",
-  "title_zh": "ものだ（本來就／常常）",
+  "title_zh": "ものだ（常理／本就如此）",
   "jlpt_level": "N3",
   "schema_version": 2,
   "pattern": [
     {
       "form": "普通形＋ものだ",
-      "gloss_zh": "表示一般道理、常識或本來就是如此",
-      "notes_zh": "名詞通常不直接接；な形容詞常用「なものだ」"
+      "gloss_zh": "表示一般道理、常識或「本來就是如此」",
+      "notes_zh": "社會規範或一般傾向。な形容詞常用「なものだ」。感嘆／というものだ 見 N2 mono-da-emotion"
     },
     {
       "form": "Vた形＋ものだ",
-      "gloss_zh": "回想過去常常做的事或曾經的狀態",
-      "notes_zh": "帶有懷念或感慨，不只是單純過去事實"
+      "gloss_zh": "回想過去常常做的事",
+      "notes_zh": "帶懷念語氣的「以前常…」。更強的感嘆用法見 mono-da-emotion"
     }
   ],
   "explanation_ja_blocks": [
@@ -135,7 +135,7 @@
       ]
     }
   ],
-  "explanation_zh": "「普通形 + ものだ」可表示一般道理、理應如此、過去常有的習慣，或強烈感慨。常帶有「本來就是這樣」的語氣。",
+  "explanation_zh": "「普通形 + ものだ」在 N3 主要表示：①一般道理／社會常理（小孩本來就會哭）；②回想過去習慣（以前常…）。語氣是把個別事情拉遠看成「本來如此」的性質。N2 的 mono-da-emotion 另收「というものだ」式的強烈感嘆／讚嘆，請分開學習。",
   "_meta": {
     "source": "curated",
     "license": "CC-BY-SA-4.0",
@@ -144,7 +144,7 @@
   },
   "annotations": {
     "mental_model": "「ものだ」は、個別の出来事を少し離れて一般的な性質として眺めます。しみじみした理解や当然性を添えます。",
-    "mental_model_zh": "「ものだ」把個別事情拉遠看成一般性質，帶有感慨或理所當然。",
+    "mental_model_zh": "把事情看成一般常理或本來如此的性質（規範／習慣），不是當下的命令。",
     "furigana": {
       "vocabulary": [
         {
@@ -181,5 +181,8 @@
         }
       ]
     }
-  }
+  },
+  "related_slugs": [
+    "mono-da-emotion"
+  ]
 }

@@ -38,9 +38,12 @@ Shape B is used: the generator rewrites only the marked auto-generated section. 
 | 意味 | いみ | 35 |
 | 意味核 | いみかく | 34 |
 | 類義差別 | るいぎさべつ | 34 |
+| 例 | れい | 33 |
+| 前 | まえ | 32 |
 | 後件 | こうけん | 31 |
 | 結果 | けっか | 28 |
 | な形容詞 | なけいようし | 23 |
+| 後 | あと | 21 |
 | 前件 | ぜんけん | 20 |
 | 動詞辞書形 | どうしじしょけい | 20 |
 | 場所 | ばしょ | 19 |
@@ -68,6 +71,7 @@ Shape B is used: the generator rewrites only the marked auto-generated section. 
 | 説明 | せつめい | 13 |
 | ます形 | ますけい | 12 |
 | 会話 | かいわ | 12 |
+| 同時 | どうじ | 12 |
 | 強調 | きょうちょう | 12 |
 | 状況 | じょうきょう | 12 |
 | 行動 | こうどう | 12 |
@@ -154,7 +158,6 @@ Shape B is used: the generator rewrites only the marked auto-generated section. 
 | 助言 | じょげん | 3 |
 | 原因 | げんいん | 3 |
 | 反応 | はんのう | 3 |
-| 同時 | どうじ | 3 |
 | 否定的 | ひていてき | 3 |
 | 唯一 | ゆいいつ | 3 |
 | 基本 | きほん | 3 |
@@ -162,7 +165,6 @@ Shape B is used: the generator rewrites only the marked auto-generated section. 
 | 実現 | じつげん | 3 |
 | 実際 | じっさい | 3 |
 | 対照的 | たいしょうてき | 3 |
-| 後 | あと | 3 |
 | 想像 | そうぞう | 3 |
 | 意見 | いけん | 3 |
 | 成立 | せいりつ | 3 |
@@ -181,6 +183,7 @@ Shape B is used: the generator rewrites only the marked auto-generated section. 
 | 発音 | はつおん | 3 |
 | 直接 | ちょくせつ | 3 |
 | 瞬間 | しゅんかん | 3 |
+| 知 | し | 3 |
 | 種類 | しゅるい | 3 |
 | 複数 | ふくすう | 3 |
 | 言葉 | ことば | 3 |
@@ -197,7 +200,7 @@ Shape B is used: the generator rewrites only the marked auto-generated section. 
 
 ## Process Notes
 
-- The script verifies every rewritten file against baseline commit `03ac4ddc9f5f6afa3bae1e65a3a888cf82c346b7`.
+- The script verifies every rewritten file against baseline commit `3aad0b82782bdcbdb571760ad1f746e20ab3c435`.
 - For every block, concatenating `text.v` and `ruby.k` in document order matches the baseline text byte-for-byte.
 - For every entry, every non-`explanation_ja_blocks` field present in baseline is preserved verbatim; on-disk corpus may carry additional post-baseline editorial fields (e.g. `annotations.mental_model`) which the regenerator passes through.
 - Markdown example bullet lines were kept as trailing text runs unless they are form-definition bullets.

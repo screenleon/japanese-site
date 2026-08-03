@@ -62,6 +62,7 @@ describe("staticApi", () => {
       history: false,
       quiz: false,
       sentence: false,
+      kokugo: false,
     });
   });
 

@@ -1,0 +1,499 @@
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { api } from "../api";
+import { CapabilitiesProvider } from "../capabilities";
+import type { KokugoUnit } from "../kokugoTypes";
+import { deriveResumeState, KokugoTab } from "./KokugoTab";
+
+vi.mock("../api", () => ({
+  api: {
+    listKokugoUnits: vi.fn(),
+    getKokugoUnit: vi.fn(),
+    getKokugoUnitState: vi.fn(),
+    putKokugoProgress: vi.fn(),
+    submitKokugoTask: vi.fn(),
+    saveKokugoArtifact: vi.fn(),
+    getCapabilities: vi.fn(),
+  },
+}));
+
+const listKokugoUnits = vi.mocked(api.listKokugoUnits!);
+const getKokugoUnit = vi.mocked(api.getKokugoUnit!);
+const getKokugoUnitState = vi.mocked(api.getKokugoUnitState!);
+const putKokugoProgress = vi.mocked(api.putKokugoProgress!);
+const submitKokugoTask = vi.mocked(api.submitKokugoTask!);
+const saveKokugoArtifact = vi.mocked(api.saveKokugoArtifact!);
+const getCapabilities = vi.mocked(api.getCapabilities);
+
+const sampleUnit: KokugoUnit = {
+  id: "library-use",
+  schema_version: 1,
+  stage: "e5-6",
+  title_ja: "学校の図書室をもっと使いやすくするには",
+  genre: "expository",
+  objectives: ["主張を見つける"],
+  estimated_minutes: 20,
+  text: [
+    {
+      kind: "paragraph",
+      tokens: [{ t: "text", v: "図書室は大切です。" }],
+    },
+  ],
+  support: { default_profile: "n3" },
+  tasks: [
+    {
+      id: "predict-1",
+      skill: "reading.predict",
+      kind: "predict",
+      payload: {
+        prompt_ja: "何について？",
+        choices: [
+          { id: "a", text_ja: "歴史" },
+          { id: "b", text_ja: "工夫" },
+        ],
+      },
+    },
+    {
+      id: "summary-1",
+      skill: "reading.summary",
+      kind: "summary-choice",
+      payload: {
+        prompt_ja: "要約は？",
+        choices: [
+          { id: "a", text_ja: "悪い要約" },
+          { id: "b", text_ja: "良い要約" },
+        ],
+        correct_id: "b",
+      },
+    },
+  ],
+  artifact: {
+    kind: "short-proposal",
+    min_chars: 5,
+    max_chars: 200,
+    checklist: ["提案がある", "理由がある"],
+    exemplar_ja: "例です。",
+  },
+  _meta: { source: "original", license: "CC0-1.0", validated_by: "test" },
+};
+
+function renderTab(caps: { progress: boolean; kokugo: boolean } = { progress: true, kokugo: true }) {
+  getCapabilities.mockResolvedValue({
+    progress: caps.progress,
+    history: false,
+    quiz: true,
+    sentence: true,
+    kokugo: caps.kokugo,
+  });
+  return render(
+    <CapabilitiesProvider>
+      <KokugoTab />
+    </CapabilitiesProvider>
+  );
+}
+
+describe("deriveResumeState", () => {
+  it("restores revise phase with draft body from saved state", () => {
+    const r = deriveResumeState(sampleUnit, {
+      progress: {
+        unit_key: "e5-6/library-use",
+        stage: "e5-6",
+        unit_id: "library-use",
+        status: "in_progress",
+        step: "revise",
+        started_at: "",
+        updated_at: "",
+      },
+      attempts: [],
+      artifacts: [
+        {
+          unit_key: "e5-6/library-use",
+          revision: 0,
+          body: "下書き本文",
+          checklist: [true, true],
+          created_at: "",
+          version: 1,
+          updated_at: "t1",
+        },
+      ],
+    });
+    expect(r.phase).toBe("revise");
+    expect(r.draftBody).toBe("下書き本文");
+    expect(r.draftVersion).toBe(1);
+    expect(r.checklist).toEqual([true, true]);
+  });
+
+  it("marks completed units as done", () => {
+    const r = deriveResumeState(sampleUnit, {
+      progress: {
+        unit_key: "e5-6/library-use",
+        stage: "e5-6",
+        unit_id: "library-use",
+        status: "completed",
+        step: "done",
+        started_at: "",
+        updated_at: "",
+        completed_at: "now",
+      },
+      attempts: [],
+      artifacts: [
+        {
+          unit_key: "e5-6/library-use",
+          revision: 0,
+          body: "下書き",
+          checklist: [true, true],
+          created_at: "",
+          version: 1,
+          updated_at: "t0",
+        },
+        {
+          unit_key: "e5-6/library-use",
+          revision: 1,
+          body: "改稿",
+          checklist: [true, true],
+          created_at: "",
+          version: 1,
+          updated_at: "t1",
+        },
+      ],
+    });
+    expect(r.phase).toBe("done");
+    expect(r.revisionBody).toBe("改稿");
+  });
+});
+
+describe("KokugoTab", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    listKokugoUnits.mockResolvedValue({
+      units: [
+        {
+          id: "library-use",
+          stage: "e5-6",
+          title_ja: "学校の図書室をもっと使いやすくするには",
+          genre: "expository",
+          estimated_minutes: 20,
+          task_count: 2,
+          has_artifact: true,
+        },
+      ],
+      count: 1,
+    });
+    getKokugoUnit.mockResolvedValue(sampleUnit);
+    getKokugoUnitState.mockResolvedValue({ attempts: [], artifacts: [] });
+    putKokugoProgress.mockResolvedValue({
+      unit_key: "e5-6/library-use",
+      stage: "e5-6",
+      unit_id: "library-use",
+      status: "in_progress",
+      step: "predict",
+      started_at: "",
+      updated_at: "",
+    });
+    submitKokugoTask.mockResolvedValue({
+      attempt: {
+        id: 1,
+        unit_key: "e5-6/library-use",
+        task_id: "predict-1",
+        answer: {},
+        created_at: "",
+      },
+      grade: { correct: null, explanation_ja: "予測を記録しました。" },
+    });
+  });
+
+  it("lists units and opens the predict step for a fresh unit", async () => {
+    renderTab();
+    expect(await screen.findByText("国語教室")).toBeVisible();
+    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    await waitFor(() => {
+      expect(screen.getByText("読む前の予測")).toBeVisible();
+    });
+    expect(getKokugoUnit).toHaveBeenCalledWith("e5-6", "library-use");
+    expect(getKokugoUnitState).toHaveBeenCalledWith("e5-6", "library-use");
+    expect(putKokugoProgress).toHaveBeenCalledWith("e5-6", "library-use", {
+      step: "predict",
+      status: "in_progress",
+    });
+  });
+
+  it("restores saved draft when reopening a unit", async () => {
+    getKokugoUnitState.mockResolvedValue({
+      progress: {
+        unit_key: "e5-6/library-use",
+        stage: "e5-6",
+        unit_id: "library-use",
+        status: "in_progress",
+        step: "revise",
+        started_at: "",
+        updated_at: "",
+      },
+      attempts: [],
+      artifacts: [
+        {
+          unit_key: "e5-6/library-use",
+          revision: 0,
+          body: "保存済み下書きです。",
+          checklist: [true, false],
+          created_at: "",
+          version: 3,
+          updated_at: "2026-08-03 10:00:00",
+        },
+      ],
+    });
+    renderTab();
+    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    await waitFor(() => {
+      expect(screen.getByText("改稿")).toBeVisible();
+    });
+    expect(screen.getByDisplayValue("保存済み下書きです。")).toBeVisible();
+    // Should not reset progress to predict
+    expect(putKokugoProgress).not.toHaveBeenCalledWith(
+      "e5-6",
+      "library-use",
+      expect.objectContaining({ step: "predict" })
+    );
+  });
+
+  it("advances predict → read → task and submits a task", async () => {
+    renderTab();
+    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    await screen.findByText("読む前の予測");
+    fireEvent.click(screen.getByLabelText("工夫"));
+    fireEvent.click(screen.getByRole("button", { name: /予測を記録/ }));
+    await waitFor(() => {
+      expect(screen.getByText("本文を読む")).toBeVisible();
+    });
+    fireEvent.click(screen.getByRole("button", { name: "課題へ進む" }));
+    await waitFor(() => {
+      expect(screen.getByText("要約")).toBeVisible();
+    });
+    submitKokugoTask.mockResolvedValueOnce({
+      attempt: {
+        id: 2,
+        unit_key: "e5-6/library-use",
+        task_id: "summary-1",
+        answer: {},
+        created_at: "",
+      },
+      grade: { correct: true, explanation_ja: "正しい要約を選べました。" },
+    });
+    fireEvent.click(screen.getByLabelText("良い要約"));
+    fireEvent.click(screen.getByRole("button", { name: "提出" }));
+    await waitFor(() => {
+      expect(submitKokugoTask).toHaveBeenCalledWith(
+        "e5-6",
+        "library-use",
+        "summary-1",
+        { choice_id: "b" }
+      );
+    });
+    await waitFor(() => {
+      expect(screen.getByText("作品（下書き）")).toBeVisible();
+    });
+  });
+
+  it("retains phase when task submit fails", async () => {
+    renderTab();
+    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    await screen.findByText("読む前の予測");
+    fireEvent.click(screen.getByLabelText("工夫"));
+    fireEvent.click(screen.getByRole("button", { name: /予測を記録/ }));
+    await screen.findByText("本文を読む");
+    fireEvent.click(screen.getByRole("button", { name: "課題へ進む" }));
+    await screen.findByText("要約");
+    submitKokugoTask.mockRejectedValueOnce(new Error("network down"));
+    fireEvent.click(screen.getByLabelText("良い要約"));
+    fireEvent.click(screen.getByRole("button", { name: "提出" }));
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toHaveTextContent("network down");
+    });
+    expect(screen.getByText("要約")).toBeVisible();
+  });
+
+  it("saves draft then revision with expected_version on second save", async () => {
+    // Start already on artifact with no draft token
+    getKokugoUnitState.mockResolvedValue({
+      progress: {
+        unit_key: "e5-6/library-use",
+        stage: "e5-6",
+        unit_id: "library-use",
+        status: "in_progress",
+        step: "artifact",
+        started_at: "",
+        updated_at: "",
+      },
+      attempts: [],
+      artifacts: [],
+    });
+    saveKokugoArtifact
+      .mockResolvedValueOnce({
+        artifact: {
+          unit_key: "e5-6/library-use",
+          revision: 0,
+          body: "下書き本文です。",
+          checklist: [true, true],
+          created_at: "",
+          version: 1,
+          updated_at: "ts-draft",
+        },
+        grade: { correct: true, explanation_ja: "ok" },
+        progress: {
+          unit_key: "e5-6/library-use",
+          stage: "e5-6",
+          unit_id: "library-use",
+          status: "in_progress",
+          step: "revise",
+          started_at: "",
+          updated_at: "",
+        },
+      })
+      .mockResolvedValueOnce({
+        artifact: {
+          unit_key: "e5-6/library-use",
+          revision: 1,
+          body: "改稿本文です。",
+          checklist: [true, true],
+          created_at: "",
+          version: 1,
+          updated_at: "ts-rev",
+        },
+        grade: { correct: true, explanation_ja: "ok" },
+        progress: {
+          unit_key: "e5-6/library-use",
+          stage: "e5-6",
+          unit_id: "library-use",
+          status: "completed",
+          step: "done",
+          started_at: "",
+          updated_at: "",
+        },
+      });
+
+    renderTab();
+    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    await screen.findByText("作品（下書き）");
+    fireEvent.change(screen.getByLabelText("下書き"), {
+      target: { value: "下書き本文です。" },
+    });
+    // check both checklist boxes
+    const boxes = screen.getAllByRole("checkbox");
+    boxes.forEach((b) => fireEvent.click(b));
+    fireEvent.click(screen.getByRole("button", { name: "下書きを保存" }));
+    await waitFor(() => {
+      expect(saveKokugoArtifact).toHaveBeenCalledWith(
+        "e5-6",
+        "library-use",
+        expect.objectContaining({ revision: 0, body: "下書き本文です。" })
+      );
+    });
+    await waitFor(() => {
+      expect(screen.getByText("改稿")).toBeVisible();
+    });
+    fireEvent.click(screen.getByRole("button", { name: /改稿を保存/ }));
+    await waitFor(() => {
+      expect(saveKokugoArtifact).toHaveBeenCalledWith(
+        "e5-6",
+        "library-use",
+        expect.objectContaining({ revision: 1 })
+      );
+    });
+    await waitFor(() => {
+      expect(screen.getByText("循環完了")).toBeVisible();
+    });
+  });
+
+  it("does not show done when server progress stays in_progress after revision", async () => {
+    // Missing task attempts: server accepts artifact grades but does not complete.
+    getKokugoUnitState.mockResolvedValue({
+      progress: {
+        unit_key: "e5-6/library-use",
+        stage: "e5-6",
+        unit_id: "library-use",
+        status: "in_progress",
+        step: "artifact",
+        started_at: "",
+        updated_at: "",
+      },
+      attempts: [],
+      artifacts: [],
+    });
+    saveKokugoArtifact
+      .mockResolvedValueOnce({
+        artifact: {
+          unit_key: "e5-6/library-use",
+          revision: 0,
+          body: "下書き本文です。",
+          checklist: [true, true],
+          created_at: "",
+          version: 1,
+          updated_at: "ts-draft",
+        },
+        grade: { correct: true, explanation_ja: "ok" },
+        progress: {
+          unit_key: "e5-6/library-use",
+          stage: "e5-6",
+          unit_id: "library-use",
+          status: "in_progress",
+          step: "revise",
+          started_at: "",
+          updated_at: "",
+        },
+      })
+      .mockResolvedValueOnce({
+        artifact: {
+          unit_key: "e5-6/library-use",
+          revision: 1,
+          body: "改稿本文です。",
+          checklist: [true, true],
+          created_at: "",
+          version: 1,
+          updated_at: "ts-rev",
+        },
+        grade: { correct: true, explanation_ja: "ok" },
+        progress: {
+          unit_key: "e5-6/library-use",
+          stage: "e5-6",
+          unit_id: "library-use",
+          status: "in_progress",
+          step: "revise",
+          started_at: "",
+          updated_at: "",
+        },
+      });
+
+    renderTab();
+    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    await screen.findByText("作品（下書き）");
+    fireEvent.change(screen.getByLabelText("下書き"), {
+      target: { value: "下書き本文です。" },
+    });
+    screen.getAllByRole("checkbox").forEach((b) => fireEvent.click(b));
+    fireEvent.click(screen.getByRole("button", { name: "下書きを保存" }));
+    await waitFor(() => {
+      expect(screen.getByText("改稿")).toBeVisible();
+    });
+    fireEvent.click(screen.getByRole("button", { name: /改稿を保存/ }));
+    await waitFor(() => {
+      expect(saveKokugoArtifact).toHaveBeenCalledTimes(2);
+    });
+    expect(screen.queryByText("循環完了")).not.toBeInTheDocument();
+    expect(screen.getByText("改稿")).toBeVisible();
+  });
+
+  it("progress-disabled fallback advances without calling submit", async () => {
+    renderTab({ progress: false, kokugo: true });
+    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    await screen.findByText("読む前の予測");
+    fireEvent.click(screen.getByLabelText("工夫"));
+    fireEvent.click(screen.getByRole("button", { name: /予測を記録/ }));
+    await waitFor(() => {
+      expect(screen.getByText("本文を読む")).toBeVisible();
+    });
+    expect(submitKokugoTask).not.toHaveBeenCalled();
+    expect(getKokugoUnitState).not.toHaveBeenCalled();
+    expect(
+      screen.getByText(/ローカル API が無いため/)
+    ).toBeVisible();
+  });
+});

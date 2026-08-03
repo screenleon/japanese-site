@@ -8,12 +8,7 @@
     {
       "form": "Vて形＋しまう",
       "gloss_zh": "表示動作完成，也可表示遺憾、後悔或不小心做了某事",
-      "notes_zh": "口語縮約形〜ちゃう／〜じゃう 詳見 te-shimau"
-    },
-    {
-      "form": "Vて形＋しまう",
-      "gloss_zh": "表示動作完成，也可表示遺憾、後悔或不小心做了某事",
-      "notes_zh": "口語常縮約為〜ちゃう（〜てしまう→食べちゃう）、〜じゃう（〜でしまう→読んじゃう）"
+      "notes_zh": "口語常縮約為〜ちゃう（食べちゃう）、〜じゃう（読んじゃう）。完成與遺憾兩種語氣依語境而定"
     }
   ],
   "explanation_ja_blocks": [
@@ -72,7 +67,16 @@
         },
         {
           "t": "text",
-          "v": "を表します。例えば「"
+          "v": "を表します。"
+        },
+        {
+          "t": "ruby",
+          "k": "例",
+          "r": "れい"
+        },
+        {
+          "t": "text",
+          "v": "えば「"
         },
         {
           "t": "ruby",
@@ -212,7 +216,7 @@
       ]
     }
   ],
-  "explanation_zh": "「動詞て形 + しまう」表示動作完成，或帶有遺憾、懊悔的語氣。常譯為「做完了」或「不小心／結果竟然」。",
+  "explanation_zh": "「動詞て形 + しまう」表示動作走到盡頭（做完了），或帶遺憾、懊悔、不小心的語氣（結果竟然…）。常譯為「做完了」或「不小心／結果竟然」。",
   "_meta": {
     "source": "curated",
     "license": "CC-BY-SA-4.0",
@@ -222,15 +226,16 @@
   "classifier_rules": [
     {
       "if_answer_equals_any": [
-        "ている"
+        "ている",
+        "てる"
       ],
-      "error_class": "wrong-pattern",
+      "error_class": "aspect-pattern",
       "contrast": null
     },
     {
       "if_answer_equals_any": [
         "ておく",
-        "ている"
+        "とく"
       ],
       "error_class": "aspect-pattern",
       "contrast": null
@@ -271,6 +276,5 @@
         }
       ]
     }
-  },
-  "audit_status": "post-dedup-naive"
+  }
 }

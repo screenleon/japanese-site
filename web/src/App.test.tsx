@@ -20,6 +20,10 @@ vi.mock("./tabs/SentenceTab", () => ({
   SentenceTab: () => <section aria-label="sentence panel">sentence panel</section>,
 }));
 
+vi.mock("./tabs/KokugoTab", () => ({
+  KokugoTab: () => <section aria-label="kokugo panel">kokugo panel</section>,
+}));
+
 vi.mock("./api", () => ({
   api: {
     searchVocab: vi.fn().mockResolvedValue({ results: [], count: 0 }),
@@ -50,6 +54,7 @@ vi.mock("./api", () => ({
       percent: 0,
     }),
     getCapabilities: vi.fn(),
+    listKokugoUnits: vi.fn().mockResolvedValue({ units: [], count: 0 }),
   },
 }));
 
@@ -93,6 +98,7 @@ describe("App tab filtering", () => {
       history: false,
       quiz: true,
       sentence: true,
+      kokugo: false,
     });
 
     render(<App />);
@@ -102,6 +108,25 @@ describe("App tab filtering", () => {
       expectVisibleTabs(["練習題", "文法", "單字", "漢字", "例句"]);
       expect(screen.getByLabelText("quiz panel")).toBeVisible();
     });
+    expect(screen.queryByRole("button", { name: "国語" })).not.toBeInTheDocument();
+  });
+
+  it("shows 国語 tab and panel when kokugo capability is enabled", async () => {
+    mockCapabilities({
+      progress: true,
+      history: false,
+      quiz: true,
+      sentence: true,
+      kokugo: true,
+    });
+
+    render(<App />);
+    fireEvent.click(await screen.findByRole("button", { name: /^国語教室/ }));
+
+    await waitFor(() => {
+      expectVisibleTabs(["練習題", "文法", "單字", "漢字", "例句", "国語"]);
+      expect(screen.getByLabelText("kokugo panel")).toBeVisible();
+    });
   });
 
   it("hides quiz and sentence tabs when capabilities report them disabled", async () => {
@@ -110,6 +135,7 @@ describe("App tab filtering", () => {
       history: false,
       quiz: false,
       sentence: false,
+      kokugo: false,
     });
 
     render(<App />);
@@ -145,6 +171,7 @@ describe("App tab filtering", () => {
       history: false,
       quiz: false,
       sentence: false,
+      kokugo: false,
     });
 
     await waitFor(() => {
@@ -181,6 +208,7 @@ describe("Chinese visibility toggle", () => {
       history: false,
       quiz: false,
       sentence: false,
+      kokugo: false,
     });
 
     render(<App />);

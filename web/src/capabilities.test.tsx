@@ -42,6 +42,7 @@ describe("CapabilitiesProvider", () => {
         history: false,
         quiz: false,
         sentence: false,
+        kokugo: false,
         loaded: false,
         progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
         bumpProgress: "function",
@@ -49,12 +50,13 @@ describe("CapabilitiesProvider", () => {
     );
   });
 
-  it("resolves to {progress, history, quiz, sentence, loaded:true} on successful fetch", async () => {
+  it("resolves to {progress, history, quiz, sentence, kokugo, loaded:true} on successful fetch", async () => {
     getCapabilities.mockResolvedValueOnce({
       progress: true,
       history: false,
       quiz: true,
       sentence: true,
+      kokugo: true,
     });
 
     render(
@@ -70,6 +72,7 @@ describe("CapabilitiesProvider", () => {
           history: false,
           quiz: true,
           sentence: true,
+          kokugo: true,
           loaded: true,
           progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
           bumpProgress: "function",
@@ -94,6 +97,7 @@ describe("CapabilitiesProvider", () => {
           history: false,
           quiz: false,
           sentence: false,
+          kokugo: false,
           loaded: true,
           progressRevisions: { grammar: 0, vocab: 0, kanji: 0 },
           bumpProgress: "function",

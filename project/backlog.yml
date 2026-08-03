@@ -1799,7 +1799,8 @@ items:
 
   - id: JS-131
     title: "Kokugo minimal cycle UI (predict → read → tasks → artifact → revise)"
-    status: todo
+    status: done
+    completed_at: "2026-08-03"
     priority: P1
     theme: kokugo
     area: frontend
@@ -1813,7 +1814,8 @@ items:
 
   - id: JS-132
     title: "Kokugo local API progress + artifact store"
-    status: todo
+    status: done
+    completed_at: "2026-08-03"
     priority: P1
     theme: kokugo
     area: backend

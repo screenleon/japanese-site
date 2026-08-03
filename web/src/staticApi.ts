@@ -321,6 +321,11 @@ export const staticApi: Api = {
       history: false,
       quiz: false,
       sentence: false,
+      kokugo: false,
     };
+  },
+
+  async listKokugoUnits() {
+    return { units: [], count: 0 };
   },
 };

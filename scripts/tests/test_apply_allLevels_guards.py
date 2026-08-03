@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
+import json
 import tempfile
 import unittest
 from collections import Counter
 from pathlib import Path
+from unittest import mock
 
 from test_apply_allLevels_inline_ruby import mod
 
@@ -48,6 +50,80 @@ class ApplyAllLevelsGuardTest(unittest.TestCase):
     def tearDown(self):
         mod.AUDIT_PATH = self._orig_audit_path
         self.tmpdir.cleanup()
+
+    def test_resolve_baseline_ref_prefers_base_when_present(self):
+        """resolve_baseline_ref returns BASE when git cat-file reports a commit."""
+        with mock.patch.object(mod.subprocess, "run") as run:
+            run.return_value = mock.Mock(returncode=0, stdout="commit\n", stderr="")
+            self.assertEqual(mod.resolve_baseline_ref(), mod.BASE)
+            run.assert_called_once()
+            self.assertIn(mod.BASE, run.call_args[0][0])
+
+    def test_resolve_baseline_ref_falls_back_to_head(self):
+        """resolve_baseline_ref returns HEAD when BASE object is missing."""
+        with mock.patch.object(mod.subprocess, "run") as run:
+            run.return_value = mock.Mock(returncode=128, stdout="", stderr="missing")
+            self.assertEqual(mod.resolve_baseline_ref(), "HEAD")
+
+    def test_load_baseline_base_then_head_then_disk(self):
+        """load_baseline tries BASE, then HEAD, then on-disk file."""
+        path = Path(self.tmpdir.name) / "entry.json"
+        disk_doc = {"slug": "disk", "explanation_ja_blocks": []}
+        path.write_text(json.dumps(disk_doc), encoding="utf-8")
+
+        base_doc = {"slug": "from-base"}
+        head_doc = {"slug": "from-head"}
+
+        def fake_run(args, **kwargs):
+            cmd = args
+            # cat-file -t BASE
+            if len(cmd) >= 3 and cmd[1] == "cat-file":
+                return mock.Mock(returncode=0, stdout="commit\n", stderr="")
+            # git show REF:path
+            if len(cmd) >= 3 and cmd[1] == "show":
+                ref_path = cmd[2]
+                if ref_path.startswith(f"{mod.BASE}:"):
+                    return mock.Mock(returncode=1, stdout="", stderr="base missing path")
+                if ref_path.startswith("HEAD:"):
+                    return mock.Mock(
+                        returncode=0, stdout=json.dumps(head_doc), stderr=""
+                    )
+            return mock.Mock(returncode=1, stdout="", stderr="unexpected")
+
+        with mock.patch.object(mod.subprocess, "run", side_effect=fake_run):
+            got = mod.load_baseline(path)
+        self.assertEqual(got["slug"], "from-head")
+
+        def only_disk_run(args, **kwargs):
+            cmd = args
+            if len(cmd) >= 3 and cmd[1] == "cat-file":
+                return mock.Mock(returncode=128, stdout="", stderr="no base")
+            if len(cmd) >= 3 and cmd[1] == "show":
+                return mock.Mock(returncode=1, stdout="", stderr="no path")
+            return mock.Mock(returncode=1, stdout="", stderr="unexpected")
+
+        with mock.patch.object(mod.subprocess, "run", side_effect=only_disk_run):
+            got = mod.load_baseline(path)
+        self.assertEqual(got["slug"], "disk")
+
+        missing = Path(self.tmpdir.name) / "absent.json"
+        with mock.patch.object(mod.subprocess, "run", side_effect=only_disk_run):
+            with self.assertRaises(RuntimeError) as err:
+                mod.load_baseline(missing)
+        self.assertIn("baseline unavailable", str(err.exception))
+
+        # BASE present and path available → use BASE without falling through.
+        def base_ok_run(args, **kwargs):
+            cmd = args
+            if len(cmd) >= 3 and cmd[1] == "cat-file":
+                return mock.Mock(returncode=0, stdout="commit\n", stderr="")
+            if len(cmd) >= 3 and cmd[1] == "show" and cmd[2].startswith(f"{mod.BASE}:"):
+                return mock.Mock(returncode=0, stdout=json.dumps(base_doc), stderr="")
+            return mock.Mock(returncode=1, stdout="", stderr="unexpected")
+
+        with mock.patch.object(mod.subprocess, "run", side_effect=base_ok_run):
+            got = mod.load_baseline(path)
+        self.assertEqual(got["slug"], "from-base")
 
     def test_verify_raises_on_non_explanation_drift(self):
         """verify rejects rewrites that change fields outside explanation_ja_blocks.

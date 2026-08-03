@@ -13,9 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          # JS-106 drift test (scripts/tests/test_no_drift.py) calls
-          # `git show 03ac4ddc...:<path>` against the JS-106 baseline.
-          # The default shallow clone (depth=1) does not include that commit.
+          # JS-106 drift test (scripts/tests/test_no_drift.py) may `git show`
+          # a pinned BASE commit for corpus baselines. Full history keeps that
+          # object available when BASE is an ancestor of the checked-out ref
+          # (squash-orphaned pins fall back to HEAD in load_baseline).
           fetch-depth: 0
 
       - name: Set up Go

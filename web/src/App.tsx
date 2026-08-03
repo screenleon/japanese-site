@@ -4,12 +4,13 @@ import { KanjiTab } from "./tabs/KanjiTab";
 import { SentenceTab } from "./tabs/SentenceTab";
 import { GrammarTab } from "./tabs/GrammarTab";
 import { QuizTab, type QuizInitialMode } from "./tabs/QuizTab";
+import { KokugoTab } from "./tabs/KokugoTab";
 import { HomePage } from "./HomePage";
 import { CapabilitiesProvider, useCapabilities } from "./capabilities";
 import { ChineseVisibilityProvider, ChineseVisibilityToggle } from "./chineseVisibility";
 import { api, type ProgressSummary } from "./api";
 
-type Tab = "quiz" | "grammar" | "vocab" | "kanji" | "sentence";
+type Tab = "quiz" | "grammar" | "vocab" | "kanji" | "sentence" | "kokugo";
 type ViewState = { view: "home" } | { view: "app"; initialMode: QuizInitialMode; initialTab?: Tab };
 
 const tabs: { id: Tab; label: string }[] = [
@@ -18,6 +19,7 @@ const tabs: { id: Tab; label: string }[] = [
   { id: "vocab", label: "單字" },
   { id: "kanji", label: "漢字" },
   { id: "sentence", label: "例句" },
+  { id: "kokugo", label: "国語" },
 ];
 
 export function App() {
@@ -31,7 +33,7 @@ export function App() {
 }
 
 function AppInner() {
-  const { quiz } = useCapabilities();
+  const { quiz, kokugo } = useCapabilities();
   const [viewState, setViewState] = useState<ViewState>({ view: "home" });
 
   if (viewState.view === "home") {
@@ -41,6 +43,7 @@ function AppInner() {
           setViewState({ view: "app", initialMode, initialTab })
         }
         quizCapable={quiz}
+        kokugoCapable={kokugo}
       />
     );
   }
@@ -60,16 +63,17 @@ function AppShell({
   initialMode: QuizInitialMode;
   initialTab?: Tab;
 }) {
-  const { loaded, quiz, sentence } = useCapabilities();
+  const { loaded, quiz, sentence, kokugo } = useCapabilities();
   const visibleTabs = useMemo(
     () =>
       tabs.filter((tab) => {
         if (!loaded) return true;
         if (tab.id === "quiz") return quiz;
         if (tab.id === "sentence") return sentence;
+        if (tab.id === "kokugo") return kokugo;
         return true;
       }),
-    [loaded, quiz, sentence]
+    [loaded, quiz, sentence, kokugo]
   );
   const [active, setActive] = useState<Tab>(initialTab ?? "quiz");
   const [grammarSlug, setGrammarSlug] = useState<string | undefined>();
@@ -90,7 +94,8 @@ function AppShell({
       <header className="bg-white border-b border-slate-200">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
           <h1 className="text-xl font-semibold tracking-tight">
-            日本語学習 <span className="text-slate-400 text-sm">— japanese-site</span>
+            {active === "kokugo" ? "国語教室" : "日本語学習"}{" "}
+            <span className="text-slate-400 text-sm">— japanese-site</span>
           </h1>
           <div className="flex flex-wrap items-center justify-end gap-2">
             <ProgressBadge />
@@ -129,6 +134,7 @@ function AppShell({
         {active === "vocab" && <VocabTab />}
         {active === "kanji" && <KanjiTab />}
         {active === "sentence" && sentence && <SentenceTab />}
+        {active === "kokugo" && kokugo && <KokugoTab />}
       </main>
       <footer className="text-center text-xs text-slate-400 py-6">
         資料來源 JMdict / KANJIDIC2 / Tatoeba (CC-BY-SA / CC-BY) ・ JLPT 標註 (MIT)

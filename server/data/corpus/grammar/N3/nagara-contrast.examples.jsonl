@@ -1,0 +1,5 @@
+{"text_ja": "悪いと___、誰も注意しない。", "text_zh": "雖然知道不好，卻沒人提醒。", "blank": "知りながら", "is_correct": 1, "hint": "逆接ながら（承認＋相反結果）", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "___、今日は伺えません。", "text_zh": "很遺憾，今天無法拜訪。", "blank": "残念ながら", "is_correct": 1, "hint": "定型：残念ながら", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "狭い___も、この部屋は気に入っている。", "text_zh": "雖然小，但我喜歡這房間。", "blank": "ながら", "is_correct": 1, "hint": "い形容詞＋ながら（も）", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "不便___、ここに住み続けている。", "text_zh": "雖然不便，仍繼續住在這裡。", "blank": "ながら", "is_correct": 1, "hint": "な形容詞語幹＋ながら", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "学生___、夜遅くまで働いている。", "text_zh": "雖然是學生，卻工作到很晚。", "blank": "でありながら", "is_correct": 1, "hint": "名詞＋でありながら", "source": "curated", "license": "CC-BY-SA-4.0"}

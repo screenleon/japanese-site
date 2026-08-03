@@ -1,0 +1,234 @@
+{
+  "slug": "nagara-contrast",
+  "title_ja": "ながら（逆接）",
+  "title_zh": "ながら（雖然…但是…）",
+  "jlpt_level": "N3",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vます形／い形／な形／N＋ながら（も）",
+      "gloss_zh": "承認前項，後項卻與預期相反（逆接）",
+      "notes_zh": "可接「ながらも」。同時進行「一邊…一邊…」見 N4 nagara；與 のに／けれども 的情緒差異見下"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「"
+        },
+        {
+          "t": "ruby",
+          "k": "動詞",
+          "r": "どうし"
+        },
+        {
+          "t": "text",
+          "v": "ます形・"
+        },
+        {
+          "t": "ruby",
+          "k": "形容詞",
+          "r": "けいようし"
+        },
+        {
+          "t": "text",
+          "v": "・"
+        },
+        {
+          "t": "ruby",
+          "k": "名詞",
+          "r": "めいし"
+        },
+        {
+          "t": "text",
+          "v": "＋ながら（も）」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "前",
+          "r": "まえ"
+        },
+        {
+          "t": "text",
+          "v": "の"
+        },
+        {
+          "t": "ruby",
+          "k": "内容",
+          "r": "ないよう"
+        },
+        {
+          "t": "text",
+          "v": "をみとめつつ、"
+        },
+        {
+          "t": "ruby",
+          "k": "後",
+          "r": "あと"
+        },
+        {
+          "t": "text",
+          "v": "で"
+        },
+        {
+          "t": "ruby",
+          "k": "予想",
+          "r": "よそう"
+        },
+        {
+          "t": "text",
+          "v": "とちがう"
+        },
+        {
+          "t": "ruby",
+          "k": "結果",
+          "r": "けっか"
+        },
+        {
+          "t": "text",
+          "v": "を述べる"
+        },
+        {
+          "t": "ruby",
+          "k": "逆接",
+          "r": "ぎゃくせつ"
+        },
+        {
+          "t": "text",
+          "v": "の使い方です。"
+        },
+        {
+          "t": "ruby",
+          "k": "例",
+          "r": "れい"
+        },
+        {
+          "t": "text",
+          "v": "：「"
+        },
+        {
+          "t": "ruby",
+          "k": "知",
+          "r": "し"
+        },
+        {
+          "t": "text",
+          "v": "っていながら"
+        },
+        {
+          "t": "ruby",
+          "k": "教",
+          "r": "おし"
+        },
+        {
+          "t": "text",
+          "v": "えてくれない」「"
+        },
+        {
+          "t": "ruby",
+          "k": "残念",
+          "r": "ざんねん"
+        },
+        {
+          "t": "text",
+          "v": "ながら"
+        },
+        {
+          "t": "ruby",
+          "k": "参加",
+          "r": "さんか"
+        },
+        {
+          "t": "text",
+          "v": "できません」。"
+        },
+        {
+          "t": "ruby",
+          "k": "同時",
+          "r": "どうじ"
+        },
+        {
+          "t": "text",
+          "v": "に二つの"
+        },
+        {
+          "t": "ruby",
+          "k": "動作",
+          "r": "どうさ"
+        },
+        {
+          "t": "text",
+          "v": "をする「Vます形＋ながら」（N4）とは意味が異なります。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「ながら（も）」作逆接時，表示承認前項，但後項與預期相反，常譯「雖然…但是…」。可接動詞ます形、い形容詞、な形容詞、名詞；「ながらも」語氣略硬。\n\n與 N4 同時進行「一邊…一邊…」的 ながら 完全不同用法，勿混淆。\n與 のに：のに 常帶不滿／意外的情緒；逆接 ながら 較書面、評價較冷靜。\n與 けれども／が：語氣接近，ながら 有時更簡潔或略文。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "import-curated-v1",
+    "validator_score": 1
+  },
+  "annotations": {
+    "mental_model": "逆接の「ながら」は、前の事実を認めつつ、そこから期待される流れとは違う後ろを置く形です。同時進行の「ながら」とは別物です。",
+    "mental_model_zh": "逆接ながら＝承認前項後指出相反結果；與「一邊…一邊…」的同時進行分開記。",
+    "nuance_note": "のにより感情が弱く、書き言葉や定型句（残念ながら）に出やすい。",
+    "furigana": {
+      "vocabulary": [
+        {
+          "kanji": "動詞",
+          "reading": "どうし"
+        },
+        {
+          "kanji": "形容詞",
+          "reading": "けいようし"
+        },
+        {
+          "kanji": "名詞",
+          "reading": "めいし"
+        },
+        {
+          "kanji": "逆接",
+          "reading": "ぎゃくせつ"
+        },
+        {
+          "kanji": "残念",
+          "reading": "ざんねん"
+        }
+      ]
+    }
+  },
+  "classifier_rules": [
+    {
+      "if_answer_contains_any": [
+        "のに"
+      ],
+      "error_class": "used-noni",
+      "contrast": null
+    },
+    {
+      "if_answer_contains_any": [
+        "けれど",
+        "けど"
+      ],
+      "error_class": "used-kedo",
+      "contrast": null
+    },
+    {
+      "if_answer_equals_any": [
+        "て"
+      ],
+      "error_class": "wrong-pattern",
+      "contrast": null
+    }
+  ],
+  "related_slugs": [
+    "nagara",
+    "contrast-noni",
+    "mono-no"
+  ]
+}

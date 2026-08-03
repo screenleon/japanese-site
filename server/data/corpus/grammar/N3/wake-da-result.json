@@ -1,14 +1,14 @@
 {
   "slug": "wake-da-result",
   "title_ja": "わけだ",
-  "title_zh": "わけだ（怪不得／也就是說）",
+  "title_zh": "わけだ（難怪／也就是說）",
   "jlpt_level": "N3",
   "schema_version": 2,
   "pattern": [
     {
       "form": "普通形＋わけだ",
       "gloss_zh": "理解理由後，表示結果自然如此或難怪如此",
-      "notes_zh": "名詞・な形容詞常接「なわけだ」；用於整理因果，不是單純主張"
+      "notes_zh": "名詞・な形容詞常接「なわけだ」。基本因果理解。更細的家族（わけではない等）見 N2 wake-da-nuance"
     },
     {
       "form": "普通形＋というわけだ",
@@ -98,7 +98,7 @@
       ]
     }
   ],
-  "explanation_zh": "「わけだ」表示知道理由或情況後，理解某結果是自然的，常譯為「怪不得」「也就是說」。",
+  "explanation_zh": "「わけだ」表示知道理由或情況後，理解某結果是自然的，常譯「怪不得」「也就是說」。重點是把前因後果接起來的「原來如此」。N2 wake-da-nuance 另整理 わけではない／わけがない／わけにはいかない 等家族與細微差別。",
   "_meta": {
     "source": "curated",
     "license": "CC-BY-SA-4.0",
@@ -144,5 +144,9 @@
         }
       ]
     }
-  }
+  },
+  "related_slugs": [
+    "hazu-da",
+    "wake-da-nuance"
+  ]
 }

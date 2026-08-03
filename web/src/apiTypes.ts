@@ -264,6 +264,63 @@ export interface Capabilities {
   history: boolean;
   quiz: boolean;
   sentence: boolean;
+  /** Track B 国語教室 unit listing available (corpus present). */
+  kokugo: boolean;
+}
+
+/** List-row for a Kokugo unit (JS-131). */
+export interface KokugoUnitSummary {
+  id: string;
+  stage: string;
+  title_ja: string;
+  genre: string;
+  estimated_minutes: number;
+  task_count: number;
+  has_artifact: boolean;
+}
+
+export interface KokugoUnitProgress {
+  unit_key: string;
+  stage: string;
+  unit_id: string;
+  status: "in_progress" | "completed";
+  step: string;
+  started_at: string;
+  updated_at: string;
+  completed_at?: string;
+}
+
+export interface KokugoTaskAttempt {
+  id: number;
+  unit_key: string;
+  task_id: string;
+  answer: unknown;
+  correct?: boolean | null;
+  feedback?: unknown;
+  created_at: string;
+}
+
+export interface KokugoArtifactRow {
+  unit_key: string;
+  revision: number;
+  body: string;
+  checklist: unknown;
+  /** Monotonic optimistic-concurrency token (starts at 1). */
+  version: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface KokugoUnitState {
+  progress?: KokugoUnitProgress;
+  attempts: KokugoTaskAttempt[];
+  artifacts: KokugoArtifactRow[];
+}
+
+export interface KokugoGradeResult {
+  correct?: boolean | null;
+  explanation_ja: string;
+  detail?: Record<string, unknown>;
 }
 
 export interface ProgressSummary {
@@ -292,4 +349,35 @@ export interface Api {
   markRead(key: ReadKey): Promise<void>;
   getProgress(type: ReadContentType, level?: string): Promise<ProgressSummary>;
   getCapabilities(): Promise<Capabilities>;
+  /** 国語教室 (Track B) — optional on staticApi (throws / empty). */
+  listKokugoUnits?(): Promise<{ units: KokugoUnitSummary[]; count: number }>;
+  getKokugoUnit?(stage: string, id: string): Promise<import("./kokugoTypes").KokugoUnit>;
+  getKokugoUnitState?(stage: string, id: string): Promise<KokugoUnitState>;
+  putKokugoProgress?(
+    stage: string,
+    id: string,
+    body: { step: string; status?: "in_progress" | "completed" }
+  ): Promise<KokugoUnitProgress>;
+  submitKokugoTask?(
+    stage: string,
+    id: string,
+    taskId: string,
+    answer: unknown
+  ): Promise<{ attempt: KokugoTaskAttempt; grade: KokugoGradeResult }>;
+  saveKokugoArtifact?(
+    stage: string,
+    id: string,
+    body: {
+      revision: 0 | 1;
+      body: string;
+      checklist_checked: boolean[];
+      /** Required when updating an existing revision row (CAS on version). */
+      expected_version?: number;
+    }
+  ): Promise<{
+    artifact: KokugoArtifactRow;
+    grade: KokugoGradeResult;
+    /** Server progress after the transactional artifact write (JS-132). */
+    progress?: KokugoUnitProgress;
+  }>;
 }
