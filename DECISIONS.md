@@ -3,6 +3,22 @@
 This file records active architectural and behavioral decisions for this repository.
 Agents must read it before planning or implementation tasks.
 
+## 2026-08-03 — JS-133 Kokugo reader polish (in-passage highlight + paragraph roles)
+
+**Context**: Phase-1 `EvidenceStep` was a detached checkbox list of gold + distractor sentences; `ParagraphRoleStep` re-listed paragraphs with bare selects. That failed the 国語 “find evidence in the text” feel (ADR-0005 Phase 2 / JS-133).
+
+**Decision**:
+
+1. **Shared `KokugoPassage`** (`web/src/components/KokugoPassage.tsx`) models paragraph → sentence surface text (`plainFromTokens` + `splitJapaneseSentences`) and renders three modes: `readonly`, `sentence-select`, `paragraph-role`.
+2. **Evidence** — learner taps sentences *in the passage*; submit still `{ quotes: string[] }` (optional gold fallback chips via `ensureGoldSelectable` if a gold string is not isolated by the splitter). Grader containment rules unchanged.
+3. **Paragraph roles** — role `<select>` sits on each passage paragraph with role-tinted borders; submit still `{ roles: string[] }` in paragraph order.
+4. **Read phase** — same component, readonly + paragraph index labels (no answer writes).
+5. **Out of scope** — free character-offset spans, classmates (JS-134), skill map (JS-136), schema/grader changes.
+
+**Consequences**: No API or SQLite migration. Static `capabilities.kokugo` still off. Follow-ups can hang classmate reveals on the same sentence keys.
+
+**Refs**: ADR-0005 Phase 2; BACKLOG JS-133; DECISIONS 2026-08-03 JS-131/132.
+
 ## 2026-08-03 — JS-131/132 security multi-tenant finding: user-accepted deployment exception
 
 **Context**: PR-gate `gate-20260803-111048-8bfac8` security-reviewer-F001 (hard block) required authenticated identity + owner isolation on `/api/kokugo/progress/**` with two-identity cross-account tests. That model assumes multi-user network exposure.

@@ -293,6 +293,144 @@ describe("KokugoTab", () => {
     });
   });
 
+  it("JS-133: evidence highlight submits quotes from in-passage sentence taps", async () => {
+    const evidenceUnit: KokugoUnit = {
+      ...sampleUnit,
+      text: [
+        {
+          kind: "paragraph",
+          tokens: [
+            {
+              t: "text",
+              v: "図書室は大切です。まず探しやすさを改善する必要があります。別の文です。",
+            },
+          ],
+        },
+      ],
+      tasks: [
+        {
+          id: "predict-1",
+          skill: "reading.predict",
+          kind: "predict",
+          payload: {
+            prompt_ja: "何について？",
+            choices: [
+              { id: "a", text_ja: "歴史" },
+              { id: "b", text_ja: "工夫" },
+            ],
+          },
+        },
+        {
+          id: "evidence-1",
+          skill: "reading.locate-evidence",
+          kind: "evidence-highlight",
+          payload: {
+            prompt_ja: "根拠の文を選びなさい。",
+            gold_quotes: ["まず探しやすさを改善する必要があります。"],
+          },
+        },
+      ],
+      artifact: undefined,
+    };
+    getKokugoUnit.mockResolvedValue(evidenceUnit);
+    renderTab();
+    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    await screen.findByText("読む前の予測");
+    fireEvent.click(screen.getByLabelText("工夫"));
+    fireEvent.click(screen.getByRole("button", { name: /予測を記録/ }));
+    await screen.findByText("本文を読む");
+    fireEvent.click(screen.getByRole("button", { name: "課題へ進む" }));
+    await screen.findByText("根拠を選ぶ");
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "まず探しやすさを改善する必要があります。" })
+    );
+    submitKokugoTask.mockResolvedValueOnce({
+      attempt: {
+        id: 3,
+        unit_key: "e5-6/library-use",
+        task_id: "evidence-1",
+        answer: {},
+        created_at: "",
+      },
+      grade: { correct: true, explanation_ja: "根拠となる文を正しく選べました。" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "提出" }));
+    await waitFor(() => {
+      expect(submitKokugoTask).toHaveBeenCalledWith(
+        "e5-6",
+        "library-use",
+        "evidence-1",
+        { quotes: ["まず探しやすさを改善する必要があります。"] }
+      );
+    });
+  });
+
+  it("JS-133: paragraph-role submits roles assigned on the passage", async () => {
+    const roleUnit: KokugoUnit = {
+      ...sampleUnit,
+      text: [
+        { kind: "paragraph", tokens: [{ t: "text", v: "問題の段落。" }] },
+        { kind: "paragraph", tokens: [{ t: "text", v: "原因の段落。" }] },
+      ],
+      tasks: [
+        {
+          id: "structure-1",
+          skill: "reading.structure",
+          kind: "paragraph-role",
+          payload: {
+            prompt_ja: "役割を選びなさい。",
+            roles: ["問題", "原因", "提案", "結論"],
+            gold_by_paragraph_index: ["問題", "原因"],
+          },
+        },
+      ],
+      artifact: undefined,
+    };
+    getKokugoUnit.mockResolvedValue(roleUnit);
+    getKokugoUnitState.mockResolvedValue({
+      progress: {
+        unit_key: "e5-6/library-use",
+        stage: "e5-6",
+        unit_id: "library-use",
+        status: "in_progress",
+        step: "task:structure-1",
+        started_at: "",
+        updated_at: "",
+      },
+      attempts: [],
+      artifacts: [],
+    });
+    renderTab();
+    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    await screen.findByText("段落の役割");
+    fireEvent.change(screen.getByLabelText("段落 1 の役割"), {
+      target: { value: "問題" },
+    });
+    fireEvent.change(screen.getByLabelText("段落 2 の役割"), {
+      target: { value: "原因" },
+    });
+    submitKokugoTask.mockResolvedValueOnce({
+      attempt: {
+        id: 4,
+        unit_key: "e5-6/library-use",
+        task_id: "structure-1",
+        answer: {},
+        created_at: "",
+      },
+      grade: { correct: true, explanation_ja: "各段落の役割を正しく整理できました。" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "提出" }));
+    await waitFor(() => {
+      expect(submitKokugoTask).toHaveBeenCalledWith(
+        "e5-6",
+        "library-use",
+        "structure-1",
+        { roles: ["問題", "原因"] }
+      );
+    });
+  });
+
   it("retains phase when task submit fails", async () => {
     renderTab();
     fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));

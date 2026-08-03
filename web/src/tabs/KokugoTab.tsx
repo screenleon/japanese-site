@@ -5,7 +5,11 @@ import type {
   KokugoUnitState,
   KokugoUnitSummary,
 } from "../apiTypes";
-import { BlockRenderer } from "../components/EntryAnnotations";
+import {
+  countParagraphs,
+  KokugoPassage,
+  type PassageSentence,
+} from "../components/KokugoPassage";
 import type {
   EvidenceHighlightPayload,
   KokugoTask,
@@ -420,9 +424,10 @@ export function KokugoTab() {
       {phase === "read" && (
         <div className="space-y-4">
           <h3 className="text-sm font-medium text-slate-800">本文を読む</h3>
-          <article className="prose prose-slate max-w-none rounded-lg border border-slate-200 bg-white p-4 leading-8">
-            <BlockRenderer blocks={unit.text} />
-          </article>
+          <p className="text-xs text-slate-600">
+            段落ごとに読み、主張・理由・提案がどこにあるか意識しましょう。
+          </p>
+          <KokugoPassage blocks={unit.text} mode="readonly" showParagraphIndex />
           <button
             type="button"
             className="px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
@@ -624,19 +629,22 @@ function TaskStep({
   if (task.kind === "predict") {
     return (
       <PredictStep
+        key={task.id}
         payload={task.payload}
         onSubmit={(choiceId) => onSubmit({ choice_id: choiceId })}
       />
     );
   }
   if (task.kind === "summary-choice") {
-    return <SummaryChoiceStep payload={task.payload} onSubmit={onSubmit} />;
+    return <SummaryChoiceStep key={task.id} payload={task.payload} onSubmit={onSubmit} />;
   }
   if (task.kind === "paragraph-role") {
-    return <ParagraphRoleStep payload={task.payload} unit={unit} onSubmit={onSubmit} />;
+    return (
+      <ParagraphRoleStep key={task.id} payload={task.payload} unit={unit} onSubmit={onSubmit} />
+    );
   }
   if (task.kind === "evidence-highlight") {
-    return <EvidenceStep payload={task.payload} unit={unit} onSubmit={onSubmit} />;
+    return <EvidenceStep key={task.id} payload={task.payload} unit={unit} onSubmit={onSubmit} />;
   }
   return <p className="text-sm text-red-600">未対応の課題種別です。</p>;
 }
@@ -689,36 +697,32 @@ function ParagraphRoleStep({
   unit: KokugoUnit;
   onSubmit: (answer: unknown) => void;
 }) {
-  const paragraphs = unit.text.filter((b) => b.kind === "paragraph");
-  const [roles, setRoles] = useState<string[]>(() => paragraphs.map(() => payload.roles[0] ?? ""));
+  const paraCount = countParagraphs(unit.text);
+  const [roles, setRoles] = useState<string[]>(() =>
+    Array.from({ length: paraCount }, () => payload.roles[0] ?? "")
+  );
+
   return (
     <div className="space-y-3">
       <h3 className="text-sm font-medium">段落の役割</h3>
-      <p className="text-sm">{payload.prompt_ja}</p>
-      <ol className="space-y-3 list-decimal list-inside">
-        {paragraphs.map((p, i) => (
-          <li key={i} className="text-sm space-y-1">
-            <div className="pl-2 text-slate-700 border-l-2 border-slate-200">
-              <BlockRenderer blocks={[p]} />
-            </div>
-            <select
-              className="ml-4 border border-slate-300 rounded px-2 py-1 text-sm"
-              value={roles[i]}
-              onChange={(e) => {
-                const next = [...roles];
-                next[i] = e.target.value;
-                setRoles(next);
-              }}
-            >
-              {payload.roles.map((r) => (
-                <option key={r} value={r}>
-                  {r}
-                </option>
-              ))}
-            </select>
-          </li>
-        ))}
-      </ol>
+      <p className="text-sm text-slate-800">{payload.prompt_ja}</p>
+      <p className="text-xs text-slate-600">
+        各段落の見出しで役割を選びます。色が変わると割り当てが反映されます。
+      </p>
+      <KokugoPassage
+        blocks={unit.text}
+        mode="paragraph-role"
+        roles={roles}
+        roleOptions={payload.roles}
+        onRoleChange={(i, role) => {
+          setRoles((prev) => {
+            const next = [...prev];
+            next[i] = role;
+            return next;
+          });
+        }}
+        showParagraphIndex
+      />
       <button
         type="button"
         className="px-4 py-2 rounded-md bg-blue-600 text-white text-sm"
@@ -739,54 +743,52 @@ function EvidenceStep({
   unit: KokugoUnit;
   onSubmit: (answer: unknown) => void;
 }) {
-  const candidates = useMemo(() => {
-    const plain = unit.text
-      .filter((b) => b.kind === "paragraph")
-      .map((b) =>
-        b.tokens
-          .map((t) => (t.t === "text" ? t.v : t.t === "ruby" ? t.k : t.label))
-          .join("")
-      )
-      .join("");
-    const sentences = plain
-      .split(/(?<=[。．？！\n])/)
-      .map((s) => s.trim())
-      .filter((s) => s.length >= 8);
-    const extras = sentences
-      .filter((s) => !payload.gold_quotes.some((g) => s.includes(g)))
-      .slice(0, 4);
-    return [...payload.gold_quotes, ...extras];
-  }, [payload.gold_quotes, unit.text]);
+  // key → surface quote text (for API quotes[])
+  const [selected, setSelected] = useState<Map<string, string>>(() => new Map());
 
-  const [selected, setSelected] = useState<Record<string, boolean>>({});
+  function toggle(sent: PassageSentence) {
+    setSelected((prev) => {
+      const next = new Map(prev);
+      if (next.has(sent.key)) next.delete(sent.key);
+      else next.set(sent.key, sent.text);
+      return next;
+    });
+  }
+
+  const selectedKeys = useMemo(() => new Set(selected.keys()), [selected]);
+  const selectedEntries = useMemo(() => Array.from(selected.entries()), [selected]);
+  const quotes = useMemo(() => selectedEntries.map(([, text]) => text), [selectedEntries]);
 
   return (
     <div className="space-y-3">
       <h3 className="text-sm font-medium">根拠を選ぶ</h3>
-      <p className="text-sm">{payload.prompt_ja}</p>
-      <ul className="space-y-2">
-        {candidates.map((q) => (
-          <li key={q}>
-            <label className="flex items-start gap-2 text-sm cursor-pointer">
-              <input
-                type="checkbox"
-                checked={!!selected[q]}
-                onChange={(e) => setSelected((s) => ({ ...s, [q]: e.target.checked }))}
-              />
-              <span>{q}</span>
-            </label>
-          </li>
-        ))}
-      </ul>
+      <p className="text-sm text-slate-800">{payload.prompt_ja}</p>
+      <p className="text-xs text-slate-600">
+        本文の文をタップして根拠をマークします（複数可）。もう一度タップすると解除します。
+      </p>
+      <KokugoPassage
+        blocks={unit.text}
+        mode="sentence-select"
+        selectedKeys={selectedKeys}
+        onToggleSentence={toggle}
+        goldQuotes={payload.gold_quotes}
+        showParagraphIndex
+      />
+      {selectedEntries.length > 0 && (
+        <div className="rounded-md border border-amber-200 bg-amber-50/60 px-3 py-2 text-xs text-amber-950">
+          <p className="font-medium mb-1">選択中（{selectedEntries.length}）</p>
+          <ul className="list-disc pl-4 space-y-0.5">
+            {selectedEntries.map(([key, text]) => (
+              <li key={key}>{text}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <button
         type="button"
-        className="px-4 py-2 rounded-md bg-blue-600 text-white text-sm"
-        onClick={() => {
-          const quotes = Object.entries(selected)
-            .filter(([, v]) => v)
-            .map(([k]) => k);
-          onSubmit({ quotes });
-        }}
+        disabled={quotes.length === 0}
+        className="px-4 py-2 rounded-md bg-blue-600 text-white text-sm disabled:opacity-40"
+        onClick={() => onSubmit({ quotes })}
       >
         提出
       </button>

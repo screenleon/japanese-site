@@ -69,10 +69,11 @@ IndexedDB progress (JS-141), multi-user classmates.
       (JS-126..128, ADR-0005).
 - [x] **KokugoUnit schema, lint, L1 path** (JS-129; fixture unit
       `e5-6/library-use.json`).
-- [ ] **PoC content polish + minimal cycle UI + local progress**
-      (JS-130..132). JS-130 may refine the fixture; UI/API still open.
+- [x] **PoC content + minimal cycle UI + local progress**
+      (JS-130..132).
 - [ ] **Reader polish, classmate answers, unit pack 2, skill map**
-      (JS-133..136).
+      (JS-133..136). JS-133 reader polish shipped 2026-08-03;
+      JS-134..136 remain open.
 
 ## Quiz / content depth
 

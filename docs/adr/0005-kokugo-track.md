@@ -164,5 +164,7 @@ Accepted 2026-08-02. **JS-129 shipped**: `web/src/kokugoTypes.ts`,
 `scripts/lint-kokugo.sh`, `server/data/corpus/kokugo/e5-6/library-use.json`.
 **JS-131/132 shipped (2026-08-03)**: `KokugoTab` minimal cycle UI;
 `/api/kokugo/**` units + SQLite progress/attempts/artifacts (`0023_kokugo_progress.sql`);
-deterministic grading in `server/internal/kokugo`. Next: JS-133 reader polish,
-JS-134 classmates, JS-135 more units.
+deterministic grading in `server/internal/kokugo`.
+**JS-133 shipped (2026-08-03)**: `KokugoPassage` in-passage evidence sentence
+select + paragraph-role marking; read phase paragraph indices. Next: JS-134
+classmates, JS-135 more units, JS-136 skill map.
