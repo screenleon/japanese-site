@@ -25,7 +25,14 @@ import type {
   Stats,
   GradeResult,
   VocabRow,
+  KokugoUnitSummary,
+  KokugoUnitState,
+  KokugoUnitProgress,
+  KokugoTaskAttempt,
+  KokugoArtifactRow,
+  KokugoGradeResult,
 } from "./apiTypes";
+import type { KokugoUnit } from "./kokugoTypes";
 
 export type * from "./apiTypes";
 
@@ -127,7 +134,42 @@ export const httpApi: Api = {
     return getJSON<ProgressSummary>(`/api/progress?${q.toString()}`);
   },
   getCapabilities: () => getJSON<Capabilities>("/api/capabilities"),
+  listKokugoUnits: () =>
+    getJSON<{ units: KokugoUnitSummary[]; count: number }>("/api/kokugo/units"),
+  getKokugoUnit: (stage, id) =>
+    getJSON<KokugoUnit>(
+      `/api/kokugo/units/${encodeURIComponent(stage)}/${encodeURIComponent(id)}`
+    ),
+  getKokugoUnitState: (stage, id) =>
+    getJSON<KokugoUnitState>(
+      `/api/kokugo/progress/${encodeURIComponent(stage)}/${encodeURIComponent(id)}`
+    ),
+  putKokugoProgress: (stage, id, body) =>
+    putJSON<KokugoUnitProgress>(
+      `/api/kokugo/progress/${encodeURIComponent(stage)}/${encodeURIComponent(id)}`,
+      body
+    ),
+  submitKokugoTask: (stage, id, taskId, answer) =>
+    postJSON<{ attempt: KokugoTaskAttempt; grade: KokugoGradeResult }>(
+      `/api/kokugo/progress/${encodeURIComponent(stage)}/${encodeURIComponent(id)}/tasks/${encodeURIComponent(taskId)}`,
+      { answer }
+    ),
+  saveKokugoArtifact: (stage, id, body) =>
+    putJSON<{ artifact: KokugoArtifactRow; grade: KokugoGradeResult }>(
+      `/api/kokugo/progress/${encodeURIComponent(stage)}/${encodeURIComponent(id)}/artifact`,
+      body
+    ),
 };
+
+async function putJSON<T>(path: string, body: unknown): Promise<T> {
+  const r = await fetch(path, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!r.ok) throw await apiError(r);
+  return r.json();
+}
 
 /** @deprecated import the `Api` interface and inject `httpApi` instead. */
 const deployMode =

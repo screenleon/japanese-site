@@ -27,6 +27,7 @@ const defaultCapabilities: CapabilitiesState = {
   history: false,
   quiz: false,
   sentence: false,
+  kokugo: false,
   loaded: false,
   progressRevisions: initialProgressRevisions,
   bumpProgress: () => {},
@@ -40,6 +41,7 @@ export function CapabilitiesProvider({ children }: { children: ReactNode }) {
     history: false,
     quiz: false,
     sentence: false,
+    kokugo: false,
   });
   const [loaded, setLoaded] = useState(false);
   const [progressRevisions, setProgressRevisions] =
@@ -68,6 +70,7 @@ export function CapabilitiesProvider({ children }: { children: ReactNode }) {
           history: false,
           quiz: false,
           sentence: false,
+          kokugo: false,
         });
         setLoaded(true);
       });

@@ -8,7 +8,7 @@
     {
       "form": "普通形＋かもしれない",
       "gloss_zh": "表示也許如此，可能性存在但不確定",
-      "notes_zh": "名詞・な形容詞通常省略「だ」後接「かもしれない」；丁寧形「かもしれません」常用；確信度比較見 kamo-shirenai 與 ni-chigainai"
+      "notes_zh": "名詞・な形容詞通常省略「だ」後接「かもしれない」。丁寧形「かもしれません」常用。確信度：かもしれない（低）＜ はずだ（有根據）＜ に違いない（高）"
     }
   ],
   "explanation_ja_blocks": [
@@ -130,7 +130,16 @@
         },
         {
           "t": "text",
-          "v": "の後に続き、"
+          "v": "の"
+        },
+        {
+          "t": "ruby",
+          "k": "後",
+          "r": "あと"
+        },
+        {
+          "t": "text",
+          "v": "に続き、"
         },
         {
           "t": "ruby",
@@ -144,7 +153,7 @@
       ]
     }
   ],
-  "explanation_zh": "「普通形 + かもしれない」表示不確定的可能性，常譯為「也許／可能」。語氣比「だろう」更不確定、更柔和。",
+  "explanation_zh": "「普通形 + かもしれない」表示不確定的可能性，常譯為「也許／可能」。語氣比「だろう」「はずだ」更不確定、更柔和，不把判斷說死。",
   "_meta": {
     "source": "curated",
     "license": "CC-BY-SA-4.0",
@@ -195,11 +204,17 @@
     {
       "if_answer_equals_any": [
         "でしょう",
+        "だろう"
+      ],
+      "error_class": "certainty-pattern",
+      "contrast": null
+    },
+    {
+      "if_answer_contains_any": [
         "はず"
       ],
       "error_class": "certainty-pattern",
       "contrast": null
     }
-  ],
-  "audit_status": "post-dedup-naive"
+  ]
 }

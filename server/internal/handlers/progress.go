@@ -65,13 +65,16 @@ func progress(db *store.DB, ps store.ProgressStore) http.HandlerFunc {
 	}
 }
 
-func capabilities(ps store.ProgressStore) http.HandlerFunc {
+func capabilities(ps store.ProgressStore, kokugoUnitsAvailable bool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		// kokugo: content listing when corpus dir is configured; full cycle
+		// (progress/artifacts) still requires progress store (local API).
 		writeJSON(w, http.StatusOK, map[string]bool{
 			"progress": ps.Enabled(),
 			"history":  false,
 			"quiz":     true,
 			"sentence": true,
+			"kokugo":   kokugoUnitsAvailable,
 		})
 	}
 }

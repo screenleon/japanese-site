@@ -55,4 +55,5 @@ Optional: `artifact` (checklist writing), `classmates` (Phase 2, array only).
 - Quiz cloze loop / `QuizContentType` — not used here.
 - Static full progress — JS-018 unchanged; bake-static does **not** yet
   publish kokugo (add when browse UI lands).
-- Runtime API / SQLite load — JS-131 / JS-132.
+- Runtime API + SQLite progress — JS-131 / JS-132 (`GET /api/kokugo/units`,
+  progress/attempt/artifact under `/api/kokugo/progress/**`).

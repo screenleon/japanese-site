@@ -50,7 +50,9 @@ func main() {
 	}
 
 	mux := http.NewServeMux()
-	handlers.Register(mux, db, ps)
+	handlers.RegisterWithOpts(mux, db, ps, handlers.RegisterOpts{
+		KokugoDir: cfg.KokugoDir,
+	})
 	if err := handlers.RegisterStatic(mux, cfg.StaticDir); err != nil {
 		logger.Error("static dir setup failed", "err", err)
 		os.Exit(1)

@@ -162,4 +162,7 @@ PoC unit: one adult-readable `expository`/`opinion` text (~500–800 chars), e.g
 
 Accepted 2026-08-02. **JS-129 shipped**: `web/src/kokugoTypes.ts`,
 `scripts/lint-kokugo.sh`, `server/data/corpus/kokugo/e5-6/library-use.json`.
-Next: JS-130 content polish (optional), JS-131 UI, JS-132 progress.
+**JS-131/132 shipped (2026-08-03)**: `KokugoTab` minimal cycle UI;
+`/api/kokugo/**` units + SQLite progress/attempts/artifacts (`0023_kokugo_progress.sql`);
+deterministic grading in `server/internal/kokugo`. Next: JS-133 reader polish,
+JS-134 classmates, JS-135 more units.

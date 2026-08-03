@@ -29,7 +29,7 @@ describe("HomePage", () => {
   });
 
   it("renders the practice subtitle and quiz CTAs in dev mode", async () => {
-    render(<HomePage onStart={vi.fn()} quizCapable={true} />);
+    render(<HomePage onStart={vi.fn()} quizCapable={true} kokugoCapable={false} />);
 
     expect(
       screen.getByText("用文法、單字與測驗建立穩定的日文練習節奏。")
@@ -39,6 +39,7 @@ describe("HomePage", () => {
     expect(screen.getByRole("button", { name: /^文法/ })).toBeVisible();
     expect(screen.getByRole("button", { name: /^單字/ })).toBeVisible();
     expect(screen.getByRole("button", { name: /^漢字/ })).toBeVisible();
+    expect(screen.queryByRole("button", { name: /^国語教室/ })).not.toBeInTheDocument();
 
     await waitFor(() => {
       expect(screen.getByText("12")).toBeVisible();
@@ -53,6 +54,22 @@ describe("HomePage", () => {
     expect(kanjiCard.querySelector("[data-testid='nav-count']")).toBeNull();
     expect(listGrammar).toHaveBeenCalledTimes(1);
     expect(searchVocab).toHaveBeenCalledWith("", undefined);
+  });
+
+  it("shows 国語教室 card when kokugoCapable and navigates with kokugo tab", async () => {
+    const onStart = vi.fn();
+    render(<HomePage onStart={onStart} quizCapable={true} kokugoCapable={true} />);
+
+    // Settle initial stats fetch so async setState is inside React act (qa-tester-F003).
+    await waitFor(() => {
+      expect(screen.getByText("12")).toBeVisible();
+    });
+
+    const card = screen.getByRole("button", { name: /^国語教室/ });
+    expect(card).toBeVisible();
+    expect(screen.getByText("讀→據→寫→改 の最小循環")).toBeVisible();
+    fireEvent.click(card);
+    expect(onStart).toHaveBeenCalledWith("練習", "kokugo");
   });
 
   it("renders the reference subtitle and hides quiz CTAs in static mode", async () => {

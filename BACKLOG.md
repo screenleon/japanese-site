@@ -130,8 +130,8 @@
 | JS-128 | ✅ closed 2026-08-02 | 與 JS-083 / JS-084 / JS-090 的邊界 | architecture | 2026-08-02 | DECISIONS.md#2026-08-02-school-kokugo-track |
 | JS-129 | ✅ closed 2026-08-02 | KokugoUnit / KokugoTask schema + lint + L1 路徑 | architecture | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-130 | ✅ closed 2026-08-02 | 国語 PoC 單元（e5-6 說明／意見文 × 完整循環） | content | 2026-08-02 | docs/adr/0005-kokugo-track.md |
-| JS-131 | 🔵 active | 国語最小循環 UI | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
-| JS-132 | 🔵 active | 国語 local API 進度與作品保存 | backend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-131 | ✅ closed 2026-08-03 | 国語最小循環 UI | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-132 | ✅ closed 2026-08-03 | 国語 local API 進度與作品保存 | backend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-133 | 🔵 active | 国語 Reader 精讀標記強化 | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-134 | 🔵 active | 模擬同學答案與改稿對照 | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-135 | 🔵 active | 国語單元包 2（PoC 後 3–4 單元） | content | 2026-08-02 | docs/adr/0005-kokugo-track.md |
@@ -1455,6 +1455,8 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 
 ## JS-114b — editorial polish on JS-114a merged entries + native-review re-authorization
 
+**Progress (2026-08-03)**: Editorial prose/pattern polish + N3/nagara-contrast authored; post-dedup-naive audit_status cleared on five entries. Structured classifier contrasts + native-reviewer stamp **deferred** (lint honesty).
+
 **Problem**: P3 editorial follow-up is still blocked on post-dedup cleanup. The existing merged entries carry interim wording and provisional metadata from earlier edits.
 
 **Why**: JS-114a intentionally separated schema migration and corpus renames from prose polish. Learner-facing content quality still needs one focused pass before next content wave.
@@ -1518,7 +1520,9 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 **See**: docs/adr/0005-kokugo-track.md, server/data/corpus/kokugo/e5-6/library-use.json
 <!-- 首次記錄: 2026-08-02 -->
 
-## JS-131 — 国語最小循環 UI
+## JS-131 — 国語最小循環 UI ✅ 2026-08-03
+
+**Outcome**: `KokugoTab` + 首頁「国語教室」nav；predict→read→tasks→artifact→revise 最小循環；capabilities.kokugo。
 
 **Problem**: 尚無導航與流程承載 predict → read → tasks → artifact → revise。
 
@@ -1531,7 +1535,9 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 **Blocked by**: JS-129, JS-130
 <!-- 首次記錄: 2026-08-02 -->
 
-## JS-132 — 国語 local API 進度與作品保存
+## JS-132 — 国語 local API 進度與作品保存 ✅ 2026-08-03
+
+**Outcome**: migration 0023 + `/api/kokugo/**` units/progress/tasks/artifact；filesystem L1 load；deterministic grade。
 
 **Problem**: 單元進度、作答、草稿與改稿需持久化。
 

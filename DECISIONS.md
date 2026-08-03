@@ -3,6 +3,77 @@
 This file records active architectural and behavioral decisions for this repository.
 Agents must read it before planning or implementation tasks.
 
+## 2026-08-03 — JS-131/132 security multi-tenant finding: user-accepted deployment exception
+
+**Context**: PR-gate `gate-20260803-111048-8bfac8` security-reviewer-F001 (hard block) required authenticated identity + owner isolation on `/api/kokugo/progress/**` with two-identity cross-account tests. That model assumes multi-user network exposure.
+
+**Decision** (product owner, 2026-08-03): **Accept risk and do not implement multi-user auth/tenant isolation for Kokugo progress in v1.** Ship under the existing audience-of-one + deployment split.
+
+**Product deployment contract**:
+| Surface | Runtime | Kokugo progress |
+|---------|---------|-----------------|
+| **Cloud / portfolio (JS-018 static)** | No Go server | No `/api/kokugo/**` learner state; static capabilities keep full cycle off |
+| **Local API** | Personal `cmd/api` + SQLite | Full cycle; single-learner trust boundary (same as `read_log`) |
+
+**Scope of exception**:
+- Applies only to **security-F001-class** “missing multi-user ownership” findings on local-only progress surfaces (`/api/kokugo/progress/**` and the same single-tenant model as existing read progress).
+- Does **not** waive: path traversal, body size limits, stable public error codes, server-enforced completion invariants, or CAS write safety (those were fixed in code).
+
+**Risk acceptance**:
+- Residual risk is limited to a process the operator already trusts on their own machine (or anyone with local OS access — same as the SQLite file itself).
+- Cloud static deploy has **no** write surface for learner artifacts; there is no multi-tenant production host for this API today.
+
+**Compensating controls**:
+1. Progress routes require `ProgressStore.Enabled()` (sqlite local mode); null/static → no writes.
+2. Unit content is filesystem L1 curriculum (not private); only attempts/artifacts are personal and stay on the local DB path.
+3. ADR-0005 / JS-126 freeze: full cycle is local-API only; static is not an offline LMS.
+
+**Rollback / revoke**:
+- If the API is ever bound to a shared or internet-facing host for multiple learners, this exception is **revoked** and auth + owner scoping must land before re-enablement.
+- Local disable path: `JS_PROGRESS_STORE=null` or unset corpus / do not run API.
+
+**Closes**: security-reviewer-F001 from `gate-20260803-111048-8bfac8` via explicit product exception (not a code multi-tenant implementation).
+
+**Refs**: ADR-0005 §Deployment, DECISIONS 2026-08-03 JS-131/132 #9–10, JS-018, `project_japanese-site_audience`.
+
+## 2026-08-03 — JS-131/132 Kokugo minimal cycle UI + local progress store
+
+**Context**: JS-129/130 delivered L1 schema + PoC unit without runtime. Learners still needed a nav surface and SQLite persistence for the read→evidence→express→revise cycle (ADR-0005).
+
+**Decision**:
+
+1. **Content stays on filesystem** — `GET /api/kokugo/units` and `GET /api/kokugo/units/{stage}/{id}` read `KOKUGO_DIR` (default `data/corpus/kokugo`). Units are **not** seeded into SQLite content tables.
+2. **Progress-only SQLite** — migration `0023_kokugo_progress.sql` stores `kokugo_unit_progress`, `kokugo_task_attempt`, `kokugo_artifact` (draft rev=0, revision rev=1). Enabled when `ProgressStore.Enabled()` (local sqlite progress mode).
+3. **Deterministic grading in `server/internal/kokugo`** — predict ungraded; summary-choice / paragraph-role / evidence-highlight / artifact length+checklist graded without LLM.
+4. **Capabilities** — `kokugo: true` when corpus dir is configured; static deploy keeps `kokugo: false` (JS-018 unchanged; no bake-static of units yet).
+5. **UI** — `KokugoTab` + home card「国語教室」; Japanese-first minimal cycle (functional over polished reader chrome). Evidence UI is choice-of-sentences v1 (JS-133 polishes highlight).
+6. **Resume + write safety (post pr-gate 2026-08-03)** — UI hydrates via `getKokugoUnitState` on open (no blank reset). Server requires revision-0 draft before revision-1 (`draft_required`). Artifact updates use **atomic CAS on monotonic `version`** (`expected_version`; `stale_write` 409 when rows affected ≠ 1), not wall-clock timestamps.
+7. **Server-enforced completion (pr-gate remediation)** — `status=completed` / `step=done` is accepted only when `KokugoCycleComplete` is true: every unit task has ≥1 attempt, and (if the unit has an artifact) both revision 0 and 1 exist. Artifact-only or bare PUT completion returns `cycle_incomplete`. Progress step writes after artifact persistence are not swallowed (500 on failure).
+8. **Public contract** — `/api/version.milestone = M3-C7` signals `/api/kokugo/**` + `capabilities.kokugo`. Task grade failures return only stable `grade_failed` (no raw grader `detail`). Request bodies capped at 64 KiB (`body_too_large` 413).
+9. **Trust model (audience-of-one; same as `read_log` progress)** — Kokugo progress/artifacts are single-tenant local-process state, not multi-user accounts. No per-row owner column or auth middleware in v1. See dedicated **2026-08-03 — JS-131/132 security multi-tenant finding** exception for gate security-F001.
+10. **Deployment split (product-confirmed 2026-08-03)** —
+    - **Cloud / portfolio (JS-018 static)**: no Go server, no SQLite progress, `capabilities.kokugo=false` (or units unavailable). Public site does **not** host `/api/kokugo/**` learner state.
+    - **Local API**: personal machine runs `cmd/api` + sqlite progress for the full cycle. Trust boundary is the local process (same as existing `read_log` / quiz progress).
+    Multi-user identity isolation remains **out of scope** until a multi-user or internet-exposed API is intentionally adopted — then auth + owner scoping is required before enablement.
+
+**Consequences**: Phase-2 items (JS-133+ highlight polish, classmates, skill map) remain blocked on this foundation. Static portfolio still cannot complete the full cycle. Do not enable kokugo progress on a shared/public server without a follow-up ownership model.
+
+## 2026-08-03 — JS-106 baseline pin must be on main history (CI no-drift)
+
+**Context**: `scripts/apply-allLevels-inline-ruby.py` pins `BASE` for non-explanation freeze + ruby regen. After squash-merge of JS-114a/JS-129, pin `e23cfd…` was **not an ancestor of main**, so GitHub Actions (`checkout` of main only) failed `test_no_drift` immediately with `git show` exit 128 — not a flaky product test.
+
+**Decision**: Pin `BASE` to a commit on `main` (`3aad0b8` / #69). `load_baseline` resolves BASE if present else HEAD, and falls back to on-disk for missing paths. Content-owned fields for `pre-redesign` / `post-dedup-naive` / `_TBD` stubs may diverge without failing verify.
+
+## 2026-08-03 — JS-114b editorial pass (prose polish; native-review stamp deferred)
+
+**Context**: Post JS-114a dedup, five entries still had `audit_status: post-dedup-naive` and N2 mono-da / wake-da still had `_TBD` patterns. Ticket also asked for N3 `nagara-contrast` and honest metadata.
+
+**Decision**:
+
+1. Polished learner-facing prose / pattern rows for N4 hazu-da, kamo-shirenai, te-shimau, nagara, N2 mono-no; differentiated N3 mono-da-norm vs N2 mono-da-emotion and N3 wake-da-result vs N2 wake-da-nuance; authored `N3/nagara-contrast` (+ examples).
+2. Cleared `audit_status: post-dedup-naive` on the five post-dedup entries after editorial integration.
+3. **Did not** stamp `_meta.validated_by: native-reviewer-v1` or non-null `classifier_rules[].contrast` — lint requires native-reviewer prefix for structured contrasts; dishonest stamps remain forbidden (`feedback_codex_metadata_stamp`). Formal native-review pass remains a follow-up if desired.
+
 ## 2026-08-02 — School Kokugo track (国語教室): product contract, dual axes, MVP scope
 
 **Context**: The project wants to combine JLPT-style 日本語学習 with Japanese school 国語 learning (reading → evidence → expression → revision), without collapsing school yearbands into JLPT levels. Audience remains personal (`audience-of-one`). M4 free-form LLM grading stays deferred. Static deployment (JS-018) remains a portfolio / read-only mirror without full learning loops.

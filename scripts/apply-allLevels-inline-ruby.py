@@ -25,8 +25,11 @@ from pathlib import Path
 
 
 # Non-explanation field freeze + explanation source text for ruby regen.
-# Rebaselined after pr-gate NO-GO corpus fixes (mono-no rule order + hazu-da provenance).
-BASE = "e23cfd67390f2a78f9d8dd62479282328698c7ba"
+# Must be a commit reachable from the checked-out branch (CI fetch-depth: 0
+# only has that history). Squash-merges drop intermediate pins — if BASE is
+# missing, load_baseline falls back to HEAD / on-disk (see resolve_baseline_ref).
+# Rebaselined to main #69 (JS-114a + JS-129) so main CI can resolve the object.
+BASE = "3aad0b82782bdcbdb571760ad1f746e20ab3c435"
 LEVELS = ("N5", "N4", "N2", "N1")
 # Post JS-114a cross-level dedup inventory (nagara-simultaneous absorbed into N4/nagara, etc.).
 # Guard fails if a level drifts from these counts so silent corpus shrink/grow is caught.
@@ -269,14 +272,50 @@ def load_json(path: Path) -> dict:
         return json.load(f)
 
 
-def load_baseline(path: Path) -> dict:
+def resolve_baseline_ref() -> str:
+    """Prefer BASE when the object is present; else HEAD (post-squash CI)."""
     proc = subprocess.run(
-        ["git", "show", f"{BASE}:{path.as_posix()}"],
-        check=True,
+        ["git", "cat-file", "-t", BASE],
+        check=False,
         text=True,
         stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
     )
-    return json.loads(proc.stdout)
+    if proc.returncode == 0 and proc.stdout.strip() in {"commit", "tag"}:
+        return BASE
+    return "HEAD"
+
+
+def load_baseline(path: Path) -> dict:
+    """Load the frozen baseline for path.
+
+    Order: pinned BASE (if reachable) → HEAD → on-disk file. The on-disk
+    fallback covers brand-new corpus files and CI checkouts that lost a
+    squash-orphaned pin entirely.
+    """
+    refs = []
+    primary = resolve_baseline_ref()
+    refs.append(primary)
+    if primary != "HEAD":
+        refs.append("HEAD")
+    last_err = ""
+    for ref in refs:
+        proc = subprocess.run(
+            ["git", "show", f"{ref}:{path.as_posix()}"],
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        if proc.returncode == 0:
+            return json.loads(proc.stdout)
+        last_err = (proc.stderr or proc.stdout or "").strip()
+    if path.exists():
+        return load_json(path)
+    raise RuntimeError(
+        f"baseline unavailable for {path.as_posix()} "
+        f"(tried {', '.join(refs)}; last error: {last_err})"
+    )
 
 
 def concat_tokens(tokens: list[dict]) -> str:
@@ -550,20 +589,32 @@ def verify(path: Path, baseline: dict, rewritten: dict) -> None:
     # is preserved verbatim, but allows the on-disk corpus to carry extra
     # keys (top-level or nested under annotations) without failing.
     #
-    # Exception: stub-state entries (baseline pattern[*].form == "_TBD" or
-    # audit_status == "pre-redesign") are owned by the JS-100 content-regen
-    # family. For those entries, the `pattern` and `audit_status` fields are
-    # expected to diverge from baseline once content is authored. Skip the
-    # drift check for exactly those two keys when baseline is stub-state;
-    # other non-explanation fields remain protected from tool side effects.
-    baseline_is_stub = baseline.get("audit_status") == "pre-redesign" or any(
-        row.get("form") == "_TBD" for row in baseline.get("pattern", []) or []
+    # Exception: content-authoring tickets own selected non-explanation fields
+    # while this tool only rewrites explanation_ja_blocks tokens:
+    #   - pre-redesign / _TBD stubs (JS-100 family)
+    #   - post-dedup-naive entries (JS-114b editorial polish)
+    # Those keys may diverge; everything else stays frozen against baseline.
+    baseline_is_content_owned = baseline.get("audit_status") in {
+        "pre-redesign",
+        "post-dedup-naive",
+    } or any(row.get("form") == "_TBD" for row in baseline.get("pattern", []) or [])
+    content_owned_keys = (
+        {
+            "pattern",
+            "audit_status",
+            "explanation_zh",
+            "classifier_rules",
+            "title_zh",
+            "related_slugs",
+            "annotations",
+        }
+        if baseline_is_content_owned
+        else set()
     )
-    stub_owned_keys = {"pattern", "audit_status"} if baseline_is_stub else set()
     base_proj = non_explanation_projection(baseline)
     new_proj = non_explanation_projection(rewritten)
     for key, value in base_proj.items():
-        if key in stub_owned_keys:
+        if key in content_owned_keys:
             continue
         if key == "annotations":
             new_ann = new_proj.get("annotations", {}) or {}

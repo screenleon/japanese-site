@@ -5,14 +5,15 @@ import { api } from "./api";
 import type { DueCount } from "./apiTypes";
 import type { QuizInitialMode } from "./tabs/QuizTab";
 
-type ContentTab = "grammar" | "vocab" | "kanji";
+type ContentTab = "grammar" | "vocab" | "kanji" | "kokugo";
 
 interface HomePageProps {
   onStart: (initialMode: QuizInitialMode, initialTab?: ContentTab) => void;
   quizCapable: boolean;
+  kokugoCapable?: boolean;
 }
 
-export function HomePage({ onStart, quizCapable }: HomePageProps) {
+export function HomePage({ onStart, quizCapable, kokugoCapable = false }: HomePageProps) {
   const [grammarCount, setGrammarCount] = useState<number | null>(null);
   const [vocabCount, setVocabCount] = useState<number | null>(null);
   const [dueCount, setDueCount] = useState<DueCount | null>(null);
@@ -74,7 +75,7 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
           </p>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-3 mb-8">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mb-8">
           <NavCard
             label="文法"
             count={grammarCount}
@@ -93,6 +94,14 @@ export function HomePage({ onStart, quizCapable }: HomePageProps) {
             description="讀音・筆畫・部首"
             onClick={() => onStart("練習", "kanji")}
           />
+          {kokugoCapable ? (
+            <NavCard
+              label="国語教室"
+              count={undefined}
+              description="讀→據→寫→改 の最小循環"
+              onClick={() => onStart("練習", "kokugo")}
+            />
+          ) : null}
         </div>
 
         {showQuizControls ? (
