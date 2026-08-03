@@ -380,6 +380,125 @@ describe("KokugoTab", () => {
     });
   });
 
+  it("JS-133: consecutive same-kind tasks remount and reset selection state", async () => {
+    /**
+     * Behavior: key={task.id} resets EvidenceStep Map between consecutive evidence tasks.
+     * 1. Resume on first evidence task; select a sentence (selection summary visible).
+     * 2. Advance to second evidence task via successful submit mock.
+     * 3. Assert selection summary is gone (state reset) and new prompt is shown.
+     */
+    const multiEvidence: KokugoUnit = {
+      ...sampleUnit,
+      text: [
+        {
+          kind: "paragraph",
+          tokens: [{ t: "text", v: "第一の文です。第二の文です。" }],
+        },
+      ],
+      tasks: [
+        {
+          id: "evidence-1",
+          skill: "reading.locate-evidence",
+          kind: "evidence-highlight",
+          payload: {
+            prompt_ja: "根拠Aを選びなさい。",
+            gold_quotes: ["第一の文です。"],
+          },
+        },
+        {
+          id: "evidence-2",
+          skill: "reading.locate-evidence",
+          kind: "evidence-highlight",
+          payload: {
+            prompt_ja: "根拠Bを選びなさい。",
+            gold_quotes: ["第二の文です。"],
+          },
+        },
+      ],
+      artifact: undefined,
+    };
+    getKokugoUnit.mockResolvedValue(multiEvidence);
+    getKokugoUnitState.mockResolvedValue({
+      progress: {
+        unit_key: "e5-6/library-use",
+        stage: "e5-6",
+        unit_id: "library-use",
+        status: "in_progress",
+        step: "task:evidence-1",
+        started_at: "",
+        updated_at: "",
+      },
+      attempts: [],
+      artifacts: [],
+    });
+    renderTab();
+    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    await screen.findByText("根拠Aを選びなさい。");
+    fireEvent.click(screen.getByRole("button", { name: "第一の文です。" }));
+    expect(screen.getByText(/選択中（1）/)).toBeVisible();
+    submitKokugoTask.mockResolvedValueOnce({
+      attempt: {
+        id: 10,
+        unit_key: "e5-6/library-use",
+        task_id: "evidence-1",
+        answer: {},
+        created_at: "",
+      },
+      grade: { correct: true, explanation_ja: "ok" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "提出" }));
+    await screen.findByText("根拠Bを選びなさい。");
+    expect(screen.queryByText(/選択中/)).toBeNull();
+    expect(screen.getByRole("button", { name: "提出" })).toBeDisabled();
+  });
+
+  it("JS-133: paragraph-role with zero paragraphs cannot submit", async () => {
+    /**
+     * Behavior: no paragraph blocks → submit disabled, no API call.
+     * 1. Open unit with only callout text and a paragraph-role task.
+     * 2. Assert status message and disabled 提出.
+     * 3. Click 提出; submitKokugoTask not called.
+     */
+    const noPara: KokugoUnit = {
+      ...sampleUnit,
+      text: [{ kind: "callout", tokens: [{ t: "text", v: "段落なし" }] }],
+      tasks: [
+        {
+          id: "structure-1",
+          skill: "reading.structure",
+          kind: "paragraph-role",
+          payload: {
+            prompt_ja: "役割を選びなさい。",
+            roles: ["問題", "原因"],
+            gold_by_paragraph_index: [],
+          },
+        },
+      ],
+      artifact: undefined,
+    };
+    getKokugoUnit.mockResolvedValue(noPara);
+    getKokugoUnitState.mockResolvedValue({
+      progress: {
+        unit_key: "e5-6/library-use",
+        stage: "e5-6",
+        unit_id: "library-use",
+        status: "in_progress",
+        step: "task:structure-1",
+        started_at: "",
+        updated_at: "",
+      },
+      attempts: [],
+      artifacts: [],
+    });
+    renderTab();
+    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    await screen.findByText(/段落がありません/);
+    const submitBtn = screen.getByRole("button", { name: "提出" });
+    expect(submitBtn).toBeDisabled();
+    fireEvent.click(submitBtn);
+    expect(submitKokugoTask).not.toHaveBeenCalled();
+  });
+
   it("JS-133: second tap deselects evidence sentence before submit", async () => {
     /**
      * Behavior: toggle off removes quote from selection summary and payload path.

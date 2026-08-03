@@ -706,9 +706,15 @@ function ParagraphRoleStep({
     <div className="space-y-3">
       <h3 className="text-sm font-medium">段落の役割</h3>
       <p className="text-sm text-slate-800">{payload.prompt_ja}</p>
-      <p className="text-xs text-slate-600">
-        各段落の見出しで役割を選びます。色が変わると割り当てが反映されます。
-      </p>
+      {paraCount === 0 ? (
+        <p className="text-sm text-amber-800 rounded-md border border-amber-200 bg-amber-50 px-3 py-2" role="status">
+          このユニットに段落がありません。役割課題を提出できません。
+        </p>
+      ) : (
+        <p className="text-xs text-slate-600">
+          各段落の見出しで役割を選びます。色が変わると割り当てが反映されます。
+        </p>
+      )}
       <KokugoPassage
         blocks={unit.text}
         mode="paragraph-role"
@@ -725,8 +731,12 @@ function ParagraphRoleStep({
       />
       <button
         type="button"
-        className="px-4 py-2 rounded-md bg-blue-600 text-white text-sm"
-        onClick={() => onSubmit({ roles })}
+        disabled={paraCount === 0 || roles.length !== paraCount}
+        className="px-4 py-2 rounded-md bg-blue-600 text-white text-sm disabled:opacity-40"
+        onClick={() => {
+          if (paraCount === 0 || roles.length !== paraCount) return;
+          onSubmit({ roles });
+        }}
       >
         提出
       </button>
