@@ -132,7 +132,7 @@
 | JS-130 | ✅ closed 2026-08-02 | 国語 PoC 單元（e5-6 說明／意見文 × 完整循環） | content | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-131 | ✅ closed 2026-08-03 | 国語最小循環 UI | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-132 | ✅ closed 2026-08-03 | 国語 local API 進度與作品保存 | backend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
-| JS-133 | 🔵 active | 国語 Reader 精讀標記強化 | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-133 | ✅ closed 2026-08-03 | 国語 Reader 精讀標記強化 | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-134 | 🔵 active | 模擬同學答案與改稿對照 | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-135 | 🔵 active | 国語單元包 2（PoC 後 3–4 單元） | content | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-136 | 🔵 active | 技能地圖與国語技能複習 | product | 2026-08-02 | docs/adr/0005-kokugo-track.md |
@@ -1550,13 +1550,15 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 **Blocked by**: JS-129
 <!-- 首次記錄: 2026-08-02 -->
 
-## JS-133 — 国語 Reader 精讀標記強化
+## JS-133 — 国語 Reader 精讀標記強化 ✅ 2026-08-03
 
 **Problem**: Phase-1 可能只有最小 widget，精讀手感不足。
 
 **Why**: 證據標記與段落角色是国語差異化核心。
 
-**Requirement**: highlight UX、段落筆記／角色標記打磨。
+**Requirement** (this ship): in-passage evidence **highlight** + **paragraph-role** marking polish. Free-form paragraph *notes* are **out of scope** for JS-133 (deferred; not closed as notes capture).
+
+**Outcome**: 新增 `KokugoPassage`：本文上點句選根拠（`quotes[]`）、段落旁角色選擇＋色標（`roles[]`）；讀取階段顯示段落編號；非 paragraph 的 `list`/`callout` 仍經 `BlockRenderer` 顯示。評分 API 契約不變。
 
 **Tags**: P2, kokugo, frontend
 **Source**: docs/adr/0005-kokugo-track.md

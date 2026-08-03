@@ -1827,8 +1827,9 @@ items:
       - Static mode remains without full progress (JS-018 unchanged).
 
   - id: JS-133
-    title: "Kokugo reader polish (highlight, paragraph notes)"
-    status: todo
+    title: "Kokugo reader polish (highlight + paragraph-role marking)"
+    status: done
+    completed_at: "2026-08-03"
     priority: P2
     theme: kokugo
     area: frontend
@@ -1836,7 +1837,9 @@ items:
     blocked_by: [JS-131]
     related: [JS-134]
     notes:
-      - Evidence highlight UX and paragraph-role affordances beyond minimal widgets.
+      - Scope this ship: evidence highlight + paragraph-role marking (not free-form paragraph notes).
+      - Shipped KokugoPassage: in-passage sentence-select (quotes[]) + on-passage paragraph-role chips (roles[]); read phase numbered paragraphs; list/callout still via BlockRenderer.
+      - API/grader contracts unchanged; tests in KokugoPassage.test.tsx + KokugoTab.test.tsx.
 
   - id: JS-134
     title: "Kokugo classmate answers + revision compare flow"

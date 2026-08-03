@@ -3,6 +3,22 @@
 This file records active architectural and behavioral decisions for this repository.
 Agents must read it before planning or implementation tasks.
 
+## 2026-08-03 — JS-133 Kokugo reader polish (in-passage highlight + paragraph roles)
+
+**Context**: Phase-1 `EvidenceStep` was a detached checkbox list of gold + distractor sentences; `ParagraphRoleStep` re-listed paragraphs with bare selects. That failed the 国語 “find evidence in the text” feel (ADR-0005 Phase 2 / JS-133).
+
+**Decision**:
+
+1. **Shared `KokugoPassage`** (`web/src/components/KokugoPassage.tsx`) walks full `Block[]` in order: paragraph blocks get interactive chrome; `list`/`callout` stay visible via `BlockRenderer`. Paragraph → sentence surface text uses `plainFromTokens` + `splitJapaneseSentences`. Modes: `readonly`, `sentence-select`, `paragraph-role`.
+2. **Evidence** — learner taps sentences *in the passage* (toggle on/off); submit still `{ quotes: string[] }`. Spanning gold that already exists in plain is graded via multi-select + server `compactSpace` containment (no free character-offset spans). Gold **missing** from all paragraph plain text is **fail-closed**: generic corpus-inconsistency notice only — never a selectable gold chip (would spoil). Grader containment rules unchanged.
+3. **Paragraph roles** — role `<select>` sits on each **paragraph** block with role-tinted borders; submit still `{ roles: string[] }` in paragraph order (list/callout do not consume role slots).
+4. **Read phase** — same component, readonly + paragraph index labels (no answer writes).
+5. **Out of scope** — free-form paragraph notes, free character-offset span painting, classmates (JS-134), skill map (JS-136), schema/grader changes.
+
+**Consequences**: No API or SQLite migration. Static `capabilities.kokugo` still off. Follow-ups can hang classmate reveals on the same sentence keys.
+
+**Refs**: ADR-0005 Phase 2; BACKLOG JS-133; DECISIONS 2026-08-03 JS-131/132.
+
 ## 2026-08-03 — JS-131/132 security multi-tenant finding: user-accepted deployment exception
 
 **Context**: PR-gate `gate-20260803-111048-8bfac8` security-reviewer-F001 (hard block) required authenticated identity + owner isolation on `/api/kokugo/progress/**` with two-identity cross-account tests. That model assumes multi-user network exposure.
