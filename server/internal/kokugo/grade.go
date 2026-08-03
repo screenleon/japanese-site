@@ -145,8 +145,14 @@ func GradeTask(unit map[string]any, taskID string, answer json.RawMessage) (Grad
 	}
 }
 
-// GradeArtifact checks length and optional self-reported checklist ticks.
-func GradeArtifact(unit map[string]any, body string, checklistChecked []bool) GradeResult {
+// GradeArtifact validates a draft (revision 0) or revision (revision 1) body.
+//
+// Progressive-writing policy:
+//   - Empty body always fails.
+//   - min_chars / max_chars are optional: 0 means "no limit" so learners can grow
+//     from short notes. When set (>0), bounds still apply for units that want them.
+//   - Checklist is hard only on revision 1 (completion). Draft may save without ticks.
+func GradeArtifact(unit map[string]any, body string, checklistChecked []bool, revision int) GradeResult {
 	art, _ := unit["artifact"].(map[string]any)
 	if art == nil {
 		return GradeResult{Correct: boolPtr(true), Explanation: "この単元に作品課題はありません。"}
@@ -154,12 +160,32 @@ func GradeArtifact(unit map[string]any, body string, checklistChecked []bool) Gr
 	minChars, _ := asInt(art["min_chars"])
 	maxChars, _ := asInt(art["max_chars"])
 	n := utf8.RuneCountInString(strings.TrimSpace(body))
-	lenOK := n >= minChars && n <= maxChars
+	if n == 0 {
+		return GradeResult{
+			Correct:     boolPtr(false),
+			Explanation: "本文が空です。少しでも書いてから保存してください。",
+			Detail: map[string]any{
+				"chars":    0,
+				"min":      minChars,
+				"max":      maxChars,
+				"len_ok":   false,
+				"check_ok": true,
+				"revision": revision,
+			},
+		}
+	}
+	lenOK := true
+	if minChars > 0 && n < minChars {
+		lenOK = false
+	}
+	if maxChars > 0 && n > maxChars {
+		lenOK = false
+	}
 	checks, _ := art["checklist"].([]any)
-	// When the unit declares checklist items, every item must be present and true.
-	// Omitted / empty checklist_checked is a fail (not a free pass).
+	// Draft (rev 0): checklist is self-reminder only.
+	// Revision (rev 1): every declared checklist item must be present and true.
 	checkOK := true
-	if len(checks) > 0 {
+	if revision >= 1 && len(checks) > 0 {
 		if len(checklistChecked) != len(checks) {
 			checkOK = false
 		} else {
@@ -172,11 +198,22 @@ func GradeArtifact(unit map[string]any, body string, checklistChecked []bool) Gr
 		}
 	}
 	ok := lenOK && checkOK
-	expl := "字数とチェックリストの条件を満たしています。"
+	expl := "保存できました。"
+	if revision >= 1 && ok {
+		expl = "改稿の条件を満たしています。"
+	}
 	if !lenOK {
-		expl = fmt.Sprintf("字数が範囲外です（現在 %d 字、目安 %d〜%d 字）。", n, minChars, maxChars)
+		if minChars > 0 && maxChars > 0 {
+			expl = fmt.Sprintf("字数が範囲外です（現在 %d 字、目安 %d〜%d 字）。", n, minChars, maxChars)
+		} else if minChars > 0 {
+			expl = fmt.Sprintf("字数が少なすぎます（現在 %d 字、目安 %d 字以上）。", n, minChars)
+		} else {
+			expl = fmt.Sprintf("字数が多すぎます（現在 %d 字、目安 %d 字以下）。", n, maxChars)
+		}
 	} else if !checkOK {
 		expl = "チェックリストの項目をすべて確認してから保存してください。"
+	} else if revision == 0 {
+		expl = "下書きを保存しました。何度でも書き直してかまいません。"
 	}
 	return GradeResult{
 		Correct:     boolPtr(ok),
@@ -187,6 +224,7 @@ func GradeArtifact(unit map[string]any, body string, checklistChecked []bool) Gr
 			"max":      maxChars,
 			"len_ok":   lenOK,
 			"check_ok": checkOK,
+			"revision": revision,
 		},
 	}
 }

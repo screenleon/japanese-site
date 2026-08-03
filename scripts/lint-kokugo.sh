@@ -310,18 +310,20 @@ function validateArtifact(artifact, rel) {
   if (!ARTIFACT_KINDS.has(artifact.kind)) {
     fail(rel, `artifact.kind must be short-proposal|summary`);
   }
-  if (typeof artifact.min_chars !== "number" || !Number.isInteger(artifact.min_chars) || artifact.min_chars < 1) {
-    fail(rel, "artifact.min_chars must be a positive integer");
+  // min_chars / max_chars: 0 means "no bound" (progressive writing). When both
+  // are > 0, min must be <= max. Non-integers or negatives fail.
+  if (typeof artifact.min_chars !== "number" || !Number.isInteger(artifact.min_chars) || artifact.min_chars < 0) {
+    fail(rel, "artifact.min_chars must be an integer >= 0 (0 = no minimum)");
   }
-  if (typeof artifact.max_chars !== "number" || !Number.isInteger(artifact.max_chars) || artifact.max_chars < 1) {
-    fail(rel, "artifact.max_chars must be a positive integer");
+  if (typeof artifact.max_chars !== "number" || !Number.isInteger(artifact.max_chars) || artifact.max_chars < 0) {
+    fail(rel, "artifact.max_chars must be an integer >= 0 (0 = no maximum)");
   }
   if (
-    typeof artifact.min_chars === "number" &&
-    typeof artifact.max_chars === "number" &&
+    artifact.min_chars > 0 &&
+    artifact.max_chars > 0 &&
     artifact.min_chars > artifact.max_chars
   ) {
-    fail(rel, "artifact.min_chars must be <= max_chars");
+    fail(rel, "artifact.min_chars must be <= max_chars when both are positive");
   }
   if (!Array.isArray(artifact.checklist) || artifact.checklist.length === 0) {
     fail(rel, "artifact.checklist must be a non-empty string array");

@@ -77,7 +77,9 @@ interface KokugoUnit {
   tasks: KokugoTask[];
   artifact?: {
     kind: "short-proposal" | "summary";
+    /** 0 = no minimum (progressive writing). */
     min_chars: number;
+    /** 0 = no maximum. */
     max_chars: number;
     checklist: string[];
     exemplar_ja?: string;

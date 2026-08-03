@@ -272,15 +272,17 @@ func (h *kokugoHandlers) putArtifact(w http.ResponseWriter, r *http.Request) {
 		httpError(w, r, http.StatusInternalServerError, "internal", err)
 		return
 	}
-	grade := kokugo.GradeArtifact(unit, body.Body, body.ChecklistChecked)
+	grade := kokugo.GradeArtifact(unit, body.Body, body.ChecklistChecked, body.Revision)
 	checklistJSON, _ := json.Marshal(body.ChecklistChecked)
 	opts := store.SaveKokugoArtifactOpts{}
 	if body.ExpectedVersion != nil {
 		opts.HasExpectedVersion = true
 		opts.ExpectedVersion = *body.ExpectedVersion
 	}
-	// Progress steps track the pedagogical cycle; only advance on passing grades.
-	// Completion requires full cycle (all tasks + both revisions) — not artifact alone.
+	// Progress steps track the pedagogical cycle.
+	// Draft (rev 0): stay on "artifact" after save so learners can re-edit freely;
+	// the UI advances to revise explicitly ("改稿へ").
+	// Revision (rev 1): complete only when the full cycle is satisfied.
 	// Artifact + progress share one SQLite transaction (risk-reviewer-F001).
 	step, status := "artifact", "in_progress"
 	passed := grade.Correct != nil && *grade.Correct
@@ -300,8 +302,6 @@ func (h *kokugoHandlers) putArtifact(w http.ResponseWriter, r *http.Request) {
 				step, status = "done", "completed"
 			}
 		}
-	} else if passed {
-		step = "revise"
 	}
 	art, prog, err := store.SaveKokugoArtifactAndProgress(
 		r.Context(), h.db, stage, id, body.Revision, body.Body, checklistJSON, opts, step, status,

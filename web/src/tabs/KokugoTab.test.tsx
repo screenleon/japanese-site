@@ -69,8 +69,8 @@ const sampleUnit: KokugoUnit = {
   ],
   artifact: {
     kind: "short-proposal",
-    min_chars: 5,
-    max_chars: 200,
+    min_chars: 0,
+    max_chars: 0,
     checklist: ["提案がある", "理由がある"],
     exemplar_ja: "例です。",
   },
@@ -683,13 +683,16 @@ describe("KokugoTab", () => {
           version: 1,
           updated_at: "ts-draft",
         },
-        grade: { correct: true, explanation_ja: "ok" },
+        grade: {
+          correct: true,
+          explanation_ja: "下書きを保存しました。何度でも書き直してかまいません。",
+        },
         progress: {
           unit_key: "e5-6/library-use",
           stage: "e5-6",
           unit_id: "library-use",
           status: "in_progress",
-          step: "revise",
+          step: "artifact",
           started_at: "",
           updated_at: "",
         },
@@ -733,8 +736,14 @@ describe("KokugoTab", () => {
         expect.objectContaining({ revision: 0, body: "下書き本文です。" })
       );
     });
+    // Progressive writing: stay on draft after save; advance only via 改稿へ.
+    expect(screen.getByText("作品（下書き）")).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "改稿へ進む" }));
     await waitFor(() => {
       expect(screen.getByText("改稿")).toBeVisible();
+    });
+    expect(putKokugoProgress).toHaveBeenCalledWith("e5-6", "library-use", {
+      step: "revise",
     });
     fireEvent.click(screen.getByRole("button", { name: /改稿を保存/ }));
     await waitFor(() => {
@@ -781,7 +790,7 @@ describe("KokugoTab", () => {
           stage: "e5-6",
           unit_id: "library-use",
           status: "in_progress",
-          step: "revise",
+          step: "artifact",
           started_at: "",
           updated_at: "",
         },
@@ -817,6 +826,11 @@ describe("KokugoTab", () => {
     screen.getAllByRole("checkbox").forEach((b) => fireEvent.click(b));
     fireEvent.click(screen.getByRole("button", { name: "下書きを保存" }));
     await waitFor(() => {
+      expect(saveKokugoArtifact).toHaveBeenCalledTimes(1);
+    });
+    expect(screen.getByText("作品（下書き）")).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "改稿へ進む" }));
+    await waitFor(() => {
       expect(screen.getByText("改稿")).toBeVisible();
     });
     fireEvent.click(screen.getByRole("button", { name: /改稿を保存/ }));
@@ -825,6 +839,105 @@ describe("KokugoTab", () => {
     });
     expect(screen.queryByText("循環完了")).not.toBeInTheDocument();
     expect(screen.getByText("改稿")).toBeVisible();
+  });
+
+  it("draft can be re-edited after save; short text is allowed", async () => {
+    /**
+     * Behavior: short draft saves without char floor; stays on draft for re-edit.
+     * 1. Open unit on artifact phase.
+     * 2. Save short body; stay on 下書き.
+     * 3. Edit again and save second time with CAS version; then 改稿へ / 下書きに戻る.
+     */
+    getKokugoUnitState.mockResolvedValue({
+      progress: {
+        unit_key: "e5-6/library-use",
+        stage: "e5-6",
+        unit_id: "library-use",
+        status: "in_progress",
+        step: "artifact",
+        started_at: "",
+        updated_at: "",
+      },
+      attempts: [],
+      artifacts: [],
+    });
+    saveKokugoArtifact
+      .mockResolvedValueOnce({
+        artifact: {
+          unit_key: "e5-6/library-use",
+          revision: 0,
+          body: "短い提案。",
+          checklist: [false, false],
+          created_at: "",
+          version: 1,
+          updated_at: "t1",
+        },
+        grade: {
+          correct: true,
+          explanation_ja: "下書きを保存しました。何度でも書き直してかまいません。",
+        },
+        progress: {
+          unit_key: "e5-6/library-use",
+          stage: "e5-6",
+          unit_id: "library-use",
+          status: "in_progress",
+          step: "artifact",
+          started_at: "",
+          updated_at: "",
+        },
+      })
+      .mockResolvedValueOnce({
+        artifact: {
+          unit_key: "e5-6/library-use",
+          revision: 0,
+          body: "短い提案。理由も足した。",
+          checklist: [true, false],
+          created_at: "",
+          version: 2,
+          updated_at: "t2",
+        },
+        grade: { correct: true, explanation_ja: "下書きを保存しました。" },
+        progress: {
+          unit_key: "e5-6/library-use",
+          stage: "e5-6",
+          unit_id: "library-use",
+          status: "in_progress",
+          step: "artifact",
+          started_at: "",
+          updated_at: "",
+        },
+      });
+
+    renderTab();
+    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    await screen.findByText("作品（下書き）");
+    fireEvent.change(screen.getByLabelText("下書き"), {
+      target: { value: "短い提案。" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "下書きを保存" }));
+    await waitFor(() => {
+      expect(screen.getByText(/何度でも書き直して/)).toBeVisible();
+    });
+    expect(screen.getByText("作品（下書き）")).toBeVisible();
+    fireEvent.change(screen.getByLabelText("下書き"), {
+      target: { value: "短い提案。理由も足した。" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "下書きを保存" }));
+    await waitFor(() => {
+      expect(saveKokugoArtifact).toHaveBeenLastCalledWith(
+        "e5-6",
+        "library-use",
+        expect.objectContaining({
+          revision: 0,
+          body: "短い提案。理由も足した。",
+          expected_version: 1,
+        })
+      );
+    });
+    fireEvent.click(screen.getByRole("button", { name: "改稿へ進む" }));
+    await screen.findByText("改稿");
+    fireEvent.click(screen.getByRole("button", { name: "下書きに戻る" }));
+    await screen.findByText("作品（下書き）");
   });
 
   it("progress-disabled fallback advances without calling submit", async () => {

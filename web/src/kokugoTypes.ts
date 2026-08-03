@@ -142,7 +142,9 @@ export type KokugoTask =
 
 export interface KokugoArtifact {
   kind: KokugoArtifactKind;
+  /** 0 = no minimum (progressive writing). */
   min_chars: number;
+  /** 0 = no maximum. */
   max_chars: number;
   checklist: string[];
   exemplar_ja?: string;

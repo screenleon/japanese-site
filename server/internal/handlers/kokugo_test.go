@@ -467,11 +467,11 @@ func TestKokugoVersionMilestone(t *testing.T) {
 }
 
 func TestKokugoEmptyChecklistDoesNotComplete(t *testing.T) {
-	// Behavior: all tasks + two in-range artifacts with omitted checklist stay in_progress.
+	// Behavior: draft may omit checklist; revision empty checklist must not complete.
 	// Steps:
 	// 1. Submit every library-use task.
-	// 2. Save rev0 and rev1 with valid length but empty checklist_checked.
-	// 3. Assert artifacts saved (or grade fails advance) and progress is not completed.
+	// 2. Save rev0 without checklist (pass) and rev1 with empty checklist (fail grade / not complete).
+	// 3. Assert progress is not completed.
 	db := newHandlerTestDB(t)
 	mux := registerKokugoMux(t, db, store.NewSQLiteProgressStore(db))
 	submitLibraryUseTasks(t, mux)
@@ -479,7 +479,7 @@ func TestKokugoEmptyChecklistDoesNotComplete(t *testing.T) {
 	rec0 := putArtifact(t, mux, map[string]any{
 		"revision": 0,
 		"body":     goodArtifactBody,
-		// omit checklist_checked
+		// omit checklist_checked — allowed on draft
 	})
 	if rec0.Code != 200 {
 		t.Fatalf("draft %d %s", rec0.Code, rec0.Body.String())
@@ -490,13 +490,17 @@ func TestKokugoEmptyChecklistDoesNotComplete(t *testing.T) {
 		} `json:"grade"`
 		Progress struct {
 			Status string `json:"status"`
+			Step   string `json:"step"`
 		} `json:"progress"`
 	}
 	if err := json.Unmarshal(rec0.Body.Bytes(), &g0); err != nil {
 		t.Fatal(err)
 	}
-	if g0.Grade.Correct != nil && *g0.Grade.Correct {
-		t.Fatalf("empty checklist must not pass grade: %s", rec0.Body.String())
+	if g0.Grade.Correct == nil || !*g0.Grade.Correct {
+		t.Fatalf("draft without checklist should pass: %s", rec0.Body.String())
+	}
+	if g0.Progress.Step != "artifact" {
+		t.Fatalf("draft save should stay on artifact step, got %q: %s", g0.Progress.Step, rec0.Body.String())
 	}
 
 	rec1 := putArtifact(t, mux, map[string]any{
@@ -504,15 +508,10 @@ func TestKokugoEmptyChecklistDoesNotComplete(t *testing.T) {
 		"body":              goodArtifactBody,
 		"checklist_checked": []bool{},
 	})
-	// rev1 may be allowed as draft exists; still must not complete.
 	if rec1.Code != 200 {
-		// if draft grade failed, progress may still allow rev1 after body-only draft
-		// Try with expected flow: force a draft with partial checklist then empty rev1
 		t.Logf("rev1 status %d %s", rec1.Code, rec1.Body.String())
 	}
 
-	// Explicit empty checklist on both revisions after a proper draft path:
-	// re-create clean: save draft failing grade, then still no completion.
 	req := httptest.NewRequest(http.MethodGet, "/api/kokugo/progress/e5-6/library-use", nil)
 	rec := httptest.NewRecorder()
 	mux.ServeHTTP(rec, req)
