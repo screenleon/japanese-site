@@ -37,6 +37,19 @@ describe("plainFromTokens / splitJapaneseSentences", () => {
      */
     expect(splitJapaneseSentences("Aです。Bます？C！")).toEqual(["Aです。", "Bます？", "C！"]);
   });
+
+  it("drops empty and whitespace-only sentence chunks", () => {
+    /**
+     * Behavior: empty/whitespace-only chunks are never selectable.
+     * 1. Call split on empty string, whitespace-only, and newline-only separators.
+     * 2. Assert empty arrays or only real sentences remain.
+     * 3. Confirm no zero-length entries.
+     */
+    expect(splitJapaneseSentences("")).toEqual([]);
+    expect(splitJapaneseSentences("   \n\t  ")).toEqual([]);
+    expect(splitJapaneseSentences("文です。\n\n次です。")).toEqual(["文です。", "次です。"]);
+    expect(splitJapaneseSentences("文です。   \n   ")).toEqual(["文です。"]);
+  });
 });
 
 describe("countParagraphs / buildPassageModel", () => {
@@ -106,10 +119,10 @@ describe("countParagraphs / buildPassageModel", () => {
 
   it("does not spoil spanning gold that already lives in plain text", () => {
     /**
-     * Behavior: multi-sentence gold in plain is ok without chips.
-     * 1. Two short sentences in one paragraph.
-     * 2. Assess spanning gold and substring gold.
-     * 3. Both status ok.
+     * Behavior: multi-sentence gold in plain is ok without chips; multi-select represents it.
+     * 1. Two short sentences in one paragraph; assess spanning gold → ok.
+     * 2. Model exposes two independently selectable sentences covering the span.
+     * 3. Joined quote surfaces compact to the spanning gold (grader compactSpace).
      */
     const model = buildPassageModel([
       {
@@ -119,6 +132,10 @@ describe("countParagraphs / buildPassageModel", () => {
     ]);
     expect(assessGoldCoverage(model, ["前文です。後文です。"])).toEqual({ status: "ok" });
     expect(assessGoldCoverage(model, ["後文"])).toEqual({ status: "ok" });
+    const sents = model[0].sentences.map((s) => s.text);
+    expect(sents).toEqual(["前文です。", "後文です。"]);
+    const joined = sents.join("");
+    expect(joined.includes("前文です。後文です。")).toBe(true);
   });
 });
 

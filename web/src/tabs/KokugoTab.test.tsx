@@ -294,6 +294,12 @@ describe("KokugoTab", () => {
   });
 
   it("JS-133: evidence highlight submits quotes from in-passage sentence taps", async () => {
+    /**
+     * Behavior: in-passage taps build quotes[]; submit disabled until selection.
+     * 1. Open unit, reach evidence step; assert 提出 disabled and no submit yet.
+     * 2. Tap gold sentence once, submit; assert quotes payload.
+     * 3. (Separate unit reopen path covered by deselect test below.)
+     */
     const evidenceUnit: KokugoUnit = {
       ...sampleUnit,
       text: [
@@ -342,9 +348,17 @@ describe("KokugoTab", () => {
     fireEvent.click(screen.getByRole("button", { name: "課題へ進む" }));
     await screen.findByText("根拠を選ぶ");
 
+    // Predict already submitted; only assert no *evidence* submit while disabled.
+    submitKokugoTask.mockClear();
+    const submitBtn = screen.getByRole("button", { name: "提出" });
+    expect(submitBtn).toBeDisabled();
+    fireEvent.click(submitBtn);
+    expect(submitKokugoTask).not.toHaveBeenCalled();
+
     fireEvent.click(
       screen.getByRole("button", { name: "まず探しやすさを改善する必要があります。" })
     );
+    expect(submitBtn).not.toBeDisabled();
     submitKokugoTask.mockResolvedValueOnce({
       attempt: {
         id: 3,
@@ -355,7 +369,7 @@ describe("KokugoTab", () => {
       },
       grade: { correct: true, explanation_ja: "根拠となる文を正しく選べました。" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "提出" }));
+    fireEvent.click(submitBtn);
     await waitFor(() => {
       expect(submitKokugoTask).toHaveBeenCalledWith(
         "e5-6",
@@ -364,6 +378,68 @@ describe("KokugoTab", () => {
         { quotes: ["まず探しやすさを改善する必要があります。"] }
       );
     });
+  });
+
+  it("JS-133: second tap deselects evidence sentence before submit", async () => {
+    /**
+     * Behavior: toggle off removes quote from selection summary and payload path.
+     * 1. Resume on evidence task with multi-sentence passage.
+     * 2. Tap gold, assert 選択中; tap again to clear; 提出 disabled.
+     * 3. Ensure submitKokugoTask never called while empty.
+     */
+    const evidenceUnit: KokugoUnit = {
+      ...sampleUnit,
+      text: [
+        {
+          kind: "paragraph",
+          tokens: [
+            {
+              t: "text",
+              v: "図書室は大切です。まず探しやすさを改善する必要があります。別の文です。",
+            },
+          ],
+        },
+      ],
+      tasks: [
+        {
+          id: "evidence-1",
+          skill: "reading.locate-evidence",
+          kind: "evidence-highlight",
+          payload: {
+            prompt_ja: "根拠の文を選びなさい。",
+            gold_quotes: ["まず探しやすさを改善する必要があります。"],
+          },
+        },
+      ],
+      artifact: undefined,
+    };
+    getKokugoUnit.mockResolvedValue(evidenceUnit);
+    getKokugoUnitState.mockResolvedValue({
+      progress: {
+        unit_key: "e5-6/library-use",
+        stage: "e5-6",
+        unit_id: "library-use",
+        status: "in_progress",
+        step: "task:evidence-1",
+        started_at: "",
+        updated_at: "",
+      },
+      attempts: [],
+      artifacts: [],
+    });
+    renderTab();
+    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    await screen.findByText("根拠を選ぶ");
+    const gold = screen.getByRole("button", {
+      name: "まず探しやすさを改善する必要があります。",
+    });
+    fireEvent.click(gold);
+    expect(screen.getByText(/選択中（1）/)).toBeVisible();
+    fireEvent.click(gold);
+    expect(screen.queryByText(/選択中/)).toBeNull();
+    expect(screen.getByRole("button", { name: "提出" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "提出" }));
+    expect(submitKokugoTask).not.toHaveBeenCalled();
   });
 
   it("JS-133: paragraph-role submits roles assigned on the passage", async () => {
