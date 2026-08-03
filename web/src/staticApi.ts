@@ -328,4 +328,24 @@ export const staticApi: Api = {
   async listKokugoUnits() {
     return { units: [], count: 0 };
   },
+
+  async getKokugoUnit() {
+    throw unsupported();
+  },
+
+  async getKokugoUnitState() {
+    return { attempts: [], artifacts: [] };
+  },
+
+  async putKokugoProgress() {
+    throw unsupported();
+  },
+
+  async submitKokugoTask() {
+    throw unsupported();
+  },
+
+  async saveKokugoArtifact() {
+    throw unsupported();
+  },
 };

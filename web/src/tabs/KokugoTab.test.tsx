@@ -17,12 +17,12 @@ vi.mock("../api", () => ({
   },
 }));
 
-const listKokugoUnits = vi.mocked(api.listKokugoUnits!);
-const getKokugoUnit = vi.mocked(api.getKokugoUnit!);
-const getKokugoUnitState = vi.mocked(api.getKokugoUnitState!);
-const putKokugoProgress = vi.mocked(api.putKokugoProgress!);
-const submitKokugoTask = vi.mocked(api.submitKokugoTask!);
-const saveKokugoArtifact = vi.mocked(api.saveKokugoArtifact!);
+const listKokugoUnits = vi.mocked(api.listKokugoUnits);
+const getKokugoUnit = vi.mocked(api.getKokugoUnit);
+const getKokugoUnitState = vi.mocked(api.getKokugoUnitState);
+const putKokugoProgress = vi.mocked(api.putKokugoProgress);
+const submitKokugoTask = vi.mocked(api.submitKokugoTask);
+const saveKokugoArtifact = vi.mocked(api.saveKokugoArtifact);
 const getCapabilities = vi.mocked(api.getCapabilities);
 
 const sampleUnit: KokugoUnit = {

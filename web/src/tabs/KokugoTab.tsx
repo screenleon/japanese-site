@@ -156,11 +156,6 @@ export function KokugoTab() {
   const [revisionVersion, setRevisionVersion] = useState(0);
 
   const loadUnits = useCallback(async () => {
-    if (!api.listKokugoUnits) {
-      setUnits([]);
-      setLoading(false);
-      return;
-    }
     setLoading(true);
     setError("");
     try {
@@ -178,7 +173,6 @@ export function KokugoTab() {
   }, [loadUnits]);
 
   async function openUnit(summary: KokugoUnitSummary) {
-    if (!api.getKokugoUnit) return;
     setError("");
     setFeedback(null);
     try {
@@ -186,7 +180,7 @@ export function KokugoTab() {
       setUnit(u);
 
       let state: KokugoUnitState | null = null;
-      if (progress && api.getKokugoUnitState) {
+      if (progress) {
         try {
           state = await api.getKokugoUnitState(u.stage, u.id);
         } catch {
@@ -204,7 +198,7 @@ export function KokugoTab() {
       setPhase(resumed.phase);
 
       // Only seed progress when starting fresh (no prior row).
-      if (progress && api.putKokugoProgress && !state?.progress) {
+      if (progress && !state?.progress) {
         await api.putKokugoProgress(u.stage, u.id, { step: "predict", status: "in_progress" });
       }
     } catch (e) {
@@ -228,7 +222,7 @@ export function KokugoTab() {
     if (!unit || !currentTask) return;
     setError("");
     setFeedback(null);
-    if (!progress || !api.submitKokugoTask) {
+    if (!progress) {
       setFeedback({
         correct: null,
         explanation_ja: "ローカル API が無いため採点を保存できません。内容の確認だけ進めます。",
@@ -250,7 +244,7 @@ export function KokugoTab() {
     if (!unit) return;
     if (after === "read") {
       setPhase("read");
-      if (progress && api.putKokugoProgress) {
+      if (progress) {
         void api.putKokugoProgress(unit.stage, unit.id, { step: "read" });
       }
       return;
@@ -260,7 +254,7 @@ export function KokugoTab() {
     if (next < tasks.length) {
       setTaskIndex(next);
       setPhase("task");
-      if (progress && api.putKokugoProgress) {
+      if (progress) {
         void api.putKokugoProgress(unit.stage, unit.id, {
           step: `task:${tasks[next].id}`,
         });
@@ -269,12 +263,12 @@ export function KokugoTab() {
     }
     if (unit.artifact) {
       setPhase("artifact");
-      if (progress && api.putKokugoProgress) {
+      if (progress) {
         void api.putKokugoProgress(unit.stage, unit.id, { step: "artifact" });
       }
     } else {
       setPhase("done");
-      if (progress && api.putKokugoProgress) {
+      if (progress) {
         void api.putKokugoProgress(unit.stage, unit.id, { step: "done", status: "completed" });
       }
     }
@@ -285,7 +279,7 @@ export function KokugoTab() {
     const body = revision === 0 ? draftBody : revisionBody;
     const checks = checklist;
     setError("");
-    if (!progress || !api.saveKokugoArtifact) {
+    if (!progress) {
       setFeedback({
         correct: null,
         explanation_ja: "静的モードでは作品を保存できません。",
@@ -313,9 +307,7 @@ export function KokugoTab() {
       if (revision === 0 && res.grade.correct) {
         setRevisionBody((prev) => prev || res.artifact.body);
         setPhase("revise");
-        if (api.putKokugoProgress) {
-          void api.putKokugoProgress(unit.stage, unit.id, { step: "revise" });
-        }
+        void api.putKokugoProgress(unit.stage, unit.id, { step: "revise" });
       } else if (revision === 1 && res.grade.correct) {
         const serverDone =
           res.progress?.status === "completed" || res.progress?.step === "done";
@@ -439,7 +431,7 @@ export function KokugoTab() {
               const first = tasks.findIndex((t) => t.kind !== "predict");
               setTaskIndex(first >= 0 ? first : 0);
               setPhase("task");
-              if (progress && api.putKokugoProgress) {
+              if (progress) {
                 const tid = tasks[first >= 0 ? first : 0]?.id;
                 void api.putKokugoProgress(unit.stage, unit.id, {
                   step: tid ? `task:${tid}` : "task",

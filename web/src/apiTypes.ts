@@ -349,22 +349,25 @@ export interface Api {
   markRead(key: ReadKey): Promise<void>;
   getProgress(type: ReadContentType, level?: string): Promise<ProgressSummary>;
   getCapabilities(): Promise<Capabilities>;
-  /** 国語教室 (Track B) — optional on staticApi (throws / empty). */
-  listKokugoUnits?(): Promise<{ units: KokugoUnitSummary[]; count: number }>;
-  getKokugoUnit?(stage: string, id: string): Promise<import("./kokugoTypes").KokugoUnit>;
-  getKokugoUnitState?(stage: string, id: string): Promise<KokugoUnitState>;
-  putKokugoProgress?(
+  /**
+   * 国語教室 (Track B). Always present on the Api contract so `tsc -b` and
+   * callers need no optional chaining; staticApi returns empty / unsupported.
+   */
+  listKokugoUnits(): Promise<{ units: KokugoUnitSummary[]; count: number }>;
+  getKokugoUnit(stage: string, id: string): Promise<import("./kokugoTypes").KokugoUnit>;
+  getKokugoUnitState(stage: string, id: string): Promise<KokugoUnitState>;
+  putKokugoProgress(
     stage: string,
     id: string,
     body: { step: string; status?: "in_progress" | "completed" }
   ): Promise<KokugoUnitProgress>;
-  submitKokugoTask?(
+  submitKokugoTask(
     stage: string,
     id: string,
     taskId: string,
     answer: unknown
   ): Promise<{ attempt: KokugoTaskAttempt; grade: KokugoGradeResult }>;
-  saveKokugoArtifact?(
+  saveKokugoArtifact(
     stage: string,
     id: string,
     body: {
