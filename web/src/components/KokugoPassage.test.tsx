@@ -4,6 +4,7 @@ import type { Block } from "../apiTypes";
 import {
   assessGoldCoverage,
   buildPassageModel,
+  buildPassageStream,
   countParagraphs,
   ensureGoldSelectable,
   KokugoPassage,
@@ -52,7 +53,7 @@ describe("plainFromTokens / splitJapaneseSentences", () => {
   });
 });
 
-describe("countParagraphs / buildPassageModel", () => {
+describe("countParagraphs / buildPassageModel / buildPassageStream", () => {
   const blocks: Block[] = [
     {
       kind: "paragraph",
@@ -63,6 +64,39 @@ describe("countParagraphs / buildPassageModel", () => {
       tokens: [{ t: "text", v: "まず探しやすさを改善する必要があります。結論です。" }],
     },
   ];
+
+  it("buildPassageStream preserves full Block order with stable para indices", () => {
+    /**
+     * Behavior: stream keeps list/callout in place; paraIndex only advances on paragraphs.
+     * 1. Build mixed callout → paragraph → list → paragraph.
+     * 2. Assert stream kinds order and paraIndex 0 then 1 on paragraphs only.
+     * 3. Assert paragraph sentence keys 0:0 and 1:0 (mutation-sensitive).
+     */
+    const mixed: Block[] = [
+      { kind: "callout", tone: "info", tokens: [{ t: "text", v: "注意" }] },
+      { kind: "paragraph", tokens: [{ t: "text", v: "第一。" }] },
+      { kind: "list", items: [{ tokens: [{ t: "text", v: "項" }] }] },
+      { kind: "paragraph", tokens: [{ t: "text", v: "第二。" }] },
+    ];
+    const stream = buildPassageStream(mixed);
+    expect(stream.map((i) => i.kind)).toEqual([
+      "other",
+      "paragraph",
+      "other",
+      "paragraph",
+    ]);
+    expect(stream[0]).toMatchObject({ kind: "other", blockIndex: 0 });
+    expect(stream[1]).toMatchObject({ kind: "paragraph", paraIndex: 0 });
+    expect(stream[2]).toMatchObject({ kind: "other", blockIndex: 2 });
+    expect(stream[3]).toMatchObject({ kind: "paragraph", paraIndex: 1 });
+    if (stream[1].kind === "paragraph") {
+      expect(stream[1].sentences[0]?.key).toBe("0:0");
+    }
+    if (stream[3].kind === "paragraph") {
+      expect(stream[3].sentences[0]?.key).toBe("1:0");
+    }
+    expect(buildPassageStream([])).toEqual([]);
+  });
 
   it("countParagraphs ignores non-paragraph blocks and handles empty", () => {
     /**
