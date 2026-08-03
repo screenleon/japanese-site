@@ -304,8 +304,9 @@ export function KokugoTab() {
         setDraftBody(res.artifact.body);
         // Progressive writing: stay on draft after save — learner re-edits freely.
         // Advance to revise only via explicit 「改稿へ」.
-        if (res.grade.correct) {
-          setRevisionBody((prev) => prev || res.artifact.body);
+        // Until rev1 is persisted, keep the revision editor seed in sync with latest draft.
+        if (res.grade.correct && revisionVersion === 0) {
+          setRevisionBody(res.artifact.body);
         }
       } else {
         setRevisionVersion(res.artifact.version);
@@ -327,7 +328,10 @@ export function KokugoTab() {
   function goToRevise() {
     if (!unit) return;
     setFeedback(null);
-    setRevisionBody((prev) => prev || draftBody);
+    // Prefer latest draft when rev1 has never been saved; keep learner rev1 text otherwise.
+    if (revisionVersion === 0) {
+      setRevisionBody(draftBody);
+    }
     setPhase("revise");
     if (progress) {
       void api.putKokugoProgress(unit.stage, unit.id, { step: "revise" });
@@ -346,7 +350,9 @@ export function KokugoTab() {
   const draftCharCount = [...draftBody.trim()].length;
   const revisionCharCount = [...revisionBody.trim()].length;
   const activeCharCount = phase === "revise" ? revisionCharCount : draftCharCount;
-  const draftSaved = draftVersion > 0 || draftBody.trim().length > 0;
+  // Server-persisted draft only — local typing alone must not unlock 改稿へ
+  // (rev1 save requires draft_required on the server).
+  const draftSaved = draftVersion > 0;
 
   if (capsLoaded && !kokugo) {
     return (

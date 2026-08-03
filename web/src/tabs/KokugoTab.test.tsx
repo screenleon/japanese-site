@@ -934,10 +934,48 @@ describe("KokugoTab", () => {
         })
       );
     });
+    // 改稿へ locked until server draft version exists
+    fireEvent.change(screen.getByLabelText("下書き"), {
+      target: { value: "未保存の文" },
+    });
+    // After two saves, draftVersion is 2 — re-seed revision from latest draft body.
+    fireEvent.change(screen.getByLabelText("下書き"), {
+      target: { value: "短い提案。理由も足した。" },
+    });
     fireEvent.click(screen.getByRole("button", { name: "改稿へ進む" }));
     await screen.findByText("改稿");
+    expect(screen.getByLabelText("改稿本文")).toHaveValue("短い提案。理由も足した。");
     fireEvent.click(screen.getByRole("button", { name: "下書きに戻る" }));
     await screen.findByText("作品（下書き）");
+  });
+
+  it("改稿へ stays disabled until draft is saved to server", async () => {
+    /**
+     * Behavior: typing alone must not unlock 改稿へ (draft_required).
+     * 1. Open artifact phase with no draft version.
+     * 2. Type text without saving.
+     * 3. Assert 改稿へ disabled.
+     */
+    getKokugoUnitState.mockResolvedValue({
+      progress: {
+        unit_key: "e5-6/library-use",
+        stage: "e5-6",
+        unit_id: "library-use",
+        status: "in_progress",
+        step: "artifact",
+        started_at: "",
+        updated_at: "",
+      },
+      attempts: [],
+      artifacts: [],
+    });
+    renderTab();
+    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    await screen.findByText("作品（下書き）");
+    fireEvent.change(screen.getByLabelText("下書き"), {
+      target: { value: "まだ保存していない" },
+    });
+    expect(screen.getByRole("button", { name: "改稿へ進む" })).toBeDisabled();
   });
 
   it("progress-disabled fallback advances without calling submit", async () => {
