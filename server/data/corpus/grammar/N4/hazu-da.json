@@ -284,7 +284,7 @@
   "_meta": {
     "source": "curated",
     "license": "CC-BY-SA-4.0",
-    "validated_by": "post-dedup-pending-review",
+    "validated_by": "import-curated-v1",
     "validator_score": 1
   },
   "annotations": {

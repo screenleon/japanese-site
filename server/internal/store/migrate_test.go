@@ -524,15 +524,16 @@ func TestMigrate_0022_RejectsLiveDatabaseAsBackup(t *testing.T) {
 	}
 }
 
-func TestMigrate_0022_BackupPreflightAcceptsPre0022SQLite(t *testing.T) {
-	// Behavior: a distinct pre-0022 SQLite backup satisfies the preflight.
+func TestMigrate_0022_RejectsUnrelatedPre0022Backup(t *testing.T) {
+	// Behavior: a distinct pre-0022 SQLite file that is not a copy of the live
+	// learner-bearing database (different attempt count) must be rejected.
 	//
 	// Steps:
-	// 1. Build a backup DB migrated only through 0021.
-	// 2. Build a live DB with attempts, point BACKUP_PATH at the backup file.
-	// 3. Migrate succeeds and applies 0022.
+	// 1. Build an empty pre-0022 backup (schema only, no attempts).
+	// 2. Build a live DB with attempts; point BACKUP_PATH at the empty backup.
+	// 3. Migrate fails and 0022 remains unapplied.
 	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
-	bakPath := filepath.Join(t.TempDir(), "pre.sqlite")
+	bakPath := filepath.Join(t.TempDir(), "unrelated-pre.sqlite")
 	bak, err := Open(bakPath)
 	if err != nil {
 		t.Fatal(err)
@@ -556,9 +557,233 @@ func TestMigrate_0022_BackupPreflightAcceptsPre0022SQLite(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", bakPath)
-	if err := Migrate(live); err != nil {
-		t.Fatalf("migrate with valid backup: %v", err)
+	if err := Migrate(live); err == nil {
+		t.Fatal("expected migrate to reject unrelated pre-0022 backup")
 	}
+	var applied int
+	_ = live.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&applied)
+	if applied != 0 {
+		t.Fatalf("0022 applied despite unrelated backup: %d", applied)
+	}
+}
+
+func TestMigrate_0022_BackupPreflightAcceptsLiveCopy(t *testing.T) {
+	// Behavior: a distinct file copy of the attempt-bearing live DB satisfies
+	// preflight; after migration the backup still holds recoverable attempts.
+	//
+	// Steps:
+	// 1. Build live through 0021, seed an attempt, close, copy file to backup.
+	// 2. Reopen live, point BACKUP_PATH at the copy, Migrate succeeds.
+	// 3. Backup still has the attempt row and lacks 0022 (restorable).
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
+	t.Setenv("JAPANESE_SITE_DB_PATH", "")
+	dir := t.TempDir()
+	livePath := filepath.Join(dir, "live.sqlite")
+	live, err := Open(livePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	migrateThrough(t, live, "0021_grammar_v2.sql")
+	if _, err := live.Exec(`INSERT INTO question
+		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+		VALUES ('seed-q', 'cloze', 'N3', 'hazuda', 'p', 'e', 'test', 'CC0', 'grammar')`); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := live.Exec(`INSERT INTO attempt (question_id, user_answer, correct) VALUES ('seed-q', 'x', 0)`); err != nil {
+		t.Fatal(err)
+	}
+	if err := live.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	bakPath := filepath.Join(dir, "live-copy.sqlite")
+	if err := copyFile(livePath, bakPath); err != nil {
+		t.Fatalf("copy backup: %v", err)
+	}
+
+	live, err = Open(livePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer live.Close()
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", bakPath)
+	if err := Migrate(live); err != nil {
+		t.Fatalf("migrate with live copy backup: %v", err)
+	}
+	var applied int
+	_ = live.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&applied)
+	if applied != 1 {
+		t.Fatalf("0022 not applied: %d", applied)
+	}
+
+	// Backup remains a restorable pre-upgrade snapshot.
+	bak, err := Open(bakPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer bak.Close()
+	var bakAttempts, bak0022 int
+	_ = bak.QueryRow(`SELECT COUNT(*) FROM attempt`).Scan(&bakAttempts)
+	_ = bak.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&bak0022)
+	if bakAttempts != 1 || bak0022 != 0 {
+		t.Fatalf("backup restorable state: attempts=%d 0022=%d want 1/0", bakAttempts, bak0022)
+	}
+}
+
+func TestMigrate_0022_RejectsHardLinkAliasAsBackup(t *testing.T) {
+	// Behavior: a hard-link alias of the live DB must be rejected (same inode),
+	// even when the path string differs from JAPANESE_SITE_DB_PATH.
+	//
+	// Steps:
+	// 1. Open file-backed live, migrate through 0021, seed attempt.
+	// 2. Create a hard link with a different path; set BACKUP_PATH to the link.
+	// 3. Migrate fails; 0022 unapplied.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
+	dir := t.TempDir()
+	livePath := filepath.Join(dir, "live.sqlite")
+	live, err := Open(livePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer live.Close()
+	migrateThrough(t, live, "0021_grammar_v2.sql")
+	if _, err := live.Exec(`INSERT INTO question
+		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+		VALUES ('seed-q', 'cloze', 'N3', 'hazuda', 'p', 'e', 'test', 'CC0', 'grammar')`); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := live.Exec(`INSERT INTO attempt (question_id, user_answer, correct) VALUES ('seed-q', 'x', 0)`); err != nil {
+		t.Fatal(err)
+	}
+	aliasPath := filepath.Join(dir, "live-alias.sqlite")
+	if err := os.Link(livePath, aliasPath); err != nil {
+		t.Skipf("hard link not supported: %v", err)
+	}
+	t.Setenv("JAPANESE_SITE_DB_PATH", livePath)
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", aliasPath)
+	if err := Migrate(live); err == nil {
+		t.Fatal("expected migrate to reject hard-link alias of live DB")
+	}
+	var applied int
+	_ = live.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&applied)
+	if applied != 0 {
+		t.Fatalf("0022 applied despite hard-link alias backup: %d", applied)
+	}
+}
+
+func TestMigrate_0022_RejectsAlreadyMigratedBackup(t *testing.T) {
+	// Behavior: a distinct SQLite backup that already records 0022 is not a
+	// pre-upgrade snapshot and must be rejected without applying 0022 on live.
+	//
+	// Steps:
+	// 1. Build live through 0021 with attempts; copy to backup path.
+	// 2. Open backup, apply full Migrate with ALLOW so backup has 0022.
+	// 3. Point live BACKUP_PATH at the migrated backup; Migrate fails; live lacks 0022.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
+	dir := t.TempDir()
+	livePath := filepath.Join(dir, "live.sqlite")
+	live, err := Open(livePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	migrateThrough(t, live, "0021_grammar_v2.sql")
+	if _, err := live.Exec(`INSERT INTO question
+		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+		VALUES ('seed-q', 'cloze', 'N3', 'hazuda', 'p', 'e', 'test', 'CC0', 'grammar')`); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := live.Exec(`INSERT INTO attempt (question_id, user_answer, correct) VALUES ('seed-q', 'x', 0)`); err != nil {
+		t.Fatal(err)
+	}
+	if err := live.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	bakPath := filepath.Join(dir, "already-migrated.sqlite")
+	if err := copyFile(livePath, bakPath); err != nil {
+		t.Fatalf("copy: %v", err)
+	}
+	bak, err := Open(bakPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "1")
+	if err := Migrate(bak); err != nil {
+		t.Fatalf("migrate backup with ALLOW: %v", err)
+	}
+	bak.Close()
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
+
+	live, err = Open(livePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer live.Close()
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", bakPath)
+	if err := Migrate(live); err == nil {
+		t.Fatal("expected migrate to reject already-migrated backup")
+	}
+	var applied int
+	_ = live.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&applied)
+	if applied != 0 {
+		t.Fatalf("0022 applied on live despite migrated backup: %d", applied)
+	}
+}
+
+func TestMigrate_0022_RejectsMigratingDBAsBackupWithoutEnv(t *testing.T) {
+	// Behavior: backup identity uses the migrating DB instance path, not only
+	// the process-global last-opened path. With JAPANESE_SITE_DB_PATH unset and
+	// another DB opened after the live DB, nominating the live file as backup
+	// must still fail.
+	//
+	// Steps:
+	// 1. Open live, migrate through 0021, seed attempt.
+	// 2. Open a second file-backed DB (overwrites liveDBPath global).
+	// 3. Clear JAPANESE_SITE_DB_PATH; set BACKUP_PATH to live path; Migrate fails.
+	t.Setenv("JAPANESE_SITE_ALLOW_SLUG_MIGRATION", "")
+	t.Setenv("JAPANESE_SITE_DB_PATH", "")
+	dir := t.TempDir()
+	livePath := filepath.Join(dir, "live.sqlite")
+	live, err := Open(livePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer live.Close()
+	migrateThrough(t, live, "0021_grammar_v2.sql")
+	if _, err := live.Exec(`INSERT INTO question
+		(id, kind, jlpt_level, grammar_point, prompt, expected, source, license, content_type)
+		VALUES ('seed-q', 'cloze', 'N3', 'hazuda', 'p', 'e', 'test', 'CC0', 'grammar')`); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := live.Exec(`INSERT INTO attempt (question_id, user_answer, correct) VALUES ('seed-q', 'x', 0)`); err != nil {
+		t.Fatal(err)
+	}
+
+	otherPath := filepath.Join(dir, "other.sqlite")
+	other, err := Open(otherPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer other.Close()
+
+	t.Setenv("JAPANESE_SITE_DB_BACKUP_PATH", livePath)
+	if err := Migrate(live); err == nil {
+		t.Fatal("expected migrate to reject migrating DB as its own backup without env")
+	}
+	var applied int
+	_ = live.QueryRow(`SELECT COUNT(*) FROM schema_migrations WHERE version='0022_grammar_slug_dedup.sql'`).Scan(&applied)
+	if applied != 0 {
+		t.Fatalf("0022 applied despite instance-scoped live-as-backup: %d", applied)
+	}
+}
+
+// copyFile copies src to dst for SQLite backup tests (files must not be open for write).
+func copyFile(src, dst string) error {
+	in, err := os.ReadFile(src)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(dst, in, 0o644)
 }
 
 func TestMigrate_0022_QuestionIDCollisionPreservesAttempts(t *testing.T) {

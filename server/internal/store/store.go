@@ -13,8 +13,9 @@ type DB struct {
 	Path string
 }
 
-// liveDBPath is the last path passed to Open in this process; used by
-// migration 0022 backup preflight when JAPANESE_SITE_DB_PATH is unset.
+// liveDBPath is the last path passed to Open in this process. Migration 0022
+// backup preflight prefers the migrating db.Path, then JAPANESE_SITE_DB_PATH;
+// liveDBPath is only a last-resort fallback for legacy callers without Path.
 var liveDBPath string
 
 func Open(path string) (*DB, error) {

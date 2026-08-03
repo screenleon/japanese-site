@@ -268,6 +268,20 @@ function validateMeta(gp, rel) {
   ) {
     fail(rel, "_meta.validator_score must be a number in [0,1]");
   }
+  // Provisional handoff markers must not claim a full-pass score.
+  // "pending-review" covers post-dedup-pending-review and similar identifiers;
+  // native-reviewer-v*-pending is allowed (contrast gate uses that prefix).
+  const vb = String(gp._meta.validated_by || "");
+  if (
+    /pending-review/i.test(vb) &&
+    typeof gp._meta.validator_score === "number" &&
+    gp._meta.validator_score >= 1
+  ) {
+    fail(
+      rel,
+      '_meta.validated_by containing "pending-review" must not set validator_score to a full-pass value (1); complete review or omit the score',
+    );
+  }
 }
 
 function validateAnnotations(gp, rel) {

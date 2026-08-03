@@ -120,6 +120,7 @@ assert_bad "i1-schema-version" 'del(.schema_version)' "schema_version must equal
 assert_bad "i2-pattern" '.pattern = [{"form":"   ","gloss_zh":"待補"}]' "pattern[0].form must be a non-empty string"
 assert_bad "i3-block" '.explanation_ja_blocks[0].tokens[0] = {"t":"ruby","k":"","r":"こんきょ"}' "explanation_ja_blocks block 0 token 0 ruby.k and ruby.r"
 assert_bad "i4-meta" '._meta.license = ""' "_meta.license must be a non-empty string"
+assert_bad "i4-pending-review-pass" '._meta.validated_by = "post-dedup-pending-review" | ._meta.validator_score = 1' 'pending-review" must not set validator_score'
 assert_bad "i5-legacy-top" '.source = "curated"' "source is disallowed; move to _meta.source"
 assert_bad "i6-annotation-overlap" '.annotations.pattern = "bad"' "annotations key 'pattern' overlaps top-level key"
 assert_bad "i7-furigana-key-terms" '.annotations.furigana.key_terms = [{"kanji":"根拠","reading":"こんきょ"}]' "annotations.furigana.key_terms is disallowed"

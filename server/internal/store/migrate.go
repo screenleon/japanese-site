@@ -156,7 +156,7 @@ func applyOrVerify(db *DB, name string, body []byte, want string) error {
 	// then rewrite deterministic question ids so a subsequent curated corpus load
 	// does not orphan-sweep legacy ids and CASCADE-delete learner attempts.
 	if name == "0022_grammar_slug_dedup.sql" {
-		if err := requireSlugMigrationBackup(tx); err != nil {
+		if err := requireSlugMigrationBackup(tx, db.Path); err != nil {
 			return fmt.Errorf("apply %s backup preflight: %w", name, err)
 		}
 		if n, err := rekeyGrammarQuestionIDs(tx); err != nil {
@@ -177,9 +177,10 @@ func applyOrVerify(db *DB, name string, body []byte, want string) error {
 }
 
 // requireSlugMigrationBackup blocks 0022 on non-empty learner history unless
-// an operator-supplied SQLite backup is verified as a distinct pre-0022 copy,
-// or an explicit test/dev allow flag is set. See DECISIONS.md JS-114a.
-func requireSlugMigrationBackup(tx *sql.Tx) error {
+// an operator-supplied SQLite backup is verified as a distinct pre-0022 copy of
+// this live database (same attempt count), or an explicit test/dev allow flag is
+// set. migratingPath is the DB instance being migrated (db.Path). See DECISIONS.md JS-114a.
+func requireSlugMigrationBackup(tx *sql.Tx, migratingPath string) error {
 	var attempts int
 	if err := tx.QueryRow(`SELECT COUNT(*) FROM attempt`).Scan(&attempts); err != nil {
 		// attempt table may not exist on ancient DBs; treat as empty.
@@ -199,15 +200,15 @@ func requireSlugMigrationBackup(tx *sql.Tx) error {
 	path := os.Getenv("JAPANESE_SITE_DB_BACKUP_PATH")
 	if path == "" {
 		return fmt.Errorf(
-			"learner attempts present (%d): set JAPANESE_SITE_DB_BACKUP_PATH to a pre-upgrade SQLite copy (not the live DB), or JAPANESE_SITE_ALLOW_SLUG_MIGRATION=1 for empty-risk opt-in",
+			"learner attempts present (%d): set JAPANESE_SITE_DB_BACKUP_PATH to a pre-upgrade SQLite copy of this database (not the live DB), or JAPANESE_SITE_ALLOW_SLUG_MIGRATION=1 for empty-risk opt-in",
 			attempts,
 		)
 	}
 	// Reject live-as-backup first (seed and API both open the live path before Migrate).
-	if err := rejectLiveDBAsBackup(path); err != nil {
+	if err := rejectLiveDBAsBackup(path, migratingPath); err != nil {
 		return err
 	}
-	if err := verifyPre0022SQLiteBackup(path); err != nil {
+	if err := verifyPre0022SQLiteBackup(path, attempts); err != nil {
 		return err
 	}
 	slog.Info("slug migration backup verified", "path", path, "attempts", attempts)
@@ -215,15 +216,30 @@ func requireSlugMigrationBackup(tx *sql.Tx) error {
 }
 
 // rejectLiveDBAsBackup ensures the recovery snapshot is not the database about
-// to be rewritten. live path comes from JAPANESE_SITE_DB_PATH or the last Open().
-func rejectLiveDBAsBackup(backupPath string) error {
-	live := os.Getenv("JAPANESE_SITE_DB_PATH")
-	if live == "" {
-		live = liveDBPath
+// to be rewritten. Prefer the migrating DB instance path, then JAPANESE_SITE_DB_PATH.
+func rejectLiveDBAsBackup(backupPath, migratingPath string) error {
+	// Instance-scoped first so multi-DB processes do not use another Open()'s path.
+	candidates := make([]string, 0, 2)
+	if migratingPath != "" && migratingPath != ":memory:" {
+		candidates = append(candidates, migratingPath)
 	}
+	if env := os.Getenv("JAPANESE_SITE_DB_PATH"); env != "" && env != ":memory:" {
+		candidates = append(candidates, env)
+	}
+	// Fall back only when the migrating store has no path of its own (legacy callers).
+	if len(candidates) == 0 && liveDBPath != "" && liveDBPath != ":memory:" {
+		candidates = append(candidates, liveDBPath)
+	}
+	for _, live := range candidates {
+		if err := rejectSamePathOrFile(backupPath, live); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func rejectSamePathOrFile(backupPath, live string) error {
 	if live == "" || live == ":memory:" {
-		// No known live path — still reject if backup is a path that looks like
-		// the process already has open; cannot compare further.
 		return nil
 	}
 	absLive, err1 := filepath.Abs(live)
@@ -265,8 +281,10 @@ func sameFile(a, b string) (bool, error) {
 }
 
 // verifyPre0022SQLiteBackup opens path as SQLite and requires that migration
-// 0022 has not already been applied. Rejects empty/non-SQLite files.
-func verifyPre0022SQLiteBackup(path string) error {
+// 0022 has not already been applied, and that the backup's attempt count matches
+// the live database (so an unrelated empty/pre-0022 file cannot satisfy preflight).
+// Rejects empty/non-SQLite files.
+func verifyPre0022SQLiteBackup(path string, liveAttempts int) error {
 	st, err := os.Stat(path)
 	if err != nil {
 		return fmt.Errorf("JAPANESE_SITE_DB_BACKUP_PATH %q: %w", path, err)
@@ -310,6 +328,21 @@ func verifyPre0022SQLiteBackup(path string) error {
 		return fmt.Errorf(
 			"JAPANESE_SITE_DB_BACKUP_PATH %q already has 0022 applied — not a pre-upgrade snapshot",
 			path,
+		)
+	}
+	var bakAttempts int
+	err = bak.QueryRow(`SELECT COUNT(*) FROM attempt`).Scan(&bakAttempts)
+	if err != nil {
+		if strings.Contains(err.Error(), "no such table") {
+			bakAttempts = 0
+		} else {
+			return fmt.Errorf("inspect backup attempts %q: %w", path, err)
+		}
+	}
+	if bakAttempts != liveAttempts {
+		return fmt.Errorf(
+			"JAPANESE_SITE_DB_BACKUP_PATH %q attempt count %d does not match live %d — backup must be a pre-upgrade copy of this database (not an unrelated pre-0022 file)",
+			path, bakAttempts, liveAttempts,
 		)
 	}
 	return nil

@@ -322,16 +322,16 @@
       "contrast": null
     },
     {
-      "default": true,
-      "error_class": "generic",
-      "contrast": null
-    },
-    {
       "if_answer_contains_any": [
         "けれど",
         "けど"
       ],
       "error_class": "used-kedo",
+      "contrast": null
+    },
+    {
+      "default": true,
+      "error_class": "generic",
       "contrast": null
     }
   ],
