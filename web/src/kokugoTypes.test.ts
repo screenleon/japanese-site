@@ -269,23 +269,24 @@ describe("kokugoTypes / corpus fixture", () => {
   });
 
   it("runtime: assertKokugoUnit rejects missing validated_by and bad tasks", () => {
-    expect(() =>
-      assertKokugoUnit({
-        ...baseUnit([predictTask]),
-        _meta: { source: "s", license: "l" },
-      }),
-    ).toThrow(/validated_by/);
-    expect(() =>
-      assertKokugoUnit({
-        ...baseUnit([
-          {
-            id: "t",
-            skill: "reading.predict",
-            kind: "predict",
-            payload: { gold_quotes: [] },
-          },
-        ]),
-      }),
-    ).toThrow(/prompt_ja|choices/);
+    // Intentionally invalid shapes — cast to unknown so tsc does not reject the fixture.
+    const missingMeta: unknown = {
+      ...baseUnit([predictTask]),
+      _meta: { source: "s", license: "l" },
+    };
+    expect(() => assertKokugoUnit(missingMeta)).toThrow(/validated_by/);
+
+    const badTask: unknown = {
+      ...baseUnit([predictTask]),
+      tasks: [
+        {
+          id: "t",
+          skill: "reading.predict",
+          kind: "predict",
+          payload: { gold_quotes: [] },
+        },
+      ],
+    };
+    expect(() => assertKokugoUnit(badTask)).toThrow(/prompt_ja|choices/);
   });
 });
