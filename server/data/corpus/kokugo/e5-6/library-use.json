@@ -149,6 +149,36 @@
     ],
     "exemplar_ja": "私は入口に「今週のおすすめ」コーナーを置くことを提案します。何を読めばよいか迷う生徒が減り、本を手に取るきっかけが増えるからです。"
   },
+  "classmates": [
+    {
+      "id": "classmate-evidence-tanaka",
+      "name_ja": "田中さん",
+      "reveal_after": { "kind": "task", "task_id": "evidence-1" },
+      "text_ja": "私は「まず探しやすさを改善する必要があります。」を選びました。問題が最初の段落でいちばんはっきり書かれていると感じたからです。",
+      "focus_ja": "根拠を本文から抜き出す"
+    },
+    {
+      "id": "classmate-summary-suzuki",
+      "name_ja": "鈴木さん",
+      "reveal_after": { "kind": "task", "task_id": "summary-1" },
+      "text_ja": "要約は b が近いと思います。問題・原因・提案がつながっていて、最後の結論まで一文で押さえているからです。",
+      "focus_ja": "全体の流れを要約する"
+    },
+    {
+      "id": "classmate-draft-yamamoto",
+      "name_ja": "山本さん",
+      "reveal_after": { "kind": "artifact" },
+      "text_ja": "棚に教科名の札をつけます。探しやすいと、利用する人が増えると思うからです。",
+      "focus_ja": "短くても提案＋理由"
+    },
+    {
+      "id": "classmate-revise-ito",
+      "name_ja": "伊藤さん",
+      "reveal_after": { "kind": "revise" },
+      "text_ja": "入口に「今週のおすすめ」コーナーを置くことを提案します。迷う生徒が減り、本を手に取るきっかけが増えるからです。あわせて教科ごとの棚表示も分かりやすくします。",
+      "focus_ja": "改稿で具体例を足す"
+    }
+  ],
   "_meta": {
     "source": "original",
     "license": "CC0-1.0",

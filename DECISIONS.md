@@ -3,6 +3,20 @@
 This file records active architectural and behavioral decisions for this repository.
 Agents must read it before planning or implementation tasks.
 
+## 2026-08-04 — JS-134 curated classmates + revision compare
+
+**Context**: Classroom loop needs peer-model answers and before/after revision without multi-user social infrastructure.
+
+**Decision**:
+
+1. **Classmates are L1 curated content** on `KokugoUnit.classmates[]` — not live peers, not `classmate-response` task kind.
+2. **Shape**: `{ id, name_ja, reveal_after, text_ja, focus_ja? }` where `reveal_after` is `{ kind: "task", task_id }` | `{ kind: "artifact" }` | `{ kind: "revise" }`. Lint deep-validates ids, kinds, and task_id ∈ unit.tasks.
+3. **Reveal policy (UI)**: show only after the learner completes the anchor — task submit, draft save (`version > 0`), or revise/done phase. No spoiler before attempt.
+4. **Revision compare**: presentational side-by-side draft vs rev1 (char counts + delta); used on revise and done. No server diff API.
+5. **Out of scope**: multi-tenant peer answers, LLM-authored classmates, new SQLite tables, static full cycle.
+
+**Refs**: ADR-0005 Phase 2; `ClassmatePanel` / `RevisionCompare`; library-use samples.
+
 ## 2026-08-03 — Kokugo artifact progressive writing (no hard char floor)
 
 **Context**: Learners cannot comfortably hit an 80-character minimum on first draft; the pedagogical goal is “start short, grow longer,” not exam-length on save.

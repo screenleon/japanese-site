@@ -41,7 +41,19 @@ and rejected by lint until a new decision opens them.
 | `paragraph-role` | `prompt_ja`, `roles[]`, `gold_by_paragraph_index[]` (length = paragraph blocks) |
 | `summary-choice` | `prompt_ja`, `choices[]`, `correct_id` |
 
-Optional: `artifact` (checklist writing), `classmates` (Phase 2, array only).
+Optional: `artifact` (checklist writing), `classmates` (JS-134 curated peer samples).
+
+### classmates (JS-134)
+
+| Field | Notes |
+|-------|--------|
+| `id` | kebab-case, unique within unit |
+| `name_ja` | Display name (e.g. 田中さん) |
+| `reveal_after` | `{ kind: "task", task_id }` \| `{ kind: "artifact" }` \| `{ kind: "revise" }` |
+| `text_ja` | Sample answer body |
+| `focus_ja` | Optional short pedagogical label |
+
+Reveal is UI-only after the learner completes the anchor (task submit / draft save / revision). Not multi-user social.
 
 ## Authoring steps
 
