@@ -83,8 +83,30 @@ describe("httpApi Kokugo transport", () => {
     expect(fetchMock).toHaveBeenCalledWith("/api/kokugo/units");
   });
 
-  it("getKokugoSkills GETs /api/kokugo/skills", async () => {
-    const payload = { skills: [], review_queue: [] };
+  it("getKokugoSkills GETs /api/kokugo/skills and decodes skill map payload", async () => {
+    const payload = {
+      skills: [
+        {
+          skill: "reading.summary",
+          label_ja: "要約する",
+          status: "weak",
+          graded: 2,
+          correct: 0,
+          practiced: 2,
+          units_touching: ["e5-6/library-use"],
+        },
+      ],
+      review_queue: [
+        {
+          stage: "e5-6",
+          unit_id: "library-use",
+          title_ja: "学校の図書室をもっと使いやすくするには",
+          genre: "expository",
+          target_skills: ["reading.summary"],
+          unit_completed: false,
+        },
+      ],
+    };
     const fetchMock = vi.fn(() =>
       Promise.resolve(new Response(JSON.stringify(payload), { status: 200 }))
     );
@@ -92,6 +114,7 @@ describe("httpApi Kokugo transport", () => {
     const httpApi = await loadHttpApi();
 
     await expect(httpApi.getKokugoSkills()).resolves.toEqual(payload);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock).toHaveBeenCalledWith("/api/kokugo/skills");
   });
 

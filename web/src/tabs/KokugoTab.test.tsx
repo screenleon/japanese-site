@@ -275,6 +275,91 @@ describe("KokugoTab", () => {
     ).toBeInTheDocument();
   });
 
+  it("opens the recommended unit when a review-queue button is clicked", async () => {
+    getCapabilities.mockResolvedValue({
+      progress: true,
+      history: true,
+      quiz: true,
+      sentence: true,
+      kokugo: true,
+    });
+    getKokugoSkills.mockResolvedValue({
+      skills: [
+        {
+          skill: "reading.summary",
+          label_ja: "要約する",
+          status: "weak",
+          graded: 2,
+          correct: 0,
+          practiced: 2,
+          units_touching: ["e5-6/library-use"],
+        },
+      ],
+      review_queue: [
+        {
+          stage: "e5-6",
+          unit_id: "library-use",
+          title_ja: "学校の図書室をもっと使いやすくするには",
+          genre: "expository",
+          target_skills: ["reading.summary"],
+          unit_completed: false,
+        },
+      ],
+    });
+    render(
+      <CapabilitiesProvider>
+        <KokugoTab />
+      </CapabilitiesProvider>
+    );
+    fireEvent.click(
+      await screen.findByRole("button", { name: /復習ユニット: 学校の図書室/ })
+    );
+    await waitFor(() => {
+      expect(getKokugoUnit).toHaveBeenCalledWith("e5-6", "library-use");
+    });
+    expect(await screen.findByText("読む前の予測")).toBeVisible();
+  });
+
+  it("keeps the unit list usable and offers retry when skill map fails", async () => {
+    getCapabilities.mockResolvedValue({
+      progress: true,
+      history: true,
+      quiz: true,
+      sentence: true,
+      kokugo: true,
+    });
+    getKokugoSkills
+      .mockRejectedValueOnce(new Error("skills down"))
+      .mockResolvedValueOnce({
+        skills: [
+          {
+            skill: "reading.summary",
+            label_ja: "要約する",
+            status: "weak",
+            graded: 1,
+            correct: 0,
+            practiced: 1,
+            units_touching: ["e5-6/library-use"],
+          },
+        ],
+        review_queue: [],
+      });
+    render(
+      <CapabilitiesProvider>
+        <KokugoTab />
+      </CapabilitiesProvider>
+    );
+    expect(await screen.findByLabelText("技能マップ読み込みエラー")).toBeVisible();
+    expect(
+      await screen.findByRole("button", { name: /ユニットを開く: 学校の図書室/ })
+    ).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "技能マップを再試行" }));
+    await waitFor(() => {
+      expect(screen.getByLabelText("技能マップ")).toBeInTheDocument();
+    });
+    expect(getKokugoSkills).toHaveBeenCalledTimes(2);
+  });
+
   it("lists units and opens the predict step for a fresh unit", async () => {
     renderTab();
     expect(await screen.findByText("国語教室")).toBeVisible();

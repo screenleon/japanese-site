@@ -73,6 +73,11 @@ func (h *kokugoHandlers) getUnit(w http.ResponseWriter, r *http.Request) {
 // getSkills returns the Track B skill map + weak-skill review queue (JS-136).
 // Available whenever the corpus loader is configured; attempt/artifact stats
 // require progress store (otherwise skills are all unseen with review from units).
+//
+// Capacity (risk-reviewer-F001 / docs/spikes/JS-136.md): each request reloads
+// every L1 unit map and all local attempts/artifacts. Acceptable under the
+// documented sub-20-unit pilot; introduce a process-local skill index or
+// bounded store aggregate before expanding the corpus beyond that envelope.
 func (h *kokugoHandlers) getSkills(w http.ResponseWriter, r *http.Request) {
 	if h.loader.Root == "" {
 		writeJSON(w, http.StatusOK, kokugo.SkillMap{

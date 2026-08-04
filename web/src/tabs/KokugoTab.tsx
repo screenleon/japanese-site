@@ -164,6 +164,8 @@ export function KokugoTab() {
   const { progress, kokugo, loaded: capsLoaded } = useCapabilities();
   const [units, setUnits] = useState<KokugoUnitSummary[]>([]);
   const [skillMap, setSkillMap] = useState<KokugoSkillMap | null>(null);
+  /** True when getKokugoSkills failed; unit list may still be usable (critic-F001). */
+  const [skillsLoadFailed, setSkillsLoadFailed] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [unit, setUnit] = useState<KokugoUnit | null>(null);
@@ -187,14 +189,29 @@ export function KokugoTab() {
       try {
         const skills = await api.getKokugoSkills();
         setSkillMap(skills);
+        setSkillsLoadFailed(false);
       } catch {
-        // Skill map is best-effort; unit list still works without it.
+        // Skill map is non-fatal for the unit list, but failure must be visible
+        // so the learner can retry (critic-F001 / JS-136).
         setSkillMap(null);
+        setSkillsLoadFailed(true);
       }
     } catch (e) {
       setError(String(e));
     } finally {
       setLoading(false);
+    }
+  }, []);
+
+  const retrySkills = useCallback(async () => {
+    setSkillsLoadFailed(false);
+    try {
+      const skills = await api.getKokugoSkills();
+      setSkillMap(skills);
+      setSkillsLoadFailed(false);
+    } catch {
+      setSkillMap(null);
+      setSkillsLoadFailed(true);
     }
   }, []);
 
@@ -411,6 +428,22 @@ export function KokugoTab() {
           <p className="text-sm text-slate-500">読み込み中…</p>
         ) : (
           <>
+            {skillsLoadFailed && (
+              <div
+                className="rounded-lg border border-amber-200 bg-amber-50/70 px-3 py-2 text-sm text-amber-950"
+                role="status"
+                aria-label="技能マップ読み込みエラー"
+              >
+                <p>技能マップを読み込めませんでした。ユニット一覧はそのまま使えます。</p>
+                <button
+                  type="button"
+                  className={`${BTN_SECONDARY} mt-2`}
+                  onClick={() => void retrySkills()}
+                >
+                  技能マップを再試行
+                </button>
+              </div>
+            )}
             {skillMap && skillMap.skills.length > 0 && (
               <SkillMapPanel
                 skillMap={skillMap}
