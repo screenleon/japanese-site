@@ -189,26 +189,60 @@ export interface KokugoUnit {
   _meta: KokugoMeta;
 }
 
+/** Grapheme-ish length for Japanese UI counters (… spread, after trim). */
+export function countJaChars(text: string): number {
+  return [...text.trim()].length;
+}
+
+/** Single filter for curated classmates by reveal_after (JS-134). */
+export function classmatesFor(
+  unit: Pick<KokugoUnit, "classmates">,
+  reveal: KokugoClassmateRevealAfter
+): KokugoClassmate[] {
+  return (unit.classmates ?? []).filter((c) => {
+    if (c.reveal_after.kind !== reveal.kind) return false;
+    if (reveal.kind === "task") {
+      return (
+        c.reveal_after.kind === "task" && c.reveal_after.task_id === reveal.task_id
+      );
+    }
+    return true;
+  });
+}
+
 /** Classmates anchored to a specific task id. */
 export function classmatesForTask(
   unit: Pick<KokugoUnit, "classmates">,
   taskId: string
 ): KokugoClassmate[] {
-  return (unit.classmates ?? []).filter(
-    (c) => c.reveal_after.kind === "task" && c.reveal_after.task_id === taskId
-  );
+  return classmatesFor(unit, { kind: "task", task_id: taskId });
 }
 
 /** Classmates revealed after draft (artifact) phase. */
 export function classmatesForArtifact(
   unit: Pick<KokugoUnit, "classmates">
 ): KokugoClassmate[] {
-  return (unit.classmates ?? []).filter((c) => c.reveal_after.kind === "artifact");
+  return classmatesFor(unit, { kind: "artifact" });
 }
 
 /** Classmates revealed after revision / on done. */
 export function classmatesForRevise(
   unit: Pick<KokugoUnit, "classmates">
 ): KokugoClassmate[] {
-  return (unit.classmates ?? []).filter((c) => c.reveal_after.kind === "revise");
+  return classmatesFor(unit, { kind: "revise" });
+}
+
+/** Writing classmates shown on the done summary (draft + revise samples). */
+export function classmatesForWritingDone(
+  unit: Pick<KokugoUnit, "classmates">
+): KokugoClassmate[] {
+  return [...classmatesForArtifact(unit), ...classmatesForRevise(unit)];
+}
+
+/**
+ * Whether the last task's classmates should sit above the step chrome.
+ * Shared by resume + live submit so reveal rules stay in one place.
+ */
+export function shouldShowTaskClassmates(phase: string): boolean {
+  return phase === "task" || phase === "read" || phase === "artifact";
 }

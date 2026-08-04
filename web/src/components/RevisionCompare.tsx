@@ -1,3 +1,5 @@
+import { countJaChars } from "../kokugoTypes";
+
 /**
  * Side-by-side draft vs revision compare (JS-134).
  * Pure presentational; empty sides still render labels for orientation.
@@ -15,8 +17,8 @@ export function RevisionCompare({
   const revision = revisionBody.trim();
   if (!draft && !revision) return null;
 
-  const draftChars = [...draft].length;
-  const revChars = [...revision].length;
+  const draftChars = countJaChars(draft);
+  const revChars = countJaChars(revision);
   const delta = revChars - draftChars;
 
   return (
@@ -36,19 +38,36 @@ export function RevisionCompare({
         </p>
       </div>
       <div className="grid gap-2 sm:grid-cols-2">
-        <article className="rounded-md border border-slate-100 bg-slate-50 p-2">
-          <h5 className="text-xs font-medium text-slate-600 mb-1">下書き</h5>
-          <pre className="whitespace-pre-wrap text-xs text-slate-800 font-sans m-0">
-            {draft || "（まだありません）"}
-          </pre>
-        </article>
-        <article className="rounded-md border border-emerald-100 bg-emerald-50/40 p-2">
-          <h5 className="text-xs font-medium text-emerald-800 mb-1">改稿後</h5>
-          <pre className="whitespace-pre-wrap text-xs text-slate-800 font-sans m-0">
-            {revision || "（まだありません）"}
-          </pre>
-        </article>
+        <CompareColumn label="下書き" body={draft} tone="draft" />
+        <CompareColumn label="改稿後" body={revision} tone="revision" />
       </div>
     </section>
+  );
+}
+
+function CompareColumn({
+  label,
+  body,
+  tone,
+}: {
+  label: string;
+  body: string;
+  tone: "draft" | "revision";
+}) {
+  const shell =
+    tone === "revision"
+      ? "rounded-md border border-emerald-100 bg-emerald-50/40 p-2"
+      : "rounded-md border border-slate-100 bg-slate-50 p-2";
+  const heading =
+    tone === "revision"
+      ? "text-xs font-medium text-emerald-800 mb-1"
+      : "text-xs font-medium text-slate-600 mb-1";
+  return (
+    <article className={shell}>
+      <h5 className={heading}>{label}</h5>
+      <pre className="whitespace-pre-wrap text-xs text-slate-800 font-sans m-0">
+        {body || "（まだありません）"}
+      </pre>
+    </article>
   );
 }

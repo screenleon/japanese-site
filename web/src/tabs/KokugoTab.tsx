@@ -12,20 +12,27 @@ import {
   type PassageSentence,
 } from "../components/KokugoPassage";
 import { RevisionCompare } from "../components/RevisionCompare";
-import type {
-  EvidenceHighlightPayload,
-  KokugoTask,
-  KokugoUnit,
-  ParagraphRolePayload,
-  PredictPayload,
-  SummaryChoicePayload,
-} from "../kokugoTypes";
 import {
+  classmatesFor,
   classmatesForArtifact,
-  classmatesForRevise,
   classmatesForTask,
+  classmatesForWritingDone,
+  countJaChars,
+  shouldShowTaskClassmates,
+  type EvidenceHighlightPayload,
+  type KokugoTask,
+  type KokugoUnit,
+  type ParagraphRolePayload,
+  type PredictPayload,
+  type SummaryChoicePayload,
 } from "../kokugoTypes";
 import { useCapabilities } from "../capabilities";
+
+/** Shared button shells for the cycle UI (reuse, avoid style drift). */
+const BTN_PRIMARY =
+  "px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-40";
+const BTN_SECONDARY =
+  "px-4 py-2 rounded-md border border-slate-300 bg-white text-sm font-medium text-slate-800 hover:bg-slate-50 disabled:opacity-40";
 
 export type Phase =
   | "list"
@@ -167,8 +174,6 @@ export function KokugoTab() {
   const [revisionVersion, setRevisionVersion] = useState(0);
   /** Last task the learner submitted — drives classmate reveal (JS-134). */
   const [lastSubmittedTaskId, setLastSubmittedTaskId] = useState<string | null>(null);
-  /** Draft was saved at least once this open (or restored with version > 0). */
-  const [draftSavedOnce, setDraftSavedOnce] = useState(false);
 
   const loadUnits = useCallback(async () => {
     setLoading(true);
@@ -211,7 +216,6 @@ export function KokugoTab() {
       setDraftVersion(resumed.draftVersion);
       setRevisionVersion(resumed.revisionVersion);
       setPhase(resumed.phase);
-      setDraftSavedOnce(resumed.draftVersion > 0);
       // Resume: show classmates for the most recent attempted task (if any).
       const attempts = state?.attempts ?? [];
       setLastSubmittedTaskId(attempts.length > 0 ? attempts[attempts.length - 1].task_id : null);
@@ -232,7 +236,6 @@ export function KokugoTab() {
     setDraftVersion(0);
     setRevisionVersion(0);
     setLastSubmittedTaskId(null);
-    setDraftSavedOnce(false);
     void loadUnits();
   }
 
@@ -321,7 +324,6 @@ export function KokugoTab() {
       if (revision === 0) {
         setDraftVersion(res.artifact.version);
         setDraftBody(res.artifact.body);
-        setDraftSavedOnce(true);
         // Progressive writing: stay on draft after save — learner re-edits freely.
         // Advance to revise only via explicit 「改稿へ」.
         // Until rev1 is persisted, keep the revision editor seed in sync with latest draft.
@@ -367,11 +369,11 @@ export function KokugoTab() {
     }
   }
 
-  const draftCharCount = [...draftBody.trim()].length;
-  const revisionCharCount = [...revisionBody.trim()].length;
+  const draftCharCount = countJaChars(draftBody);
+  const revisionCharCount = countJaChars(revisionBody);
   const activeCharCount = phase === "revise" ? revisionCharCount : draftCharCount;
   // Server-persisted draft only — local typing alone must not unlock 改稿へ
-  // (rev1 save requires draft_required on the server).
+  // (rev1 save requires draft_required on the server). Also gates draft classmates.
   const draftSaved = draftVersion > 0;
 
   if (capsLoaded && !kokugo) {
@@ -458,10 +460,9 @@ export function KokugoTab() {
         </div>
       )}
 
-      {lastSubmittedTaskId &&
-        (phase === "task" || phase === "read" || phase === "artifact") && (
-          <ClassmatePanel classmates={classmatesForTask(unit, lastSubmittedTaskId)} />
-        )}
+      {lastSubmittedTaskId && shouldShowTaskClassmates(phase) && (
+        <ClassmatePanel classmates={classmatesForTask(unit, lastSubmittedTaskId)} />
+      )}
 
       {phase === "predict" && currentTask?.kind === "predict" && (
         <PredictStep
@@ -481,7 +482,7 @@ export function KokugoTab() {
           <KokugoPassage blocks={unit.text} mode="readonly" showParagraphIndex />
           <button
             type="button"
-            className="px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
+            className={BTN_PRIMARY}
             onClick={() => {
               setFeedback(null);
               const first = tasks.findIndex((t) => t.kind !== "predict");
@@ -574,7 +575,7 @@ export function KokugoTab() {
               </p>
             </details>
           )}
-          {phase === "artifact" && draftSavedOnce && (
+          {phase === "artifact" && draftSaved && (
             <ClassmatePanel
               classmates={classmatesForArtifact(unit)}
               title="クラスメイトの下書き"
@@ -584,7 +585,7 @@ export function KokugoTab() {
             <>
               <RevisionCompare draftBody={draftBody} revisionBody={revisionBody} />
               <ClassmatePanel
-                classmates={classmatesForRevise(unit)}
+                classmates={classmatesFor(unit, { kind: "revise" })}
                 title="クラスメイトの改稿例"
               />
             </>
@@ -594,7 +595,7 @@ export function KokugoTab() {
               <>
                 <button
                   type="button"
-                  className="px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-40"
+                  className={BTN_PRIMARY}
                   disabled={!draftBody.trim()}
                   onClick={() => void saveArtifact(0)}
                 >
@@ -602,7 +603,7 @@ export function KokugoTab() {
                 </button>
                 <button
                   type="button"
-                  className="px-4 py-2 rounded-md border border-slate-300 bg-white text-sm font-medium text-slate-800 hover:bg-slate-50 disabled:opacity-40"
+                  className={BTN_SECONDARY}
                   disabled={!draftSaved || !draftBody.trim()}
                   onClick={goToRevise}
                 >
@@ -613,17 +614,13 @@ export function KokugoTab() {
               <>
                 <button
                   type="button"
-                  className="px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-40"
+                  className={BTN_PRIMARY}
                   disabled={!revisionBody.trim()}
                   onClick={() => void saveArtifact(1)}
                 >
                   改稿を保存して完了
                 </button>
-                <button
-                  type="button"
-                  className="px-4 py-2 rounded-md border border-slate-300 bg-white text-sm font-medium text-slate-800 hover:bg-slate-50"
-                  onClick={goToDraft}
-                >
+                <button type="button" className={BTN_SECONDARY} onClick={goToDraft}>
                   下書きに戻る
                 </button>
               </>
@@ -644,10 +641,7 @@ export function KokugoTab() {
             title="完成した作品の対比"
           />
           <ClassmatePanel
-            classmates={[
-              ...classmatesForArtifact(unit),
-              ...classmatesForRevise(unit),
-            ]}
+            classmates={classmatesForWritingDone(unit)}
             title="クラスメイトの作品例"
           />
           <button
