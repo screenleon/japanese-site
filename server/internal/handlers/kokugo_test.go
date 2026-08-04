@@ -150,6 +150,80 @@ func TestKokugoListUnitsReturnsPoC(t *testing.T) {
 	}
 }
 
+func TestKokugoSkillsListMapsFailureIsStable500(t *testing.T) {
+	// Behavior: GET /api/kokugo/skills returns stable internal error when unit load fails.
+	// Steps:
+	// 1. Arrange a corpus file under e5-6 whose JSON stage points at a missing directory.
+	// 2. Act GET /api/kokugo/skills.
+	// 3. Assert HTTP 500 with {"error":"internal"} and no skills payload.
+	root := t.TempDir()
+	stageDir := filepath.Join(root, "e5-6")
+	if err := os.MkdirAll(stageDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	// Listed via e5-6/, but stage field sends GetMap to a non-existent stage path.
+	bad := `{
+  "id": "broken-unit",
+  "stage": "missing-stage",
+  "title_ja": "壊れたユニット",
+  "genre": "story",
+  "tasks": [{"id": "t1", "skill": "reading.summary", "kind": "summary-choice"}]
+}`
+	if err := os.WriteFile(filepath.Join(stageDir, "broken-unit.json"), []byte(bad), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	db := newHandlerTestDB(t)
+	mux := http.NewServeMux()
+	RegisterWithOpts(mux, db, store.NewSQLiteProgressStore(db), RegisterOpts{KokugoDir: root})
+
+	req := httptest.NewRequest(http.MethodGet, "/api/kokugo/skills", nil)
+	rec := httptest.NewRecorder()
+	mux.ServeHTTP(rec, req)
+	if rec.Code != http.StatusInternalServerError {
+		t.Fatalf("status %d %s", rec.Code, rec.Body.String())
+	}
+	var body map[string]any
+	if err := json.Unmarshal(rec.Body.Bytes(), &body); err != nil {
+		t.Fatal(err)
+	}
+	if body["error"] != "internal" {
+		t.Fatalf("want stable error=internal, got %s", rec.Body.String())
+	}
+	if _, ok := body["skills"]; ok {
+		t.Fatalf("must not include partial skills payload: %s", rec.Body.String())
+	}
+}
+
+func TestKokugoSkillsStoreFailureIsStable500(t *testing.T) {
+	// Behavior: GET /api/kokugo/skills returns stable internal error when an aggregation store read fails.
+	// Steps:
+	// 1. Arrange repo corpus + sqlite progress, then drop kokugo_task_attempt.
+	// 2. Act GET /api/kokugo/skills.
+	// 3. Assert HTTP 500 with {"error":"internal"} and no skills payload.
+	db := newHandlerTestDB(t)
+	mux := registerKokugoMux(t, db, store.NewSQLiteProgressStore(db))
+	if _, err := db.Exec(`DROP TABLE kokugo_task_attempt`); err != nil {
+		t.Fatalf("drop attempt table: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodGet, "/api/kokugo/skills", nil)
+	rec := httptest.NewRecorder()
+	mux.ServeHTTP(rec, req)
+	if rec.Code != http.StatusInternalServerError {
+		t.Fatalf("status %d %s", rec.Code, rec.Body.String())
+	}
+	var body map[string]any
+	if err := json.Unmarshal(rec.Body.Bytes(), &body); err != nil {
+		t.Fatal(err)
+	}
+	if body["error"] != "internal" {
+		t.Fatalf("want stable error=internal, got %s", rec.Body.String())
+	}
+	if _, ok := body["skills"]; ok {
+		t.Fatalf("must not include partial skills payload: %s", rec.Body.String())
+	}
+}
+
 func TestKokugoSkillsEmptyWhenLoaderDisabled(t *testing.T) {
 	// Behavior: GET /api/kokugo/skills returns empty arrays when KokugoDir is unset.
 	// Steps:
