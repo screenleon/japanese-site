@@ -302,31 +302,57 @@ export function KokugoTab() {
       if (revision === 0) {
         setDraftVersion(res.artifact.version);
         setDraftBody(res.artifact.body);
+        // Progressive writing: stay on draft after save — learner re-edits freely.
+        // Advance to revise only via explicit 「改稿へ」.
+        // Until rev1 is persisted, keep the revision editor seed in sync with latest draft.
+        if (res.grade.correct && revisionVersion === 0) {
+          setRevisionBody(res.artifact.body);
+        }
       } else {
         setRevisionVersion(res.artifact.version);
         setRevisionBody(res.artifact.body);
-      }
-      // Only advance when grade passes (length/checklist).
-      // Done phase requires server-confirmed completed progress (critic-F001).
-      if (revision === 0 && res.grade.correct) {
-        setRevisionBody((prev) => prev || res.artifact.body);
-        setPhase("revise");
-        void api.putKokugoProgress(unit.stage, unit.id, { step: "revise" });
-      } else if (revision === 1 && res.grade.correct) {
-        const serverDone =
-          res.progress?.status === "completed" || res.progress?.step === "done";
-        if (serverDone) {
-          setPhase("done");
-        } else {
-          // Valid revision saved but cycle incomplete (e.g. missing tasks).
-          setPhase("revise");
+        // Done requires server-confirmed completed progress (critic-F001).
+        if (res.grade.correct) {
+          const serverDone =
+            res.progress?.status === "completed" || res.progress?.step === "done";
+          if (serverDone) {
+            setPhase("done");
+          }
         }
       }
-      // Failed grade: stay on current phase so the learner can fix.
     } catch (e) {
       setError(String(e));
     }
   }
+
+  function goToRevise() {
+    if (!unit) return;
+    setFeedback(null);
+    // Prefer latest draft when rev1 has never been saved; keep learner rev1 text otherwise.
+    if (revisionVersion === 0) {
+      setRevisionBody(draftBody);
+    }
+    setPhase("revise");
+    if (progress) {
+      void api.putKokugoProgress(unit.stage, unit.id, { step: "revise" });
+    }
+  }
+
+  function goToDraft() {
+    if (!unit) return;
+    setFeedback(null);
+    setPhase("artifact");
+    if (progress) {
+      void api.putKokugoProgress(unit.stage, unit.id, { step: "artifact" });
+    }
+  }
+
+  const draftCharCount = [...draftBody.trim()].length;
+  const revisionCharCount = [...revisionBody.trim()].length;
+  const activeCharCount = phase === "revise" ? revisionCharCount : draftCharCount;
+  // Server-persisted draft only — local typing alone must not unlock 改稿へ
+  // (rev1 save requires draft_required on the server).
+  const draftSaved = draftVersion > 0;
 
   if (capsLoaded && !kokugo) {
     return (
@@ -464,8 +490,25 @@ export function KokugoTab() {
             {phase === "artifact" ? "作品（下書き）" : "改稿"}
           </h3>
           <p className="text-xs text-slate-600">
-            {unit.artifact.min_chars}〜{unit.artifact.max_chars} 字 · {unit.artifact.kind}
+            {unit.artifact.kind}
+            {" · "}
+            現在 {activeCharCount} 字
+            {unit.artifact.min_chars > 0 || unit.artifact.max_chars > 0
+              ? ` · 目安 ${unit.artifact.min_chars > 0 ? unit.artifact.min_chars : "—"}〜${
+                  unit.artifact.max_chars > 0 ? unit.artifact.max_chars : "—"
+                } 字`
+              : " · 字数制限なし（短く書いてから少しずつ増やせます）"}
           </p>
+          {phase === "artifact" && (
+            <p className="text-xs text-slate-500">
+              下書きは何度でも保存・書き直せます。準備ができたら「改稿へ」へ進んでください。
+            </p>
+          )}
+          {phase === "revise" && (
+            <p className="text-xs text-slate-500">
+              改稿ではチェックリストを確認してから保存します。必要なら下書きに戻って直せます。
+            </p>
+          )}
           <ul className="space-y-1">
             {unit.artifact.checklist.map((item, i) => (
               <li key={item} className="flex items-start gap-2 text-sm">
@@ -480,7 +523,12 @@ export function KokugoTab() {
                     });
                   }}
                 />
-                <span>{item}</span>
+                <span>
+                  {item}
+                  {phase === "artifact" ? (
+                    <span className="text-xs text-slate-400">（下書きでは任意）</span>
+                  ) : null}
+                </span>
               </li>
             ))}
           </ul>
@@ -490,7 +538,7 @@ export function KokugoTab() {
             onChange={(e) =>
               phase === "artifact" ? setDraftBody(e.target.value) : setRevisionBody(e.target.value)
             }
-            placeholder="ここに提案文を書いてください"
+            placeholder="ここに提案文を書いてください（短くて大丈夫です）"
             aria-label={phase === "artifact" ? "下書き" : "改稿本文"}
           />
           {unit.artifact.exemplar_ja && (
@@ -509,13 +557,46 @@ export function KokugoTab() {
               </pre>
             </details>
           )}
-          <button
-            type="button"
-            className="px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
-            onClick={() => void saveArtifact(phase === "artifact" ? 0 : 1)}
-          >
-            {phase === "artifact" ? "下書きを保存" : "改稿を保存して完了"}
-          </button>
+          <div className="flex flex-wrap gap-2">
+            {phase === "artifact" ? (
+              <>
+                <button
+                  type="button"
+                  className="px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-40"
+                  disabled={!draftBody.trim()}
+                  onClick={() => void saveArtifact(0)}
+                >
+                  下書きを保存
+                </button>
+                <button
+                  type="button"
+                  className="px-4 py-2 rounded-md border border-slate-300 bg-white text-sm font-medium text-slate-800 hover:bg-slate-50 disabled:opacity-40"
+                  disabled={!draftSaved || !draftBody.trim()}
+                  onClick={goToRevise}
+                >
+                  改稿へ進む
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-40"
+                  disabled={!revisionBody.trim()}
+                  onClick={() => void saveArtifact(1)}
+                >
+                  改稿を保存して完了
+                </button>
+                <button
+                  type="button"
+                  className="px-4 py-2 rounded-md border border-slate-300 bg-white text-sm font-medium text-slate-800 hover:bg-slate-50"
+                  onClick={goToDraft}
+                >
+                  下書きに戻る
+                </button>
+              </>
+            )}
+          </div>
         </div>
       )}
 

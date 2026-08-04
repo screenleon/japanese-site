@@ -3,6 +3,20 @@
 This file records active architectural and behavioral decisions for this repository.
 Agents must read it before planning or implementation tasks.
 
+## 2026-08-03 — Kokugo artifact progressive writing (no hard char floor)
+
+**Context**: Learners cannot comfortably hit an 80-character minimum on first draft; the pedagogical goal is “start short, grow longer,” not exam-length on save.
+
+**Decision**:
+
+1. **`min_chars` / `max_chars` = 0 means no bound** (lint allows ≥ 0). Non-empty body is always required. Optional positive bounds remain for future units.
+2. **Draft (revision 0)** may save without full checklist ticks; grade message encourages re-edit. Server **stays on progress step `artifact`** after draft save (no auto-jump to revise).
+3. **Revision (revision 1)** still requires full checklist for a passing grade; completion still needs full cycle (tasks + rev0 + rev1).
+4. **UI**: “下書きを保存” stays on draft; explicit **「改稿へ進む」** / **「下書きに戻る」**; live character count only (no forced range for library-use).
+5. **Completed lock (immutable snapshot)**: once `status=completed`, reject progress regression **and** any further artifact writes (`completed_locked` 409), including rev1 re-saves that would re-assert `status=completed`. Bodies/versions stay frozen.
+
+**Refs**: `library-use` artifact 0/0; `GradeArtifact(..., revision)`; ADR-0005 loop unchanged; `ErrKokugoCompletedLocked`.
+
 ## 2026-08-03 — JS-133 Kokugo reader polish (in-passage highlight + paragraph roles)
 
 **Context**: Phase-1 `EvidenceStep` was a detached checkbox list of gold + distractor sentences; `ParagraphRoleStep` re-listed paragraphs with bare selects. That failed the 国語 “find evidence in the text” feel (ADR-0005 Phase 2 / JS-133).

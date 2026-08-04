@@ -60,77 +60,112 @@ func TestGradeSummaryAndEvidence(t *testing.T) {
 	}
 }
 
-func TestGradeArtifactLength(t *testing.T) {
-	unit := loadLibraryUse(t)
-	// min 80 max 120
-	short := GradeArtifact(unit, "短い", []bool{true, true, true})
-	if short.Correct == nil || *short.Correct {
-		t.Fatalf("short should fail: %+v", short)
-	}
-	body := "私は入口に「今週のおすすめ」コーナーを置くことを提案します。何を読めばよいか迷う生徒が減り、本を手に取るきっかけが増えるからです。さらに教科ごとの棚表示も分かりやすくします。"
-	good := GradeArtifact(unit, body, []bool{true, true, true})
-	if good.Correct == nil || !*good.Correct {
-		t.Fatalf("good should pass: %+v", good)
-	}
-}
-
-func TestGradeArtifactBoundaries(t *testing.T) {
-	// Behavior-named coverage for inclusive min/max, just-outside bounds,
-	// unchecked checklist, and checklist length mismatch (library-use: 80–120, 3 checks).
+func TestGradeArtifactProgressiveWriting(t *testing.T) {
+	// library-use uses min_chars=0 max_chars=0: only non-empty is required on draft.
 	unit := loadLibraryUse(t)
 	checksOK := []bool{true, true, true}
 
-	// Exactly minimum (80 runes) — pad a base string to 80.
-	minBody := padRunes("あ", 80)
-	if n := len([]rune(minBody)); n != 80 {
-		t.Fatalf("min pad len %d", n)
+	got := GradeArtifact(unit, "   ", checksOK, 0)
+	if got.Correct == nil || *got.Correct {
+		t.Fatalf("empty draft should fail: %+v", got)
 	}
-	got := GradeArtifact(unit, minBody, checksOK)
+	got = GradeArtifact(unit, "", checksOK, 1)
+	if got.Correct == nil || *got.Correct {
+		t.Fatalf("empty revision should fail: %+v", got)
+	}
+
+	got = GradeArtifact(unit, "提案です。", nil, 0)
 	if got.Correct == nil || !*got.Correct {
-		t.Fatalf("exactly min should pass: %+v", got)
+		t.Fatalf("short draft without checklist should pass: %+v", got)
 	}
 
-	// Exactly maximum (120 runes).
-	maxBody := padRunes("い", 120)
-	got = GradeArtifact(unit, maxBody, checksOK)
+	long := padRunes("あ", 500)
+	got = GradeArtifact(unit, long, nil, 0)
 	if got.Correct == nil || !*got.Correct {
-		t.Fatalf("exactly max should pass: %+v", got)
+		t.Fatalf("long draft should pass with max=0: %+v", got)
 	}
 
-	// Just outside: 79 and 121.
-	got = GradeArtifact(unit, padRunes("う", 79), checksOK)
+	got = GradeArtifact(unit, "提案です。理由もあります。", []bool{true, false, true}, 1)
 	if got.Correct == nil || *got.Correct {
-		t.Fatalf("min-1 should fail: %+v", got)
+		t.Fatalf("revision with unchecked item should fail: %+v", got)
 	}
-	got = GradeArtifact(unit, padRunes("え", 121), checksOK)
+	got = GradeArtifact(unit, "提案です。理由もあります。", checksOK, 1)
+	if got.Correct == nil || !*got.Correct {
+		t.Fatalf("revision with full checklist should pass: %+v", got)
+	}
+	got = GradeArtifact(unit, "提案です。", nil, 1)
 	if got.Correct == nil || *got.Correct {
-		t.Fatalf("max+1 should fail: %+v", got)
+		t.Fatalf("revision with nil checklist should fail: %+v", got)
+	}
+}
+
+func TestGradeArtifactOptionalBounds(t *testing.T) {
+	// Both bounds positive (closed range).
+	unit := map[string]any{
+		"artifact": map[string]any{
+			"kind":      "short-proposal",
+			"min_chars": float64(5),
+			"max_chars": float64(10),
+			"checklist": []any{"a"},
+		},
+	}
+	got := GradeArtifact(unit, "abcd", []bool{true}, 0)
+	if got.Correct == nil || *got.Correct {
+		t.Fatalf("below min should fail when min>0: %+v", got)
+	}
+	got = GradeArtifact(unit, "abcde", []bool{true}, 0)
+	if got.Correct == nil || !*got.Correct {
+		t.Fatalf("at min draft should pass: %+v", got)
+	}
+	got = GradeArtifact(unit, padRunes("x", 11), []bool{true}, 0)
+	if got.Correct == nil || *got.Correct {
+		t.Fatalf("above max should fail when max>0: %+v", got)
+	}
+}
+
+func TestGradeArtifactOneSidedBounds(t *testing.T) {
+	// min only: max_chars=0 means no upper bound.
+	minOnly := map[string]any{
+		"artifact": map[string]any{
+			"kind":      "short-proposal",
+			"min_chars": float64(5),
+			"max_chars": float64(0),
+			"checklist": []any{},
+		},
+	}
+	got := GradeArtifact(minOnly, "abcd", nil, 0) // 4 < 5
+	if got.Correct == nil || *got.Correct {
+		t.Fatalf("min-only: below min should fail: %+v", got)
+	}
+	got = GradeArtifact(minOnly, "abcde", nil, 0)
+	if got.Correct == nil || !*got.Correct {
+		t.Fatalf("min-only: at min should pass: %+v", got)
+	}
+	got = GradeArtifact(minOnly, padRunes("y", 200), nil, 0)
+	if got.Correct == nil || !*got.Correct {
+		t.Fatalf("min-only: long body should pass when max=0: %+v", got)
 	}
 
-	// Unchecked checklist entry (length in range).
-	got = GradeArtifact(unit, minBody, []bool{true, false, true})
-	if got.Correct == nil || *got.Correct {
-		t.Fatalf("unchecked item should fail: %+v", got)
+	// max only: min_chars=0 means no lower bound beyond non-empty.
+	maxOnly := map[string]any{
+		"artifact": map[string]any{
+			"kind":      "short-proposal",
+			"min_chars": float64(0),
+			"max_chars": float64(10),
+			"checklist": []any{},
+		},
 	}
-
-	// Checklist length mismatch.
-	got = GradeArtifact(unit, minBody, []bool{true, true})
-	if got.Correct == nil || *got.Correct {
-		t.Fatalf("checklist length mismatch should fail: %+v", got)
+	got = GradeArtifact(maxOnly, "a", nil, 0)
+	if got.Correct == nil || !*got.Correct {
+		t.Fatalf("max-only: short non-empty should pass: %+v", got)
 	}
-	got = GradeArtifact(unit, minBody, []bool{true, true, true, true})
-	if got.Correct == nil || *got.Correct {
-		t.Fatalf("checklist too long should fail: %+v", got)
+	got = GradeArtifact(maxOnly, padRunes("z", 10), nil, 0)
+	if got.Correct == nil || !*got.Correct {
+		t.Fatalf("max-only: exactly max should pass: %+v", got)
 	}
-
-	// Omitted / empty checklist is not a free pass when unit has checklist items.
-	got = GradeArtifact(unit, minBody, nil)
+	got = GradeArtifact(maxOnly, padRunes("z", 11), nil, 0)
 	if got.Correct == nil || *got.Correct {
-		t.Fatalf("nil checklist should fail: %+v", got)
-	}
-	got = GradeArtifact(unit, minBody, []bool{})
-	if got.Correct == nil || *got.Correct {
-		t.Fatalf("empty checklist should fail: %+v", got)
+		t.Fatalf("max-only: above max should fail: %+v", got)
 	}
 }
 

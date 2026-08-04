@@ -73,6 +73,7 @@ func EnsureKokugoProgress(ctx context.Context, db *DB, stage, unitID, step strin
 }
 
 // UpdateKokugoProgress sets step/status for a unit (creates row if needed).
+// Refuses to downgrade a completed unit to in_progress.
 func UpdateKokugoProgress(ctx context.Context, db *DB, stage, unitID, step, status string) (KokugoUnitProgress, error) {
 	unitKey := KokugoUnitKey(stage, unitID)
 	if step == "" {
@@ -83,6 +84,20 @@ func UpdateKokugoProgress(ctx context.Context, db *DB, stage, unitID, step, stat
 	}
 	if status != "in_progress" && status != "completed" {
 		return KokugoUnitProgress{}, fmt.Errorf("invalid status %q", status)
+	}
+
+	// Lock: completed units cannot regress via client step navigation.
+	if status != "completed" {
+		var cur string
+		err := db.QueryRowContext(ctx,
+			`SELECT status FROM kokugo_unit_progress WHERE unit_key = ?`, unitKey,
+		).Scan(&cur)
+		if err == nil && cur == "completed" {
+			return KokugoUnitProgress{}, ErrKokugoCompletedLocked
+		}
+		if err != nil && !errors.Is(err, sql.ErrNoRows) {
+			return KokugoUnitProgress{}, err
+		}
 	}
 
 	var completedAt any
@@ -100,10 +115,19 @@ func UpdateKokugoProgress(ctx context.Context, db *DB, stage, unitID, step, stat
 			completed_at = CASE
 				WHEN excluded.status = 'completed' THEN COALESCE(kokugo_unit_progress.completed_at, excluded.completed_at)
 				ELSE NULL
-			END`,
+			END
+		WHERE kokugo_unit_progress.status != 'completed'
+			OR excluded.status = 'completed'`,
 		unitKey, stage, unitID, status, step, completedAt)
 	if err != nil {
 		return KokugoUnitProgress{}, fmt.Errorf("update kokugo progress: %w", err)
+	}
+	// If WHERE blocked the UPDATE (row stayed completed, no insert), surface lock.
+	if status != "completed" {
+		p, gerr := GetKokugoProgress(ctx, db, stage, unitID)
+		if gerr == nil && p.Status == "completed" {
+			return KokugoUnitProgress{}, ErrKokugoCompletedLocked
+		}
 	}
 	return GetKokugoProgress(ctx, db, stage, unitID)
 }
@@ -238,6 +262,11 @@ var ErrKokugoStaleWrite = errors.New("kokugo artifact stale write")
 
 // ErrKokugoDraftRequired is returned when revision 1 is saved without revision 0.
 var ErrKokugoDraftRequired = errors.New("kokugo draft required before revision")
+
+// ErrKokugoCompletedLocked is returned when a client tries to mutate a unit
+// that has already completed the full cycle (progress regression or further
+// artifact writes). Completed artifacts are treated as an immutable snapshot.
+var ErrKokugoCompletedLocked = errors.New("kokugo unit already completed")
 
 // SaveKokugoArtifactOpts controls draft/revision invariants and concurrency.
 type SaveKokugoArtifactOpts struct {
@@ -522,6 +551,20 @@ func SaveKokugoArtifactAndProgress(
 		return KokugoArtifact{}, KokugoUnitProgress{}, err
 	}
 	defer func() { _ = tx.Rollback() }()
+
+	// Completed cycles are immutable: reject any further artifact write, even
+	// when the handler would re-assert status=completed (rev1 re-save race).
+	// Progress-only regression is handled separately in UpdateKokugoProgress.
+	var cur string
+	err = tx.QueryRowContext(ctx,
+		`SELECT status FROM kokugo_unit_progress WHERE unit_key = ?`, unitKey,
+	).Scan(&cur)
+	if err == nil && cur == "completed" {
+		return KokugoArtifact{}, KokugoUnitProgress{}, ErrKokugoCompletedLocked
+	}
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return KokugoArtifact{}, KokugoUnitProgress{}, err
+	}
 
 	// Draft-before-revision (check inside tx).
 	if revision == 1 {
