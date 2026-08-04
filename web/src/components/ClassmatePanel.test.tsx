@@ -21,11 +21,25 @@ const samples: KokugoClassmate[] = [
 
 describe("ClassmatePanel", () => {
   it("renders nothing when classmates empty", () => {
+    /**
+     * Behavior: empty classmate list produces no DOM (parent can mount unconditionally).
+     * Steps:
+     * 1. Arrange ClassmatePanel with classmates=[].
+     * 2. Act render.
+     * 3. Assert container is empty (no title, no list).
+     */
     const { container } = render(<ClassmatePanel classmates={[]} />);
     expect(container).toBeEmptyDOMElement();
   });
 
   it("renders names, focus, and bodies", () => {
+    /**
+     * Behavior: curated samples show name, optional focus label, and body text.
+     * Steps:
+     * 1. Arrange two classmates (with and without focus_ja) and a custom title.
+     * 2. Act render ClassmatePanel.
+     * 3. Assert section aria-label, both names, focus line, and both bodies.
+     */
     render(<ClassmatePanel classmates={samples} title="クラスメイトの答え" />);
     expect(screen.getByLabelText("クラスメイトの答え")).toBeVisible();
     expect(screen.getByText("田中さん")).toBeVisible();
