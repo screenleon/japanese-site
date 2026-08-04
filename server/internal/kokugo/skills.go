@@ -29,6 +29,21 @@ var SkillLabelJa = map[string]string{
 	"writing.revision":        "改稿する",
 }
 
+// knownSkills is the closed set for O(1) membership checks while indexing.
+var knownSkills map[string]struct{}
+
+func init() {
+	knownSkills = make(map[string]struct{}, len(AllSkills))
+	for _, s := range AllSkills {
+		knownSkills[s] = struct{}{}
+	}
+}
+
+func isKnownSkill(skill string) bool {
+	_, ok := knownSkills[skill]
+	return ok
+}
+
 // AttemptRow is a minimal attempt projection for skill aggregation.
 type AttemptRow struct {
 	UnitKey string
@@ -145,6 +160,11 @@ func BuildUnitSkillIndex(units []map[string]any) UnitSkillIndex {
 				taskID, _ := tm["id"].(string)
 				skill, _ := tm["skill"].(string)
 				if taskID == "" || skill == "" {
+					continue
+				}
+				// Unknown / non-canonical skills must not panic on seenSkillUnit[skill]
+				// (nil map write). Lint rejects them at authoring time; runtime skips.
+				if !isKnownSkill(skill) {
 					continue
 				}
 				idx.TaskSkill[unitKey][taskID] = skill
