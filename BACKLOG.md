@@ -133,7 +133,7 @@
 | JS-131 | ✅ closed 2026-08-03 | 国語最小循環 UI | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-132 | ✅ closed 2026-08-03 | 国語 local API 進度與作品保存 | backend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-133 | ✅ closed 2026-08-03 | 国語 Reader 精讀標記強化 | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
-| JS-134 | 🔵 active | 模擬同學答案與改稿對照 | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-134 | ✅ closed 2026-08-04 | 模擬同學答案與改稿對照 | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-135 | 🔵 active | 国語單元包 2（PoC 後 3–4 單元） | content | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-136 | 🔵 active | 技能地圖與国語技能複習 | product | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-137 | 🔵 active | 国語音讀（依賴音訊路徑） | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
@@ -1565,7 +1565,7 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 **Blocked by**: JS-131
 <!-- 首次記錄: 2026-08-02 -->
 
-## JS-134 — 模擬同學答案與改稿對照
+## JS-134 — 模擬同學答案與改稿對照 ✅ 2026-08-04
 
 **Problem**: 單人站需模擬「以文章為根據交流」。
 

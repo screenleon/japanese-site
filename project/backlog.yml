@@ -1843,7 +1843,8 @@ items:
 
   - id: JS-134
     title: "Kokugo classmate answers + revision compare flow"
-    status: todo
+    status: done
+    completed_at: "2026-08-04"
     priority: P2
     theme: kokugo
     area: frontend
@@ -1852,6 +1853,7 @@ items:
     related: [JS-130, JS-135]
     notes:
       - Curated classmate answers revealed after learner response; before/after revision UI.
+      - Shipped: KokugoClassmate schema + lint; library-use samples; ClassmatePanel + RevisionCompare in KokugoTab.
 
   - id: JS-135
     title: "Kokugo unit pack 2 (3–4 units after PoC)"

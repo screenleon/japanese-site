@@ -74,6 +74,29 @@ const sampleUnit: KokugoUnit = {
     checklist: ["提案がある", "理由がある"],
     exemplar_ja: "例です。",
   },
+  classmates: [
+    {
+      id: "classmate-summary",
+      name_ja: "田中さん",
+      reveal_after: { kind: "task", task_id: "summary-1" },
+      text_ja: "要約は b が近いです。",
+      focus_ja: "全体の流れ",
+    },
+    {
+      id: "classmate-draft",
+      name_ja: "山本さん",
+      reveal_after: { kind: "artifact" },
+      text_ja: "札をつける提案です。",
+      focus_ja: "短く提案",
+    },
+    {
+      id: "classmate-revise",
+      name_ja: "伊藤さん",
+      reveal_after: { kind: "revise" },
+      text_ja: "おすすめコーナーを置きます。",
+      focus_ja: "具体例",
+    },
+  ],
   _meta: { source: "original", license: "CC0-1.0", validated_by: "test" },
 };
 
@@ -244,7 +267,7 @@ describe("KokugoTab", () => {
     renderTab();
     fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
     await waitFor(() => {
-      expect(screen.getByText("改稿")).toBeVisible();
+      expect(screen.getByRole("heading", { level: 3, name: "改稿" })).toBeVisible();
     });
     expect(screen.getByDisplayValue("保存済み下書きです。")).toBeVisible();
     // Should not reset progress to predict
@@ -740,7 +763,7 @@ describe("KokugoTab", () => {
     expect(screen.getByText("作品（下書き）")).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "改稿へ進む" }));
     await waitFor(() => {
-      expect(screen.getByText("改稿")).toBeVisible();
+      expect(screen.getByRole("heading", { level: 3, name: "改稿" })).toBeVisible();
     });
     expect(putKokugoProgress).toHaveBeenCalledWith("e5-6", "library-use", {
       step: "revise",
@@ -831,14 +854,14 @@ describe("KokugoTab", () => {
     expect(screen.getByText("作品（下書き）")).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "改稿へ進む" }));
     await waitFor(() => {
-      expect(screen.getByText("改稿")).toBeVisible();
+      expect(screen.getByRole("heading", { level: 3, name: "改稿" })).toBeVisible();
     });
     fireEvent.click(screen.getByRole("button", { name: /改稿を保存/ }));
     await waitFor(() => {
       expect(saveKokugoArtifact).toHaveBeenCalledTimes(2);
     });
     expect(screen.queryByText("循環完了")).not.toBeInTheDocument();
-    expect(screen.getByText("改稿")).toBeVisible();
+    expect(screen.getByRole("heading", { level: 3, name: "改稿" })).toBeVisible();
   });
 
   it("draft can be re-edited after save; short text is allowed", async () => {
@@ -943,7 +966,7 @@ describe("KokugoTab", () => {
       target: { value: "短い提案。理由も足した。" },
     });
     fireEvent.click(screen.getByRole("button", { name: "改稿へ進む" }));
-    await screen.findByText("改稿");
+    await screen.findByRole("heading", { level: 3, name: "改稿" });
     expect(screen.getByLabelText("改稿本文")).toHaveValue("短い提案。理由も足した。");
     fireEvent.click(screen.getByRole("button", { name: "下書きに戻る" }));
     await screen.findByText("作品（下書き）");
@@ -992,5 +1015,106 @@ describe("KokugoTab", () => {
     expect(
       screen.getByText(/ローカル API が無いため/)
     ).toBeVisible();
+  });
+
+  it("JS-134: reveals task classmates after summary submit", async () => {
+    /**
+     * Behavior: curated classmates appear only after the anchored task is submitted.
+     * 1. Open unit and complete predict → read → summary task.
+     * 2. Assert 田中さん classmate text appears on artifact phase (last submitted task).
+     * 3. Assert classmate body is the curated sample, not learner text.
+     */
+    renderTab();
+    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    await screen.findByText("読む前の予測");
+    fireEvent.click(screen.getByLabelText("工夫"));
+    fireEvent.click(screen.getByRole("button", { name: /予測を記録/ }));
+    await screen.findByText("本文を読む");
+    fireEvent.click(screen.getByRole("button", { name: "課題へ進む" }));
+    await screen.findByText("要約");
+    submitKokugoTask.mockResolvedValueOnce({
+      attempt: {
+        id: 2,
+        unit_key: "e5-6/library-use",
+        task_id: "summary-1",
+        answer: {},
+        created_at: "",
+      },
+      grade: { correct: true, explanation_ja: "正しい要約を選べました。" },
+    });
+    fireEvent.click(screen.getByLabelText("良い要約"));
+    fireEvent.click(screen.getByRole("button", { name: "提出" }));
+    await waitFor(() => {
+      expect(screen.getByText("作品（下書き）")).toBeVisible();
+    });
+    expect(screen.getByText("田中さん")).toBeVisible();
+    expect(screen.getByText("要約は b が近いです。")).toBeVisible();
+    // Draft classmates stay hidden until draft is saved.
+    expect(screen.queryByText("山本さん")).not.toBeInTheDocument();
+  });
+
+  it("JS-134: revision compare + revise classmates after draft save and 改稿へ", async () => {
+    /**
+     * Behavior: after draft save show draft classmates; revise phase shows side-by-side compare.
+     * 1. Resume on artifact with empty draft.
+     * 2. Save draft → 山本さん appears.
+     * 3. 改稿へ → RevisionCompare labels + 伊藤さん revise classmate.
+     */
+    getKokugoUnitState.mockResolvedValue({
+      progress: {
+        unit_key: "e5-6/library-use",
+        stage: "e5-6",
+        unit_id: "library-use",
+        status: "in_progress",
+        step: "artifact",
+        started_at: "",
+        updated_at: "",
+      },
+      attempts: [],
+      artifacts: [],
+    });
+    saveKokugoArtifact.mockResolvedValueOnce({
+      artifact: {
+        unit_key: "e5-6/library-use",
+        revision: 0,
+        body: "下書き本文です。",
+        checklist: [true, true],
+        created_at: "",
+        version: 1,
+        updated_at: "t1",
+      },
+      grade: {
+        correct: true,
+        explanation_ja: "下書きを保存しました。何度でも書き直してかまいません。",
+      },
+      progress: {
+        unit_key: "e5-6/library-use",
+        stage: "e5-6",
+        unit_id: "library-use",
+        status: "in_progress",
+        step: "artifact",
+        started_at: "",
+        updated_at: "",
+      },
+    });
+
+    renderTab();
+    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    await screen.findByText("作品（下書き）");
+    expect(screen.queryByText("山本さん")).not.toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("下書き"), {
+      target: { value: "下書き本文です。" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "下書きを保存" }));
+    await waitFor(() => {
+      expect(screen.getByText("山本さん")).toBeVisible();
+    });
+    expect(screen.getByText("札をつける提案です。")).toBeVisible();
+
+    fireEvent.click(screen.getByRole("button", { name: "改稿へ進む" }));
+    await screen.findByRole("heading", { level: 3, name: "改稿" });
+    expect(screen.getByLabelText("下書きと改稿の対比")).toBeVisible();
+    expect(screen.getByText("伊藤さん")).toBeVisible();
+    expect(screen.getByText("おすすめコーナーを置きます。")).toBeVisible();
   });
 });

@@ -5,11 +5,13 @@ import type {
   KokugoUnitState,
   KokugoUnitSummary,
 } from "../apiTypes";
+import { ClassmatePanel } from "../components/ClassmatePanel";
 import {
   countParagraphs,
   KokugoPassage,
   type PassageSentence,
 } from "../components/KokugoPassage";
+import { RevisionCompare } from "../components/RevisionCompare";
 import type {
   EvidenceHighlightPayload,
   KokugoTask,
@@ -17,6 +19,11 @@ import type {
   ParagraphRolePayload,
   PredictPayload,
   SummaryChoicePayload,
+} from "../kokugoTypes";
+import {
+  classmatesForArtifact,
+  classmatesForRevise,
+  classmatesForTask,
 } from "../kokugoTypes";
 import { useCapabilities } from "../capabilities";
 
@@ -158,6 +165,10 @@ export function KokugoTab() {
   const [checklist, setChecklist] = useState<boolean[]>([]);
   const [draftVersion, setDraftVersion] = useState(0);
   const [revisionVersion, setRevisionVersion] = useState(0);
+  /** Last task the learner submitted — drives classmate reveal (JS-134). */
+  const [lastSubmittedTaskId, setLastSubmittedTaskId] = useState<string | null>(null);
+  /** Draft was saved at least once this open (or restored with version > 0). */
+  const [draftSavedOnce, setDraftSavedOnce] = useState(false);
 
   const loadUnits = useCallback(async () => {
     setLoading(true);
@@ -200,6 +211,10 @@ export function KokugoTab() {
       setDraftVersion(resumed.draftVersion);
       setRevisionVersion(resumed.revisionVersion);
       setPhase(resumed.phase);
+      setDraftSavedOnce(resumed.draftVersion > 0);
+      // Resume: show classmates for the most recent attempted task (if any).
+      const attempts = state?.attempts ?? [];
+      setLastSubmittedTaskId(attempts.length > 0 ? attempts[attempts.length - 1].task_id : null);
 
       // Only seed progress when starting fresh (no prior row).
       if (progress && !state?.progress) {
@@ -216,6 +231,8 @@ export function KokugoTab() {
     setFeedback(null);
     setDraftVersion(0);
     setRevisionVersion(0);
+    setLastSubmittedTaskId(null);
+    setDraftSavedOnce(false);
     void loadUnits();
   }
 
@@ -231,12 +248,14 @@ export function KokugoTab() {
         correct: null,
         explanation_ja: "ローカル API が無いため採点を保存できません。内容の確認だけ進めます。",
       });
+      setLastSubmittedTaskId(currentTask.id);
       advanceAfterTask(after);
       return;
     }
     try {
       const res = await api.submitKokugoTask(unit.stage, unit.id, currentTask.id, answer);
       setFeedback(res.grade);
+      setLastSubmittedTaskId(currentTask.id);
       advanceAfterTask(after);
     } catch (e) {
       setError(String(e));
@@ -302,6 +321,7 @@ export function KokugoTab() {
       if (revision === 0) {
         setDraftVersion(res.artifact.version);
         setDraftBody(res.artifact.body);
+        setDraftSavedOnce(true);
         // Progressive writing: stay on draft after save — learner re-edits freely.
         // Advance to revise only via explicit 「改稿へ」.
         // Until rev1 is persisted, keep the revision editor seed in sync with latest draft.
@@ -438,6 +458,11 @@ export function KokugoTab() {
         </div>
       )}
 
+      {lastSubmittedTaskId &&
+        (phase === "task" || phase === "read" || phase === "artifact") && (
+          <ClassmatePanel classmates={classmatesForTask(unit, lastSubmittedTaskId)} />
+        )}
+
       {phase === "predict" && currentTask?.kind === "predict" && (
         <PredictStep
           payload={currentTask.payload}
@@ -549,13 +574,20 @@ export function KokugoTab() {
               </p>
             </details>
           )}
-          {phase === "revise" && draftBody && (
-            <details className="text-sm" open>
-              <summary className="cursor-pointer text-slate-600">下書きとの対比</summary>
-              <pre className="mt-2 whitespace-pre-wrap text-xs bg-slate-50 p-2 rounded border">
-                {draftBody}
-              </pre>
-            </details>
+          {phase === "artifact" && draftSavedOnce && (
+            <ClassmatePanel
+              classmates={classmatesForArtifact(unit)}
+              title="クラスメイトの下書き"
+            />
+          )}
+          {phase === "revise" && (
+            <>
+              <RevisionCompare draftBody={draftBody} revisionBody={revisionBody} />
+              <ClassmatePanel
+                classmates={classmatesForRevise(unit)}
+                title="クラスメイトの改稿例"
+              />
+            </>
           )}
           <div className="flex flex-wrap gap-2">
             {phase === "artifact" ? (
@@ -606,13 +638,18 @@ export function KokugoTab() {
           <p className="text-sm text-green-800">
             予測・読解・課題・作品・改稿の一巡が終わりました。
           </p>
-          {draftBody && (
-            <details className="text-sm text-green-900">
-              <summary>作品の記録</summary>
-              <p className="mt-1 text-xs">下書き: {draftBody}</p>
-              {revisionBody && <p className="mt-1 text-xs">改稿: {revisionBody}</p>}
-            </details>
-          )}
+          <RevisionCompare
+            draftBody={draftBody}
+            revisionBody={revisionBody}
+            title="完成した作品の対比"
+          />
+          <ClassmatePanel
+            classmates={[
+              ...classmatesForArtifact(unit),
+              ...classmatesForRevise(unit),
+            ]}
+            title="クラスメイトの作品例"
+          />
           <button
             type="button"
             className="px-4 py-2 rounded-md bg-white border border-green-300 text-sm"

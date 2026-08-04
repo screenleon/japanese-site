@@ -84,8 +84,22 @@ interface KokugoUnit {
     checklist: string[];
     exemplar_ja?: string;
   };
-  classmates?: unknown; // Phase 2
+  classmates?: KokugoClassmate[]; // JS-134 curated samples
   _meta: { source: string; license: string; validated_by?: string };
+}
+
+// JS-134 — curated peer samples (not multi-user social)
+type KokugoClassmateRevealAfter =
+  | { kind: "task"; task_id: string }
+  | { kind: "artifact" }
+  | { kind: "revise" };
+
+interface KokugoClassmate {
+  id: string;
+  name_ja: string;
+  reveal_after: KokugoClassmateRevealAfter;
+  text_ja: string;
+  focus_ja?: string;
 }
 
 interface KokugoTask {
@@ -168,5 +182,7 @@ Accepted 2026-08-02. **JS-129 shipped**: `web/src/kokugoTypes.ts`,
 `/api/kokugo/**` units + SQLite progress/attempts/artifacts (`0023_kokugo_progress.sql`);
 deterministic grading in `server/internal/kokugo`.
 **JS-133 shipped (2026-08-03)**: `KokugoPassage` in-passage evidence sentence
-select + paragraph-role marking; read phase paragraph indices. Next: JS-134
-classmates, JS-135 more units, JS-136 skill map.
+select + paragraph-role marking; read phase paragraph indices.
+**JS-134 shipped (2026-08-04)**: curated `classmates[]` + `ClassmatePanel` /
+`RevisionCompare` (reveal after learner response; before/after draft·改稿).
+Next: JS-135 more units, JS-136 skill map.

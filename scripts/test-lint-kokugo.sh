@@ -72,6 +72,10 @@ if command -v jq >/dev/null 2>&1; then
 	expect_fail "artifact-empty-checklist" '.artifact.checklist = []'
 	expect_fail "choices-too-few" '.tasks[0].payload.choices = [{"id":"a","text_ja":"only one"}]'
 	expect_fail "empty-choice-id" '.tasks[0].payload.choices[0].id = ""'
+	expect_fail "classmates-not-array" '.classmates = {"bad":true}'
+	expect_fail "classmate-bad-task" '.classmates = [{"id":"c1","name_ja":"A","text_ja":"x","reveal_after":{"kind":"task","task_id":"no-such-task"}}]'
+	expect_fail "classmate-dup-id" '.classmates = [{"id":"c1","name_ja":"A","text_ja":"x","reveal_after":{"kind":"artifact"}},{"id":"c1","name_ja":"B","text_ja":"y","reveal_after":{"kind":"revise"}}]'
+	expect_fail "classmate-bad-kind" '.classmates = [{"id":"c1","name_ja":"A","text_ja":"x","reveal_after":{"kind":"peer"}}]'
 else
 	echo "test-lint-kokugo: jq not found; skipping structured negative cases" >&2
 fi

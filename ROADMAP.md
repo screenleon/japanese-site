@@ -73,7 +73,8 @@ IndexedDB progress (JS-141), multi-user classmates.
       (JS-130..132).
 - [ ] **Reader polish, classmate answers, unit pack 2, skill map**
       (JS-133..136). JS-133 reader polish shipped 2026-08-03;
-      JS-134..136 remain open.
+      JS-134 classmates + revision compare shipped 2026-08-04;
+      JS-135..136 remain open.
 
 ## Quiz / content depth
 

@@ -4,6 +4,9 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, expectTypeOf, it } from "vitest";
 import type { Block } from "./apiTypes";
 import {
+  classmatesForArtifact,
+  classmatesForRevise,
+  classmatesForTask,
   KOKUGO_ARTIFACT_KINDS,
   KOKUGO_GENRES,
   KOKUGO_SCHEMA_VERSION,
@@ -225,6 +228,13 @@ describe("kokugoTypes / corpus fixture", () => {
     );
     expect(raw.text.some((b) => b.kind === "paragraph")).toBe(true);
     expect(raw._meta.validated_by).toBeTruthy();
+    // JS-134 classmates present and filterable.
+    expect(Array.isArray(raw.classmates) && raw.classmates.length).toBeGreaterThan(0);
+    expect(classmatesForTask(raw, "evidence-1").length).toBeGreaterThan(0);
+    expect(classmatesForTask(raw, "summary-1").length).toBeGreaterThan(0);
+    expect(classmatesForArtifact(raw).length).toBeGreaterThan(0);
+    expect(classmatesForRevise(raw).length).toBeGreaterThan(0);
+    expect(classmatesForTask(raw, "no-such").length).toBe(0);
   });
 
   it("compile-time: positive unit with all four task discriminants", () => {

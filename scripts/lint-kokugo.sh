@@ -435,11 +435,82 @@ function validateUnit(data, absPath) {
   }
 
   if (data.artifact !== undefined) validateArtifact(data.artifact, rel);
-  if (data.classmates !== undefined && !Array.isArray(data.classmates)) {
-    fail(rel, "classmates must be an array when set");
+
+  if (data.classmates !== undefined) {
+    validateClassmates(data.classmates, rel, data.tasks);
   }
 
   validateMeta(data._meta, rel);
+}
+
+/**
+ * JS-134: curated classmate samples.
+ * Shape: { id, name_ja, reveal_after, text_ja, focus_ja? }
+ * reveal_after: { kind: "task", task_id } | { kind: "artifact" } | { kind: "revise" }
+ */
+function validateClassmates(classmates, rel, tasks) {
+  if (!Array.isArray(classmates)) {
+    fail(rel, "classmates must be an array when set");
+    return;
+  }
+  const taskIds = new Set();
+  if (Array.isArray(tasks)) {
+    for (const t of tasks) {
+      if (isObj(t) && nonEmptyString(t.id)) taskIds.add(t.id);
+    }
+  }
+  const ids = new Set();
+  classmates.forEach((c, i) => {
+    const where = `classmates[${i}]`;
+    if (!isObj(c)) {
+      fail(rel, `${where} must be an object`);
+      return;
+    }
+    const allowed = new Set(["id", "name_ja", "reveal_after", "text_ja", "focus_ja"]);
+    for (const key of Object.keys(c)) {
+      if (!allowed.has(key)) fail(rel, `${where}: unknown key '${key}'`);
+    }
+    if (!nonEmptyString(c.id) || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(c.id)) {
+      fail(rel, `${where}.id must be non-empty kebab-case`);
+    } else if (ids.has(c.id)) {
+      fail(rel, `${where}.id duplicate '${c.id}'`);
+    } else {
+      ids.add(c.id);
+    }
+    if (!nonEmptyString(c.name_ja)) fail(rel, `${where}.name_ja required`);
+    if (!nonEmptyString(c.text_ja)) fail(rel, `${where}.text_ja required`);
+    if (c.focus_ja !== undefined && !nonEmptyString(c.focus_ja)) {
+      fail(rel, `${where}.focus_ja must be non-empty when set`);
+    }
+    if (!isObj(c.reveal_after) || !nonEmptyString(c.reveal_after.kind)) {
+      fail(rel, `${where}.reveal_after.kind required`);
+      return;
+    }
+    const kind = c.reveal_after.kind;
+    if (kind === "task") {
+      if (!nonEmptyString(c.reveal_after.task_id)) {
+        fail(rel, `${where}.reveal_after.task_id required for kind=task`);
+      } else if (!taskIds.has(c.reveal_after.task_id)) {
+        fail(
+          rel,
+          `${where}.reveal_after.task_id '${c.reveal_after.task_id}' not in unit.tasks`
+        );
+      }
+      for (const key of Object.keys(c.reveal_after)) {
+        if (key !== "kind" && key !== "task_id") {
+          fail(rel, `${where}.reveal_after: unknown key '${key}'`);
+        }
+      }
+    } else if (kind === "artifact" || kind === "revise") {
+      for (const key of Object.keys(c.reveal_after)) {
+        if (key !== "kind") {
+          fail(rel, `${where}.reveal_after: unknown key '${key}' for kind=${kind}`);
+        }
+      }
+    } else {
+      fail(rel, `${where}.reveal_after.kind must be task|artifact|revise`);
+    }
+  });
 }
 
 walk(kokugoRoot);

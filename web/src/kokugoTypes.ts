@@ -150,6 +150,24 @@ export interface KokugoArtifact {
   exemplar_ja?: string;
 }
 
+/**
+ * Curated “classmate” sample (JS-134). Not multi-user social — L1 content only.
+ * Revealed after the learner has completed the anchored step.
+ */
+export type KokugoClassmateRevealAfter =
+  | { kind: "task"; task_id: string }
+  | { kind: "artifact" }
+  | { kind: "revise" };
+
+export interface KokugoClassmate {
+  id: string;
+  name_ja: string;
+  reveal_after: KokugoClassmateRevealAfter;
+  text_ja: string;
+  /** Short pedagogical focus label (optional). */
+  focus_ja?: string;
+}
+
 export interface KokugoSupport {
   default_profile: SupportProfile;
 }
@@ -166,7 +184,31 @@ export interface KokugoUnit {
   support: KokugoSupport;
   tasks: KokugoTask[];
   artifact?: KokugoArtifact;
-  /** Phase 2 — allowed as array but not deeply validated in v1 lint. */
-  classmates?: unknown[];
+  /** Curated peer samples (JS-134); omit when none. */
+  classmates?: KokugoClassmate[];
   _meta: KokugoMeta;
+}
+
+/** Classmates anchored to a specific task id. */
+export function classmatesForTask(
+  unit: Pick<KokugoUnit, "classmates">,
+  taskId: string
+): KokugoClassmate[] {
+  return (unit.classmates ?? []).filter(
+    (c) => c.reveal_after.kind === "task" && c.reveal_after.task_id === taskId
+  );
+}
+
+/** Classmates revealed after draft (artifact) phase. */
+export function classmatesForArtifact(
+  unit: Pick<KokugoUnit, "classmates">
+): KokugoClassmate[] {
+  return (unit.classmates ?? []).filter((c) => c.reveal_after.kind === "artifact");
+}
+
+/** Classmates revealed after revision / on done. */
+export function classmatesForRevise(
+  unit: Pick<KokugoUnit, "classmates">
+): KokugoClassmate[] {
+  return (unit.classmates ?? []).filter((c) => c.reveal_after.kind === "revise");
 }
