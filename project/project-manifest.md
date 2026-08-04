@@ -66,6 +66,7 @@ Project-local boundaries and constraints for the japanese-site repository.
 | `web/**` | grading-feedback | content-source, jlpt-content-accuracy, connector-credential, corpus-storage |
 | `scripts/**` | content-source, corpus-storage | jlpt-content-accuracy, grading-feedback, connector-credential |
 | `server/data/corpus/**` | content-source, jlpt-content-accuracy, corpus-storage | grading-feedback, connector-credential |
+| `server/data/corpus/kokugo/**` | content-source, corpus-storage, kokugo-content-authoring | jlpt-content-accuracy, grading-feedback, connector-credential |
 | `server/data/cache/**` | content-source, corpus-storage | jlpt-content-accuracy, grading-feedback, connector-credential |
 | `server/data/external/**` | corpus-storage | content-source, jlpt-content-accuracy, grading-feedback, connector-credential |
 | `server/data/tanos_raw/**` | content-source, corpus-storage | jlpt-content-accuracy, grading-feedback, connector-credential |

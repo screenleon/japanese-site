@@ -139,7 +139,7 @@
 | JS-137 | 🔵 active | 国語音讀（依賴音訊路徑） | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-138 | 🔵 active | 国語 ↔ JLPT 語彙／文法 deep-link | product | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-139 | 🔵 active | 重寫 JS-083 為日本語 track 讀解短練 | architecture | 2026-08-02 | docs/adr/0005-kokugo-track.md |
-| JS-140 | 🔵 active | 国語內容授權／適切性／母語審查 checklist | content | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-140 | ✅ closed 2026-08-04 | 国語內容授權／適切性／母語審查 checklist | content | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-141 | 🔵 active | （可選）重訪 JS-018 靜態進度 | architecture | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 
 ---
@@ -1643,7 +1643,7 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 **Blocked by**: JS-128, JS-129
 <!-- 首次記錄: 2026-08-02 -->
 
-## JS-140 — 国語內容授權／適切性／母語審查 checklist
+## JS-140 — 国語內容授權／適切性／母語審查 checklist ✅ 2026-08-04
 
 **Problem**: 多單元擴充前缺統一內容品質門檻。
 
