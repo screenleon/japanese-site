@@ -60,7 +60,7 @@ Reveal is UI-only after the learner completes the anchor (task submit / draft sa
 1. Copy an existing unit or start from `e5-6/library-use.json`.
 2. Keep content original or clearly licensed; never paste textbook passages.
 3. Run `make lint-kokugo`.
-4. Commit; content review covers accuracy and age-appropriateness (JS-140).
+4. Complete the [KOKUGO-006 pre-merge checklist](../../../../rules/domain/kokugo-content-authoring.md#rule-kokugo-006) before committing a new or changed unit.
 
 ## Out of scope (this directory alone)
 

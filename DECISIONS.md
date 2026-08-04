@@ -3,6 +3,12 @@
 This file records active architectural and behavioral decisions for this repository.
 Agents must read it before planning or implementation tasks.
 
+## 2026-08-04 — JS-140 Kokugo multi-unit authoring gate
+
+**Decision**: Before merge, each new or changed multi-unit Kokugo content file (JS-135+) must pass [`rules/domain/kokugo-content-authoring.md`](rules/domain/kokugo-content-authoring.md). The gate covers license/provenance, metadata accountability, e5-6 stage and adult-readable fit, unit integrity, and Claude-primary native-perspective review with optional codex secondary review. It is an authoring process gate, not a new runtime validator.
+
+**Refs**: JS-140; ADR-0005; DECISIONS 2026-08-02 content policy.
+
 ## 2026-08-04 — JS-134 curated classmates + revision compare
 
 **Context**: Classroom loop needs peer-model answers and before/after revision without multi-user social infrastructure.

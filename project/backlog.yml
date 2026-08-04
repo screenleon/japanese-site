@@ -1917,15 +1917,17 @@ items:
 
   - id: JS-140
     title: "Kokugo content license + age-appropriateness + native review checklist"
-    status: todo
+    status: done
     priority: P2
     theme: kokugo
     area: content
     source: "docs/adr/0005-kokugo-track.md"
+    completed_at: "2026-08-04"
     blocked_by: [JS-129]
     related: [JS-130, JS-135]
     notes:
-      - Authoring checklist before multi-unit expansion; no textbook copies.
+      - Shipped rules/domain/kokugo-content-authoring.md (KOKUGO-001..006), corpus README checklist link, and Kokugo workspace-rule routing.
+      - Multi-unit expansion must pass the documented license, stage/age, and native-perspective gate; no textbook copies.
 
   - id: JS-141
     title: "Optional revisit JS-018 static progress for kokugo (IndexedDB)"
