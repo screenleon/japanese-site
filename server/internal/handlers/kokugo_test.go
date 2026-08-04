@@ -860,14 +860,37 @@ func TestKokugoRejectionBranchesLeaveDBUnchanged(t *testing.T) {
 	}
 }
 
-func TestKokugoCompletedLockedRejectsRegression(t *testing.T) {
-	// Behavior: after full cycle completion, client cannot regress step/status.
-	// Steps:
-	// 1. Complete unit (tasks + draft + revision).
-	// 2. PUT progress step=artifact (simulate concurrent 下書きに戻る).
-	// 3. Assert 409 completed_locked and status remains completed.
-	db := newHandlerTestDB(t)
-	mux := registerKokugoMux(t, db, store.NewSQLiteProgressStore(db))
+// kokugoUnitStateSnapshot is the GET /progress payload shape used by lock tests.
+type kokugoUnitStateSnapshot struct {
+	Progress *struct {
+		Status string `json:"status"`
+		Step   string `json:"step"`
+	} `json:"progress"`
+	Artifacts []struct {
+		Revision  int             `json:"revision"`
+		Body      string          `json:"body"`
+		Version   int             `json:"version"`
+		Checklist json.RawMessage `json:"checklist"`
+	} `json:"artifacts"`
+}
+
+func getKokugoUnitState(t *testing.T, mux *http.ServeMux) kokugoUnitStateSnapshot {
+	t.Helper()
+	req := httptest.NewRequest(http.MethodGet, "/api/kokugo/progress/e5-6/library-use", nil)
+	rec := httptest.NewRecorder()
+	mux.ServeHTTP(rec, req)
+	if rec.Code != 200 {
+		t.Fatalf("get state: %d %s", rec.Code, rec.Body.String())
+	}
+	var state kokugoUnitStateSnapshot
+	if err := json.Unmarshal(rec.Body.Bytes(), &state); err != nil {
+		t.Fatal(err)
+	}
+	return state
+}
+
+func completeLibraryUseUnit(t *testing.T, mux *http.ServeMux) {
+	t.Helper()
 	submitLibraryUseTasks(t, mux)
 	if putArtifact(t, mux, map[string]any{
 		"revision": 0, "body": goodArtifactBody, "checklist_checked": []bool{true, true, true},
@@ -879,6 +902,72 @@ func TestKokugoCompletedLockedRejectsRegression(t *testing.T) {
 	}).Code != 200 {
 		t.Fatal("rev1")
 	}
+	state := getKokugoUnitState(t, mux)
+	if state.Progress == nil || state.Progress.Status != "completed" {
+		t.Fatalf("setup expected completed: %+v", state.Progress)
+	}
+	if len(state.Artifacts) != 2 {
+		t.Fatalf("setup expected 2 artifacts, got %d", len(state.Artifacts))
+	}
+}
+
+func assertKokugoStateUnchanged(t *testing.T, before, after kokugoUnitStateSnapshot) {
+	t.Helper()
+	if before.Progress == nil || after.Progress == nil {
+		t.Fatalf("progress missing before=%v after=%v", before.Progress, after.Progress)
+	}
+	if after.Progress.Status != before.Progress.Status || after.Progress.Step != before.Progress.Step {
+		t.Fatalf("progress mutated: before=%+v after=%+v", before.Progress, after.Progress)
+	}
+	if len(after.Artifacts) != len(before.Artifacts) {
+		t.Fatalf("artifact count mutated: before=%d after=%d", len(before.Artifacts), len(after.Artifacts))
+	}
+	byRev := func(arts []struct {
+		Revision  int             `json:"revision"`
+		Body      string          `json:"body"`
+		Version   int             `json:"version"`
+		Checklist json.RawMessage `json:"checklist"`
+	}) map[int]struct {
+		Body      string
+		Version   int
+		Checklist string
+	} {
+		m := make(map[int]struct {
+			Body      string
+			Version   int
+			Checklist string
+		}, len(arts))
+		for _, a := range arts {
+			m[a.Revision] = struct {
+				Body      string
+				Version   int
+				Checklist string
+			}{a.Body, a.Version, string(a.Checklist)}
+		}
+		return m
+	}
+	b, a := byRev(before.Artifacts), byRev(after.Artifacts)
+	for rev, want := range b {
+		got, ok := a[rev]
+		if !ok {
+			t.Fatalf("missing revision %d after lock reject", rev)
+		}
+		if got != want {
+			t.Fatalf("revision %d mutated: before=%+v after=%+v", rev, want, got)
+		}
+	}
+}
+
+func TestKokugoCompletedLockedRejectsRegression(t *testing.T) {
+	// Behavior: after full cycle completion, client cannot regress step/status.
+	// Steps:
+	// 1. Complete unit (tasks + draft + revision).
+	// 2. PUT progress step=artifact (simulate concurrent 下書きに戻る).
+	// 3. Assert 409 completed_locked and status remains completed.
+	db := newHandlerTestDB(t)
+	mux := registerKokugoMux(t, db, store.NewSQLiteProgressStore(db))
+	completeLibraryUseUnit(t, mux)
+	before := getKokugoUnitState(t, mux)
 
 	req := httptest.NewRequest(
 		http.MethodPut,
@@ -892,19 +981,81 @@ func TestKokugoCompletedLockedRejectsRegression(t *testing.T) {
 		t.Fatalf("want 409 completed_locked, got %d %s", rec.Code, rec.Body.String())
 	}
 
-	req2 := httptest.NewRequest(http.MethodGet, "/api/kokugo/progress/e5-6/library-use", nil)
-	rec2 := httptest.NewRecorder()
-	mux.ServeHTTP(rec2, req2)
-	var state struct {
-		Progress *struct {
-			Status string `json:"status"`
-			Step   string `json:"step"`
-		} `json:"progress"`
+	assertKokugoStateUnchanged(t, before, getKokugoUnitState(t, mux))
+}
+
+func TestKokugoCompletedLockedRejectsArtifactWrites(t *testing.T) {
+	// Behavior (qa-tester-F001): after full cycle completion, PUT artifact
+	// (rev0 and rev1) returns 409 completed_locked and mutates nothing.
+	// Steps:
+	// 1. Complete library-use (tasks + draft + rev1).
+	// 2. Snapshot progress + artifact versions/bodies.
+	// 3. PUT rev0 (draft re-save) and rev1 (revision re-save with CAS token).
+	// 4. Assert 409 completed_locked each time; snapshot unchanged.
+	db := newHandlerTestDB(t)
+	mux := registerKokugoMux(t, db, store.NewSQLiteProgressStore(db))
+	completeLibraryUseUnit(t, mux)
+	before := getKokugoUnitState(t, mux)
+
+	revVersion := map[int]int{}
+	for _, a := range before.Artifacts {
+		revVersion[a.Revision] = a.Version
 	}
-	if err := json.Unmarshal(rec2.Body.Bytes(), &state); err != nil {
-		t.Fatal(err)
+	if revVersion[0] < 1 || revVersion[1] < 1 {
+		t.Fatalf("expected versioned artifacts: %+v", revVersion)
 	}
-	if state.Progress == nil || state.Progress.Status != "completed" {
-		t.Fatalf("status must stay completed: %s", rec2.Body.String())
+
+	mutatedBody := goodArtifactBody + "（改変してはいけない）"
+	cases := []struct {
+		name string
+		body map[string]any
+	}{
+		{
+			name: "rev0_without_version",
+			body: map[string]any{
+				"revision":          0,
+				"body":              mutatedBody,
+				"checklist_checked": []bool{false, false, false},
+			},
+		},
+		{
+			name: "rev0_with_cas",
+			body: map[string]any{
+				"revision":          0,
+				"body":              mutatedBody,
+				"checklist_checked": []bool{true, true, true},
+				"expected_version":  revVersion[0],
+			},
+		},
+		{
+			// Handler would re-assert status=completed on a passing rev1; store
+			// must still refuse so the completed snapshot stays immutable.
+			name: "rev1_with_cas",
+			body: map[string]any{
+				"revision":          1,
+				"body":              mutatedBody,
+				"checklist_checked": []bool{true, true, true},
+				"expected_version":  revVersion[1],
+			},
+		},
+		{
+			name: "rev1_failing_grade",
+			body: map[string]any{
+				"revision":          1,
+				"body":              "短い",
+				"checklist_checked": []bool{false, false, false},
+				"expected_version":  revVersion[1],
+			},
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			rec := putArtifact(t, mux, tc.body)
+			if rec.Code != http.StatusConflict || !bytes.Contains(rec.Body.Bytes(), []byte(`completed_locked`)) {
+				t.Fatalf("want 409 completed_locked, got %d %s", rec.Code, rec.Body.String())
+			}
+			assertKokugoStateUnchanged(t, before, getKokugoUnitState(t, mux))
+		})
 	}
 }

@@ -263,8 +263,9 @@ var ErrKokugoStaleWrite = errors.New("kokugo artifact stale write")
 // ErrKokugoDraftRequired is returned when revision 1 is saved without revision 0.
 var ErrKokugoDraftRequired = errors.New("kokugo draft required before revision")
 
-// ErrKokugoCompletedLocked is returned when a client tries to move a completed
-// unit back to in_progress (e.g. concurrent 「下書きに戻る」 after cycle complete).
+// ErrKokugoCompletedLocked is returned when a client tries to mutate a unit
+// that has already completed the full cycle (progress regression or further
+// artifact writes). Completed artifacts are treated as an immutable snapshot.
 var ErrKokugoCompletedLocked = errors.New("kokugo unit already completed")
 
 // SaveKokugoArtifactOpts controls draft/revision invariants and concurrency.
@@ -551,18 +552,18 @@ func SaveKokugoArtifactAndProgress(
 	}
 	defer func() { _ = tx.Rollback() }()
 
-	// Never regress a completed cycle via artifact + progress write.
-	if status != "completed" {
-		var cur string
-		err := tx.QueryRowContext(ctx,
-			`SELECT status FROM kokugo_unit_progress WHERE unit_key = ?`, unitKey,
-		).Scan(&cur)
-		if err == nil && cur == "completed" {
-			return KokugoArtifact{}, KokugoUnitProgress{}, ErrKokugoCompletedLocked
-		}
-		if err != nil && !errors.Is(err, sql.ErrNoRows) {
-			return KokugoArtifact{}, KokugoUnitProgress{}, err
-		}
+	// Completed cycles are immutable: reject any further artifact write, even
+	// when the handler would re-assert status=completed (rev1 re-save race).
+	// Progress-only regression is handled separately in UpdateKokugoProgress.
+	var cur string
+	err = tx.QueryRowContext(ctx,
+		`SELECT status FROM kokugo_unit_progress WHERE unit_key = ?`, unitKey,
+	).Scan(&cur)
+	if err == nil && cur == "completed" {
+		return KokugoArtifact{}, KokugoUnitProgress{}, ErrKokugoCompletedLocked
+	}
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return KokugoArtifact{}, KokugoUnitProgress{}, err
 	}
 
 	// Draft-before-revision (check inside tx).

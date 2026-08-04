@@ -13,8 +13,9 @@ Agents must read it before planning or implementation tasks.
 2. **Draft (revision 0)** may save without full checklist ticks; grade message encourages re-edit. Server **stays on progress step `artifact`** after draft save (no auto-jump to revise).
 3. **Revision (revision 1)** still requires full checklist for a passing grade; completion still needs full cycle (tasks + rev0 + rev1).
 4. **UI**: “下書きを保存” stays on draft; explicit **「改稿へ進む」** / **「下書きに戻る」**; live character count only (no forced range for library-use).
+5. **Completed lock (immutable snapshot)**: once `status=completed`, reject progress regression **and** any further artifact writes (`completed_locked` 409), including rev1 re-saves that would re-assert `status=completed`. Bodies/versions stay frozen.
 
-**Refs**: `library-use` artifact 0/0; `GradeArtifact(..., revision)`; ADR-0005 loop unchanged.
+**Refs**: `library-use` artifact 0/0; `GradeArtifact(..., revision)`; ADR-0005 loop unchanged; `ErrKokugoCompletedLocked`.
 
 ## 2026-08-03 — JS-133 Kokugo reader polish (in-passage highlight + paragraph roles)
 

@@ -128,3 +128,63 @@ func TestKokugoProgressRoundTrip(t *testing.T) {
 		t.Fatalf("want ErrNotFound, got %v", err)
 	}
 }
+
+func TestSaveKokugoArtifactAndProgressCompletedLocked(t *testing.T) {
+	// Behavior: once progress is completed, further artifact+progress writes fail
+	// with ErrKokugoCompletedLocked — including re-asserting status=completed.
+	db := openKokugoTestDB(t)
+	ctx := context.Background()
+
+	if _, err := SaveKokugoArtifact(ctx, db, "e5-6", "library-use", 0, "draft body", json.RawMessage(`[]`), SaveKokugoArtifactOpts{}); err != nil {
+		t.Fatalf("draft: %v", err)
+	}
+	rev, err := SaveKokugoArtifact(ctx, db, "e5-6", "library-use", 1, "rev body", json.RawMessage(`[]`), SaveKokugoArtifactOpts{})
+	if err != nil {
+		t.Fatalf("rev: %v", err)
+	}
+	if _, err := UpdateKokugoProgress(ctx, db, "e5-6", "library-use", "done", "completed"); err != nil {
+		t.Fatalf("complete: %v", err)
+	}
+
+	// Progress regression path.
+	if _, err := UpdateKokugoProgress(ctx, db, "e5-6", "library-use", "artifact", "in_progress"); !errors.Is(err, ErrKokugoCompletedLocked) {
+		t.Fatalf("want completed locked on progress, got %v", err)
+	}
+
+	// Artifact path: rev0 (would set in_progress) and rev1 (would re-assert completed).
+	for _, tc := range []struct {
+		name     string
+		revision int
+		step     string
+		status   string
+		version  int
+	}{
+		{"rev0_in_progress", 0, "artifact", "in_progress", 1},
+		{"rev1_completed", 1, "done", "completed", rev.Version},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			_, _, err := SaveKokugoArtifactAndProgress(
+				ctx, db, "e5-6", "library-use", tc.revision, "mutated",
+				json.RawMessage(`[]`),
+				SaveKokugoArtifactOpts{HasExpectedVersion: true, ExpectedVersion: tc.version},
+				tc.step, tc.status,
+			)
+			if !errors.Is(err, ErrKokugoCompletedLocked) {
+				t.Fatalf("want completed locked, got %v", err)
+			}
+		})
+	}
+
+	got0, err := GetKokugoArtifact(ctx, db, "e5-6", "library-use", 0)
+	if err != nil || got0.Body != "draft body" || got0.Version != 1 {
+		t.Fatalf("draft mutated: %+v err=%v", got0, err)
+	}
+	got1, err := GetKokugoArtifact(ctx, db, "e5-6", "library-use", 1)
+	if err != nil || got1.Body != "rev body" || got1.Version != rev.Version {
+		t.Fatalf("rev mutated: %+v err=%v", got1, err)
+	}
+	p, err := GetKokugoProgress(ctx, db, "e5-6", "library-use")
+	if err != nil || p.Status != "completed" || p.Step != "done" {
+		t.Fatalf("progress mutated: %+v err=%v", p, err)
+	}
+}
