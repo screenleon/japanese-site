@@ -150,6 +150,80 @@ func TestKokugoListUnitsReturnsPoC(t *testing.T) {
 	}
 }
 
+func TestKokugoSkillsEmptyWhenLoaderDisabled(t *testing.T) {
+	// Behavior: GET /api/kokugo/skills returns empty arrays when KokugoDir is unset.
+	// Steps:
+	// 1. Arrange RegisterWithOpts with KokugoDir "".
+	// 2. Act GET /api/kokugo/skills.
+	// 3. Assert 200 and skills/review_queue are empty (non-nil) arrays.
+	db := newHandlerTestDB(t)
+	mux := http.NewServeMux()
+	RegisterWithOpts(mux, db, store.NewSQLiteProgressStore(db), RegisterOpts{KokugoDir: ""})
+
+	req := httptest.NewRequest(http.MethodGet, "/api/kokugo/skills", nil)
+	rec := httptest.NewRecorder()
+	mux.ServeHTTP(rec, req)
+	if rec.Code != 200 {
+		t.Fatalf("status %d %s", rec.Code, rec.Body.String())
+	}
+	var body struct {
+		Skills      []any `json:"skills"`
+		ReviewQueue []any `json:"review_queue"`
+	}
+	if err := json.Unmarshal(rec.Body.Bytes(), &body); err != nil {
+		t.Fatal(err)
+	}
+	if body.Skills == nil || body.ReviewQueue == nil {
+		t.Fatalf("skills/review_queue must be present arrays: %s", rec.Body.String())
+	}
+	if len(body.Skills) != 0 || len(body.ReviewQueue) != 0 {
+		t.Fatalf("want empty skill map, got %s", rec.Body.String())
+	}
+}
+
+func TestKokugoSkillsWithoutProgressStore(t *testing.T) {
+	// Behavior: with corpus but NullProgressStore, skills are all unseen and review queue is corpus-derived.
+	// Steps:
+	// 1. Arrange repo corpus + NullProgressStore (progress disabled).
+	// 2. Act GET /api/kokugo/skills.
+	// 3. Assert six skills all status=unseen and a non-empty review_queue without store attempts.
+	db := newHandlerTestDB(t)
+	mux := registerKokugoMux(t, db, store.NullProgressStore{})
+
+	req := httptest.NewRequest(http.MethodGet, "/api/kokugo/skills", nil)
+	rec := httptest.NewRecorder()
+	mux.ServeHTTP(rec, req)
+	if rec.Code != 200 {
+		t.Fatalf("status %d %s", rec.Code, rec.Body.String())
+	}
+	var body struct {
+		Skills []struct {
+			Skill  string `json:"skill"`
+			Status string `json:"status"`
+		} `json:"skills"`
+		ReviewQueue []struct {
+			UnitID string `json:"unit_id"`
+		} `json:"review_queue"`
+	}
+	if err := json.Unmarshal(rec.Body.Bytes(), &body); err != nil {
+		t.Fatal(err)
+	}
+	if len(body.Skills) != 6 {
+		t.Fatalf("want 6 skills, got %d: %s", len(body.Skills), rec.Body.String())
+	}
+	for _, s := range body.Skills {
+		if s.Status != "unseen" {
+			t.Fatalf("skill %s status=%q want unseen (no progress store)", s.Skill, s.Status)
+		}
+	}
+	if len(body.ReviewQueue) == 0 {
+		t.Fatalf("expected corpus-derived review_queue when all skills unseen: %s", rec.Body.String())
+	}
+	if countKokugoRows(t, db, "kokugo_task_attempt") != 0 {
+		t.Fatal("progress-disabled skills path must not write attempts")
+	}
+}
+
 func TestKokugoSkillsMapReflectsAttempts(t *testing.T) {
 	// Behavior: GET /api/kokugo/skills aggregates ADR-0005 skills + review queue (JS-136).
 	// Steps:
