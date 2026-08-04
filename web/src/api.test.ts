@@ -83,6 +83,18 @@ describe("httpApi Kokugo transport", () => {
     expect(fetchMock).toHaveBeenCalledWith("/api/kokugo/units");
   });
 
+  it("getKokugoSkills GETs /api/kokugo/skills", async () => {
+    const payload = { skills: [], review_queue: [] };
+    const fetchMock = vi.fn(() =>
+      Promise.resolve(new Response(JSON.stringify(payload), { status: 200 }))
+    );
+    vi.stubGlobal("fetch", fetchMock);
+    const httpApi = await loadHttpApi();
+
+    await expect(httpApi.getKokugoSkills()).resolves.toEqual(payload);
+    expect(fetchMock).toHaveBeenCalledWith("/api/kokugo/skills");
+  });
+
   it("getKokugoUnit encodes stage and id path segments", async () => {
     const fetchMock = vi.fn(() =>
       Promise.resolve(new Response(JSON.stringify({ id: "library-use" }), { status: 200 }))

@@ -114,6 +114,24 @@ func (l Loader) GetMap(stage, id string) (map[string]any, error) {
 	return m, nil
 }
 
+// ListMaps returns full unit maps for every L1 unit (JS-136 skill index).
+// Order matches List() (stage, id).
+func (l Loader) ListMaps() ([]map[string]any, error) {
+	summaries, err := l.List()
+	if err != nil {
+		return nil, err
+	}
+	out := make([]map[string]any, 0, len(summaries))
+	for _, s := range summaries {
+		m, err := l.GetMap(s.Stage, s.ID)
+		if err != nil {
+			return nil, fmt.Errorf("%s/%s: %w", s.Stage, s.ID, err)
+		}
+		out = append(out, m)
+	}
+	return out, nil
+}
+
 func loadSummary(path string) (UnitSummary, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {

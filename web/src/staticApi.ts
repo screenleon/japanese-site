@@ -333,6 +333,10 @@ export const staticApi: Api = {
     throw unsupported();
   },
 
+  async getKokugoSkills() {
+    return { skills: [], review_queue: [] };
+  },
+
   async getKokugoUnitState() {
     return { attempts: [], artifacts: [] };
   },

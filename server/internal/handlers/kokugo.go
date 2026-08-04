@@ -29,6 +29,7 @@ func registerKokugo(mux *http.ServeMux, db *store.DB, loader kokugo.Loader, prog
 	h := &kokugoHandlers{db: db, loader: loader, progressEnabled: progressEnabled}
 	mux.HandleFunc("GET /api/kokugo/units", h.listUnits)
 	mux.HandleFunc("GET /api/kokugo/units/{stage}/{id}", h.getUnit)
+	mux.HandleFunc("GET /api/kokugo/skills", h.getSkills)
 	mux.HandleFunc("GET /api/kokugo/progress", h.listProgress)
 	mux.HandleFunc("GET /api/kokugo/progress/{stage}/{id}", h.getProgress)
 	mux.HandleFunc("PUT /api/kokugo/progress/{stage}/{id}", h.putProgress)
@@ -67,6 +68,92 @@ func (h *kokugoHandlers) getUnit(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(raw)
+}
+
+// getSkills returns the Track B skill map + weak-skill review queue (JS-136).
+// Available whenever the corpus loader is configured; attempt/artifact stats
+// require progress store (otherwise skills are all unseen with review from units).
+func (h *kokugoHandlers) getSkills(w http.ResponseWriter, r *http.Request) {
+	if h.loader.Root == "" {
+		writeJSON(w, http.StatusOK, kokugo.SkillMap{
+			Skills:      []kokugo.SkillStat{},
+			ReviewQueue: []kokugo.ReviewItem{},
+		})
+		return
+	}
+	units, err := h.loader.ListMaps()
+	if err != nil {
+		httpError(w, r, http.StatusInternalServerError, "internal", err)
+		return
+	}
+	idx := kokugo.BuildUnitSkillIndex(units)
+
+	var attempts []kokugo.AttemptRow
+	var artifacts []kokugo.ArtifactRow
+	var progress []kokugo.ProgressRow
+	if h.progressEnabled && h.db != nil {
+		rawAttempts, err := store.ListAllKokugoTaskAttempts(r.Context(), h.db)
+		if err != nil {
+			httpError(w, r, http.StatusInternalServerError, "internal", err)
+			return
+		}
+		attempts = toSkillAttemptRows(rawAttempts)
+		rawArts, err := store.ListAllKokugoArtifacts(r.Context(), h.db)
+		if err != nil {
+			httpError(w, r, http.StatusInternalServerError, "internal", err)
+			return
+		}
+		artifacts = toSkillArtifactRows(rawArts)
+		rawProg, err := store.ListKokugoProgress(r.Context(), h.db)
+		if err != nil {
+			httpError(w, r, http.StatusInternalServerError, "internal", err)
+			return
+		}
+		progress = toSkillProgressRows(rawProg)
+	}
+
+	m := kokugo.AggregateSkillMap(idx, attempts, artifacts, progress)
+	writeJSON(w, http.StatusOK, m)
+}
+
+func toSkillAttemptRows(in []store.KokugoTaskAttempt) []kokugo.AttemptRow {
+	out := make([]kokugo.AttemptRow, 0, len(in))
+	for _, a := range in {
+		out = append(out, kokugo.AttemptRow{
+			UnitKey:   a.UnitKey,
+			TaskID:    a.TaskID,
+			Correct:   a.Correct,
+			CreatedAt: a.CreatedAt,
+			ID:        a.ID,
+		})
+	}
+	return out
+}
+
+func toSkillArtifactRows(in []store.KokugoArtifact) []kokugo.ArtifactRow {
+	out := make([]kokugo.ArtifactRow, 0, len(in))
+	for _, a := range in {
+		out = append(out, kokugo.ArtifactRow{
+			UnitKey:          a.UnitKey,
+			Revision:         a.Revision,
+			Body:             a.Body,
+			ChecklistAllTrue: kokugo.ChecklistAllTrue(a.Checklist),
+		})
+	}
+	return out
+}
+
+func toSkillProgressRows(in []store.KokugoUnitProgress) []kokugo.ProgressRow {
+	out := make([]kokugo.ProgressRow, 0, len(in))
+	for _, p := range in {
+		out = append(out, kokugo.ProgressRow{
+			UnitKey: p.UnitKey,
+			Stage:   p.Stage,
+			UnitID:  p.UnitID,
+			Status:  p.Status,
+		})
+	}
+	return out
 }
 
 func (h *kokugoHandlers) listProgress(w http.ResponseWriter, r *http.Request) {

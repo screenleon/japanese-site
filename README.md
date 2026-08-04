@@ -141,4 +141,4 @@ make clean             # remove build artifacts and dev SQLite
 | `project/project-manifest.md` | Repo constraints and validation |
 | `AGENTS.md` | Agent operating playbook |
 
-**JS-134 shipped** (curated classmates after response + draft/改稿 side-by-side compare). Next 国語 work: **JS-135** unit pack 2, **JS-136** skill map. M4 LLM connector remains deferred until re-authorized.
+**JS-135 / JS-136 shipped** (unit pack 2: story / opinion / poetry + skill map & weak-skill review queue). Phase-2 国語教室 loop is complete; optional Phase-3 items (read-aloud, JLPT deep-links) remain open. M4 LLM connector remains deferred until re-authorized.

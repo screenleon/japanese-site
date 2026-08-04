@@ -31,6 +31,7 @@ import type {
   KokugoTaskAttempt,
   KokugoArtifactRow,
   KokugoGradeResult,
+  KokugoSkillMap,
 } from "./apiTypes";
 import type { KokugoUnit } from "./kokugoTypes";
 
@@ -140,6 +141,7 @@ export const httpApi: Api = {
     getJSON<KokugoUnit>(
       `/api/kokugo/units/${encodeURIComponent(stage)}/${encodeURIComponent(id)}`
     ),
+  getKokugoSkills: () => getJSON<KokugoSkillMap>("/api/kokugo/skills"),
   getKokugoUnitState: (stage, id) =>
     getJSON<KokugoUnitState>(
       `/api/kokugo/progress/${encodeURIComponent(stage)}/${encodeURIComponent(id)}`

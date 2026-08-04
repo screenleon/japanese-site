@@ -55,6 +55,7 @@ vi.mock("./api", () => ({
     }),
     getCapabilities: vi.fn(),
     listKokugoUnits: vi.fn().mockResolvedValue({ units: [], count: 0 }),
+    getKokugoSkills: vi.fn().mockResolvedValue({ skills: [], review_queue: [] }),
   },
 }));
 

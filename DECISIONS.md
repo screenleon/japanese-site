@@ -3,6 +3,47 @@
 This file records active architectural and behavioral decisions for this repository.
 Agents must read it before planning or implementation tasks.
 
+## 2026-08-04 — JS-135 unit pack 2 + KOKUGO-006 attestation
+
+**Context**: After JS-140 authoring gate and JS-134 classmates, the track needed genre diversity beyond the single `library-use` PoC.
+
+**Decision**:
+
+1. **Ship three new e5-6 units** under `server/data/corpus/kokugo/e5-6/`:
+   - `shared-umbrella` — **story**
+   - `club-balance` — **opinion**
+   - `evening-chime` — **poetry** (light seasonal / school culture)
+2. Keep PoC `library-use` (**expository**) so the pack covers all four genres with four units total.
+3. Full pedagogical loop per unit (predict → tasks → artifact → classmates samples); original `source: original`, `license: CC0-1.0`.
+4. **KOKUGO-006 pre-merge checklist** (process gate) completed for all three new files; Claude primary native-perspective review stamped as `_meta.validated_by: claude-primary-native-review-2026-08-04`.
+
+**KOKUGO-006 checklist attestation** (shared-umbrella, club-balance, evening-chime):
+
+- [x] `_meta` source / license / honest review-process id
+- [x] Original passages only (no textbook / exam copy)
+- [x] `e5-6`, adult-readable upper-elementary thinking
+- [x] Support profile scaffolds language only (`n3`)
+- [x] Full v1 loop + task kinds; gold quotes in plain text; valid genres
+- [x] `make lint-kokugo` clean (4 units)
+- [x] Claude primary native-perspective review passed and recorded
+- [x] Classmates are curated L1 samples only
+
+**Refs**: JS-135; JS-140; `rules/domain/kokugo-content-authoring.md`; ADR-0005.
+
+## 2026-08-04 — JS-136 skill map (read-time aggregation, not cloze SRS)
+
+**Context**: Unit completion alone does not show reading/writing skill progress. ADR-0005 skills already live on tasks.
+
+**Decision**:
+
+1. **No new skill SQLite table in v1.** Aggregate from unit L1 JSON + `kokugo_task_attempt` + `kokugo_artifact` + progress rows at read time.
+2. **API**: `GET /api/kokugo/skills` → `{ skills[], review_queue[] }` (labels, status, accuracy, units_touching; incomplete units targeting weak/unseen skills).
+3. **UI**: skill map + review queue on `KokugoTab` list view only; does **not** write cloze `next_due_at` or reuse quiz SRS.
+4. Status thresholds: `unseen` | `practiced` | `weak` (graded accuracy &lt; 0.6) | `strong` (graded ≥ 2 and accuracy ≥ 0.8). Predict remains ungraded priming.
+5. Spike write-up: `docs/spikes/JS-136.md` (GREEN / adopt).
+
+**Refs**: ADR-0005 `KokugoSkill`; JS-136; JS-131/132 progress store.
+
 ## 2026-08-04 — JS-140 Kokugo multi-unit authoring gate
 
 **Decision**: Before merge, each new or changed multi-unit Kokugo content file (JS-135+) must pass [`rules/domain/kokugo-content-authoring.md`](rules/domain/kokugo-content-authoring.md). The gate covers license/provenance, metadata accountability, e5-6 stage and adult-readable fit, unit integrity, and Claude-primary native-perspective review with optional codex secondary review. It is an authoring process gate, not a new runtime validator.

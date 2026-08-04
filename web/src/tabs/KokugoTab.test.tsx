@@ -9,6 +9,7 @@ vi.mock("../api", () => ({
   api: {
     listKokugoUnits: vi.fn(),
     getKokugoUnit: vi.fn(),
+    getKokugoSkills: vi.fn(),
     getKokugoUnitState: vi.fn(),
     putKokugoProgress: vi.fn(),
     submitKokugoTask: vi.fn(),
@@ -19,6 +20,7 @@ vi.mock("../api", () => ({
 
 const listKokugoUnits = vi.mocked(api.listKokugoUnits);
 const getKokugoUnit = vi.mocked(api.getKokugoUnit);
+const getKokugoSkills = vi.mocked(api.getKokugoSkills);
 const getKokugoUnitState = vi.mocked(api.getKokugoUnitState);
 const putKokugoProgress = vi.mocked(api.putKokugoProgress);
 const submitKokugoTask = vi.mocked(api.submitKokugoTask);
@@ -202,6 +204,8 @@ describe("KokugoTab", () => {
       ],
       count: 1,
     });
+    // Default: empty map so list-open tests are not polluted by review buttons.
+    getKokugoSkills.mockResolvedValue({ skills: [], review_queue: [] });
     getKokugoUnit.mockResolvedValue(sampleUnit);
     getKokugoUnitState.mockResolvedValue({ attempts: [], artifacts: [] });
     putKokugoProgress.mockResolvedValue({
@@ -225,10 +229,58 @@ describe("KokugoTab", () => {
     });
   });
 
+  it("shows skill map and review queue on the unit list", async () => {
+    getCapabilities.mockResolvedValue({
+      progress: true,
+      history: true,
+      quiz: true,
+      sentence: true,
+      kokugo: true,
+    });
+    getKokugoSkills.mockResolvedValue({
+      skills: [
+        {
+          skill: "reading.summary",
+          label_ja: "要約する",
+          status: "weak",
+          graded: 2,
+          correct: 0,
+          practiced: 2,
+          units_touching: ["e5-6/library-use"],
+        },
+      ],
+      review_queue: [
+        {
+          stage: "e5-6",
+          unit_id: "library-use",
+          title_ja: "学校の図書室をもっと使いやすくするには",
+          genre: "expository",
+          target_skills: ["reading.summary"],
+          unit_completed: false,
+        },
+      ],
+    });
+    render(
+      <CapabilitiesProvider>
+        <KokugoTab />
+      </CapabilitiesProvider>
+    );
+    await waitFor(() => {
+      expect(screen.getByLabelText("技能マップ")).toBeInTheDocument();
+    });
+    expect(screen.getAllByText("要約する").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText("弱技能の復習ユニット")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /復習ユニット: 学校の図書室/ })
+    ).toBeInTheDocument();
+  });
+
   it("lists units and opens the predict step for a fresh unit", async () => {
     renderTab();
     expect(await screen.findByText("国語教室")).toBeVisible();
-    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /ユニットを開く: 学校の図書室/ })
+    );
     await waitFor(() => {
       expect(screen.getByText("読む前の予測")).toBeVisible();
     });
@@ -265,7 +317,9 @@ describe("KokugoTab", () => {
       ],
     });
     renderTab();
-    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /ユニットを開く: 学校の図書室/ })
+    );
     await waitFor(() => {
       expect(screen.getByRole("heading", { level: 3, name: "改稿" })).toBeVisible();
     });
@@ -280,7 +334,9 @@ describe("KokugoTab", () => {
 
   it("advances predict → read → task and submits a task", async () => {
     renderTab();
-    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /ユニットを開く: 学校の図書室/ })
+    );
     await screen.findByText("読む前の予測");
     fireEvent.click(screen.getByLabelText("工夫"));
     fireEvent.click(screen.getByRole("button", { name: /予測を記録/ }));
@@ -363,7 +419,9 @@ describe("KokugoTab", () => {
     };
     getKokugoUnit.mockResolvedValue(evidenceUnit);
     renderTab();
-    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /ユニットを開く: 学校の図書室/ })
+    );
     await screen.findByText("読む前の予測");
     fireEvent.click(screen.getByLabelText("工夫"));
     fireEvent.click(screen.getByRole("button", { name: /予測を記録/ }));
@@ -455,7 +513,9 @@ describe("KokugoTab", () => {
       artifacts: [],
     });
     renderTab();
-    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /ユニットを開く: 学校の図書室/ })
+    );
     await screen.findByText("根拠Aを選びなさい。");
     fireEvent.click(screen.getByRole("button", { name: "第一の文です。" }));
     expect(screen.getByText(/選択中（1）/)).toBeVisible();
@@ -514,7 +574,9 @@ describe("KokugoTab", () => {
       artifacts: [],
     });
     renderTab();
-    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /ユニットを開く: 学校の図書室/ })
+    );
     await screen.findByText(/段落がありません/);
     const submitBtn = screen.getByRole("button", { name: "提出" });
     expect(submitBtn).toBeDisabled();
@@ -570,7 +632,9 @@ describe("KokugoTab", () => {
       artifacts: [],
     });
     renderTab();
-    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /ユニットを開く: 学校の図書室/ })
+    );
     await screen.findByText("根拠を選ぶ");
     const gold = screen.getByRole("button", {
       name: "まず探しやすさを改善する必要があります。",
@@ -631,7 +695,9 @@ describe("KokugoTab", () => {
       artifacts: [],
     });
     renderTab();
-    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /ユニットを開く: 学校の図書室/ })
+    );
     await screen.findByText("段落の役割");
     expect(screen.getByText("ヒント")).toBeVisible();
     expect(screen.getAllByLabelText(/段落 \d+ の役割/)).toHaveLength(2);
@@ -664,7 +730,9 @@ describe("KokugoTab", () => {
 
   it("retains phase when task submit fails", async () => {
     renderTab();
-    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /ユニットを開く: 学校の図書室/ })
+    );
     await screen.findByText("読む前の予測");
     fireEvent.click(screen.getByLabelText("工夫"));
     fireEvent.click(screen.getByRole("button", { name: /予測を記録/ }));
@@ -743,7 +811,9 @@ describe("KokugoTab", () => {
       });
 
     renderTab();
-    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /ユニットを開く: 学校の図書室/ })
+    );
     await screen.findByText("作品（下書き）");
     fireEvent.change(screen.getByLabelText("下書き"), {
       target: { value: "下書き本文です。" },
@@ -841,7 +911,9 @@ describe("KokugoTab", () => {
       });
 
     renderTab();
-    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /ユニットを開く: 学校の図書室/ })
+    );
     await screen.findByText("作品（下書き）");
     fireEvent.change(screen.getByLabelText("下書き"), {
       target: { value: "下書き本文です。" },
@@ -932,7 +1004,9 @@ describe("KokugoTab", () => {
       });
 
     renderTab();
-    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /ユニットを開く: 学校の図書室/ })
+    );
     await screen.findByText("作品（下書き）");
     fireEvent.change(screen.getByLabelText("下書き"), {
       target: { value: "短い提案。" },
@@ -993,7 +1067,9 @@ describe("KokugoTab", () => {
       artifacts: [],
     });
     renderTab();
-    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /ユニットを開く: 学校の図書室/ })
+    );
     await screen.findByText("作品（下書き）");
     fireEvent.change(screen.getByLabelText("下書き"), {
       target: { value: "まだ保存していない" },
@@ -1003,7 +1079,9 @@ describe("KokugoTab", () => {
 
   it("progress-disabled fallback advances without calling submit", async () => {
     renderTab({ progress: false, kokugo: true });
-    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /ユニットを開く: 学校の図書室/ })
+    );
     await screen.findByText("読む前の予測");
     fireEvent.click(screen.getByLabelText("工夫"));
     fireEvent.click(screen.getByRole("button", { name: /予測を記録/ }));
@@ -1025,7 +1103,9 @@ describe("KokugoTab", () => {
      * 3. Assert classmate body is the curated sample, not learner text.
      */
     renderTab();
-    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /ユニットを開く: 学校の図書室/ })
+    );
     await screen.findByText("読む前の予測");
     fireEvent.click(screen.getByLabelText("工夫"));
     fireEvent.click(screen.getByRole("button", { name: /予測を記録/ }));
@@ -1099,7 +1179,9 @@ describe("KokugoTab", () => {
     });
 
     renderTab();
-    fireEvent.click(await screen.findByRole("button", { name: /学校の図書室/ }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /ユニットを開く: 学校の図書室/ })
+    );
     await screen.findByText("作品（下書き）");
     expect(screen.queryByText("山本さん")).not.toBeInTheDocument();
     fireEvent.change(screen.getByLabelText("下書き"), {

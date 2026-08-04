@@ -185,4 +185,8 @@ deterministic grading in `server/internal/kokugo`.
 select + paragraph-role marking; read phase paragraph indices.
 **JS-134 shipped (2026-08-04)**: curated `classmates[]` + `ClassmatePanel` /
 `RevisionCompare` (reveal after learner response; before/after draft·改稿).
-Next: JS-135 more units, JS-136 skill map.
+**JS-135 shipped (2026-08-04)**: pack 2 units `shared-umbrella` (story),
+`club-balance` (opinion), `evening-chime` (poetry) beside PoC `library-use`.
+**JS-136 shipped (2026-08-04)**: `GET /api/kokugo/skills` + list-view skill map /
+weak-skill review queue (read-time aggregation; not cloze SRS).
+Next: Phase 3 optional (JS-137+).

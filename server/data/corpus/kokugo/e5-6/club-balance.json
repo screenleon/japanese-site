@@ -1,0 +1,187 @@
+{
+  "id": "club-balance",
+  "schema_version": 1,
+  "stage": "e5-6",
+  "title_ja": "部活動の時間をどう考えるか",
+  "genre": "opinion",
+  "objectives": [
+    "筆者の主張と理由を本文から区別する",
+    "反対意見への言及を含めて段落の役割を整理する",
+    "短い意見文で主張と一つの理由を書く"
+  ],
+  "estimated_minutes": 20,
+  "text": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "放課後の部活動は、学校生活を豊かにする大切な時間です。体を動かしたり、同じ目標に向かって仲間と練習したりする経験は、授業だけでは得にくいものです。しかし、練習時間が長すぎると、宿題や睡眠の時間が圧迫される、という声も少なくありません。部活動は「多ければ多いほどよい」のでしょうか。私は、そうは思いません。"
+        }
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "理由の一つは、集中力には限りがあることです。長い練習のあとで机に向かっても、頭が働かず、結局同じ問題を何度もやり直すことがあります。短い時間でも中身のある練習をし、家では休んで次の日に備える方が、結果として上達も勉強も続きやすいのではないでしょうか。また、睡眠不足が続くと、授業中に眠くなり、理解そのものが浅くなります。"
+        }
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "もちろん、「試合が近い時期は長めに練習すべきだ」という意見もあります。確かに、大会前にだけ負荷を上げるのは自然です。ただ、平時から毎日遅くまで残る習慣は、特別な期間との区別がつきにくくなります。だからこそ、平常時の終わり時刻をあらかじめ決め、例外は事前に共有する仕組みが必要です。"
+        }
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "部活動の価値は、時間の長さではなく、関わり方の質にあります。終わりの時刻を守り、練習の目的をはっきりさせれば、部活も学習も両立しやすくなります。学校全体で「続けるための時間設計」を話し合うことこそ、今いちばん必要な提案だと私は考えます。"
+        }
+      ]
+    }
+  ],
+  "support": {
+    "default_profile": "n3"
+  },
+  "tasks": [
+    {
+      "id": "predict-1",
+      "skill": "reading.predict",
+      "kind": "predict",
+      "payload": {
+        "prompt_ja": "タイトルだけを見て、筆者がいちばん論じそうなことはどれだと思いますか。",
+        "choices": [
+          {
+            "id": "a",
+            "text_ja": "新しい部を増やす予算の配分"
+          },
+          {
+            "id": "b",
+            "text_ja": "部活動の時間の長さと両立の仕方"
+          },
+          {
+            "id": "c",
+            "text_ja": "運動部のユニフォームのデザイン"
+          },
+          {
+            "id": "d",
+            "text_ja": "文化祭の出し物の決め方"
+          }
+        ],
+        "allow_free_text": false
+      }
+    },
+    {
+      "id": "evidence-1",
+      "skill": "reading.locate-evidence",
+      "kind": "evidence-highlight",
+      "payload": {
+        "prompt_ja": "筆者の中心的な主張を示す一文を、文章中から選びなさい。",
+        "gold_quotes": [
+          "部活動の価値は、時間の長さではなく、関わり方の質にあります。"
+        ]
+      }
+    },
+    {
+      "id": "structure-1",
+      "skill": "reading.structure",
+      "kind": "paragraph-role",
+      "payload": {
+        "prompt_ja": "各段落の役割を選びなさい。",
+        "roles": [
+          "問題提起",
+          "理由",
+          "反論への応答",
+          "結論"
+        ],
+        "gold_by_paragraph_index": [
+          "問題提起",
+          "理由",
+          "反論への応答",
+          "結論"
+        ]
+      }
+    },
+    {
+      "id": "summary-1",
+      "skill": "reading.summary",
+      "kind": "summary-choice",
+      "payload": {
+        "prompt_ja": "この文章全体を最もよく表す要約はどれですか。",
+        "choices": [
+          {
+            "id": "a",
+            "text_ja": "部活動は長く練習するほど必ず強くなるので、終了時刻を決める必要はない。"
+          },
+          {
+            "id": "b",
+            "text_ja": "部活動は大切だが時間の長さが質ではない。平常時の終わりを決め、学習と両立できる時間設計が必要だ。"
+          },
+          {
+            "id": "c",
+            "text_ja": "部活動はすべて廃止し、放課後は自習だけにすべきだ。"
+          },
+          {
+            "id": "d",
+            "text_ja": "試合前も平時も同じ長さで練習しなければ不公平である。"
+          }
+        ],
+        "correct_id": "b"
+      }
+    }
+  ],
+  "artifact": {
+    "kind": "short-proposal",
+    "min_chars": 0,
+    "max_chars": 0,
+    "checklist": [
+      "部活動の時間についての主張が一つある",
+      "その主張を支える理由が一つ以上ある",
+      "自分の言葉で書けている"
+    ],
+    "exemplar_ja": "私は平常時の部活動の終了時刻を決めることを提案します。終わりが見えると集中して練習でき、宿題や睡眠の時間も守りやすくなるからです。"
+  },
+  "classmates": [
+    {
+      "id": "classmate-evidence-watanabe",
+      "name_ja": "渡辺さん",
+      "reveal_after": { "kind": "task", "task_id": "evidence-1" },
+      "text_ja": "最後の段落の「部活動の価値は、時間の長さではなく、関わり方の質にあります。」が主張だと思います。ここがいちばん言い切りが強いからです。",
+      "focus_ja": "主張の位置を見極める"
+    },
+    {
+      "id": "classmate-summary-inoue",
+      "name_ja": "井上さん",
+      "reveal_after": { "kind": "task", "task_id": "summary-1" },
+      "text_ja": "要約は b です。問題・理由・反論への応答・結論が、両立のための時間設計にまとまっているからです。",
+      "focus_ja": "反論も含めて要約する"
+    },
+    {
+      "id": "classmate-draft-saito",
+      "name_ja": "斎藤さん",
+      "reveal_after": { "kind": "artifact" },
+      "text_ja": "終わりの時刻を決めるべきです。長く残るより、短い練習の方が集中できると思うからです。",
+      "focus_ja": "短く主張＋理由"
+    },
+    {
+      "id": "classmate-revise-kimura",
+      "name_ja": "木村さん",
+      "reveal_after": { "kind": "revise" },
+      "text_ja": "平常時の終了時刻を決め、大会前だけ例外を共有する仕組みを提案します。区別がはっきりすると、部活も勉強も続けやすくなるからです。",
+      "focus_ja": "改稿で仕組みまで具体化する"
+    }
+  ],
+  "_meta": {
+    "source": "original",
+    "license": "CC0-1.0",
+    "validated_by": "claude-primary-native-review-2026-08-04"
+  }
+}

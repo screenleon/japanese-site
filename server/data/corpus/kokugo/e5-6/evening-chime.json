@@ -1,0 +1,187 @@
+{
+  "id": "evening-chime",
+  "schema_version": 1,
+  "stage": "e5-6",
+  "title_ja": "夕方のチャイム",
+  "genre": "poetry",
+  "objectives": [
+    "短い詩の情景と感覚を読み取る",
+    "連ごとの役割（情景・感覚・思い・余韻）を整理する",
+    "短い感想で心に残った表現と自分の体験をつなげて書く"
+  ],
+  "estimated_minutes": 15,
+  "text": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "校庭の端で、鉄棒が一つ残っている。風が通るたび、細い音がする。靴箱のにおいと、まだ乾ききらない運動着。誰かが走り去ったあとの砂が、靴の溝に残っている。"
+        }
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "チャイムが、空の低いところから降ってくる。オレンジ色の光が、窓ガラスを一度だけ強くして、すぐに弱まる。遠くの踏切が、間を置いて鳴る。"
+        }
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "今日できたことと、できなかったことが、同じカバンの中で揺れる。急がなくてもいい、と自分に言いながら、足は駅の方へ向く。明日の時間割が、胸のあたりで小さく光る。"
+        }
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "チャイムはもう止んでいる。残っているのは、耳の奥の余韻と、帰り道の風だけだ。また同じ音が鳴る日まで、この夕方を一度しまっておく。"
+        }
+      ]
+    }
+  ],
+  "support": {
+    "default_profile": "n3"
+  },
+  "tasks": [
+    {
+      "id": "predict-1",
+      "skill": "reading.predict",
+      "kind": "predict",
+      "payload": {
+        "prompt_ja": "タイトルだけを見て、この作品がいちばん描きそうなものはどれだと思いますか。",
+        "choices": [
+          {
+            "id": "a",
+            "text_ja": "朝の会の司会の進め方"
+          },
+          {
+            "id": "b",
+            "text_ja": "下校時刻の音と夕方の気持ち"
+          },
+          {
+            "id": "c",
+            "text_ja": "新しい校舎の設計図"
+          },
+          {
+            "id": "d",
+            "text_ja": "給食の献立の決め方"
+          }
+        ],
+        "allow_free_text": false
+      }
+    },
+    {
+      "id": "evidence-1",
+      "skill": "reading.locate-evidence",
+      "kind": "evidence-highlight",
+      "payload": {
+        "prompt_ja": "「チャイム」がどのように感じられるかを示す一文を、本文から選びなさい。",
+        "gold_quotes": [
+          "チャイムが、空の低いところから降ってくる。"
+        ]
+      }
+    },
+    {
+      "id": "structure-1",
+      "skill": "reading.structure",
+      "kind": "paragraph-role",
+      "payload": {
+        "prompt_ja": "各連（段落）の役割を選びなさい。",
+        "roles": [
+          "情景",
+          "感覚",
+          "思い",
+          "余韻"
+        ],
+        "gold_by_paragraph_index": [
+          "情景",
+          "感覚",
+          "思い",
+          "余韻"
+        ]
+      }
+    },
+    {
+      "id": "summary-1",
+      "skill": "reading.summary",
+      "kind": "summary-choice",
+      "payload": {
+        "prompt_ja": "この作品全体を最もよく表す読み取りはどれですか。",
+        "choices": [
+          {
+            "id": "a",
+            "text_ja": "チャイムの故障を直す係の一日を説明した実用文である。"
+          },
+          {
+            "id": "b",
+            "text_ja": "下校のチャイムをきっかけに、夕方の景色・音・心の動きを短く描き、余韻で締めている。"
+          },
+          {
+            "id": "c",
+            "text_ja": "部活動を長く続けるべきだと主張する意見文である。"
+          },
+          {
+            "id": "d",
+            "text_ja": "踏切の危険を訴える案内文である。"
+          }
+        ],
+        "correct_id": "b"
+      }
+    }
+  ],
+  "artifact": {
+    "kind": "summary",
+    "min_chars": 0,
+    "max_chars": 0,
+    "checklist": [
+      "心に残った表現や場面が一つ以上ある",
+      "その表現から感じたことが書かれている",
+      "自分の体験や似た場面への一言がある"
+    ],
+    "exemplar_ja": "「チャイムが、空の低いところから降ってくる。」という行が残ります。音が上から来る感じがして、下校の空気が目に浮かびました。私も駅へ歩くとき、同じような余韻を覚えたことがあります。"
+  },
+  "classmates": [
+    {
+      "id": "classmate-evidence-fujita",
+      "name_ja": "藤田さん",
+      "reveal_after": { "kind": "task", "task_id": "evidence-1" },
+      "text_ja": "「チャイムが、空の低いところから降ってくる。」を選びました。「降る」という言い方が、ただの機械音以上に感じられるからです。",
+      "focus_ja": "比喩的な表現を根拠にする"
+    },
+    {
+      "id": "classmate-summary-mori",
+      "name_ja": "森さん",
+      "reveal_after": { "kind": "task", "task_id": "summary-1" },
+      "text_ja": "読み取りは b が近いです。情景から余韻までの流れが、実用文や意見文ではないと分かるからです。",
+      "focus_ja": "ジャンルに合った要約"
+    },
+    {
+      "id": "classmate-draft-ishida",
+      "name_ja": "石田さん",
+      "reveal_after": { "kind": "artifact" },
+      "text_ja": "チャイムが空から降る感じが好きです。下校の静かさが思い浮かびました。",
+      "focus_ja": "短く表現＋感想"
+    },
+    {
+      "id": "classmate-revise-okada",
+      "name_ja": "岡田さん",
+      "reveal_after": { "kind": "revise" },
+      "text_ja": "「空の低いところから降ってくる」チャイムが印象的でした。音だけでなく光や踏切まで続いていて、一日の終わりがゆっくり閉じる感じがします。私の通学路でも、似た余韻を覚えたことがあります。",
+      "focus_ja": "改稿で体験を一文足す"
+    }
+  ],
+  "_meta": {
+    "source": "original",
+    "license": "CC0-1.0",
+    "validated_by": "claude-primary-native-review-2026-08-04"
+  }
+}

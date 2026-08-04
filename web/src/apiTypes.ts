@@ -317,6 +317,35 @@ export interface KokugoUnitState {
   artifacts: KokugoArtifactRow[];
 }
 
+/** One skill on the Track B skill map (JS-136). */
+export type KokugoSkillStatus = "unseen" | "practiced" | "weak" | "strong";
+
+export interface KokugoSkillStat {
+  skill: string;
+  label_ja: string;
+  status: KokugoSkillStatus;
+  graded: number;
+  correct: number;
+  accuracy?: number;
+  practiced: number;
+  units_touching: string[];
+}
+
+/** Unit recommended for weak / unseen skills (not cloze SRS). */
+export interface KokugoReviewItem {
+  stage: string;
+  unit_id: string;
+  title_ja: string;
+  genre: string;
+  target_skills: string[];
+  unit_completed: boolean;
+}
+
+export interface KokugoSkillMap {
+  skills: KokugoSkillStat[];
+  review_queue: KokugoReviewItem[];
+}
+
 export interface KokugoGradeResult {
   correct?: boolean | null;
   explanation_ja: string;
@@ -355,6 +384,8 @@ export interface Api {
    */
   listKokugoUnits(): Promise<{ units: KokugoUnitSummary[]; count: number }>;
   getKokugoUnit(stage: string, id: string): Promise<import("./kokugoTypes").KokugoUnit>;
+  /** Skill map + weak-skill review queue (JS-136). Empty when corpus/progress unavailable. */
+  getKokugoSkills(): Promise<KokugoSkillMap>;
   getKokugoUnitState(stage: string, id: string): Promise<KokugoUnitState>;
   putKokugoProgress(
     stage: string,
