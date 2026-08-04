@@ -134,8 +134,8 @@
 | JS-132 | ✅ closed 2026-08-03 | 国語 local API 進度與作品保存 | backend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-133 | ✅ closed 2026-08-03 | 国語 Reader 精讀標記強化 | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-134 | ✅ closed 2026-08-04 | 模擬同學答案與改稿對照 | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
-| JS-135 | 🔵 active | 国語單元包 2（PoC 後 3–4 單元） | content | 2026-08-02 | docs/adr/0005-kokugo-track.md |
-| JS-136 | 🔵 active | 技能地圖與国語技能複習 | product | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-135 | ✅ closed 2026-08-04 | 国語單元包 2（PoC 後 3–4 單元） | content | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-136 | ✅ closed 2026-08-04 | 技能地圖與国語技能複習 | product | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-137 | 🔵 active | 国語音讀（依賴音訊路徑） | frontend | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-138 | 🔵 active | 国語 ↔ JLPT 語彙／文法 deep-link | product | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-139 | 🔵 active | 重寫 JS-083 為日本語 track 讀解短練 | architecture | 2026-08-02 | docs/adr/0005-kokugo-track.md |
@@ -1578,7 +1578,7 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 **Blocked by**: JS-131
 <!-- 首次記錄: 2026-08-02 -->
 
-## JS-135 — 国語單元包 2（PoC 後 3–4 單元）
+## JS-135 — 国語單元包 2（PoC 後 3–4 單元） ✅ 2026-08-04
 
 **Problem**: 單一 PoC 無法驗證題材多樣性與留存。
 
@@ -1586,18 +1586,22 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 
 **Requirement**: 故事／說明意見／輕詩歌或文化各至少覆蓋；仍限 e5-6。
 
+**Outcome**: 新增 `shared-umbrella`（story）、`club-balance`（opinion）、`evening-chime`（poetry）；與 PoC `library-use`（expository）共 4 單元、四 genre 覆蓋。KOKUGO-006 檢核完成；`validated_by: claude-primary-native-review-2026-08-04`。
+
 **Tags**: P2, kokugo, content
 **Source**: docs/adr/0005-kokugo-track.md
 **Blocked by**: JS-130, JS-131
 <!-- 首次記錄: 2026-08-02 -->
 
-## JS-136 — 技能地圖與国語技能複習
+## JS-136 — 技能地圖與国語技能複習 ✅ 2026-08-04
 
 **Problem**: 僅單元完成率看不出閱讀技能進步。
 
 **Why**: 技能維度是留存與複習的核心。
 
 **Requirement**: skill map + 弱技能複習佇列；勿只併回 cloze SRS。
+
+**Outcome**: Spike `docs/spikes/JS-136.md`（adopt 讀時聚合）。`GET /api/kokugo/skills` + `KokugoTab` 技能マップ／弱技能復習ユニット；不寫入 cloze SRS。
 
 **Tags**: P2, kokugo, product
 **Source**: docs/adr/0005-kokugo-track.md

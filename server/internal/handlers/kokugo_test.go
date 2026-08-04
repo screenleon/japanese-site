@@ -150,6 +150,248 @@ func TestKokugoListUnitsReturnsPoC(t *testing.T) {
 	}
 }
 
+func TestKokugoSkillsListMapsFailureIsStable500(t *testing.T) {
+	// Behavior: GET /api/kokugo/skills returns stable internal error when unit load fails.
+	// Steps:
+	// 1. Arrange a corpus file under e5-6 whose JSON stage points at a missing directory.
+	// 2. Act GET /api/kokugo/skills.
+	// 3. Assert HTTP 500 with {"error":"internal"} and no skills payload.
+	root := t.TempDir()
+	stageDir := filepath.Join(root, "e5-6")
+	if err := os.MkdirAll(stageDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	// Listed via e5-6/, but stage field sends GetMap to a non-existent stage path.
+	bad := `{
+  "id": "broken-unit",
+  "stage": "missing-stage",
+  "title_ja": "壊れたユニット",
+  "genre": "story",
+  "tasks": [{"id": "t1", "skill": "reading.summary", "kind": "summary-choice"}]
+}`
+	if err := os.WriteFile(filepath.Join(stageDir, "broken-unit.json"), []byte(bad), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	db := newHandlerTestDB(t)
+	mux := http.NewServeMux()
+	RegisterWithOpts(mux, db, store.NewSQLiteProgressStore(db), RegisterOpts{KokugoDir: root})
+
+	req := httptest.NewRequest(http.MethodGet, "/api/kokugo/skills", nil)
+	rec := httptest.NewRecorder()
+	mux.ServeHTTP(rec, req)
+	if rec.Code != http.StatusInternalServerError {
+		t.Fatalf("status %d %s", rec.Code, rec.Body.String())
+	}
+	var body map[string]any
+	if err := json.Unmarshal(rec.Body.Bytes(), &body); err != nil {
+		t.Fatal(err)
+	}
+	if body["error"] != "internal" {
+		t.Fatalf("want stable error=internal, got %s", rec.Body.String())
+	}
+	if _, ok := body["skills"]; ok {
+		t.Fatalf("must not include partial skills payload: %s", rec.Body.String())
+	}
+}
+
+func TestKokugoSkillsStoreFailureIsStable500(t *testing.T) {
+	// Behavior: GET /api/kokugo/skills returns stable internal error when an aggregation store read fails.
+	// Steps:
+	// 1. Arrange repo corpus + sqlite progress, then drop kokugo_task_attempt.
+	// 2. Act GET /api/kokugo/skills.
+	// 3. Assert HTTP 500 with {"error":"internal"} and no skills payload.
+	db := newHandlerTestDB(t)
+	mux := registerKokugoMux(t, db, store.NewSQLiteProgressStore(db))
+	if _, err := db.Exec(`DROP TABLE kokugo_task_attempt`); err != nil {
+		t.Fatalf("drop attempt table: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodGet, "/api/kokugo/skills", nil)
+	rec := httptest.NewRecorder()
+	mux.ServeHTTP(rec, req)
+	if rec.Code != http.StatusInternalServerError {
+		t.Fatalf("status %d %s", rec.Code, rec.Body.String())
+	}
+	var body map[string]any
+	if err := json.Unmarshal(rec.Body.Bytes(), &body); err != nil {
+		t.Fatal(err)
+	}
+	if body["error"] != "internal" {
+		t.Fatalf("want stable error=internal, got %s", rec.Body.String())
+	}
+	if _, ok := body["skills"]; ok {
+		t.Fatalf("must not include partial skills payload: %s", rec.Body.String())
+	}
+}
+
+func TestKokugoSkillsEmptyWhenLoaderDisabled(t *testing.T) {
+	// Behavior: GET /api/kokugo/skills returns empty arrays when KokugoDir is unset.
+	// Steps:
+	// 1. Arrange RegisterWithOpts with KokugoDir "".
+	// 2. Act GET /api/kokugo/skills.
+	// 3. Assert 200 and skills/review_queue are empty (non-nil) arrays.
+	db := newHandlerTestDB(t)
+	mux := http.NewServeMux()
+	RegisterWithOpts(mux, db, store.NewSQLiteProgressStore(db), RegisterOpts{KokugoDir: ""})
+
+	req := httptest.NewRequest(http.MethodGet, "/api/kokugo/skills", nil)
+	rec := httptest.NewRecorder()
+	mux.ServeHTTP(rec, req)
+	if rec.Code != 200 {
+		t.Fatalf("status %d %s", rec.Code, rec.Body.String())
+	}
+	var body struct {
+		Skills      []any `json:"skills"`
+		ReviewQueue []any `json:"review_queue"`
+	}
+	if err := json.Unmarshal(rec.Body.Bytes(), &body); err != nil {
+		t.Fatal(err)
+	}
+	if body.Skills == nil || body.ReviewQueue == nil {
+		t.Fatalf("skills/review_queue must be present arrays: %s", rec.Body.String())
+	}
+	if len(body.Skills) != 0 || len(body.ReviewQueue) != 0 {
+		t.Fatalf("want empty skill map, got %s", rec.Body.String())
+	}
+}
+
+func TestKokugoSkillsWithoutProgressStore(t *testing.T) {
+	// Behavior: with corpus but NullProgressStore, skills are all unseen and review queue is corpus-derived.
+	// Steps:
+	// 1. Arrange repo corpus + NullProgressStore (progress disabled).
+	// 2. Act GET /api/kokugo/skills.
+	// 3. Assert six skills all status=unseen and a non-empty review_queue without store attempts.
+	db := newHandlerTestDB(t)
+	mux := registerKokugoMux(t, db, store.NullProgressStore{})
+
+	req := httptest.NewRequest(http.MethodGet, "/api/kokugo/skills", nil)
+	rec := httptest.NewRecorder()
+	mux.ServeHTTP(rec, req)
+	if rec.Code != 200 {
+		t.Fatalf("status %d %s", rec.Code, rec.Body.String())
+	}
+	var body struct {
+		Skills []struct {
+			Skill  string `json:"skill"`
+			Status string `json:"status"`
+		} `json:"skills"`
+		ReviewQueue []struct {
+			UnitID string `json:"unit_id"`
+		} `json:"review_queue"`
+	}
+	if err := json.Unmarshal(rec.Body.Bytes(), &body); err != nil {
+		t.Fatal(err)
+	}
+	if len(body.Skills) != 6 {
+		t.Fatalf("want 6 skills, got %d: %s", len(body.Skills), rec.Body.String())
+	}
+	for _, s := range body.Skills {
+		if s.Status != "unseen" {
+			t.Fatalf("skill %s status=%q want unseen (no progress store)", s.Skill, s.Status)
+		}
+	}
+	if len(body.ReviewQueue) == 0 {
+		t.Fatalf("expected corpus-derived review_queue when all skills unseen: %s", rec.Body.String())
+	}
+	if countKokugoRows(t, db, "kokugo_task_attempt") != 0 {
+		t.Fatal("progress-disabled skills path must not write attempts")
+	}
+}
+
+func TestKokugoSkillsMapReflectsAttempts(t *testing.T) {
+	// Behavior: GET /api/kokugo/skills aggregates ADR-0005 skills + review queue (JS-136).
+	// Steps:
+	// 1. Arrange corpus + sqlite; submit library-use tasks.
+	// 2. Act GET /api/kokugo/skills.
+	// 3. Assert six skills, graded reading skills practiced/strong, review_queue present.
+	db := newHandlerTestDB(t)
+	mux := registerKokugoMux(t, db, store.NewSQLiteProgressStore(db))
+	submitLibraryUseTasks(t, mux)
+
+	req := httptest.NewRequest(http.MethodGet, "/api/kokugo/skills", nil)
+	rec := httptest.NewRecorder()
+	mux.ServeHTTP(rec, req)
+	if rec.Code != 200 {
+		t.Fatalf("status %d %s", rec.Code, rec.Body.String())
+	}
+	var body struct {
+		Skills []struct {
+			Skill     string   `json:"skill"`
+			Status    string   `json:"status"`
+			Practiced int      `json:"practiced"`
+			Graded    int      `json:"graded"`
+			LabelJa   string   `json:"label_ja"`
+		} `json:"skills"`
+		ReviewQueue []struct {
+			UnitID string `json:"unit_id"`
+		} `json:"review_queue"`
+	}
+	if err := json.Unmarshal(rec.Body.Bytes(), &body); err != nil {
+		t.Fatal(err)
+	}
+	if len(body.Skills) != 6 {
+		t.Fatalf("want 6 skills, got %d: %s", len(body.Skills), rec.Body.String())
+	}
+	bySkill := map[string]string{}
+	for _, s := range body.Skills {
+		if s.LabelJa == "" {
+			t.Fatalf("missing label: %+v", s)
+		}
+		bySkill[s.Skill] = s.Status
+		if s.Skill == "reading.summary" && s.Practiced < 1 {
+			t.Fatalf("summary should be practiced after submit: %+v", s)
+		}
+	}
+	if bySkill["reading.summary"] == "unseen" {
+		t.Fatalf("summary still unseen after graded attempt: %+v", bySkill)
+	}
+	// Pack has incomplete units → review queue non-empty for unseen writing skills.
+	if len(body.ReviewQueue) == 0 {
+		t.Fatalf("expected review_queue entries: %s", rec.Body.String())
+	}
+}
+
+func TestKokugoListUnitsIncludesPack2(t *testing.T) {
+	// Behavior: unit pack 2 (JS-135) is listed alongside the PoC unit.
+	db := newHandlerTestDB(t)
+	mux := registerKokugoMux(t, db, store.NewSQLiteProgressStore(db))
+
+	req := httptest.NewRequest(http.MethodGet, "/api/kokugo/units", nil)
+	rec := httptest.NewRecorder()
+	mux.ServeHTTP(rec, req)
+	if rec.Code != 200 {
+		t.Fatalf("status %d %s", rec.Code, rec.Body.String())
+	}
+	var body struct {
+		Count int `json:"count"`
+		Units []struct {
+			ID    string `json:"id"`
+			Genre string `json:"genre"`
+		} `json:"units"`
+	}
+	if err := json.Unmarshal(rec.Body.Bytes(), &body); err != nil {
+		t.Fatal(err)
+	}
+	if body.Count < 4 {
+		t.Fatalf("want >=4 units after pack 2, got %d: %s", body.Count, rec.Body.String())
+	}
+	want := map[string]string{
+		"library-use":     "expository",
+		"shared-umbrella": "story",
+		"club-balance":    "opinion",
+		"evening-chime":   "poetry",
+	}
+	got := map[string]string{}
+	for _, u := range body.Units {
+		got[u.ID] = u.Genre
+	}
+	for id, genre := range want {
+		if got[id] != genre {
+			t.Fatalf("unit %s: want genre %s, got %q (all=%v)", id, genre, got[id], got)
+		}
+	}
+}
+
 func TestKokugoGetUnitReturnsJSON(t *testing.T) {
 	// Behavior: GET /api/kokugo/units/{stage}/{id} returns the unit document.
 	// Steps:
@@ -458,11 +700,11 @@ func TestKokugoVersionMilestone(t *testing.T) {
 	if rec.Code != 200 {
 		t.Fatalf("status %d", rec.Code)
 	}
-	if !bytes.Contains(rec.Body.Bytes(), []byte(`"milestone":"M3-C7"`)) {
-		t.Fatalf("want M3-C7: %s", rec.Body.String())
+	if !bytes.Contains(rec.Body.Bytes(), []byte(`"milestone":"M3-C8"`)) {
+		t.Fatalf("want M3-C8: %s", rec.Body.String())
 	}
-	if bytes.Contains(rec.Body.Bytes(), []byte(`"milestone":"M3-C6"`)) {
-		t.Fatalf("stale M3-C6: %s", rec.Body.String())
+	if bytes.Contains(rec.Body.Bytes(), []byte(`"milestone":"M3-C7"`)) {
+		t.Fatalf("stale M3-C7: %s", rec.Body.String())
 	}
 }
 

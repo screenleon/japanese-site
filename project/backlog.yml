@@ -1857,27 +1857,33 @@ items:
 
   - id: JS-135
     title: "Kokugo unit pack 2 (3–4 units after PoC)"
-    status: todo
+    status: done
     priority: P2
     theme: kokugo
     area: content
     source: "docs/adr/0005-kokugo-track.md"
+    completed_at: "2026-08-04"
     blocked_by: [JS-130, JS-131]
-    related: [JS-136]
+    related: [JS-136, JS-140]
     notes:
       - Mix story / expository-opinion / light poetry-or-culture; still e5-6 only.
+      - Shipped e5-6 units: shared-umbrella (story), club-balance (opinion), evening-chime (poetry); library-use remains expository PoC (4 total).
+      - KOKUGO-006 pre-merge checklist completed; Claude primary native-perspective review recorded as validated_by claude-primary-native-review-2026-08-04.
 
   - id: JS-136
     title: "Kokugo skill map + skill review queue"
-    status: todo
+    status: done
     priority: P2
     theme: kokugo
     area: product
     source: "docs/adr/0005-kokugo-track.md"
+    completed_at: "2026-08-04"
     blocked_by: [JS-132, JS-131]
-    related: [JS-083, JS-007]
+    related: [JS-083, JS-007, JS-135]
     notes:
       - Surface skill-level progress; feed weak skills into review without collapsing into cloze SRS only.
+      - Spike result: docs/spikes/JS-136.md (adopt read-time aggregation).
+      - Shipped GET /api/kokugo/skills + KokugoTab skill map / weak-skill review queue (no cloze SRS).
 
   - id: JS-137
     title: "Kokugo read-aloud (depends on audio path)"

@@ -10,7 +10,10 @@ JSON. Contract: `docs/adr/0005-kokugo-track.md`, types:
 kokugo/
 ├── README.md
 └── e5-6/                 # stage directory (must match unit.stage)
-    └── <unit-id>.json    # unit.id must equal filename stem
+    ├── library-use.json      # PoC expository (JS-130)
+    ├── shared-umbrella.json  # story (JS-135)
+    ├── club-balance.json     # opinion (JS-135)
+    └── evening-chime.json    # poetry (JS-135)
 ```
 
 v1 stage allowlist: **`e5-6` only**. Other stages are reserved in the ADR

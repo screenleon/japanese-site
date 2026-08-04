@@ -66,6 +66,14 @@ describe("staticApi", () => {
     });
   });
 
+  it("getKokugoSkills returns an empty skill map without fetch", async () => {
+    await expect(staticApi.getKokugoSkills()).resolves.toEqual({
+      skills: [],
+      review_queue: [],
+    });
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
   it("markRead is a no-op", async () => {
     await expect(
       staticApi.markRead({ type: "grammar", slug: "aru-majiki" })

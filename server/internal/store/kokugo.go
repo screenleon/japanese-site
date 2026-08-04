@@ -231,7 +231,10 @@ func ListKokugoTaskAttempts(ctx context.Context, db *DB, stage, unitID string) (
 		return nil, err
 	}
 	defer rows.Close()
+	return scanKokugoTaskAttempts(rows)
+}
 
+func scanKokugoTaskAttempts(rows *sql.Rows) ([]KokugoTaskAttempt, error) {
 	var out []KokugoTaskAttempt
 	for rows.Next() {
 		var a KokugoTaskAttempt
@@ -374,6 +377,10 @@ func ListKokugoArtifacts(ctx context.Context, db *DB, stage, unitID string) ([]K
 		return nil, err
 	}
 	defer rows.Close()
+	return scanKokugoArtifacts(rows)
+}
+
+func scanKokugoArtifacts(rows *sql.Rows) ([]KokugoArtifact, error) {
 	var out []KokugoArtifact
 	for rows.Next() {
 		var a KokugoArtifact
@@ -388,6 +395,32 @@ func ListKokugoArtifacts(ctx context.Context, db *DB, stage, unitID string) ([]K
 		out = []KokugoArtifact{}
 	}
 	return out, rows.Err()
+}
+
+// ListAllKokugoTaskAttempts returns every task attempt across units (JS-136 skill map).
+func ListAllKokugoTaskAttempts(ctx context.Context, db *DB) ([]KokugoTaskAttempt, error) {
+	rows, err := db.QueryContext(ctx, `
+		SELECT id, unit_key, task_id, answer_json, correct, feedback_json, created_at
+		FROM kokugo_task_attempt
+		ORDER BY id ASC`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	return scanKokugoTaskAttempts(rows)
+}
+
+// ListAllKokugoArtifacts returns every artifact row across units (JS-136 skill map).
+func ListAllKokugoArtifacts(ctx context.Context, db *DB) ([]KokugoArtifact, error) {
+	rows, err := db.QueryContext(ctx, `
+		SELECT unit_key, revision, body, checklist_json, version, created_at, updated_at
+		FROM kokugo_artifact
+		ORDER BY unit_key, revision`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	return scanKokugoArtifacts(rows)
 }
 
 // GetKokugoUnitState returns progress + attempts + artifacts (progress may be nil).

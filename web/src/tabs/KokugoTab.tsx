@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { api } from "../api";
 import type {
   KokugoGradeResult,
+  KokugoSkillMap,
+  KokugoSkillStat,
   KokugoUnitState,
   KokugoUnitSummary,
 } from "../apiTypes";
@@ -161,6 +163,9 @@ function taskIndexFromState(
 export function KokugoTab() {
   const { progress, kokugo, loaded: capsLoaded } = useCapabilities();
   const [units, setUnits] = useState<KokugoUnitSummary[]>([]);
+  const [skillMap, setSkillMap] = useState<KokugoSkillMap | null>(null);
+  /** True when getKokugoSkills failed; unit list may still be usable (critic-F001). */
+  const [skillsLoadFailed, setSkillsLoadFailed] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [unit, setUnit] = useState<KokugoUnit | null>(null);
@@ -181,10 +186,32 @@ export function KokugoTab() {
     try {
       const res = await api.listKokugoUnits();
       setUnits(res.units);
+      try {
+        const skills = await api.getKokugoSkills();
+        setSkillMap(skills);
+        setSkillsLoadFailed(false);
+      } catch {
+        // Skill map is non-fatal for the unit list, but failure must be visible
+        // so the learner can retry (critic-F001 / JS-136).
+        setSkillMap(null);
+        setSkillsLoadFailed(true);
+      }
     } catch (e) {
       setError(String(e));
     } finally {
       setLoading(false);
+    }
+  }, []);
+
+  const retrySkills = useCallback(async () => {
+    setSkillsLoadFailed(false);
+    try {
+      const skills = await api.getKokugoSkills();
+      setSkillMap(skills);
+      setSkillsLoadFailed(false);
+    } catch {
+      setSkillMap(null);
+      setSkillsLoadFailed(true);
     }
   }, []);
 
@@ -399,30 +426,61 @@ export function KokugoTab() {
         {error && <p className="text-sm text-red-600">{error}</p>}
         {!capsLoaded || loading ? (
           <p className="text-sm text-slate-500">読み込み中…</p>
-        ) : units.length === 0 ? (
-          <p className="text-sm text-slate-500">ユニットがありません。</p>
         ) : (
-          <ul className="space-y-2">
-            {units.map((u) => (
-              <li key={`${u.stage}/${u.id}`}>
+          <>
+            {skillsLoadFailed && (
+              <div
+                className="rounded-lg border border-amber-200 bg-amber-50/70 px-3 py-2 text-sm text-amber-950"
+                role="status"
+                aria-label="技能マップ読み込みエラー"
+              >
+                <p>技能マップを読み込めませんでした。ユニット一覧はそのまま使えます。</p>
                 <button
                   type="button"
-                  onClick={() => void openUnit(u)}
-                  className="w-full text-left p-4 rounded-lg border border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/40 transition-colors"
+                  className={`${BTN_SECONDARY} mt-2`}
+                  onClick={() => void retrySkills()}
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="font-medium text-slate-900">{u.title_ja}</p>
-                      <p className="text-xs text-slate-500 mt-1">
-                        {u.stage} · {u.genre} · 約 {u.estimated_minutes} 分 · 課題 {u.task_count}
-                      </p>
-                    </div>
-                    <span className="text-xs text-blue-700 shrink-0">開く</span>
-                  </div>
+                  技能マップを再試行
                 </button>
-              </li>
-            ))}
-          </ul>
+              </div>
+            )}
+            {skillMap && skillMap.skills.length > 0 && (
+              <SkillMapPanel
+                skillMap={skillMap}
+                onOpenReview={(stage, id) => {
+                  const hit = units.find((u) => u.stage === stage && u.id === id);
+                  if (hit) void openUnit(hit);
+                }}
+              />
+            )}
+            {units.length === 0 ? (
+              <p className="text-sm text-slate-500">ユニットがありません。</p>
+            ) : (
+              <ul className="space-y-2">
+                {units.map((u) => (
+                  <li key={`${u.stage}/${u.id}`}>
+                    <button
+                      type="button"
+                      aria-label={`ユニットを開く: ${u.title_ja}`}
+                      onClick={() => void openUnit(u)}
+                      className="w-full text-left p-4 rounded-lg border border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/40 transition-colors"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="font-medium text-slate-900">{u.title_ja}</p>
+                          <p className="text-xs text-slate-500 mt-1">
+                            {u.stage} · {u.genre} · 約 {u.estimated_minutes} 分 · 課題{" "}
+                            {u.task_count}
+                          </p>
+                        </div>
+                        <span className="text-xs text-blue-700 shrink-0">開く</span>
+                      </div>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
         )}
       </section>
     );
@@ -688,6 +746,84 @@ function PhaseBadge({
     <span className="text-xs font-medium px-2 py-1 rounded-full bg-slate-100 text-slate-700">
       {label}
     </span>
+  );
+}
+
+const SKILL_STATUS_LABEL: Record<KokugoSkillStat["status"], string> = {
+  unseen: "未練習",
+  practiced: "練習中",
+  weak: "要復習",
+  strong: "安定",
+};
+
+const SKILL_STATUS_CLASS: Record<KokugoSkillStat["status"], string> = {
+  unseen: "bg-slate-100 text-slate-600 border-slate-200",
+  practiced: "bg-sky-50 text-sky-800 border-sky-200",
+  weak: "bg-amber-50 text-amber-900 border-amber-200",
+  strong: "bg-emerald-50 text-emerald-800 border-emerald-200",
+};
+
+/** List-view skill map + weak-skill unit queue (JS-136; not cloze SRS). */
+function SkillMapPanel({
+  skillMap,
+  onOpenReview,
+}: {
+  skillMap: KokugoSkillMap;
+  onOpenReview: (stage: string, unitId: string) => void;
+}) {
+  return (
+    <div className="space-y-3 rounded-lg border border-slate-200 bg-white p-3" aria-label="技能マップ">
+      <div>
+        <h3 className="text-sm font-medium text-slate-900">技能マップ</h3>
+        <p className="text-xs text-slate-500 mt-0.5">
+          ユニット課題の正誤から国語技能を集計します（穴埋め SRS とは別）
+        </p>
+      </div>
+      <ul className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+        {skillMap.skills.map((s) => (
+          <li
+            key={s.skill}
+            className={
+              "rounded-md border px-2 py-2 text-xs " + SKILL_STATUS_CLASS[s.status]
+            }
+          >
+            <p className="font-medium">{s.label_ja}</p>
+            <p className="mt-0.5 opacity-90">
+              {SKILL_STATUS_LABEL[s.status]}
+              {s.graded > 0
+                ? ` · ${s.correct}/${s.graded}`
+                : s.practiced > 0
+                  ? ` · ${s.practiced}回`
+                  : ""}
+            </p>
+          </li>
+        ))}
+      </ul>
+      {skillMap.review_queue.length > 0 && (
+        <div className="space-y-2">
+          <h4 className="text-xs font-medium text-slate-700">弱技能の復習ユニット</h4>
+          <ul className="space-y-1.5">
+            {skillMap.review_queue.map((item) => (
+              <li key={`${item.stage}/${item.unit_id}`}>
+                <button
+                  type="button"
+                  aria-label={`復習ユニット: ${item.title_ja}`}
+                  onClick={() => onOpenReview(item.stage, item.unit_id)}
+                  className="w-full text-left text-xs rounded-md border border-amber-200 bg-amber-50/60 px-2.5 py-2 hover:bg-amber-50"
+                >
+                  <span className="font-medium text-slate-900">{item.title_ja}</span>
+                  <span className="block text-slate-600 mt-0.5">
+                    {item.target_skills
+                      .map((sk) => skillMap.skills.find((s) => s.skill === sk)?.label_ja ?? sk)
+                      .join(" · ")}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
   );
 }
 

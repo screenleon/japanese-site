@@ -406,8 +406,9 @@ func health(w http.ResponseWriter, _ *http.Request) {
 func version(w http.ResponseWriter, _ *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]string{
 		"name":      "japanese-site",
+		// M3-C8: GET /api/kokugo/skills skill map + weak-skill review queue (JS-136).
 		// M3-C7: Kokugo track API (/api/kokugo/**) + capabilities.kokugo (JS-131/132).
-		"milestone": "M3-C7",
+		"milestone": "M3-C8",
 	})
 }
 

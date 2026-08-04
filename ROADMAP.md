@@ -71,10 +71,11 @@ IndexedDB progress (JS-141), multi-user classmates.
       `e5-6/library-use.json`).
 - [x] **PoC content + minimal cycle UI + local progress**
       (JS-130..132).
-- [ ] **Reader polish, classmate answers, unit pack 2, skill map**
+- [x] **Reader polish, classmate answers, unit pack 2, skill map**
       (JS-133..136). JS-133 reader polish shipped 2026-08-03;
       JS-134 classmates + revision compare shipped 2026-08-04;
-      JS-135..136 remain open.
+      JS-135 unit pack 2 (story/opinion/poetry + expository PoC) and
+      JS-136 skill map + weak-skill review queue shipped 2026-08-04.
 
 ## Quiz / content depth
 
