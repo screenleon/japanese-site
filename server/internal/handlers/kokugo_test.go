@@ -700,11 +700,11 @@ func TestKokugoVersionMilestone(t *testing.T) {
 	if rec.Code != 200 {
 		t.Fatalf("status %d", rec.Code)
 	}
-	if !bytes.Contains(rec.Body.Bytes(), []byte(`"milestone":"M3-C7"`)) {
-		t.Fatalf("want M3-C7: %s", rec.Body.String())
+	if !bytes.Contains(rec.Body.Bytes(), []byte(`"milestone":"M3-C8"`)) {
+		t.Fatalf("want M3-C8: %s", rec.Body.String())
 	}
-	if bytes.Contains(rec.Body.Bytes(), []byte(`"milestone":"M3-C6"`)) {
-		t.Fatalf("stale M3-C6: %s", rec.Body.String())
+	if bytes.Contains(rec.Body.Bytes(), []byte(`"milestone":"M3-C7"`)) {
+		t.Fatalf("stale M3-C7: %s", rec.Body.String())
 	}
 }
 

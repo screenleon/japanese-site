@@ -41,6 +41,7 @@ Agents must read it before planning or implementation tasks.
 3. **UI**: skill map + review queue on `KokugoTab` list view only; does **not** write cloze `next_due_at` or reuse quiz SRS.
 4. Status thresholds: `unseen` | `practiced` | `weak` (graded accuracy &lt; 0.6) | `strong` (graded ≥ 2 and accuracy ≥ 0.8). Predict remains ungraded priming.
 5. Spike write-up: `docs/spikes/JS-136.md` (GREEN / adopt).
+6. **Public contract** — `/api/version.milestone = M3-C8` signals the skills endpoint (M3-C7 remains the prior kokugo units/progress contract).
 
 **Refs**: ADR-0005 `KokugoSkill`; JS-136; JS-131/132 progress store.
 
