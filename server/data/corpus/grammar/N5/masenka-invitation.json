@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vます形の語幹＋ませんか",
+      "gloss_zh": "禮貌邀請：要不要一起…？",
+      "notes_zh": "例：一緒に行きませんか。形式是否定疑問，功能是邀請而非單純否定"
+    },
+    {
+      "form": "Vませんか（提案）",
+      "gloss_zh": "向對方提出建議或邀請",
+      "notes_zh": "例：コーヒーを飲みませんか。自己提議「我們做吧」可用「ましょう」見 mashou-volitional"
     }
   ],
   "explanation_ja_blocks": [
@@ -169,6 +175,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

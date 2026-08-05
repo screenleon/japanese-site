@@ -1,0 +1,67 @@
+{
+  "slug": "kiru-kirenai",
+  "title_ja": "きる／きれない",
+  "title_zh": "きる／きれない（做完／做不完）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vます形＋きる",
+      "gloss_zh": "完全做完；做到極限",
+      "notes_zh": "例：食べきる／使い切る。完了・徹底"
+    },
+    {
+      "form": "Vます形＋きれない",
+      "gloss_zh": "做不完；無法完全…",
+      "notes_zh": "例：食べきれない／数え切れない"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「きる／きれない」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "完了",
+          "r": "かんりょう"
+        },
+        {
+          "t": "text",
+          "v": "やその"
+        },
+        {
+          "t": "ruby",
+          "k": "否定",
+          "r": "ひてい"
+        },
+        {
+          "t": "text",
+          "v": "を表します。\n\n- お金を使い切った\n- 感動で言い切れない"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「きる」表示完全做完或做到極致；「きれない」表示無法完全做到。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「きる」は残量ゼロまでの完了、「きれない」は容量オーバーで収まらない状態です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "完了",
+          "reading": "かんりょう"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{"text_ja": "熟練者でも難しい。___初心者においてをや。", "text_zh": "熟練者都難，更何況初學者。", "blank": "いわんや", "is_correct": 1, "hint": "文語", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "若者でも疲れる。___老人をや。", "text_zh": "年輕人都累，更何況老人。", "blank": "いわんや", "is_correct": 1, "hint": "類推", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "平日でも混む。___休日においてをや。", "text_zh": "平日都擠，更何況假日。", "blank": "いわんや", "is_correct": 1, "hint": "程度", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "読むだけでも大変だ。___書くをや。", "text_zh": "光讀就夠嗆，更何況寫。", "blank": "いわんや", "is_correct": 1, "hint": "拡大", "source": "curated", "license": "CC-BY-SA-4.0"}

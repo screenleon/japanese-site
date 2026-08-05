@@ -1,0 +1,74 @@
+{
+  "slug": "ni-atatte-wa",
+  "title_ja": "に当たっては",
+  "title_zh": "に当たっては（正當…之際）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N／Vる＋に当たっては",
+      "gloss_zh": "正當…之際（正式注意）",
+      "notes_zh": "例：実施に当たっては注意が必要。にあたっての強調"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「に当たっては」は、その"
+        },
+        {
+          "t": "ruby",
+          "k": "時機",
+          "r": "じき"
+        },
+        {
+          "t": "text",
+          "v": "における"
+        },
+        {
+          "t": "ruby",
+          "k": "注意",
+          "r": "ちゅうい"
+        },
+        {
+          "t": "text",
+          "v": "や"
+        },
+        {
+          "t": "ruby",
+          "k": "前提",
+          "r": "ぜんてい"
+        },
+        {
+          "t": "text",
+          "v": "を示します。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「に当たっては」在正式場合提示注意「正當…之際」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「に当たっては」は、開始前の公式チェックリストを開く形です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "時機",
+          "reading": "じき"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "ni-atatte"
+  ]
+}

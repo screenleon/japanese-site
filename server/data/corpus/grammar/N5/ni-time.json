@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "時刻／曜日／日付＋に＋動詞",
+      "gloss_zh": "標示動作發生的具體時間點",
+      "notes_zh": "例：7時に起きます／月曜日に会います。明確時點才加「に」"
+    },
+    {
+      "form": "相対時間（今日・明日・毎日など）＋動詞",
+      "gloss_zh": "相對時間詞通常不加「に」",
+      "notes_zh": "例：今日行きます（×今日に）。いつ／毎日／いつも 等也不加「に」"
     }
   ],
   "explanation_ja_blocks": [
@@ -177,6 +183,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

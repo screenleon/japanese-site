@@ -3,6 +3,19 @@
 This file records active architectural and behavioral decisions for this repository.
 Agents must read it before planning or implementation tasks.
 
+## 2026-08-05 — Asymmetric grammar inventory (N1/N2 denser than N5)
+
+**Context**: The original ~40-entries-per-level scaffold was a quality-first MVP, not a claim that JLPT densities are equal. Learners correctly expect N1/N2 to carry more grammar points than N5/N4; N3 also had clear foundation gaps (義務、まま、について、によって、わけ系, etc.).
+
+**Decision**:
+
+1. **Grow inventory asymmetrically**: expand N3 / N2 / N1 with high-frequency curated points while keeping N5/N4 near the existing core unless a specific gap is requested.
+2. **Target shape (this pack)**: N5/N4 ~39 each; N3 ≥60; N2 ≥70; N1 ≥70. Further batches may raise N1/N2 further without re-equalizing lower levels.
+3. **Authoring bar for new rows**: full v2 envelope (`pattern[]` with notes, `explanation_ja_blocks` + `explanation_zh`, `mental_model`, examples JSONL, `_meta` source/license/validated_by). No `_TBD` stubs.
+4. **Not exhaustive**: still a curated learner core, not a full commercial JLPT dump. Prefer pedagogical coverage and sibling routing over raw count.
+
+**Refs**: `audits/grammar-inventory-expand-n1-n2-n3-2026-08-05.md`; JS-100c N5 pattern regen on same branch.
+
 ## 2026-08-04 — JS-135 unit pack 2 + KOKUGO-006 attestation
 
 **Context**: After JS-140 authoring gate and JS-134 classmates, the track needed genre diversity beyond the single `library-use` PoC.

@@ -1,0 +1,63 @@
+{
+  "slug": "ni-itaru",
+  "title_ja": "に至る／に至って",
+  "title_zh": "に至る／に至って（以至…）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N／Vる＋に至る",
+      "gloss_zh": "到達…（過程終點）",
+      "notes_zh": "例：破局に至る。書き言葉"
+    },
+    {
+      "form": "N／Vる＋に至って（は）",
+      "gloss_zh": "直到…才…；到了…地步",
+      "notes_zh": "例：事故に至ってやっと対策した"
+    },
+    {
+      "form": "Nに至るまで",
+      "gloss_zh": "甚至到…為止",
+      "notes_zh": "例：細部に至るまで確認した"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「に至る」は、長い過程の末の"
+        },
+        {
+          "t": "ruby",
+          "k": "到達点",
+          "r": "とうたつてん"
+        },
+        {
+          "t": "text",
+          "v": "を表します。\n\n- 合意に至った"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「に至る」表到達結果點；「に至って」常帶「到這地步才」；「に至るまで」表範圍之廣。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「に至る」は、過程の終点に旗を立てる形です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "到達点",
+          "reading": "とうたつてん"
+        }
+      ]
+    }
+  }
+}

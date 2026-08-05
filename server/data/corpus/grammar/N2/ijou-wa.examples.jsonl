@@ -1,0 +1,4 @@
+{"text_ja": "選ばれた___、期待に応えたい。", "text_zh": "既然被選上，就想回應期待。", "blank": "以上は", "is_correct": 1, "hint": "前提", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "知っている___、教えなければなりません。", "text_zh": "既然知道，就必須告訴他。", "blank": "以上", "is_correct": 1, "hint": "義務", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "やると言った___、やり通します。", "text_zh": "既然說了要做，就會做到底。", "blank": "以上は", "is_correct": 1, "hint": "一貫", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "大人である___、自分で決めます。", "text_zh": "既然是大人，就自己決定。", "blank": "以上", "is_correct": 1, "hint": "身分", "source": "curated", "license": "CC-BY-SA-4.0"}

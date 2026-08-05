@@ -1,0 +1,53 @@
+{
+  "slug": "zu-niwa-sumanai",
+  "title_ja": "ずにはすまない",
+  "title_zh": "ずにはすまない（不做不行）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vない形（ず）＋にはすまない",
+      "gloss_zh": "不做不行；必須做才過得去",
+      "notes_zh": "例：謝らずにはすまない"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ずにはすまない」は、そうしないと済まない"
+        },
+        {
+          "t": "ruby",
+          "k": "義務感",
+          "r": "ぎむかん"
+        },
+        {
+          "t": "text",
+          "v": "を表します。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「ずにはすまない」表示從道義或社會關係上「不做不行」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「ずにはすまない」は、社会的な勘定が終わらない線です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "義務感",
+          "reading": "ぎむかん"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{"text_ja": "この薬はよく効く___、副作用もあります。", "text_zh": "這藥很有效，另一方面也有副作用。", "blank": "一方で", "is_correct": 1, "hint": "二面", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "都市は便利な___物価が高いです。", "text_zh": "都市方便，另一方面物價高。", "blank": "一方", "is_correct": 1, "hint": "対比", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "___、反対する人もいます。", "text_zh": "另一方面，也有人反對。", "blank": "一方", "is_correct": 1, "hint": "接続", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "成績は上がった___、ストレスも増えました。", "text_zh": "成績上升的同時壓力也增了。", "blank": "一方で", "is_correct": 1, "hint": "並行", "source": "curated", "license": "CC-BY-SA-4.0"}

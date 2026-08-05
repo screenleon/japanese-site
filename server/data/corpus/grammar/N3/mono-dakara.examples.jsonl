@@ -1,0 +1,4 @@
+{"text_ja": "初めてだった___、緊張しました。", "text_zh": "因為是第一次，所以緊張了。", "blank": "ものだから", "is_correct": 1, "hint": "事情", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "雨が強かった___、遅れました。", "text_zh": "因為雨大，所以遲到了。", "blank": "ものだから", "is_correct": 1, "hint": "理由", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "知らなかった___、失礼しました。", "text_zh": "因為不知道，所以失禮了。", "blank": "ものだから", "is_correct": 1, "hint": "弁解", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "安かった___、つい買ってしまいました。", "text_zh": "因為便宜，一不小心就買了。", "blank": "ものだから", "is_correct": 1, "hint": "背景", "source": "curated", "license": "CC-BY-SA-4.0"}

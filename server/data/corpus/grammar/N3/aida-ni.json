@@ -1,0 +1,61 @@
+{
+  "slug": "aida-ni",
+  "title_ja": "あいだに",
+  "title_zh": "あいだに（在…期間內）",
+  "jlpt_level": "N3",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vている／Nの＋あいだに",
+      "gloss_zh": "在某持續期間內（完成另一動作）",
+      "notes_zh": "例：留守のあいだに荷物が届いた。「あいだ」は期間全体、「あいだに」はその中の一点"
+    },
+    {
+      "form": "Vない形＋あいだに",
+      "gloss_zh": "在還沒…之前的期間內",
+      "notes_zh": "例：冷めないあいだに食べてください"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「あいだに」は、ある"
+        },
+        {
+          "t": "ruby",
+          "k": "期間",
+          "r": "きかん"
+        },
+        {
+          "t": "text",
+          "v": "の中で起きることを表します。\n\n- 夏休みのあいだに本を読んだ\n- 子供が寝ているあいだに仕事をする"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「あいだに」表示在某段時間之中發生或完成某事。期間用「あいだ」，期間內完成用「あいだに」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「あいだに」は、続く枠の内側に出来事を差し込みます。枠が終わる前に済ませる入れ子です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "期間",
+          "reading": "きかん"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "uchi-ni"
+  ]
+}

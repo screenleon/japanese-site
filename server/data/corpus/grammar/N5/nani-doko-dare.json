@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "何／どこ／誰／いつ／どう",
+      "gloss_zh": "基本疑問詞",
+      "notes_zh": "例：何を食べますか／どこに行きますか／誰が来ますか。何有「なに／なん」兩讀"
+    },
+    {
+      "form": "疑問詞＋が／を／に＋…＋か",
+      "gloss_zh": "疑問詞在句中的助詞搭配",
+      "notes_zh": "例：何が好きですか（主語「が」）。句尾加「か」見 ka-question"
     }
   ],
   "explanation_ja_blocks": [
@@ -169,6 +175,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

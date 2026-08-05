@@ -1,0 +1,57 @@
+{
+  "slug": "nagara-mo",
+  "title_ja": "ながらも",
+  "title_zh": "ながらも（雖然…卻…）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vます形／い形／な形／N＋ながら（も）",
+      "gloss_zh": "雖然…卻…",
+      "notes_zh": "例：狭いながらも楽しい我が家。同時進行の「ながら」(N4)と別"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ながらも」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "逆接",
+          "r": "ぎゃくせつ"
+        },
+        {
+          "t": "text",
+          "v": "を表します。\n\n- 子供ながらも立派だ"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「ながら（も）」逆接用法：雖然狀態 A，卻 B。與同時動作「Vますながら」不同。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「ながらも」は、前件の属性を残したまま後件が食い違う形です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "逆接",
+          "reading": "ぎゃくせつ"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "nagara-contrast",
+    "nagara"
+  ]
+}

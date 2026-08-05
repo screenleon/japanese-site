@@ -1,0 +1,4 @@
+{"text_ja": "朝は電車が遅れ___です。", "text_zh": "早上電車往往誤點。", "blank": "がち", "is_correct": 1, "hint": "傾向", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "一人暮らしはコンビニに頼り___だ。", "text_zh": "獨居往往依賴超商。", "blank": "がち", "is_correct": 1, "hint": "癖", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "彼は病気___です。", "text_zh": "他體弱多病。", "blank": "がち", "is_correct": 1, "hint": "名詞＋がち", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "説明が長くなり___なので簡潔にします。", "text_zh": "說明容易變長，所以簡短說。", "blank": "がち", "is_correct": 1, "hint": "自己注記", "source": "curated", "license": "CC-BY-SA-4.0"}

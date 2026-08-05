@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N／数量＋だけ",
+      "gloss_zh": "限定：只有、僅僅",
+      "notes_zh": "例：水だけ飲みます／一人だけ来ました。範圍內沒有其他"
+    },
+    {
+      "form": "普通形＋だけ",
+      "gloss_zh": "限定動作或狀態的範圍",
+      "notes_zh": "例：見るだけです。N4+「だけあって」等延伸義不在此條"
     }
   ],
   "explanation_ja_blocks": [
@@ -169,6 +175,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

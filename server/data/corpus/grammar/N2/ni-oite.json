@@ -1,0 +1,80 @@
+{
+  "slug": "ni-oite",
+  "title_ja": "において",
+  "title_zh": "において（在…方面／於…）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N＋において",
+      "gloss_zh": "在…（場所・時間・領域）",
+      "notes_zh": "例：会議において決定した。で／での硬い言い方"
+    },
+    {
+      "form": "N＋における＋N",
+      "gloss_zh": "在…的（連體）",
+      "notes_zh": "例：現代における課題"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「において」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "場面",
+          "r": "ばめん"
+        },
+        {
+          "t": "text",
+          "v": "や"
+        },
+        {
+          "t": "ruby",
+          "k": "分野",
+          "r": "ぶんや"
+        },
+        {
+          "t": "text",
+          "v": "を改まって示す"
+        },
+        {
+          "t": "ruby",
+          "k": "表現",
+          "r": "ひょうげん"
+        },
+        {
+          "t": "text",
+          "v": "です。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「において／における」是正式的「で／での」，用於場所、時間、領域。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「において」は、公的な座標を置きます。どこで／どの領域での話かを固定します。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "場面",
+          "reading": "ばめん"
+        },
+        {
+          "kanji": "分野",
+          "reading": "ぶんや"
+        }
+      ]
+    }
+  }
+}

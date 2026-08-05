@@ -1,0 +1,87 @@
+{
+  "slug": "nakereba-naranai",
+  "title_ja": "なければならない",
+  "title_zh": "なければならない（必須）",
+  "jlpt_level": "N3",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vない形＋なければならない",
+      "gloss_zh": "必須做…；非做不可",
+      "notes_zh": "例：毎日勉強しなければならない。口語常說「なきゃ／なくちゃ」；禁止見 te-wa-ikenai(N4)"
+    },
+    {
+      "form": "Vない形＋なければいけない",
+      "gloss_zh": "必須做…（口語亦常見）",
+      "notes_zh": "例：早く帰らなければいけません。與「なければならない」幾乎同義，語氣略柔"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「なければならない」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "義務",
+          "r": "ぎむ"
+        },
+        {
+          "t": "text",
+          "v": "や"
+        },
+        {
+          "t": "ruby",
+          "k": "必要",
+          "r": "ひつよう"
+        },
+        {
+          "t": "text",
+          "v": "を表します。\n\n- 毎日勉強しなければならない\n- 薬を飲まなければいけません\n\n"
+        },
+        {
+          "t": "ruby",
+          "k": "禁止",
+          "r": "きんし"
+        },
+        {
+          "t": "text",
+          "v": "の「てはいけない」とは逆の方向です。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「なければならない／なければいけない」表示義務或必要，中文「必須、得要」。口語有「なきゃ／なくちゃ」等縮約。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「なければならない」は、しない選択が許されないという義務の枠を先に置きます。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "義務",
+          "reading": "ぎむ"
+        },
+        {
+          "kanji": "必要",
+          "reading": "ひつよう"
+        },
+        {
+          "kanji": "禁止",
+          "reading": "きんし"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "te-wa-ikenai"
+  ]
+}

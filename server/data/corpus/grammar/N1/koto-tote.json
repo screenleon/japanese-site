@@ -1,0 +1,80 @@
+{
+  "slug": "koto-tote",
+  "title_ja": "こととて",
+  "title_zh": "こととて（因為是…嘛）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Nの／普通形＋こととて",
+      "gloss_zh": "因為是…（恕難…）",
+      "notes_zh": "例：初めてのこととてご容赦を。弁解・寛容依頼の硬い言い方"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「こととて」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "事情",
+          "r": "じじょう"
+        },
+        {
+          "t": "text",
+          "v": "を示して"
+        },
+        {
+          "t": "ruby",
+          "k": "容赦",
+          "r": "ようしゃ"
+        },
+        {
+          "t": "text",
+          "v": "を求める"
+        },
+        {
+          "t": "ruby",
+          "k": "硬",
+          "r": "かた"
+        },
+        {
+          "t": "text",
+          "v": "い"
+        },
+        {
+          "t": "ruby",
+          "k": "表現",
+          "r": "ひょうげん"
+        },
+        {
+          "t": "text",
+          "v": "です。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「こととて」表示因某種情況請見諒「畢竟是…」。古雅。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「こととて」は、事情を前置きして許しを請う儀礼的な線です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "容赦",
+          "reading": "ようしゃ"
+        }
+      ]
+    }
+  }
+}

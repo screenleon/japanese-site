@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "これ／それ／あれ／どれ",
+      "gloss_zh": "指事物：近己／近對方／遠雙方／疑問",
+      "notes_zh": "例：これは本です／それは何ですか。單獨當名詞；修飾名詞改用「この／その／あの／どの」"
+    },
+    {
+      "form": "この／その／あの／どの＋N",
+      "gloss_zh": "連體指示：這個／那個 N",
+      "notes_zh": "例：この本。場所：ここ／そこ／あそこ／どこ；方向：こちら 等"
     }
   ],
   "explanation_ja_blocks": [
@@ -173,6 +179,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

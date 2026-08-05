@@ -1,0 +1,62 @@
+{
+  "slug": "shika-arakaru",
+  "title_ja": "にしかず",
+  "title_zh": "にしかず（莫過於…）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N／Vる＋にしかず",
+      "gloss_zh": "莫過於…；最好是…",
+      "notes_zh": "例：百聞は一見にしかず。定型・文語"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「にしかず」は、それに及ばない、"
+        },
+        {
+          "t": "ruby",
+          "k": "最善",
+          "r": "さいぜん"
+        },
+        {
+          "t": "text",
+          "v": "はそれだ、という文語"
+        },
+        {
+          "t": "ruby",
+          "k": "表現",
+          "r": "ひょうげん"
+        },
+        {
+          "t": "text",
+          "v": "です。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「にしかず」文語比較「比不上、莫過於」。常見於成語。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「にしかず」は、比較の頂点を一文で指す文語の型です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "最善",
+          "reading": "さいぜん"
+        }
+      ]
+    }
+  }
+}

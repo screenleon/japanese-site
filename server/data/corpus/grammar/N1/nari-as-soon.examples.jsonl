@@ -1,0 +1,4 @@
+{"text_ja": "家に着く___倒れ込んだ。", "text_zh": "一到家就癱倒了。", "blank": "なり", "is_correct": 1, "hint": "即時", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "扉を開ける___大声がした。", "text_zh": "一開門就聽到大聲。", "blank": "なり", "is_correct": 1, "hint": "直後", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "座る___眠り始めた。", "text_zh": "一坐下就開始睡。", "blank": "なり", "is_correct": 1, "hint": "即時", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "見る___泣き出した。", "text_zh": "一見到就哭了。", "blank": "なり", "is_correct": 1, "hint": "反応", "source": "curated", "license": "CC-BY-SA-4.0"}

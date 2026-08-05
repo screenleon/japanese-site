@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形／です・ます形＋から＋結果",
+      "gloss_zh": "說明理由：因為…所以…",
+      "notes_zh": "例：寒いから、窓を閉めます。語氣直接；更軟的理由見 N4 ので"
+    },
+    {
+      "form": "N／な形容詞＋だから＋結果",
+      "gloss_zh": "名詞・な形容詞後的理由",
+      "notes_zh": "例：日曜日だから、休みます。丁寧可說「ですから」"
     }
   ],
   "explanation_ja_blocks": [
@@ -131,6 +137,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

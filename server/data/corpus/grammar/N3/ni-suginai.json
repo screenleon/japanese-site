@@ -1,0 +1,58 @@
+{
+  "slug": "ni-suginai",
+  "title_ja": "にすぎない",
+  "title_zh": "にすぎない（只不過是…）",
+  "jlpt_level": "N3",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N／普通形＋にすぎない",
+      "gloss_zh": "只不過是…；僅僅…",
+      "notes_zh": "例：それは噂にすぎない。評価を低く抑える"
+    },
+    {
+      "form": "数量＋にすぎない",
+      "gloss_zh": "僅僅（數量上）…",
+      "notes_zh": "例：参加者は10人にすぎなかった"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「にすぎない」は、それ以上ではないという"
+        },
+        {
+          "t": "ruby",
+          "k": "評価",
+          "r": "ひょうか"
+        },
+        {
+          "t": "text",
+          "v": "を表します。\n\n- ただの冗談にすぎない\n- まだ初心者にすぎない"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「にすぎない」把事物往下壓：「只不過是…」，暗示沒有更多。書面常見。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「にすぎない」は上限のフタです。それ以上の意味や価値を付け足さないよう評価を低く固定します。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "評価",
+          "reading": "ひょうか"
+        }
+      ]
+    }
+  }
+}

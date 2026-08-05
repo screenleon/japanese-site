@@ -1,0 +1,58 @@
+{
+  "slug": "nari-ni",
+  "title_ja": "なりに／なりの",
+  "title_zh": "なりに／なりの（以…相應的方式）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N＋なりに",
+      "gloss_zh": "以與其相稱的方式",
+      "notes_zh": "例：子供なりに考えている"
+    },
+    {
+      "form": "N＋なりの＋N",
+      "gloss_zh": "與…相稱的 N",
+      "notes_zh": "例：初心者なりの工夫"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「なりに」は、その"
+        },
+        {
+          "t": "ruby",
+          "k": "立場",
+          "r": "たちば"
+        },
+        {
+          "t": "text",
+          "v": "に応じたやり方があることを表します。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「なりに／なりの」表示在該身分或條件下盡其所能、有其自身的方式。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「なりに」は、規模や立場に合わせた最善の線です。上から見下ろさず、その枠内の誠実さを認めます。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "立場",
+          "reading": "たちば"
+        }
+      ]
+    }
+  }
+}

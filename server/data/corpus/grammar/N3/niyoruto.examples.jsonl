@@ -1,0 +1,4 @@
+{"text_ja": "天気予報___、午後から雨です。", "text_zh": "根據天氣預報，下午起會下雨。", "blank": "によると", "is_correct": 1, "hint": "情報源", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "案内板___、駅は右です。", "text_zh": "根據告示牌，車站在右邊。", "blank": "によると", "is_correct": 1, "hint": "情報源", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "報道___、けが人はいません。", "text_zh": "據報導沒有傷者。", "blank": "によれば", "is_correct": 1, "hint": "書面", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "友達の話___、店はもう閉まっています。", "text_zh": "據朋友說，店已打烊。", "blank": "によると", "is_correct": 1, "hint": "伝聞", "source": "curated", "license": "CC-BY-SA-4.0"}

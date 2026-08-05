@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "ます形",
-      "gloss_zh": "ます形"
+      "form": "Vます形（現在・未来）",
+      "gloss_zh": "動詞禮貌形：做／將做",
+      "notes_zh": "例：食べます／行きます。一段：語幹＋ます；五段：い段＋ます；する→します、来る→来ます"
+    },
+    {
+      "form": "V辞書形→ます形",
+      "gloss_zh": "由辞書形改成ます形的基本規則",
+      "notes_zh": "例：飲む→飲みます、書く→書きます。否定・過去見 masu-negative／masu-past"
     }
   ],
   "explanation_ja_blocks": [
@@ -171,6 +177,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

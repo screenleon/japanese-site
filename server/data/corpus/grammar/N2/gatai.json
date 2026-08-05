@@ -1,0 +1,53 @@
+{
+  "slug": "gatai",
+  "title_ja": "がたい",
+  "title_zh": "がたい（難以…）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vます形＋がたい",
+      "gloss_zh": "難以…（心理・評價上）",
+      "notes_zh": "例：信じがたい／許しがたい。にくいより書き・評価的"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「がたい」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "心理的",
+          "r": "しんりてき"
+        },
+        {
+          "t": "text",
+          "v": "に難しいことを表します。\n\n- 理解しがたい態度\n- 忘れがたい思い出"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「がたい」表示心理或評價上難以做到「難以…」。多接感情・認知動詞。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「がたい」は、心の抵抗が大きい難しさです。技術的な「にくい」より評価・感情側に寄ります。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "心理的",
+          "reading": "しんりてき"
+        }
+      ]
+    }
+  }
+}

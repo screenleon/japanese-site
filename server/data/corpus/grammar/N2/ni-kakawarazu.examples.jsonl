@@ -1,0 +1,4 @@
+{"text_ja": "天候___試合は行います。", "text_zh": "不論天氣如何比賽都舉行。", "blank": "にかかわらず", "is_correct": 1, "hint": "條件無効", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "経験の有無___応募できます。", "text_zh": "不論有無經驗都可報名。", "blank": "にかかわらず", "is_correct": 1, "hint": "不問", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "成功するしない___挑戦します。", "text_zh": "不論成敗都要挑戰。", "blank": "にかかわらず", "is_correct": 1, "hint": "両極", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "曜日___同じ時間に開きます。", "text_zh": "不論星期幾都同一時間開。", "blank": "にかかわらず", "is_correct": 1, "hint": "一律", "source": "curated", "license": "CC-BY-SA-4.0"}

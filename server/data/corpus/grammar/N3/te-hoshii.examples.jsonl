@@ -1,0 +1,4 @@
+{"text_ja": "もう一度説明して___です。", "text_zh": "希望你再說明一次。", "blank": "ほしい", "is_correct": 1, "hint": "希望", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "静かにして___んですが。", "text_zh": "希望你安靜一點…", "blank": "ほしい", "is_correct": 1, "hint": "依頼寄り", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "ここに来ないで___です。", "text_zh": "希望你不要來這裡。", "blank": "ほしい", "is_correct": 1, "hint": "否定希望", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "正直に話して___。", "text_zh": "希望你老實說。", "blank": "ほしい", "is_correct": 1, "hint": "相手行動", "source": "curated", "license": "CC-BY-SA-4.0"}

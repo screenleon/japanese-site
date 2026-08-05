@@ -1,0 +1,93 @@
+{
+  "slug": "nari-as-soon",
+  "title_ja": "なり",
+  "title_zh": "なり（一…就…）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "V辞書形＋なり",
+      "gloss_zh": "一…就立刻…",
+      "notes_zh": "例：帰るなり寝た。や否や・が早いかと近い書き寄り"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「なり」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "前",
+          "r": "まえ"
+        },
+        {
+          "t": "text",
+          "v": "の"
+        },
+        {
+          "t": "ruby",
+          "k": "動作",
+          "r": "どうさ"
+        },
+        {
+          "t": "text",
+          "v": "の"
+        },
+        {
+          "t": "ruby",
+          "k": "直後",
+          "r": "ちょくご"
+        },
+        {
+          "t": "text",
+          "v": "に"
+        },
+        {
+          "t": "ruby",
+          "k": "後",
+          "r": "あと"
+        },
+        {
+          "t": "text",
+          "v": "の"
+        },
+        {
+          "t": "ruby",
+          "k": "動作",
+          "r": "どうさ"
+        },
+        {
+          "t": "text",
+          "v": "が起きることを表します。\n\n- 会うなり文句を言った"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「なり」接辭書形，表示前動作一發生就立刻做後動作。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「なり」は、前件の着地と同時に後件が発火する瞬間接続です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "直後",
+          "reading": "ちょくご"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "ya-inaya",
+    "ga-hayai-ka"
+  ]
+}

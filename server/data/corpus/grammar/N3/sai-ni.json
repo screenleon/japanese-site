@@ -1,0 +1,57 @@
+{
+  "slug": "sai-ni",
+  "title_ja": "際に",
+  "title_zh": "際に（在…之際）",
+  "jlpt_level": "N3",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Nの／Vる・Vた＋際（に）",
+      "gloss_zh": "在…的時候／之際（正式）",
+      "notes_zh": "例：お帰りの際に。案内・手続きの定型"
+    },
+    {
+      "form": "Vる＋際は",
+      "gloss_zh": "當要…時（注意事項）",
+      "notes_zh": "例：利用する際は登録が必要です。ときより硬い"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「際に」は、改まった「とき」です。\n\n- 帰国の際に連絡してください\n- ご利用の際は注意事項をお読みください"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「際に／際は」是正式場合的「とき」，多用於公告、手續、商務。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「際に」は公式のタイミング枠です。手続きや礼儀の場面で動作の瞬間をきちんと切り取ります。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "帰国",
+          "reading": "きこく"
+        },
+        {
+          "kanji": "利用",
+          "reading": "りよう"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "toki-when",
+    "ni-saishite"
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "slug": "te-naranai",
+  "title_ja": "てならない",
+  "title_zh": "てならない（…得不行）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vて／い形−くて／な形−で＋ならない",
+      "gloss_zh": "不由得…；…得不行（書面偏）",
+      "notes_zh": "例：残念でならない。思索・感慨に出やすい"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「てならない」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "自然",
+          "r": "しぜん"
+        },
+        {
+          "t": "text",
+          "v": "にわき上がる"
+        },
+        {
+          "t": "ruby",
+          "k": "感情",
+          "r": "かんじょう"
+        },
+        {
+          "t": "text",
+          "v": "が強いことを表します。\n\n- 不思議でならない"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「てならない」書面語氣較強，表示自然湧現、無法壓抑的情感。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「てならない」は、心に勝手に広がる思いです。やや硬い語感で表します。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "感情",
+          "reading": "かんじょう"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "te-tamaranai"
+  ]
+}

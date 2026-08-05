@@ -1,0 +1,74 @@
+{
+  "slug": "ippou",
+  "title_ja": "一方（で）",
+  "title_zh": "一方（で）（一方面…另一方面…）",
+  "jlpt_level": "N3",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "普通形＋一方（で）",
+      "gloss_zh": "一方面…；與此同時另一方面…",
+      "notes_zh": "例：便利な一方で、問題もある"
+    },
+    {
+      "form": "一方、文",
+      "gloss_zh": "句首連接：另一方面…",
+      "notes_zh": "例：一方、反対意見も多い"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「一方（で）」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "物事",
+          "r": "ものごと"
+        },
+        {
+          "t": "text",
+          "v": "の別の面や"
+        },
+        {
+          "t": "ruby",
+          "k": "対比",
+          "r": "たいひ"
+        },
+        {
+          "t": "text",
+          "v": "を示します。\n\n- 給料は高い一方で、仕事がきつい"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「一方（で）」表示同一事物的另一面，或兩件並行的事。中文「一方面…另一方面…」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「一方」はコインの裏を返します。今述べた面と並ぶもう一面を出します。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "物事",
+          "reading": "ものごと"
+        },
+        {
+          "kanji": "対比",
+          "reading": "たいひ"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "hanmen"
+  ]
+}

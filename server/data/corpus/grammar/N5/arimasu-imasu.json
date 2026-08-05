@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "場所＋に＋物＋があります",
+      "gloss_zh": "無生命物的存在",
+      "notes_zh": "例：机の上に本があります。物用「が」，場所用「に」"
+    },
+    {
+      "form": "場所＋に＋人／動物＋がいます",
+      "gloss_zh": "人或動物的存在",
+      "notes_zh": "例：公園に子供がいます。物不能用「います」（×本がいます）"
     }
   ],
   "explanation_ja_blocks": [
@@ -139,6 +145,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

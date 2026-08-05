@@ -1,0 +1,53 @@
+{
+  "slug": "meku",
+  "title_ja": "めく",
+  "title_zh": "めく（帶有…氣息）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N＋めく",
+      "gloss_zh": "帶有…的氣息／樣子",
+      "notes_zh": "例：皮肉めいた言い方／春めく"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「めく」は、その"
+        },
+        {
+          "t": "ruby",
+          "k": "気配",
+          "r": "けはい"
+        },
+        {
+          "t": "text",
+          "v": "がすることを表します。\n\n- 謎めいた微笑み\n- 皮肉めく"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「めく」表示帶有某種色彩或氣息，不完全是但像。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「めく」は、輪郭のぼかした色づきです。完全同一ではないが気配が差す感じです。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "気配",
+          "reading": "けはい"
+        }
+      ]
+    }
+  }
+}

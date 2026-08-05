@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋も＋述語",
+      "gloss_zh": "追加同類：也／也都",
+      "notes_zh": "例：私も学生です。取代「は／が／を」位置，不說「はも」"
+    },
+    {
+      "form": "疑問詞＋も＋否定",
+      "gloss_zh": "全稱否定：什麼也…都不…",
+      "notes_zh": "例：何も食べません／誰も来ません。肯定「全部」用「全部／みんな」等，不與「も」硬套"
     }
   ],
   "explanation_ja_blocks": [
@@ -124,6 +130,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

@@ -1,0 +1,4 @@
+{"text_ja": "この店は安い___美味しい。", "text_zh": "這家店不但便宜而且好吃。", "blank": "上に", "is_correct": 1, "hint": "累加", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "道に迷った___雨まで降ってきた。", "text_zh": "不但迷路，連雨都下了。", "blank": "上に", "is_correct": 1, "hint": "悪化累加", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "経験がある___語学もできる。", "text_zh": "不但有經驗，還會外語。", "blank": "上に", "is_correct": 1, "hint": "プラス", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "忙しい___人手も足りない。", "text_zh": "不但忙，人手也不足。", "blank": "上に", "is_correct": 1, "hint": "状況", "source": "curated", "license": "CC-BY-SA-4.0"}

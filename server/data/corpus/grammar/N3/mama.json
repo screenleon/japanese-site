@@ -1,0 +1,63 @@
+{
+  "slug": "mama",
+  "title_ja": "まま",
+  "title_zh": "まま（維持原樣）",
+  "jlpt_level": "N3",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vた形＋まま",
+      "gloss_zh": "保持做完該動作後的狀態不變",
+      "notes_zh": "例：靴をはいたまま入る。多帶「未改回原狀」感"
+    },
+    {
+      "form": "Vない形＋まま",
+      "gloss_zh": "一直沒做…就（維持未做的狀態）",
+      "notes_zh": "例：何も知らないまま決めた"
+    },
+    {
+      "form": "N＋の＋まま",
+      "gloss_zh": "保持該名詞所示狀態",
+      "notes_zh": "例：昔のまま／このまま進む"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「まま」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "状態",
+          "r": "じょうたい"
+        },
+        {
+          "t": "text",
+          "v": "が変わらないことを表します。\n\n- テレビをつけたまま寝る\n- 何も言わないまま帰った"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「まま」表示狀態沒有改變、維持原樣。常接「Vた／Vない／Nの」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「まま」は変化を止めたスナップショットです。未整理の状態を残したまま次の動作へ進む感じが出ます。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "状態",
+          "reading": "じょうたい"
+        }
+      ]
+    }
+  }
+}

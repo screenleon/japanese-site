@@ -1,0 +1,4 @@
+{"text_ja": "便利___、駅から遠いです。", "text_zh": "雖說方便，離車站卻很遠。", "blank": "といっても", "is_correct": 1, "hint": "修正", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "失敗___、学びは多かった。", "text_zh": "雖說是失敗，學到的卻很多。", "blank": "といっても", "is_correct": 1, "hint": "再評価", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "休み___半日だけです。", "text_zh": "雖說放假，只有半天。", "blank": "といっても", "is_correct": 1, "hint": "看板差", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "知っている___名前だけです。", "text_zh": "雖說知道，只知道名字。", "blank": "といっても", "is_correct": 1, "hint": "程度低", "source": "curated", "license": "CC-BY-SA-4.0"}

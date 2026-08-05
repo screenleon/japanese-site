@@ -1,0 +1,4 @@
+{"text_ja": "未熟___失敗した。", "text_zh": "因不成熟而失敗。", "blank": "なものゆえ", "is_correct": 1, "hint": "理由", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "遠隔___参加できない。", "text_zh": "因遠隔無法參加。", "blank": "のものゆえ", "is_correct": 1, "hint": "事情", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "多忙___返信が遅れた。", "text_zh": "因忙碌回信遲了。", "blank": "のものゆえ", "is_correct": 1, "hint": "弁解", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "初対面___遠慮してしまう。", "text_zh": "因初次見面而客氣。", "blank": "のものゆえ", "is_correct": 1, "hint": "背景", "source": "curated", "license": "CC-BY-SA-4.0"}

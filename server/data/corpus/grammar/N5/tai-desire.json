@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vます形の語幹＋たいです",
+      "gloss_zh": "想要做某事（多用於第一人稱）",
+      "notes_zh": "例：寿司を食べたいです。對象助詞常由「を」改「が」（寿司が食べたい）"
+    },
+    {
+      "form": "Vます形の語幹＋たくないです／たかったです",
+      "gloss_zh": "不想做／以前想做（い形容詞式活用）",
+      "notes_zh": "例：行きたくないです。第三人稱慾望多用「たがる」（N4）"
     }
   ],
   "explanation_ja_blocks": [
@@ -130,6 +136,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

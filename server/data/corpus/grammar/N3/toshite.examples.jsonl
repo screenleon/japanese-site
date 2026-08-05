@@ -1,0 +1,4 @@
+{"text_ja": "私は医者___働いています。", "text_zh": "我以醫生的身分工作。", "blank": "として", "is_correct": 1, "hint": "身分", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "友人___アドバイスします。", "text_zh": "以朋友身分給建議。", "blank": "として", "is_correct": 1, "hint": "立場", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "学生___の意見を聞きたいです。", "text_zh": "想聽作為學生的意見。", "blank": "として", "is_correct": 1, "hint": "連體", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "記念___写真を撮りました。", "text_zh": "作為紀念拍了照。", "blank": "として", "is_correct": 1, "hint": "位置づけ", "source": "curated", "license": "CC-BY-SA-4.0"}

@@ -1,0 +1,67 @@
+{
+  "slug": "uru-enai",
+  "title_ja": "得る／得ない",
+  "title_zh": "得る／得ない（可能／不可能）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vます形＋得る（うる／える）",
+      "gloss_zh": "有可能…；能夠…（書面）",
+      "notes_zh": "例：あり得る。書き言葉。読みは「うる／える」両用"
+    },
+    {
+      "form": "Vます形＋得ない",
+      "gloss_zh": "不可能…",
+      "notes_zh": "例：あり得ない。強い不可能性"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「得る／得ない」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "可能性",
+          "r": "かのうせい"
+        },
+        {
+          "t": "text",
+          "v": "の有無を"
+        },
+        {
+          "t": "ruby",
+          "k": "書き言葉",
+          "r": "かきことば"
+        },
+        {
+          "t": "text",
+          "v": "で表します。\n\n- 起こり得る事故\n- あり得ない話"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「得る／得ない」書面表達可能性「可能發生／不可能」。口語「ありえる／ありえない」常見。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「得る／得ない」は、可能性のスイッチです。起こりうるか、筋として切るかを示します。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "可能性",
+          "reading": "かのうせい"
+        }
+      ]
+    }
+  }
+}

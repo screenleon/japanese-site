@@ -1,0 +1,61 @@
+{
+  "slug": "ni-kakawarazu",
+  "title_ja": "にかかわらず",
+  "title_zh": "にかかわらず（不論…）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N／普通形＋にかかわらず",
+      "gloss_zh": "不論…；與…無關",
+      "notes_zh": "例：天候にかかわらず実施する"
+    },
+    {
+      "form": "Vる・Vない＋にかかわらず",
+      "gloss_zh": "無論做不做…",
+      "notes_zh": "例：来る来ないにかかわらず連絡を。にもかかわらず(N1)は逆接「儘管」"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「にかかわらず」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "条件",
+          "r": "じょうけん"
+        },
+        {
+          "t": "text",
+          "v": "の違いを問題にしないことを表します。\n\n- 年齢にかかわらず参加できる"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「にかかわらず」表示不受該條件左右「不論…」。與「にもかかわらず」不同。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「にかかわらず」は、条件の差を無効化する線です。どれを取っても方針は同じ、と枠を広げます。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "年齢",
+          "reading": "ねんれい"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "nimokakawarazu"
+  ]
+}

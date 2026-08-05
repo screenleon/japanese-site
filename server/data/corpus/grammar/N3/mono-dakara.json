@@ -1,0 +1,62 @@
+{
+  "slug": "mono-dakara",
+  "title_ja": "ものだから",
+  "title_zh": "ものだから（因為…嘛）",
+  "jlpt_level": "N3",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "普通形＋ものだから／もんだから",
+      "gloss_zh": "因為…（解釋理由，略帶辯解）",
+      "notes_zh": "例：道が混んでいたものだから遅れた"
+    },
+    {
+      "form": "な形容詞／N＋ものだから",
+      "gloss_zh": "名詞・な形接續",
+      "notes_zh": "例：初めてなものだから緊張した"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ものだから」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "事情",
+          "r": "じじょう"
+        },
+        {
+          "t": "text",
+          "v": "を説明して理由を述べます。\n\n- 急いでいたものだから、忘れ物をした"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「ものだから」說明導致結果的事情，常帶辯解語感。口語「もんだから」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「ものだから」は、事情の物語を添える理由です。結果の責任を状況側に少し寄せます。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "事情",
+          "reading": "じじょう"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "kara-reason",
+    "node-reason"
+  ]
+}

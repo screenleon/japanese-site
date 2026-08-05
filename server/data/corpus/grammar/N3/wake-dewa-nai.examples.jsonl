@@ -1,0 +1,4 @@
+{"text_ja": "お金がない___ではない。", "text_zh": "並不是沒錢。", "blank": "わけ", "is_correct": 1, "hint": "部分否定", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "彼が悪い___ではありません。", "text_zh": "並不是他不好。", "blank": "わけ", "is_correct": 1, "hint": "言い切り回避", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "毎日来る___ではない。", "text_zh": "並不是每天都來。", "blank": "わけ", "is_correct": 1, "hint": "程度", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "反対という___ではない。", "text_zh": "並不是反對的意思。", "blank": "わけ", "is_correct": 1, "hint": "意味否定", "source": "curated", "license": "CC-BY-SA-4.0"}

@@ -1,0 +1,74 @@
+{
+  "slug": "ni-kawatte",
+  "title_ja": "にかわって／にかわり",
+  "title_zh": "にかわって（代替…）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N＋にかわって／にかわり",
+      "gloss_zh": "代替某人／某事物",
+      "notes_zh": "例：部長にかわって挨拶する"
+    },
+    {
+      "form": "N＋にかわる＋N",
+      "gloss_zh": "取代…的…",
+      "notes_zh": "例：紙にかわる素材"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「にかわって」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "代理",
+          "r": "だいり"
+        },
+        {
+          "t": "text",
+          "v": "や"
+        },
+        {
+          "t": "ruby",
+          "k": "交代",
+          "r": "こうたい"
+        },
+        {
+          "t": "text",
+          "v": "を表します。\n\n- 母にかわってお礼を言います"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「にかわって」表示代理或取代「代替…」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「にかわって」は、本来の位置に誰かが入る交代です。代役を立てます。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "代理",
+          "reading": "だいり"
+        },
+        {
+          "kanji": "交代",
+          "reading": "こうたい"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "kawari-ni"
+  ]
+}

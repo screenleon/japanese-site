@@ -1,0 +1,70 @@
+{
+  "slug": "sei-ka",
+  "title_ja": "せいか",
+  "title_zh": "せいか（也許是因為…）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "普通形＋せいか",
+      "gloss_zh": "也許是因為…（不確定的原因）",
+      "notes_zh": "例：風邪のせいか頭が痛い。せいだ(N3)の不確か版"
+    },
+    {
+      "form": "Nの＋せいか",
+      "gloss_zh": "或許由於 N",
+      "notes_zh": "例：雨のせいか客が少ない"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「せいか」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "原因",
+          "r": "げんいん"
+        },
+        {
+          "t": "text",
+          "v": "の"
+        },
+        {
+          "t": "ruby",
+          "k": "推測",
+          "r": "すいそく"
+        },
+        {
+          "t": "text",
+          "v": "をやわらかく示します。\n\n- 緊張のせいか手が震える"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「せいか」表示不確定的原因推測「也許是因為…」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「せいか」は、原因に問号を付けた線です。断定しない話し方です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "推測",
+          "reading": "すいそく"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "sei-de"
+  ]
+}

@@ -1,0 +1,4 @@
+{"text_ja": "彼は厳しい___、公正な人です。", "text_zh": "與其說他嚴格，不如說他公正。", "blank": "というより", "is_correct": 1, "hint": "言い換え", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "不便___、慣れていないだけです。", "text_zh": "與其說不方便，不如說只是不習慣。", "blank": "というより", "is_correct": 1, "hint": "修正", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "仕事___趣味に近いです。", "text_zh": "與其說是工作，更接近興趣。", "blank": "というより", "is_correct": 1, "hint": "N言い換え", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "失敗___、いい経験でした。", "text_zh": "與其說是失敗，不如說是好經驗。", "blank": "というより", "is_correct": 1, "hint": "再評価", "source": "curated", "license": "CC-BY-SA-4.0"}

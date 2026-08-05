@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "場所＋で＋動作動詞",
+      "gloss_zh": "標示動作進行的場所",
+      "notes_zh": "例：図書館で勉強します。存在位置用「に」；到達點也用「に」，不要用「で」"
+    },
+    {
+      "form": "道具／手段＋で＋動詞",
+      "gloss_zh": "標示使用的工具或手段",
+      "notes_zh": "例：箸で食べます／バスで行きます。N5 常與場所「で」一起學"
     }
   ],
   "explanation_ja_blocks": [
@@ -136,6 +142,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

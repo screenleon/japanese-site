@@ -1,0 +1,80 @@
+{
+  "slug": "mono-nara",
+  "title_ja": "ものなら",
+  "title_zh": "ものなら（如果能…的話）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vう・よう形＋ものなら",
+      "gloss_zh": "要是能…的話（實際很難）",
+      "notes_zh": "例：帰れるものなら帰りたい"
+    },
+    {
+      "form": "Vる＋ものなら",
+      "gloss_zh": "若膽敢…（後件多為嚴重後果）",
+      "notes_zh": "例：文句を言うものなら許さない"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ものなら」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "実現",
+          "r": "じつげん"
+        },
+        {
+          "t": "text",
+          "v": "が難しい"
+        },
+        {
+          "t": "ruby",
+          "k": "仮定",
+          "r": "かてい"
+        },
+        {
+          "t": "text",
+          "v": "や、強い"
+        },
+        {
+          "t": "ruby",
+          "k": "警告",
+          "r": "けいこく"
+        },
+        {
+          "t": "text",
+          "v": "に使います。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「ものなら」：①難以實現的願望假設 ②若竟敢做則後果嚴重。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「ものなら」は、もしのハードルを高くした仮定です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "実現",
+          "reading": "じつげん"
+        },
+        {
+          "kanji": "警告",
+          "reading": "けいこく"
+        }
+      ]
+    }
+  }
+}

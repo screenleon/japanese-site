@@ -1,0 +1,4 @@
+{"text_ja": "議論___結論を出します。", "text_zh": "基於討論得出結論。", "blank": "を踏まえて", "is_correct": 1, "hint": "前提", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "ご意見___修正しました。", "text_zh": "根據意見做了修正。", "blank": "を踏まえて", "is_correct": 1, "hint": "反映", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "現状___計画を見直す。", "text_zh": "基於現狀重新審視計畫。", "blank": "を踏まえて", "is_correct": 1, "hint": "判断", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "過去の失敗___対策を講じる。", "text_zh": "以過去失敗為鑑採取對策。", "blank": "を踏まえて", "is_correct": 1, "hint": "教訓", "source": "curated", "license": "CC-BY-SA-4.0"}

@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "述語＋か",
+      "gloss_zh": "句尾疑問：…嗎？",
+      "notes_zh": "例：学生ですか／行きますか。口語可省略「か」改用上升語調"
+    },
+    {
+      "form": "疑問詞＋…＋か",
+      "gloss_zh": "含疑問詞的詢問句",
+      "notes_zh": "例：何を食べますか／どこに行きますか。疑問詞主語常用「が」"
     }
   ],
   "explanation_ja_blocks": [
@@ -141,6 +147,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

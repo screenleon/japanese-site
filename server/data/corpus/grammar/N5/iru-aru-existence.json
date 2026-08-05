@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "場所＋に＋N＋がある",
+      "gloss_zh": "普通形：無生命存在",
+      "notes_zh": "例：あそこにコンビニがある。丁寧形「あります」見 arimasu-imasu"
+    },
+    {
+      "form": "場所＋に＋N＋がいる",
+      "gloss_zh": "普通形：有生命存在",
+      "notes_zh": "例：猫がいる。丁寧形「います」；持有義的「ある」另論"
     }
   ],
   "explanation_ja_blocks": [
@@ -167,6 +173,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

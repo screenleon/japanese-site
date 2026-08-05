@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N1＋と＋N2",
+      "gloss_zh": "完整列舉：A 和 B",
+      "notes_zh": "例：パンと牛乳。要「等」的不完全列舉用「や」"
+    },
+    {
+      "form": "人＋と＋動詞",
+      "gloss_zh": "表示共同動作的對象",
+      "notes_zh": "例：友達と映画を見ます。對象是「一起做」的人，不是動作受詞（受詞用「を」）"
     }
   ],
   "explanation_ja_blocks": [
@@ -118,6 +124,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

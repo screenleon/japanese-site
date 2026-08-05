@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "場所＋へ＋行きます／来ます／帰ります",
+      "gloss_zh": "標示移動方向",
+      "notes_zh": "例：日本へ行きます。助詞寫「へ」讀「え」。到達感較強時多用「に」"
+    },
+    {
+      "form": "場所＋へ＋の＋N",
+      "gloss_zh": "修飾名詞：往某處的…",
+      "notes_zh": "例：学校への道。此連體用法「に」較不自然"
     }
   ],
   "explanation_ja_blocks": [
@@ -154,6 +160,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

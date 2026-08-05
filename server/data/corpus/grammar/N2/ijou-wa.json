@@ -1,0 +1,79 @@
+{
+  "slug": "ijou-wa",
+  "title_ja": "以上（は）",
+  "title_zh": "以上（は）（既然…就…）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "普通形＋以上（は）",
+      "gloss_zh": "既然…；既已…就應…",
+      "notes_zh": "例：決めた以上は取り消せない。からにはと近いがやや硬い"
+    },
+    {
+      "form": "Nである＋以上",
+      "gloss_zh": "既為…身分／既是…",
+      "notes_zh": "例：社会人である以上、責任がある"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「以上（は）」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "前件",
+          "r": "ぜんけん"
+        },
+        {
+          "t": "text",
+          "v": "を"
+        },
+        {
+          "t": "ruby",
+          "k": "前提",
+          "r": "ぜんてい"
+        },
+        {
+          "t": "text",
+          "v": "にした"
+        },
+        {
+          "t": "ruby",
+          "k": "結論",
+          "r": "けつろん"
+        },
+        {
+          "t": "text",
+          "v": "を導きます。\n\n- 約束した以上、守るべきだ"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「以上（は）」表示承認前件後的論理後果「既然…」。論說文常見。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「以上」は、前提を確定させたあとの論理の段です。後戻りできない線から結論を下ろします。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "結論",
+          "reading": "けつろん"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "kara-niwa"
+  ]
+}

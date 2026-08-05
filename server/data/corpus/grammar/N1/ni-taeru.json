@@ -1,0 +1,58 @@
+{
+  "slug": "ni-taeru",
+  "title_ja": "に耐える／に耐えない",
+  "title_zh": "に耐える／に耐えない（值得…／不忍…）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N＋に耐える",
+      "gloss_zh": "值得…；經得起…",
+      "notes_zh": "例：読むに耐える文章。評価が一定以上"
+    },
+    {
+      "form": "N＋に耐えない",
+      "gloss_zh": "不忍…；不值得…",
+      "notes_zh": "例：見るに耐えない。不堪"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「に耐える／耐えない」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "評価",
+          "r": "ひょうか"
+        },
+        {
+          "t": "text",
+          "v": "の下限を表します。\n\n- 鑑賞に耐える作品\n- 聞くに耐えない暴言"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「に耐える」表示夠水準、經得起；「に耐えない」表示不堪、不忍。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「に耐える」は、基準線を越えているかの検査です。耐えないは基準割れです。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "評価",
+          "reading": "ひょうか"
+        }
+      ]
+    }
+  }
+}

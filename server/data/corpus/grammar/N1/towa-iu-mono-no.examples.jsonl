@@ -1,0 +1,4 @@
+{"text_ja": "簡単___準備が大変だ。", "text_zh": "話雖說簡單，準備卻很辛苦。", "blank": "とはいうものの", "is_correct": 1, "hint": "逆接", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "安い___品質は良い。", "text_zh": "雖說便宜品質卻好。", "blank": "とはいうものの", "is_correct": 1, "hint": "修正", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "賛成___不安は残る。", "text_zh": "雖贊成仍有不安。", "blank": "とはいうものの", "is_correct": 1, "hint": "留保", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "近い___道が分かりにくい。", "text_zh": "雖近路卻不好認。", "blank": "とはいうものの", "is_correct": 1, "hint": "難点", "source": "curated", "license": "CC-BY-SA-4.0"}

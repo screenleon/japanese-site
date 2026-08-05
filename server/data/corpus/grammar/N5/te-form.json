@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vて形",
+      "gloss_zh": "動詞て形：連接、請求、進行等的基底形",
+      "notes_zh": "例：食べて、書いて、飲んで。一段：て；五段：って／んで／いて／いで／して"
+    },
+    {
+      "form": "Vて形＋ください",
+      "gloss_zh": "禮貌請求：請…",
+      "notes_zh": "例：ちょっと待ってください。連接動作見 verb-te-form-connection；進行見 te-imasu"
     }
   ],
   "explanation_ja_blocks": [
@@ -179,6 +185,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

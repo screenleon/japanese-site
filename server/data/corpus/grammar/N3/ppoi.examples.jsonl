@@ -1,0 +1,4 @@
+{"text_ja": "その服は子供___ですね。", "text_zh": "那件衣服有點孩子氣。", "blank": "っぽい", "is_correct": 1, "hint": "印象", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "彼は怒り___性格です。", "text_zh": "他是容易發脾氣的性格。", "blank": "っぽい", "is_correct": 1, "hint": "傾向", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "この料理は油___です。", "text_zh": "這料理油膩膩的。", "blank": "っぽい", "is_correct": 1, "hint": "性質", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "今日は秋___天気です。", "text_zh": "今天天氣很有秋意。", "blank": "っぽい", "is_correct": 1, "hint": "気配", "source": "curated", "license": "CC-BY-SA-4.0"}

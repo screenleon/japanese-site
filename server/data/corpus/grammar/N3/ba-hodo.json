@@ -1,0 +1,74 @@
+{
+  "slug": "ba-hodo",
+  "title_ja": "ば〜ほど",
+  "title_zh": "ば〜ほど（越…越…）",
+  "jlpt_level": "N3",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vば形＋V辞書形＋ほど",
+      "gloss_zh": "越做…就越…",
+      "notes_zh": "例：考えれば考えるほど分からなくなる。前後は同じ動詞のペア"
+    },
+    {
+      "form": "い形−ければ＋い形＋ほど",
+      "gloss_zh": "越…就越…（い形容詞）",
+      "notes_zh": "例：高ければ高いほどいい"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ば〜ほど」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "程度",
+          "r": "ていど"
+        },
+        {
+          "t": "text",
+          "v": "が上がるにつれて、あとの"
+        },
+        {
+          "t": "ruby",
+          "k": "状態",
+          "r": "じょうたい"
+        },
+        {
+          "t": "text",
+          "v": "も強まることを表します。\n\n- 練習すればするほど上手になる"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「ば〜ほど」表示比例關係「越…越…」。動詞重複ば形與辭書形。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「ば〜ほど」は、段階を上げるスライドです。一方が増えるほど他方も連動して強まります。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "程度",
+          "reading": "ていど"
+        },
+        {
+          "kanji": "状態",
+          "reading": "じょうたい"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "hodo"
+  ]
+}

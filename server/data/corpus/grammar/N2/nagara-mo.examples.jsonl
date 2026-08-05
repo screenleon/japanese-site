@@ -1,0 +1,4 @@
+{"text_ja": "狭い___快適な部屋です。", "text_zh": "雖小卻舒適的房間。", "blank": "ながらも", "is_correct": 1, "hint": "逆接", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "初心者___立派な作品です。", "text_zh": "雖是初學者，作品卻出色。", "blank": "ながらも", "is_correct": 1, "hint": "評価", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "残念___試合は中止です。", "text_zh": "雖遺憾，比賽取消。", "blank": "ながら", "is_correct": 1, "hint": "公式", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "知ってい___言えませんでした。", "text_zh": "雖然知道，卻說不出口。", "blank": "ながらも", "is_correct": 1, "hint": "内心矛盾", "source": "curated", "license": "CC-BY-SA-4.0"}

@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V1て形、V2",
+      "gloss_zh": "依序連接動作：先做 V1 再做 V2",
+      "notes_zh": "例：朝ごはんを食べて、学校へ行きます。句尾一個禮貌形即可"
+    },
+    {
+      "form": "Vて形＋から＋V2",
+      "gloss_zh": "明確「做完之後」再做後項",
+      "notes_zh": "例：宿題をしてから、遊びます。比單純「て」更強調先後完成"
     }
   ],
   "explanation_ja_blocks": [
@@ -173,6 +179,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

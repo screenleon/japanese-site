@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N1＋の＋N2",
+      "gloss_zh": "表示所有、所屬或屬性關係",
+      "notes_zh": "例：私の本／日本語の先生。N1 修飾 N2，核心名詞在後"
+    },
+    {
+      "form": "場所N＋の＋位置語",
+      "gloss_zh": "表示位置關係",
+      "notes_zh": "例：机の上／駅の前。後接「に／で」時整塊當場所"
     }
   ],
   "explanation_ja_blocks": [
@@ -196,6 +202,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

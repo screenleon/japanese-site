@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋を＋他動詞",
+      "gloss_zh": "標示動作的對象（受詞）",
+      "notes_zh": "例：水を飲みます／本を読みます。發音同「お」，書寫必須用「を」"
+    },
+    {
+      "form": "場所＋を＋移動動詞",
+      "gloss_zh": "標示經過或離開的場所",
+      "notes_zh": "例：橋を渡ります／家を出ます。N5 先掌握對象「を」，移動用法可對照到達「に」"
     }
   ],
   "explanation_ja_blocks": [
@@ -155,6 +161,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

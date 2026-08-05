@@ -6,8 +6,19 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "数＋つ",
+      "gloss_zh": "一般物品的通用量詞（約 1–9）",
+      "notes_zh": "例：一つ、二つ。十以上常用「個」等其他量詞"
+    },
+    {
+      "form": "数＋人",
+      "gloss_zh": "數人",
+      "notes_zh": "例：一人（ひとり）、二人（ふたり）、三人（さんにん）。一人・二人讀法特殊"
+    },
+    {
+      "form": "数＋枚",
+      "gloss_zh": "數薄片狀物",
+      "notes_zh": "例：紙が三枚あります。票、盤子、襯衫等也常用「枚」"
     }
   ],
   "explanation_ja_blocks": [
@@ -181,6 +192,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

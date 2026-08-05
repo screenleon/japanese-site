@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "数＋本",
+      "gloss_zh": "數細長物（筆、瓶、樹、傘等）",
+      "notes_zh": "例：ペンが三本あります。一本・六本・八本・十本多讀「ぽん」，三本「ぼん」"
+    },
+    {
+      "form": "何本",
+      "gloss_zh": "詢問細長物數量",
+      "notes_zh": "例：ビールは何本ありますか。價格用「いくら」見 ikura-nanbon"
     }
   ],
   "explanation_ja_blocks": [
@@ -94,6 +100,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

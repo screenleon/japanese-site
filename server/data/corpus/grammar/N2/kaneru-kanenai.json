@@ -1,0 +1,71 @@
+{
+  "slug": "kaneru-kanenai",
+  "title_ja": "かねる／かねない",
+  "title_zh": "かねる／かねない（難以…／很可能…）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vます形＋かねる",
+      "gloss_zh": "難以…；不便…（婉拒）",
+      "notes_zh": "例：賛成しかねる。丁寧な拒否・保留"
+    },
+    {
+      "form": "Vます形＋かねない",
+      "gloss_zh": "很有可能會…（多負面）",
+      "notes_zh": "例：事故になりかねない。悪い結果の可能性"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「かねる」は"
+        },
+        {
+          "t": "ruby",
+          "k": "困難",
+          "r": "こんなん"
+        },
+        {
+          "t": "text",
+          "v": "や拒否を遠回しに表し、「かねない」は好ましくない"
+        },
+        {
+          "t": "ruby",
+          "k": "可能性",
+          "r": "かのうせい"
+        },
+        {
+          "t": "text",
+          "v": "を表します。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「かねる」委婉表示難以照辦；「かねない」表示不好的事很可能發生。形態相似、意思相反。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「かねる」は引き受けの手前で止まる線、「かねない」は悪い方向へ転がりやすい坂です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "困難",
+          "reading": "こんなん"
+        },
+        {
+          "kanji": "可能性",
+          "reading": "かのうせい"
+        }
+      ]
+    }
+  }
+}
