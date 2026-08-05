@@ -7,11 +7,15 @@ import {
   type GrammarPoint,
 } from "../api";
 import { ClassifierContrasts } from "../components/ClassifierContrasts";
+import {
+  ContentFirstLayout,
+  formatDirectorySummary,
+} from "../components/ContentFirstLayout";
 import { BlockRenderer, EntryAnnotations } from "../components/EntryAnnotations";
+import { LevelPicker } from "../components/LevelPicker";
 import { IfChinese, useChineseVisibility } from "../chineseVisibility";
 import { useReadTracking } from "../hooks/useReadTracking";
-
-const levels = ["N5", "N4", "N3", "N2", "N1"];
+import { JLPT_LEVELS } from "../jlptLevels";
 
 function hasAnnotations(annotations: Annotations) {
   return Object.entries(annotations).some(([kind, value]) => {
@@ -73,6 +77,8 @@ export function GrammarTab({
   const preserveActiveOnLevelChange = useRef(false);
   const [loadingRandom, setLoadingRandom] = useState(false);
   const [err, setErr] = useState("");
+  // Mobile directory open state lives in the tab (UI-001); lg+ always shows the list.
+  const [directoryOpen, setDirectoryOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -84,7 +90,9 @@ export function GrammarTab({
         if (cancelled) return;
         const next = r.points || [];
         setPoints(next);
-        const firstWithContent = levels.find((level) => next.some((p) => p.jlpt_level === level));
+        const firstWithContent = JLPT_LEVELS.find((level) =>
+          next.some((p) => p.jlpt_level === level)
+        );
         if (firstWithContent) setSelectedLevel(firstWithContent);
       })
       .catch((e) => {
@@ -112,11 +120,15 @@ export function GrammarTab({
   }, [initialSlug, points]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const grouped = useMemo(() => {
-    return levels.map((level) => ({
+    return JLPT_LEVELS.map((level) => ({
       level,
       points: points.filter((p) => p.jlpt_level === level),
     }));
   }, [points]);
+
+  const levelCounts = useMemo(() => {
+    return new Map(grouped.map((g) => [g.level, g.points.length]));
+  }, [grouped]);
 
   const levelPoints = grouped.find((g) => g.level === selectedLevel)?.points || [];
   const active = levelPoints.find((p) => p.slug === activeSlug) || levelPoints[0] || null;
@@ -148,6 +160,7 @@ export function GrammarTab({
       return;
     }
     setActiveSlug("");
+    setDirectoryOpen(false);
   }, [selectedLevel]);
 
   useEffect(() => {
@@ -205,38 +218,31 @@ export function GrammarTab({
 
   return (
     <section className="space-y-6">
-      <div className="grid gap-3 sm:grid-cols-5">
-        {grouped.map(({ level, points }) => (
-          <button
-            key={level}
-            type="button"
-            onClick={() => setSelectedLevel(level)}
-            className={
-              "rounded-md border px-4 py-3 text-left transition-colors " +
-              (selectedLevel === level
-                ? "border-blue-600 bg-blue-50 text-blue-700"
-                : "border-slate-200 bg-white text-slate-700 hover:border-slate-300")
-            }
-          >
-            <div className="text-lg font-semibold">{level}</div>
-            <div className="text-xs text-slate-500">{points.length} 文法</div>
-          </button>
-        ))}
-      </div>
+      <LevelPicker
+        selected={selectedLevel}
+        onSelect={setSelectedLevel}
+        subtitle={(level) => `${levelCounts.get(level) ?? 0} 文法`}
+      />
 
       {levelPoints.length === 0 ? (
         <div className="rounded-md border border-slate-200 bg-white p-6 text-sm text-slate-500">
           この等級の文法はまだ準備中です。
         </div>
       ) : (
-        <div className="space-y-5">
-          <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
-            <ul className="space-y-1">
+        <ContentFirstLayout
+          directoryOpen={directoryOpen}
+          onDirectoryOpenChange={setDirectoryOpen}
+          directorySummary={formatDirectorySummary(levelPoints.length)}
+          directory={
+            <ul className="space-y-1 rounded-md border border-slate-200 bg-white p-2 lg:border-0 lg:bg-transparent lg:p-0">
               {levelPoints.map((p) => (
                 <li key={p.slug}>
                   <button
                     type="button"
-                    onClick={() => setActiveSlug(p.slug)}
+                    onClick={() => {
+                      setActiveSlug(p.slug);
+                      setDirectoryOpen(false);
+                    }}
                     className={
                       "w-full rounded-md px-3 py-2 text-left text-sm " +
                       (active?.slug === p.slug
@@ -252,8 +258,9 @@ export function GrammarTab({
                 </li>
               ))}
             </ul>
-
-            {active && (
+          }
+          content={
+            active ? (
               <article className="rounded-md border border-slate-200 bg-white p-6">
                 <header className="mb-4">
                   <div className="flex flex-wrap items-start justify-between gap-3">
@@ -289,12 +296,17 @@ export function GrammarTab({
                   <h3 className="text-base font-medium">句型</h3>
                   <dl className="mt-3 space-y-2">
                     {active.pattern.map((row, index) => (
-                      <div key={`${row.form}-${index}`} className="grid gap-1 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+                      <div
+                        key={`${row.form}-${index}`}
+                        className="grid gap-1 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
+                      >
                         <dt className="font-mono text-sm text-slate-900">{row.form}</dt>
                         <dd className="text-sm text-slate-600">
                           <IfChinese>
                             {row.gloss_zh}
-                            {row.notes_zh && <span className="ml-2 text-slate-500">{row.notes_zh}</span>}
+                            {row.notes_zh && (
+                              <span className="ml-2 text-slate-500">{row.notes_zh}</span>
+                            )}
                           </IfChinese>
                         </dd>
                       </div>
@@ -336,6 +348,7 @@ export function GrammarTab({
                               preserveActiveOnLevelChange.current = true;
                               setSelectedLevel(point.jlpt_level);
                               setActiveSlug(point.slug);
+                              setDirectoryOpen(false);
                             }}
                             className="rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
                           >
@@ -368,9 +381,9 @@ export function GrammarTab({
                   </IfChinese>
                 )}
               </article>
-            )}
-          </div>
-        </div>
+            ) : null
+          }
+        />
       )}
     </section>
   );

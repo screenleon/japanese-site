@@ -142,6 +142,12 @@
 | JS-140 | ✅ closed 2026-08-04 | 国語內容授權／適切性／母語審查 checklist | content | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-141 | 🔵 active | （可選）重訪 JS-018 靜態進度 | architecture | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-142 | ✅ closed 2026-08-05 | Asymmetric grammar inventory expand: N3+22 / N2+30 / N1+34 | content | 2026-08-05 | user-request 2026-08-05 (N1/N2 density + N3 gaps) |
+| JS-143 | ✅ closed 2026-08-05 | 手機參考 Tab：先內容後清單（文法 + 單字） | frontend | 2026-08-05 | user product discussion 2026-08-05 (vocab/kanji IA + mobile list-before-detail) |
+| JS-144 | 🔵 active | 單字 headword → 漢字 deep-link（App 導覽） | frontend | 2026-08-05 | user product discussion 2026-08-05 (split kanji; jump from vocab for readings) |
+| JS-145 | 🔵 active | 漢字詳情：含此字的例詞 | backend/frontend | 2026-08-05 | user product discussion 2026-08-05 (kanji page value after jump) |
+| JS-146 | 🔵 active | 漢字次要軸：依 JLPT 瀏覽字表 | frontend | 2026-08-05 | user product discussion 2026-08-05 (kanji harder to level-browse than vocab) |
+| JS-147 | 🔵 active | 學習專題集合（敬語／オノマトペ等）— 不加新頂層 Tab | product | 2026-08-05 | user product discussion 2026-08-05 (special blocks for keigo, onomatopoeia, etc.) |
+| JS-148 | 🔵 active | 同音／近形漢字關聯（策展或推導） | content | 2026-08-05 | user product discussion 2026-08-05 (similar-sounding / confusable characters) |
 
 ---
 
@@ -1684,5 +1690,116 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 **Tags**: P1, content
 **Status**: done
 **Source**: user-request 2026-08-05
+<!-- 首次記錄: 2026-08-05 -->
+
+## JS-143 — 手機參考 Tab：先內容後清單（文法 + 單字） ✅ 2026-08-05
+
+**Problem**: 文法與單字參考頁在手機上常先露出長清單（文法 DOM 順序為清單在前；單字則整級列表過長），使用者真正要讀的當前內容被擠到下方。
+
+**Why**: 參考型學習以「當前條目」為中心；目錄是跳轉工具，不應搶第一屏。全站應共用 content-first 模式。
+
+**Requirement**:
+1. 小螢幕：先顯示當前內容卡／article，清單改為可折疊、底部目錄，或明確「本級目錄」控制。
+2. 桌面：可維持 list|detail 並排，但共用 `activeId` 狀態機。
+3. 涵蓋 `GrammarTab` + `VocabTab`；抽出可複用 layout 供後續漢字瀏覽（JS-146）。
+4. 單字清單列在手機預設精簡（headword/reading + 短 gloss），避免每列展開全部 annotations。
+5. 不改 corpus／schema。與 JS-115（條目內部 block 順序）分開。
+
+**Outcome**: Shipped `ContentFirstLayout`；Grammar／Vocab 內容 DOM 在前、手機目錄可折疊（lg 常顯）；單字目錄精簡列、點選進入 focus 卡。
+
+**Tags**: P1, frontend, study-ux
+**Status**: done
+**Source**: user product discussion 2026-08-05
+**Related**: JS-115, JS-144, JS-145
+<!-- 首次記錄: 2026-08-05 -->
+
+## JS-144 — 單字 headword → 漢字 deep-link（App 導覽）
+
+**Problem**: 漢字 Tab 僅手動查一字；單字含漢字時無法跳到字卡看音訓等讀音資訊。詞與字混在同一卡也不利維護。
+
+**Why**: 單字與漢字是不同學習單位（一詞多字、一字多讀）；正確 IA 是分層 + 雙向連結。文法已有 `navigateToGrammar` 先例。
+
+**Requirement**:
+1. 保持漢字為獨立 study surface。
+2. 從 vocab headword 抽出漢字碼點，可點擊 → 切到漢字 Tab 並載入該字。
+3. `AppShell` 增加與 `grammarSlug` 對等的 `navigateToKanji`／initial character 狀態；`KanjiTab` 接受並消費一次。
+4. static 模式須可用既有 `getKanji`／staticApi。
+5. 範圍外：漢字頁例詞（JS-145）、JLPT 字表瀏覽（JS-146）。
+
+**Tags**: P1, frontend, study-ux, 估計 — 中
+**Source**: user product discussion 2026-08-05
+**Related**: JS-143, JS-145, JS-138, JS-089
+<!-- 首次記錄: 2026-08-05 -->
+
+## JS-145 — 漢字詳情：含此字的例詞
+
+**Problem**: 僅能查字並顯示 KANJIDIC 欄位時，從單字跳入後缺乏「這個讀法出現在哪些詞」的回程價值。
+
+**Why**: 漢字學習的核心是字在詞中的讀法與用法；例詞讓 deep-link 形成閉環。
+
+**Requirement**:
+1. 漢字詳情列出含該字的 vocab（搜尋／contains 即可，v1 不必新表）；結果上限；日文優先 gloss。
+2. 可選：點例詞回到單字 Tab 對應 headword（對稱 deep-link）。
+3. 記錄 static bake／API 是否需 `listVocabByKanji`；能 client 搜尋則 UI-only。
+4. 不新增頂層 Tab。Blocked by JS-144。
+
+**Tags**: P1, backend/frontend, study-ux, 估計 — 中
+**Source**: user product discussion 2026-08-05
+**Blocked by**: JS-144
+**Related**: JS-089, JS-146
+<!-- 首次記錄: 2026-08-05 -->
+
+## JS-146 — 漢字次要軸：依 JLPT 瀏覽字表
+
+**Problem**: 單字已能按級學，漢字僅查詢入口，複習「本級字表」不便；但漢字又不宜把 JLPT 當唯一主軸（一字跨多級詞）。
+
+**Why**: 查詢 + 從單字跳入是主路徑；JLPT 字表是次要複習軸。
+
+**Requirement**:
+1. 在漢字 Tab 增加可選 N5–N1 目錄；採 JS-143 content-first（清單不搶第一屏）。
+2. 資料用既有 `corpus/kanji/N*.jsonl`；若缺 list API 再補 `listKanji(level)`。
+3. 範圍外：部首／筆畫主軸、獨立 kanji quiz tab（見 JS-089）。
+4. Blocked by JS-143 + JS-144。
+
+**Tags**: P2, frontend, study-ux, 估計 — 中
+**Source**: user product discussion 2026-08-05
+**Blocked by**: JS-143, JS-144
+**Related**: JS-145, JS-089
+<!-- 首次記錄: 2026-08-05 -->
+
+## JS-147 — 學習專題集合（敬語／オノマトペ等）— 不加新頂層 Tab
+
+**Problem**: 敬語、擬聲擬態、易混組等需要「完整區塊」感，但每個主題一個一級導覽會使 Nav 膨脹。
+
+**Why**: 完整度應來自策展集合與篩選，不是無限 Tab。既有 backlog（JS-073 keigo 文法、JS-082 オノマトペ、JS-084 獨立 module spike）需產品原則對齊。
+
+**Requirement**:
+1. 產品原則寫入 ticket／實作註記：專題用 hub + filter／slug 列表，預設不新開 NavCard。
+2. Hub UI（首頁或 study 內 chips）：例如「敬語入門」「オノマトペ」，點入導向既有 grammar／vocab 清單篩選。
+3. v1 可用 hard-coded slug／headword 集合；有 tag schema 後再升級。
+4. 明確延後 JS-084 獨立 keigo corpus，直到基礎內容 + hub 證明需要新 type。
+5. 範圍外：同音字圖譜（JS-148）。
+
+**Tags**: P2, product, study-ux, 估計 — 中
+**Source**: user product discussion 2026-08-05
+**Related**: JS-073, JS-082, JS-084, JS-085, JS-086, JS-087, JS-088
+<!-- 首次記錄: 2026-08-05 -->
+
+## JS-148 — 同音／近形漢字關聯（策展或推導）
+
+**Problem**: 同音異字、形近字是漢字痛點，但目前無結構化關聯；獨立 quiz tab 是否必要尚未定（JS-089）。
+
+**Why**: 在漢字詳情上掛少量關聯，比先做新 quiz 面更貼近「跳入字卡後加深理解」的路徑。
+
+**Requirement**:
+1. 漢字詳情可選顯示同音混淆、形近字 chips（可點）。
+2. 優先小規模 L1 策展邊或 annotations；遵守 source／license／validated_by。
+3. 依賴 JS-145（字頁已有例詞價值），避免死鏈。
+4. 可回饋 JS-089 是否仍需 kanji quiz tab；本票本身不強制新 quiz。
+
+**Tags**: P3, content, study-ux, 估計 — 中
+**Source**: user product discussion 2026-08-05
+**Blocked by**: JS-145
+**Related**: JS-089, JS-144
 <!-- 首次記錄: 2026-08-05 -->
 
