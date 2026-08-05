@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋は＋述語",
+      "gloss_zh": "標示話題：就某事物展開說明",
+      "notes_zh": "例：私は学生です。書寫用「は」，發音是「わ」。對比焦點用「が」見 ga-particle"
+    },
+    {
+      "form": "時間／場所＋は＋述語",
+      "gloss_zh": "把時間或場面當成話題",
+      "notes_zh": "例：今日は暑いです／ここは静かです。已知話題用「は」，新資訊主語常用「が」"
     }
   ],
   "explanation_ja_blocks": [
@@ -165,6 +171,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

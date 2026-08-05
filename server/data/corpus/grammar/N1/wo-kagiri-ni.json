@@ -1,0 +1,67 @@
+{
+  "slug": "wo-kagiri-ni",
+  "title_ja": "を限りに",
+  "title_zh": "を限りに（以…為最後）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "時・区切りN＋を限りに",
+      "gloss_zh": "以…為界結束",
+      "notes_zh": "例：今日を限りに禁煙する"
+    },
+    {
+      "form": "声を限りに",
+      "gloss_zh": "盡全力（聲嘶力竭）",
+      "notes_zh": "例：声を限りに叫ぶ。定型"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「を限りに」は、それを最"
+        },
+        {
+          "t": "ruby",
+          "k": "後",
+          "r": "あと"
+        },
+        {
+          "t": "text",
+          "v": "の"
+        },
+        {
+          "t": "ruby",
+          "k": "区切り",
+          "r": "くぎり"
+        },
+        {
+          "t": "text",
+          "v": "にすることを表します。\n\n- 今シーズンを限りに引退する"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「を限りに」表示以某時點為最後界線；另有「声を限りに」定型。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「を限りに」は、終了の線を日付や区切りに刻む宣言です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "区切り",
+          "reading": "くぎり"
+        }
+      ]
+    }
+  }
+}

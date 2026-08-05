@@ -1,0 +1,76 @@
+{
+  "slug": "iwan-ya",
+  "title_ja": "いわんや",
+  "title_zh": "いわんや（更何況…）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "いわんや＋N＋においてをや",
+      "gloss_zh": "更何況…（文語）",
+      "notes_zh": "例：大人でも無理だ。いわんや子供においてをや。定型的"
+    },
+    {
+      "form": "いわんや＋N＋をや",
+      "gloss_zh": "更何況 N",
+      "notes_zh": "省略形も"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「いわんや」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "前",
+          "r": "まえ"
+        },
+        {
+          "t": "text",
+          "v": "よりさらに"
+        },
+        {
+          "t": "ruby",
+          "k": "甚",
+          "r": "はなは"
+        },
+        {
+          "t": "text",
+          "v": "だしいことを示す文語"
+        },
+        {
+          "t": "ruby",
+          "k": "表現",
+          "r": "ひょうげん"
+        },
+        {
+          "t": "text",
+          "v": "です。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「いわんや…をや」文語「更何況」。前已述困難，後項更甚。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「いわんや」は、階段を一段高くした比較の極です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "甚",
+          "reading": "はなは"
+        }
+      ]
+    }
+  }
+}

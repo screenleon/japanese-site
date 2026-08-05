@@ -1,0 +1,53 @@
+{
+  "slug": "wo-he-te",
+  "title_ja": "を経て",
+  "title_zh": "を経て（經過…）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N＋を経て",
+      "gloss_zh": "經過…之後",
+      "notes_zh": "例：審査を経て採用される。過程・経由"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「を経て」は、ある"
+        },
+        {
+          "t": "ruby",
+          "k": "過程",
+          "r": "かてい"
+        },
+        {
+          "t": "text",
+          "v": "や地点を通過することを表します。\n\n- 幾多の困難を経て完成した"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「を経て」表示經過某過程、階段或地點之後。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「を経て」は、通過点を踏み石にする進行です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "過程",
+          "reading": "かてい"
+        }
+      ]
+    }
+  }
+}

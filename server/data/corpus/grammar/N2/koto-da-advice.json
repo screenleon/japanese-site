@@ -1,0 +1,58 @@
+{
+  "slug": "koto-da-advice",
+  "title_ja": "ことだ",
+  "title_zh": "ことだ（應當…）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vる／Vない＋ことだ",
+      "gloss_zh": "應該…；要緊的是…（忠告）",
+      "notes_zh": "例：無理をしないことだ。助言・心得"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "ruby",
+          "k": "助言",
+          "r": "じょげん"
+        },
+        {
+          "t": "text",
+          "v": "の「ことだ」は、そうするのがよいという"
+        },
+        {
+          "t": "ruby",
+          "k": "忠告",
+          "r": "ちゅうこく"
+        },
+        {
+          "t": "text",
+          "v": "を表します。\n\n- 早く寝ることだ"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "忠告用法的「ことだ」表示「應該做的事是…」。帶前輩口吻。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "忠告の「ことだ」は、行動指針を一句で渡す形です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "忠告",
+          "reading": "ちゅうこく"
+        }
+      ]
+    }
+  }
+}

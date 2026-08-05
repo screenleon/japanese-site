@@ -1,0 +1,4 @@
+{"text_ja": "規定___処分を決める。", "text_zh": "參照規定決定處分。", "blank": "に照らして", "is_correct": 1, "hint": "基準", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "良心___行動する。", "text_zh": "對照良心行動。", "blank": "に照らして", "is_correct": 1, "hint": "規範", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "先例___妥当だ。", "text_zh": "參照先例是妥當的。", "blank": "に照らして", "is_correct": 1, "hint": "判断", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "事実___説明が矛盾する。", "text_zh": "對照事實說明有矛盾。", "blank": "に照らして", "is_correct": 1, "hint": "検証", "source": "curated", "license": "CC-BY-SA-4.0"}

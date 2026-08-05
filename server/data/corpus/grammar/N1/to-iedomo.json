@@ -1,0 +1,62 @@
+{
+  "slug": "to-iedomo",
+  "title_ja": "といえども",
+  "title_zh": "といえども（即使…也…）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "普通形／N＋といえども",
+      "gloss_zh": "即使…也…；雖說是…",
+      "notes_zh": "例：子供といえども油断できない。硬い譲歩"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「といえども」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "硬",
+          "r": "かた"
+        },
+        {
+          "t": "text",
+          "v": "い"
+        },
+        {
+          "t": "ruby",
+          "k": "譲歩",
+          "r": "じょうほ"
+        },
+        {
+          "t": "text",
+          "v": "を表します。\n\n- 専門家といえども間違う"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「といえども」正式讓步「即使…也」。比「としても」古雅。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「といえども」は、権威や属性を認めた上で例外を許さない譲歩です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "譲歩",
+          "reading": "じょうほ"
+        }
+      ]
+    }
+  }
+}

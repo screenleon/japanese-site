@@ -1,0 +1,80 @@
+{
+  "slug": "koto-wa-nai",
+  "title_ja": "ことはない",
+  "title_zh": "ことはない（不必…／不會…）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vる＋ことはない",
+      "gloss_zh": "不必…；無需…",
+      "notes_zh": "例：謝ることはない。助言で負担を下げる"
+    },
+    {
+      "form": "Vる＋ことはない",
+      "gloss_zh": "不會（發生）…",
+      "notes_zh": "例：失敗することはないと思う。文脈で読み分け"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ことはない」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "不要",
+          "r": "ふよう"
+        },
+        {
+          "t": "text",
+          "v": "や"
+        },
+        {
+          "t": "ruby",
+          "k": "可能性",
+          "r": "かのうせい"
+        },
+        {
+          "t": "text",
+          "v": "の"
+        },
+        {
+          "t": "ruby",
+          "k": "否定",
+          "r": "ひてい"
+        },
+        {
+          "t": "text",
+          "v": "を表します。\n\n- 急ぐことはない"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「ことはない」可表①不必做 ②不會發生。忠告場合多為「不必…」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「ことはない」は、余分な行動や心配を下ろす線です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "不要",
+          "reading": "ふよう"
+        },
+        {
+          "kanji": "可能性",
+          "reading": "かのうせい"
+        }
+      ]
+    }
+  }
+}

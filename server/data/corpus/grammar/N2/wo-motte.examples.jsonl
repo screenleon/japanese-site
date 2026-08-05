@@ -1,0 +1,4 @@
+{"text_ja": "本日___受付を終了します。", "text_zh": "受理於今日截止。", "blank": "をもって", "is_correct": 1, "hint": "終了", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "これ___閉会といたします。", "text_zh": "會議至此結束。", "blank": "をもって", "is_correct": 1, "hint": "定型", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "実績___示してください。", "text_zh": "請以實績證明。", "blank": "をもって", "is_correct": 1, "hint": "根拠", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "全力___任務に当たります。", "text_zh": "以全力執行任務。", "blank": "をもって", "is_correct": 1, "hint": "手段", "source": "curated", "license": "CC-BY-SA-4.0"}

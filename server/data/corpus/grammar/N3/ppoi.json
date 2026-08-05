@@ -1,0 +1,71 @@
+{
+  "slug": "ppoi",
+  "title_ja": "っぽい",
+  "title_zh": "っぽい（帶有…色彩／容易…）",
+  "jlpt_level": "N3",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N／い形語幹／Vます形＋っぽい",
+      "gloss_zh": "帶有…的感覺；有點…",
+      "notes_zh": "例：子供っぽい／忘れっぽい／白っぽい"
+    },
+    {
+      "form": "Vます形＋っぽい",
+      "gloss_zh": "容易做該動作（習性）",
+      "notes_zh": "例：怒りっぽい。がちより口語・印象寄り"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「っぽい」は、その"
+        },
+        {
+          "t": "ruby",
+          "k": "性質",
+          "r": "せいしつ"
+        },
+        {
+          "t": "text",
+          "v": "や"
+        },
+        {
+          "t": "ruby",
+          "k": "印象",
+          "r": "いんしょう"
+        },
+        {
+          "t": "text",
+          "v": "が強いことを表します。\n\n- 水っぽいスープ\n- 忘れっぽい人"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「っぽい」表示「有點…樣、帶…氣質、容易…」。口語、印象化。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「っぽい」は、輪郭のぼかした色付けです。完全そのものではないが、その気配が染みている感じです。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "性質",
+          "reading": "せいしつ"
+        },
+        {
+          "kanji": "印象",
+          "reading": "いんしょう"
+        }
+      ]
+    }
+  }
+}

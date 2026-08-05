@@ -1,0 +1,76 @@
+{
+  "slug": "ni-shite",
+  "title_ja": "にして",
+  "title_zh": "にして（以…之身／到了…）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N＋にして",
+      "gloss_zh": "以…之身（才）…；到了…才…",
+      "notes_zh": "例：この年齢にして初めて分かった。強調・感慨"
+    },
+    {
+      "form": "一瞬にして",
+      "gloss_zh": "一瞬間就…",
+      "notes_zh": "例：一瞬にして終わった。定型"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「にして」は、その"
+        },
+        {
+          "t": "ruby",
+          "k": "条件",
+          "r": "じょうけん"
+        },
+        {
+          "t": "text",
+          "v": "のもとでの"
+        },
+        {
+          "t": "ruby",
+          "k": "出来事",
+          "r": "できごと"
+        },
+        {
+          "t": "text",
+          "v": "を"
+        },
+        {
+          "t": "ruby",
+          "k": "強調",
+          "r": "きょうちょう"
+        },
+        {
+          "t": "text",
+          "v": "します。\n\n- プロにしてこの失敗"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「にして」強調在某條件下（才）發生，或「一瞬間就」等定型。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「にして」は、条件の枠に出来事をはめ込み、驚きや感慨を乗せます。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "条件",
+          "reading": "じょうけん"
+        }
+      ]
+    }
+  }
+}

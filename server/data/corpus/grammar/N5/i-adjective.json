@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "い形容詞",
-      "gloss_zh": "い形容詞"
+      "form": "い形容詞＋N",
+      "gloss_zh": "直接修飾名詞",
+      "notes_zh": "例：新しい本。語尾「い」保留，不加「な」"
+    },
+    {
+      "form": "い形容詞語幹＋くない／かった",
+      "gloss_zh": "否定與過去的基本活用",
+      "notes_zh": "例：高くないです／高かったです。丁寧常後加「です」；過去見 adjective-past"
     }
   ],
   "explanation_ja_blocks": [
@@ -156,6 +162,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

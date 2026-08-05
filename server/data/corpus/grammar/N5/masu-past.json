@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vます形の語幹＋ました",
+      "gloss_zh": "禮貌過去肯定：做了",
+      "notes_zh": "例：食べました／行きました。表完成或過去經驗的基本形"
+    },
+    {
+      "form": "Vます形の語幹＋ませんでした",
+      "gloss_zh": "禮貌過去否定：沒做",
+      "notes_zh": "例：食べませんでした。非過去否定用「ません」見 masu-negative"
     }
   ],
   "explanation_ja_blocks": [
@@ -165,6 +171,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

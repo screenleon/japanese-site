@@ -1,0 +1,87 @@
+{
+  "slug": "te-hoshii",
+  "title_ja": "てほしい",
+  "title_zh": "てほしい（希望對方做…）",
+  "jlpt_level": "N3",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vて形＋ほしい",
+      "gloss_zh": "希望對方（或他人）做…",
+      "notes_zh": "例：もう少しゆっくり話してほしい"
+    },
+    {
+      "form": "Vない形＋でほしい",
+      "gloss_zh": "希望對方不要做…",
+      "notes_zh": "例：来ないでほしい"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「てほしい」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "相手",
+          "r": "あいて"
+        },
+        {
+          "t": "text",
+          "v": "の"
+        },
+        {
+          "t": "ruby",
+          "k": "行動",
+          "r": "こうどう"
+        },
+        {
+          "t": "text",
+          "v": "への"
+        },
+        {
+          "t": "ruby",
+          "k": "希望",
+          "r": "きぼう"
+        },
+        {
+          "t": "text",
+          "v": "を表します。\n\n- 手伝ってほしい\n- 大きな声で話さないでほしい"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「てほしい」表示希望別人做某事（不是自己的「たい」）。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「てほしい」は、希望の矢印を相手の行動へ向けます。「たい」が自分側なのに対し、相手に動いてほしい点を示します。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "相手",
+          "reading": "あいて"
+        },
+        {
+          "kanji": "行動",
+          "reading": "こうどう"
+        },
+        {
+          "kanji": "希望",
+          "reading": "きぼう"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "tai-desire"
+  ]
+}

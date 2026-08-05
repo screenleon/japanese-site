@@ -1,0 +1,62 @@
+{
+  "slug": "mono-yue",
+  "title_ja": "ものゆえ",
+  "title_zh": "ものゆえ（因為…）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "普通形＋ものゆえ",
+      "gloss_zh": "因為…（文語）",
+      "notes_zh": "例：知らぬものゆえ失礼した。ゆえに系"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ものゆえ」は、文語的な"
+        },
+        {
+          "t": "ruby",
+          "k": "理由",
+          "r": "りゆう"
+        },
+        {
+          "t": "text",
+          "v": "の"
+        },
+        {
+          "t": "ruby",
+          "k": "表現",
+          "r": "ひょうげん"
+        },
+        {
+          "t": "text",
+          "v": "です。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「ものゆえ」文語理由「因為」。現代少用於日常會話。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「ものゆえ」は、古典寄りの理由接続です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "理由",
+          "reading": "りゆう"
+        }
+      ]
+    }
+  }
+}

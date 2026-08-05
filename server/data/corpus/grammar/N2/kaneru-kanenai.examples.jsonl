@@ -1,0 +1,4 @@
+{"text_ja": "その条件ではお受けし___ます。", "text_zh": "在那個條件下恐怕難以接受。", "blank": "かね", "is_correct": 1, "hint": "婉拒", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "詳しくは分かり___ます。", "text_zh": "詳細情況難以確知。", "blank": "かね", "is_correct": 1, "hint": "保留", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "このままだと失敗し___ない。", "text_zh": "這樣下去很可能會失敗。", "blank": "かね", "is_correct": 1, "hint": "悪可能性", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "炎上し___ない発言だった。", "text_zh": "那是很可能引發炎上的發言。", "blank": "かね", "is_correct": 1, "hint": "リスク", "source": "curated", "license": "CC-BY-SA-4.0"}

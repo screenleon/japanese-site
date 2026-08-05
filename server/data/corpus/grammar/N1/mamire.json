@@ -1,0 +1,53 @@
+{
+  "slug": "mamire",
+  "title_ja": "まみれ",
+  "title_zh": "まみれ（沾滿…）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N＋まみれ",
+      "gloss_zh": "沾滿不好的或髒的東西",
+      "notes_zh": "例：泥まみれ／借金まみれ。マイナス寄り"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「まみれ」は、好ましくないもので"
+        },
+        {
+          "t": "ruby",
+          "k": "覆",
+          "r": "おお"
+        },
+        {
+          "t": "text",
+          "v": "われていることを表します。\n\n- ほこりまみれの部屋"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「まみれ」表示沾滿、滿是（多負面）「…得一塌糊塗」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「まみれ」は、表面を嫌なものでびっしり覆う状態です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "覆",
+          "reading": "おお"
+        }
+      ]
+    }
+  }
+}

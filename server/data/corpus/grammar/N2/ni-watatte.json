@@ -1,0 +1,58 @@
+{
+  "slug": "ni-watatte",
+  "title_ja": "にわたって",
+  "title_zh": "にわたって（橫跨…）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N＋にわたって",
+      "gloss_zh": "橫跨（時間・範圍）整個…",
+      "notes_zh": "例：10年にわたって研究した"
+    },
+    {
+      "form": "N＋にわたる＋N",
+      "gloss_zh": "長達…的／波及…的",
+      "notes_zh": "例：長期間にわたる議論"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「にわたって」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "範囲",
+          "r": "はんい"
+        },
+        {
+          "t": "text",
+          "v": "が広いことを表します。\n\n- 全国にわたって被害が出た"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「にわたって／にわたる」表示時間或空間範圍很廣「歷時…、遍及…」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「にわたって」は、広がりを面で示します。期間や領域全体を覆うイメージです。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "範囲",
+          "reading": "はんい"
+        }
+      ]
+    }
+  }
+}

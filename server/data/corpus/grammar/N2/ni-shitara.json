@@ -1,0 +1,61 @@
+{
+  "slug": "ni-shitara",
+  "title_ja": "にしたら／にすれば",
+  "title_zh": "にしたら／にすれば（站在…的立場）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N＋にしたら／にすれば",
+      "gloss_zh": "站在…的立場來看",
+      "notes_zh": "例：子供にしたら無理な要求だ。視点の切り替え"
+    },
+    {
+      "form": "N＋にすると",
+      "gloss_zh": "若以…來算／來看",
+      "notes_zh": "例：一日にするとわずかだ"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「にしたら／にすれば」は、ある"
+        },
+        {
+          "t": "ruby",
+          "k": "立場",
+          "r": "たちば"
+        },
+        {
+          "t": "text",
+          "v": "からの見方を示します。\n\n- 初心者にしたら難しい"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「にしたら／にすれば」表示站在某立場的觀點「對…來說」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「にしたら」は、視点の帽子を相手側にかぶせ替えます。こちらの基準ではなく相手の世界で測ります。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "立場",
+          "reading": "たちば"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "ni-totte"
+  ]
+}

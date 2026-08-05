@@ -108,7 +108,7 @@
 | JS-099 | 🟡 in_progress | classifier_rules editorial expansion + ClassifierContrasts UI | schema/frontend | 2026-05-10 | spike:JS-097/098/099 |
 | JS-100a | ✅ closed 2026-05-16 | N3 grammar v2 content regen slice (40 entries, shipped via PR #56) | content | 2026-05-10 | blocked-on-spike-merge |
 | JS-100b | ✅ closed 2026-05-17 | N4 grammar v2 content regen slice (40 entries) | content | 2026-05-10 | blocked-on-spike-merge |
-| JS-100c | 🔵 active | N5 grammar v2 content regen slice (40 entries) | content | 2026-05-10 | blocked-on-spike-merge |
+| JS-100c | ✅ closed 2026-08-05 | N5 grammar v2 content regen slice (39 entries) | content | 2026-05-10 | blocked-on-spike-merge |
 | JS-101 | 🟡 in_progress | N2/N1 grammar v2 gradual content uplift | content | 2026-05-10 | blocked-on-spike-merge |
 | JS-102 | 🔵 active | Drop SQLite legacy shadow columns | backend/schema | 2026-05-10 | blocked-on JS-100b/JS-100c + JS-101 content cycle + one release window |
 | JS-103 | 🔵 active | Full 150-entry classifier contrast rollout | content | 2026-05-10 | blocked-on JS-100b, JS-100c |
@@ -141,6 +141,7 @@
 | JS-139 | 🔵 active | 重寫 JS-083 為日本語 track 讀解短練 | architecture | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-140 | ✅ closed 2026-08-04 | 国語內容授權／適切性／母語審查 checklist | content | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-141 | 🔵 active | （可選）重訪 JS-018 靜態進度 | architecture | 2026-08-02 | docs/adr/0005-kokugo-track.md |
+| JS-142 | ✅ closed 2026-08-05 | Asymmetric grammar inventory expand: N3+22 / N2+30 / N1+34 | content | 2026-08-05 | user-request 2026-08-05 (N1/N2 density + N3 gaps) |
 
 ---
 
@@ -1175,16 +1176,16 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Source**: blocked-on-spike-merge
 <!-- 首次記錄: 2026-05-10 -->
 
-## JS-100c — N5 grammar v2 content regen slice (40 entries)
+## JS-100c — N5 grammar v2 content regen slice (39 entries) ✅ 2026-08-05
 
 **Problem**: The Phase 2 spike mechanically migrates most non-PoC entries and leaves many N5 entries with `audit_status: "pre-redesign"`.
 
-**Why**: N5 grammar is learner-critical and should receive native-reviewed v2 explanations, patterns, furigana vocabulary, and annotation cleanup instead of remaining envelope-only migrated content.
+**Why**: N5 grammar is learner-critical and should receive pedagogical native-perspective-reviewed v2 explanations, patterns, furigana vocabulary, and annotation cleanup instead of remaining envelope-only migrated content.
 
-**Requirement**: Regenerate and native-review the N5 grammar v2 slice for 40 entries, removing `audit_status: "pre-redesign"` entry-by-entry as each passes review.
+**Requirement**: Regenerate and review the full N5 inventory (**39** on-disk entries; historical “40” was the MVP scaffold estimate) under the project content-review bar (main-thread pedagogical native-perspective review with stated non-native-speaker limitation — same as JS-100a/b / JS-101). Remove `audit_status: "pre-redesign"` entry-by-entry as each passes.
 
 **Tags**: P1, content
-**Status**: todo
+**Status**: done
 **Blocked by**: JS-097/098/099 spike merge
 **Source**: blocked-on-spike-merge
 <!-- 首次記錄: 2026-05-10 -->
@@ -1672,3 +1673,16 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 **Source**: docs/adr/0005-kokugo-track.md
 **Blocked by**: JS-132
 <!-- 首次記錄: 2026-08-02 -->
+## JS-142 — Asymmetric grammar inventory expand: N3+22 / N2+30 / N1+34 ✅ 2026-08-05
+
+**Problem**: Equal ~40 grammar points per JLPT level was a quality-first MVP scaffold, but real N1/N2 density is much higher; N3 also lacked several high-frequency foundation items (義務、まま、について、によって、わけ系, etc.).
+
+**Why**: Learners expect higher levels to hold more grammar; the site should grow N1/N2 denser without pretending the official exam lists are fully covered.
+
+**Requirement**: Add curated high-value N3/N2/N1 entries at full v2 authoring bar (pattern notes, explanations, mental_model, examples). Record asymmetric inventory decision. Do not re-equalize N5/N4 counts.
+
+**Tags**: P1, content
+**Status**: done
+**Source**: user-request 2026-08-05
+<!-- 首次記錄: 2026-08-05 -->
+

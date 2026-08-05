@@ -1,0 +1,4 @@
+{"text_ja": "父___出席しました。", "text_zh": "代替父親出席了。", "blank": "にかわって", "is_correct": 1, "hint": "代理", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "キャプテン___挨拶します。", "text_zh": "代替隊長致詞。", "blank": "にかわり", "is_correct": 1, "hint": "儀礼", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "現金___電子マネーが使われる。", "text_zh": "電子貨幣取代現金被使用。", "blank": "にかわる", "is_correct": 1, "hint": "交代", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "先生___質問に答えました。", "text_zh": "代替老師回答了問題。", "blank": "にかわって", "is_correct": 1, "hint": "代役", "source": "curated", "license": "CC-BY-SA-4.0"}

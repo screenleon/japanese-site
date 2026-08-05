@@ -1,0 +1,4 @@
+{"text_ja": "風邪の___体がだるい。", "text_zh": "也許是因為感冒，身體疲倦。", "blank": "せいか", "is_correct": 1, "hint": "不確定原因", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "年の___記憶力が落ちた。", "text_zh": "也許上了年紀，記性變差。", "blank": "せいか", "is_correct": 1, "hint": "推測", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "雨の___来客が少なかった。", "text_zh": "也許因為下雨，來客少。", "blank": "せいか", "is_correct": 1, "hint": "マイナス因", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "初めての___緊張しています。", "text_zh": "也許是第一次，所以緊張。", "blank": "せいか", "is_correct": 1, "hint": "事情", "source": "curated", "license": "CC-BY-SA-4.0"}

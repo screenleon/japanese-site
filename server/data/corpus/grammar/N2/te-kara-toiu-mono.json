@@ -1,0 +1,75 @@
+{
+  "slug": "te-kara-toiu-mono",
+  "title_ja": "てからというもの",
+  "title_zh": "てからというもの（自從…之後就…）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vて形＋からというもの",
+      "gloss_zh": "自從…之後（一直）…",
+      "notes_zh": "例：彼と別れてからというもの元気がない。転換点以降の継続"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「てからというもの」は、ある"
+        },
+        {
+          "t": "ruby",
+          "k": "出来事",
+          "r": "できごと"
+        },
+        {
+          "t": "text",
+          "v": "を境に"
+        },
+        {
+          "t": "ruby",
+          "k": "状態",
+          "r": "じょうたい"
+        },
+        {
+          "t": "text",
+          "v": "が続いていることを"
+        },
+        {
+          "t": "ruby",
+          "k": "強調",
+          "r": "きょうちょう"
+        },
+        {
+          "t": "text",
+          "v": "します。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「てからというもの」強調自某轉折點起狀態一直如此。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「てからというもの」は、境界線のあとを一本に染めます。その出来事以降、様子が一貫して変わったことを強調します。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "出来事",
+          "reading": "できごと"
+        },
+        {
+          "kanji": "状態",
+          "reading": "じょうたい"
+        }
+      ]
+    }
+  }
+}

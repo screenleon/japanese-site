@@ -31,13 +31,14 @@ from pathlib import Path
 # Rebaselined to main #69 (JS-114a + JS-129) so main CI can resolve the object.
 BASE = "3aad0b82782bdcbdb571760ad1f746e20ab3c435"
 LEVELS = ("N5", "N4", "N2", "N1")
-# Post JS-114a cross-level dedup inventory (nagara-simultaneous absorbed into N4/nagara, etc.).
-# Guard fails if a level drifts from these counts so silent corpus shrink/grow is caught.
+# Inventory floors for the JS-106 inline-ruby rewriter (N3 intentionally out of
+# scope for this script). Updated 2026-08-05 for JS-142 asymmetric expand:
+# N2 40→70, N1 40→74. Guard fails if a level drifts so silent shrink/grow is caught.
 EXPECTED_COUNTS = {
     "N5": 39,
     "N4": 39,
-    "N2": 40,
-    "N1": 40,
+    "N2": 70,
+    "N1": 74,
 }
 ROOT = Path("server/data/corpus/grammar")
 AUDIT_PATH = Path("audits/js-106-allLevels-codex-pass-2026-05-16.md")

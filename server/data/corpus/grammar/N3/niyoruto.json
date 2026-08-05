@@ -1,0 +1,74 @@
+{
+  "slug": "niyoruto",
+  "title_ja": "によると／によれば",
+  "title_zh": "によると／によれば（據…）",
+  "jlpt_level": "N3",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N＋によると",
+      "gloss_zh": "根據…（消息來源）",
+      "notes_zh": "例：天気予報によると、明日は雨だ。後件常接傳聞「そうだ」等"
+    },
+    {
+      "form": "N＋によれば",
+      "gloss_zh": "根據…（較書面）",
+      "notes_zh": "例：記事によれば、交渉は難航している"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「によると／によれば」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "情報",
+          "r": "じょうほう"
+        },
+        {
+          "t": "text",
+          "v": "の"
+        },
+        {
+          "t": "ruby",
+          "k": "出所",
+          "r": "でどころ"
+        },
+        {
+          "t": "text",
+          "v": "を示します。\n\n- ニュースによると、電車が止まっている"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「によると／によれば」標示資訊來源，中文「據…」。後句多為傳聞或客觀報告。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「によると」は、内容の責任を情報源に預けます。話し手は媒介者として伝えます。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "情報",
+          "reading": "じょうほう"
+        },
+        {
+          "kanji": "出所",
+          "reading": "でどころ"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "souda-hearsay"
+  ]
+}

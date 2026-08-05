@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "起点＋から＋終点＋まで",
+      "gloss_zh": "表示從…到…的範圍（時間或場所）",
+      "notes_zh": "例：9時から5時まで／駅から学校まで。可只說「から」或只說「まで」"
+    },
+    {
+      "form": "N＋から／N＋まで",
+      "gloss_zh": "單獨標示起點或終點",
+      "notes_zh": "例：東京から来ました／5時まで待ちます"
     }
   ],
   "explanation_ja_blocks": [
@@ -88,6 +94,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

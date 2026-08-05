@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "文1＋が、＋文2",
+      "gloss_zh": "連接兩句，表示轉折：但是、可是",
+      "notes_zh": "例：行きたいですが、時間がありません。比「でも」更偏書面／丁寧連接"
+    },
+    {
+      "form": "丁寧形＋が、…",
+      "gloss_zh": "前件用です／ます，後接委婉對比或鋪墊",
+      "notes_zh": "例：すみませんが、ちょっと待ってください。前件常是鋪墊，不一定是強烈逆接"
     }
   ],
   "explanation_ja_blocks": [
@@ -166,6 +172,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

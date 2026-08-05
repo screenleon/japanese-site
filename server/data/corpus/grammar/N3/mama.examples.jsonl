@@ -1,0 +1,4 @@
+{"text_ja": "メガネをかけた___寝てしまいました。", "text_zh": "戴著眼鏡就睡著了。", "blank": "まま", "is_correct": 1, "hint": "状態維持", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "靴をはいた___入らないでください。", "text_zh": "請不要穿著鞋進去。", "blank": "まま", "is_correct": 1, "hint": "未改状態", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "何も知らない___契約してしまいました。", "text_zh": "什麼都不知道就簽了約。", "blank": "まま", "is_correct": 1, "hint": "未做のまま", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "部屋は散らかった___です。", "text_zh": "房間還是亂糟糟的。", "blank": "まま", "is_correct": 1, "hint": "未整理", "source": "curated", "license": "CC-BY-SA-4.0"}

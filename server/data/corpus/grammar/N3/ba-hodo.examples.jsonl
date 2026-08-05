@@ -1,0 +1,4 @@
+{"text_ja": "読めば読む___面白くなります。", "text_zh": "越讀越有趣。", "blank": "ほど", "is_correct": 1, "hint": "比例", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "考えれば考える___不安になります。", "text_zh": "越想越不安。", "blank": "ほど", "is_correct": 1, "hint": "連動", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "安ければ安い___いいです。", "text_zh": "越便宜越好。", "blank": "ほど", "is_correct": 1, "hint": "形容詞", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "北へ行けば行く___寒くなります。", "text_zh": "越往北越冷。", "blank": "ほど", "is_correct": 1, "hint": "空間比例", "source": "curated", "license": "CC-BY-SA-4.0"}

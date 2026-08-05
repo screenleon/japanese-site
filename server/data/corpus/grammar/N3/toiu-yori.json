@@ -1,0 +1,58 @@
+{
+  "slug": "toiu-yori",
+  "title_ja": "というより",
+  "title_zh": "というより（與其說…不如說…）",
+  "jlpt_level": "N3",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "普通形＋というより",
+      "gloss_zh": "與其說…不如說…",
+      "notes_zh": "例：難しいというより面倒だ。言い換え・修正"
+    },
+    {
+      "form": "N＋というより＋N",
+      "gloss_zh": "與其稱為 A 不如稱為 B",
+      "notes_zh": "例：趣味というより仕事だ"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「というより」は、前の"
+        },
+        {
+          "t": "ruby",
+          "k": "表現",
+          "r": "ひょうげん"
+        },
+        {
+          "t": "text",
+          "v": "を修正して、より正確な言い方にします。\n\n- 怒りというより悲しみだ"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「というより」用於修正說法：前句標籤不精確，後句更貼切。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「というより」はラベルの貼り直しです。より芯に近い言い換えを後に置きます。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "表現",
+          "reading": "ひょうげん"
+        }
+      ]
+    }
+  }
+}

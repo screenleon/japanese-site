@@ -1,0 +1,4 @@
+{"text_ja": "読む___論文ではない。", "text_zh": "不是值得一讀的論文。", "blank": "に耐える", "is_correct": 1, "hint": "評価", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "見る___惨状だった。", "text_zh": "是不忍卒睹的慘狀。", "blank": "に耐えない", "is_correct": 1, "hint": "不堪", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "批判___内容だ。", "text_zh": "是經得起批評的內容。", "blank": "に耐える", "is_correct": 1, "hint": "水準", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "聞く___言いぐさだ。", "text_zh": "是不忍聽的說辭。", "blank": "に耐えない", "is_correct": 1, "hint": "不快", "source": "curated", "license": "CC-BY-SA-4.0"}

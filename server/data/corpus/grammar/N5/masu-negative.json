@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vます形の語幹＋ません",
+      "gloss_zh": "禮貌非過去否定：不做",
+      "notes_zh": "例：食べません／行きません。過去否定是「ませんでした」見 masu-past"
+    },
+    {
+      "form": "全然／あまり＋Vません",
+      "gloss_zh": "與頻率副詞搭配的否定",
+      "notes_zh": "例：あまり食べません。副詞見 frequency-adverbs"
     }
   ],
   "explanation_ja_blocks": [
@@ -139,6 +145,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

@@ -1,0 +1,4 @@
+{"text_ja": "何も食べ___寝てしまいました。", "text_zh": "什麼都沒吃就睡了。", "blank": "ずに", "is_correct": 1, "hint": "否定中止", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "連絡___引っ越ししてしまった。", "text_zh": "沒聯絡就搬走了。", "blank": "せずに", "is_correct": 1, "hint": "する→せず", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "メモを取ら___聞いていました。", "text_zh": "沒做筆記就聽著。", "blank": "ずに", "is_correct": 1, "hint": "ないで相当", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "挨拶___帰ってしまいました。", "text_zh": "沒打招呼就回去了。", "blank": "せずに", "is_correct": 1, "hint": "せずに", "source": "curated", "license": "CC-BY-SA-4.0"}

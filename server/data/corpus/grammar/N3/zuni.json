@@ -1,0 +1,61 @@
+{
+  "slug": "zuni",
+  "title_ja": "ずに",
+  "title_zh": "ずに（不…而…）",
+  "jlpt_level": "N3",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vない形（ない→ず）＋に",
+      "gloss_zh": "不（做）…而…",
+      "notes_zh": "例：朝ごはんを食べずに出かけた。書き言葉寄り；口語は「ないで」"
+    },
+    {
+      "form": "する→せずに",
+      "gloss_zh": "「する」的否定中止特殊形",
+      "notes_zh": "例：連絡せずに引っ越した"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ずに」は、「ないで」の"
+        },
+        {
+          "t": "ruby",
+          "k": "硬い",
+          "r": "かたい"
+        },
+        {
+          "t": "text",
+          "v": "形です。\n\n- 何も言わずに泣いた\n- 辞書を使わずに読んだ"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「ずに」是文語色彩的否定中止，相當口語「ないで」。する→せずに。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「ずに」は、しないまま次へ進む橋です。口語の「ないで」より文が引き締まります。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "硬い",
+          "reading": "かたい"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "nai-de"
+  ]
+}

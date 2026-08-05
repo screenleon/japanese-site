@@ -1,0 +1,62 @@
+{
+  "slug": "ni-atatte",
+  "title_ja": "にあたって",
+  "title_zh": "にあたって（正當…之際）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N／Vる＋にあたって",
+      "gloss_zh": "正當要…之際（正式）",
+      "notes_zh": "例：開会にあたってご挨拶します"
+    },
+    {
+      "form": "N＋にあたり",
+      "gloss_zh": "同上，中止形",
+      "notes_zh": "例：出発にあたり注意点を確認する"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「にあたって」は、改まった"
+        },
+        {
+          "t": "ruby",
+          "k": "開始",
+          "r": "かいし"
+        },
+        {
+          "t": "text",
+          "v": "や区切りを示します。\n\n- 入学にあたって決意を新たにする"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「にあたって／にあたり」用於正式場合「值此…之際」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「にあたって」は、公式な門の前に立つ形です。これから始める局面を儀礼的に切り取ります。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "開始",
+          "reading": "かいし"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "sai-ni",
+    "ni-saishite"
+  ]
+}

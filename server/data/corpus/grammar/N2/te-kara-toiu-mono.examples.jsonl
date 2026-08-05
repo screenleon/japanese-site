@@ -1,0 +1,4 @@
+{"text_ja": "留学して___連絡が減った。", "text_zh": "自從留學後聯絡就變少了。", "blank": "からというもの", "is_correct": 1, "hint": "転換後", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "子供が生まれて___時間の使い方が変わった。", "text_zh": "孩子出生後，時間用法變了。", "blank": "からというもの", "is_correct": 1, "hint": "境", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "その話を聞いて___眠れない。", "text_zh": "聽了那件事之後就睡不著。", "blank": "からというもの", "is_correct": 1, "hint": "継続", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "転職して___毎日が充実している。", "text_zh": "換工作之後每天都很充實。", "blank": "からというもの", "is_correct": 1, "hint": "以降", "source": "curated", "license": "CC-BY-SA-4.0"}

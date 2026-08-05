@@ -1,0 +1,4 @@
+{"text_ja": "お客様___失礼なことを言ってはいけません。", "text_zh": "對顧客不可說失禮的話。", "blank": "に対して", "is_correct": 1, "hint": "対象", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "この問題___どう思いますか。", "text_zh": "對這個問題你怎麼看？", "blank": "に対して", "is_correct": 1, "hint": "向き", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "兄が明るいの___、弟は静かです。", "text_zh": "相對哥哥開朗，弟弟安靜。", "blank": "に対して", "is_correct": 1, "hint": "対比", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "自然___関心が高まっています。", "text_zh": "對自然的關心提高了。", "blank": "に対する", "is_correct": 1, "hint": "連體", "source": "curated", "license": "CC-BY-SA-4.0"}

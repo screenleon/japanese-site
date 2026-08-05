@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋と＋結果",
+      "gloss_zh": "條件成立後自然／必然的結果",
+      "notes_zh": "例：このボタンを押すと、ドアが開きます。多用於規則、習慣、自然現象"
+    },
+    {
+      "form": "V辞書形＋と＋結果",
+      "gloss_zh": "動詞條件接續的基本形",
+      "notes_zh": "例：まっすぐ行くと、駅があります。主觀意志、請求少用「と」"
     }
   ],
   "explanation_ja_blocks": [
@@ -118,6 +124,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

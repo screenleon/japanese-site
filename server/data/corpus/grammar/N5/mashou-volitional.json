@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vます形の語幹＋ましょう",
+      "gloss_zh": "提議一起做：…吧",
+      "notes_zh": "例：行きましょう／食べましょう。含說話者自己在內"
+    },
+    {
+      "form": "Vましょうか",
+      "gloss_zh": "提議幫忙或確認是否一起做",
+      "notes_zh": "例：手伝いましょうか（要我幫忙嗎）。邀請對方常用「ませんか」"
     }
   ],
   "explanation_ja_blocks": [
@@ -156,6 +162,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

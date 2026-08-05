@@ -1,0 +1,58 @@
+{
+  "slug": "ni-sokushite",
+  "title_ja": "に即して",
+  "title_zh": "に即して（依照…實際）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N＋に即して",
+      "gloss_zh": "依照…；貼合…實際",
+      "notes_zh": "例：実情に即して見直す。理念より現場"
+    },
+    {
+      "form": "N＋に即した＋N",
+      "gloss_zh": "符合…的",
+      "notes_zh": "例：時代に即した制度"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「に即して」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "実情",
+          "r": "じつじょう"
+        },
+        {
+          "t": "text",
+          "v": "や規範から離れないことを表します。"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「に即して」表示貼合事實、現狀或時代「依照實際」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「に即して」は、机上ではなく足元の線に合わせる調整です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "実情",
+          "reading": "じつじょう"
+        }
+      ]
+    }
+  }
+}

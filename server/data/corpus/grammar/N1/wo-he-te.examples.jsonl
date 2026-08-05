@@ -1,0 +1,4 @@
+{"text_ja": "面接___採用が決まった。", "text_zh": "經過面試錄取決定了。", "blank": "を経て", "is_correct": 1, "hint": "過程", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "京都___大阪へ向かった。", "text_zh": "經京都前往大阪。", "blank": "を経て", "is_correct": 1, "hint": "経由", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "長い議論___合意に達した。", "text_zh": "經長討論達成共識。", "blank": "を経て", "is_correct": 1, "hint": "過程", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "失敗___成長した。", "text_zh": "經過失敗成長了。", "blank": "を経て", "is_correct": 1, "hint": "経験", "source": "curated", "license": "CC-BY-SA-4.0"}

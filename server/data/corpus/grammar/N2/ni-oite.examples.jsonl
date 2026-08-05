@@ -1,0 +1,4 @@
+{"text_ja": "式は講堂___行われます。", "text_zh": "儀式在講堂舉行。", "blank": "において", "is_correct": 1, "hint": "場所", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "過去の会議___同様の問題が出た。", "text_zh": "在過去會議中出現過同樣問題。", "blank": "において", "is_correct": 1, "hint": "場面", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "日本___の研究が進んでいる。", "text_zh": "在日本的研究正在推進。", "blank": "における", "is_correct": 1, "hint": "連體", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "この点___同意します。", "text_zh": "在這一點上我同意。", "blank": "において", "is_correct": 1, "hint": "領域", "source": "curated", "license": "CC-BY-SA-4.0"}

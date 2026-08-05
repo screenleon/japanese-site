@@ -1,0 +1,62 @@
+{
+  "slug": "zaru-wo-enai",
+  "title_ja": "ざるを得ない",
+  "title_zh": "ざるを得ない（不得不…）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vない形（ない→ざる）＋を得ない",
+      "gloss_zh": "不得不…；只好…",
+      "notes_zh": "例：認めざるを得ない。する→せざるを得ない。書き言葉"
+    },
+    {
+      "form": "Vざるを得ない",
+      "gloss_zh": "客觀上別無選擇",
+      "notes_zh": "例：延期せざるを得なかった。外圧・状況寄り"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ざるを得ない」は、他に"
+        },
+        {
+          "t": "ruby",
+          "k": "選択",
+          "r": "せんたく"
+        },
+        {
+          "t": "text",
+          "v": "がなくそうするしかないことを表します。\n\n- 値上げせざるを得ない"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「ざるを得ない」表示別無選擇、不得不做。する→せざるを得ない。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「ざるを得ない」は、外から閉じられた選択肢です。逃げ道がないから動く圧力の形です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "選択",
+          "reading": "せんたく"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "nakereba-naranai",
+    "yogi-naku-sareru"
+  ]
+}

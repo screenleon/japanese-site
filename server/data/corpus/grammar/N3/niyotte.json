@@ -1,0 +1,76 @@
+{
+  "slug": "niyotte",
+  "title_ja": "によって",
+  "title_zh": "によって（依…／被…）",
+  "jlpt_level": "N3",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N＋によって",
+      "gloss_zh": "依…而不同；靠…；由於…",
+      "notes_zh": "例：人によって考えが違う／努力によって成功した"
+    },
+    {
+      "form": "N＋によって＋Vられる",
+      "gloss_zh": "被動句中標示動作主（書面）",
+      "notes_zh": "例：この絵はピカソによって描かれた。口語多用「に」"
+    },
+    {
+      "form": "N＋による＋N",
+      "gloss_zh": "由…造成的／依…的（連體）",
+      "notes_zh": "例：地震による被害"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「によって」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "手段",
+          "r": "しゅだん"
+        },
+        {
+          "t": "text",
+          "v": "・"
+        },
+        {
+          "t": "ruby",
+          "k": "原因",
+          "r": "げんいん"
+        },
+        {
+          "t": "text",
+          "v": "・対応の違いを表します。\n\n- 季節によって景色が変わる\n- 不注意によって事故が起きた"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「によって」可表示：①依對象而異 ②手段／原因 ③被動的動作主（較書面）。連體用「による」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「によって」は、結果を左右する軸を名詞側に置きます。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "手段",
+          "reading": "しゅだん"
+        },
+        {
+          "kanji": "原因",
+          "reading": "げんいん"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "slug": "nuku",
+  "title_ja": "ぬく",
+  "title_zh": "ぬく（做到底）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vます形＋ぬく",
+      "gloss_zh": "徹底做完…；堅持到底",
+      "notes_zh": "例：考えぬく／走りぬく。途中でやめない完遂"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ぬく」は、最"
+        },
+        {
+          "t": "ruby",
+          "k": "後",
+          "r": "あと"
+        },
+        {
+          "t": "text",
+          "v": "まで"
+        },
+        {
+          "t": "ruby",
+          "k": "やり遂",
+          "r": "やりと"
+        },
+        {
+          "t": "text",
+          "v": "げることを表します。\n\n- 悩みぬいて決めた\n- 戦いぬいた"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「ぬく」接動詞ます形，表示做到底、貫徹始終。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「ぬく」は、途中下車しない完遂の線です。困難を押し切って端まで行く動きです。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "完遂",
+          "reading": "かんすい"
+        }
+      ]
+    }
+  }
+}

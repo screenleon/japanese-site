@@ -1,0 +1,53 @@
+{
+  "slug": "mono-ka",
+  "title_ja": "ものか／もんか",
+  "title_zh": "ものか（怎麼會…／絕不…）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "普通形＋ものか／もんか",
+      "gloss_zh": "怎麼會…；才不要…（強烈否定）",
+      "notes_zh": "例：負けるものか。反語・拒絶。口語「もんか」"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ものか」は、強い"
+        },
+        {
+          "t": "ruby",
+          "k": "否定",
+          "r": "ひてい"
+        },
+        {
+          "t": "text",
+          "v": "や拒絶を反語で表します。\n\n- 二度と行くものか\n- そんなこと知るもんか"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「ものか／もんか」以反語強烈否定「怎麼可能／才不要」。口語、情緒強。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「ものか」は、反語で扉を叩く強い否定です。受け入れる余地を見せません。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "否定",
+          "reading": "ひてい"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{"text_ja": "最近忙しくて___。", "text_zh": "最近忙得不得了。", "blank": "しょうがない", "is_correct": 1, "hint": "程度", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "彼の話が面白くて___。", "text_zh": "他的話有趣得沒辦法。", "blank": "仕方がない", "is_correct": 1, "hint": "感情", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "早く休みたくて___。", "text_zh": "想休息想得要命。", "blank": "しょうがない", "is_correct": 1, "hint": "欲求", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "寂しくて___、電話しました。", "text_zh": "寂寞得不行，打了電話。", "blank": "しょうがなく", "is_correct": 1, "hint": "動機", "source": "curated", "license": "CC-BY-SA-4.0"}

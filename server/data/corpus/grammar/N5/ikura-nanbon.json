@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "いくらですか",
+      "gloss_zh": "詢問價格：多少錢",
+      "notes_zh": "例：これはいくらですか。不是問數量"
+    },
+    {
+      "form": "何＋量詞",
+      "gloss_zh": "詢問數量：幾個／幾本…",
+      "notes_zh": "例：何本／何枚／何人。量詞要與物品形狀匹配"
     }
   ],
   "explanation_ja_blocks": [
@@ -151,6 +157,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

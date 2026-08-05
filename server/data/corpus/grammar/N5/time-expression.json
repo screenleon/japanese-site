@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "〜時＋〜分",
+      "gloss_zh": "時刻：幾點幾分",
+      "notes_zh": "例：3時15分。四時・七時・九時讀法特殊；分有「ふん／ぷん」"
+    },
+    {
+      "form": "午前／午後＋時刻",
+      "gloss_zh": "上下午標示",
+      "notes_zh": "例：午前9時／午後6時。也可說「朝／夜」等"
     }
   ],
   "explanation_ja_blocks": [
@@ -139,6 +145,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

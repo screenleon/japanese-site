@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "い形容詞・な形容詞の過去形",
-      "gloss_zh": "い形容詞・な形容詞的過去形"
+      "form": "い形容詞語幹＋かったです",
+      "gloss_zh": "い形容詞過去肯定",
+      "notes_zh": "例：昨日は暑かったです。否定過去：くなかったです"
+    },
+    {
+      "form": "な形容詞／N＋でした",
+      "gloss_zh": "な形容詞・名詞的過去肯定",
+      "notes_zh": "例：静かでした／学生でした。否定過去：じゃありませんでした"
     }
   ],
   "explanation_ja_blocks": [
@@ -228,6 +234,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

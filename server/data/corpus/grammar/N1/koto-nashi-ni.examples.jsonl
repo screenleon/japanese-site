@@ -1,0 +1,4 @@
+{"text_ja": "確認する___進められない。", "text_zh": "若不確認就無法推進。", "blank": "ことなしに", "is_correct": 1, "hint": "必須", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "練習する___上達しない。", "text_zh": "若不練習就不會進步。", "blank": "ことなしに", "is_correct": 1, "hint": "条件", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "説明を聞く___判断できない。", "text_zh": "若不聽說明就無法判斷。", "blank": "ことなしに", "is_correct": 1, "hint": "前提", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "許可を得る___使用できない。", "text_zh": "若不取得許可就不能使用。", "blank": "ことなしに", "is_correct": 1, "hint": "手続", "source": "curated", "license": "CC-BY-SA-4.0"}

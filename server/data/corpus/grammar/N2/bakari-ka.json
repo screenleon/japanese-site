@@ -1,0 +1,80 @@
+{
+  "slug": "bakari-ka",
+  "title_ja": "ばかりか",
+  "title_zh": "ばかりか（不僅…甚至…）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "普通形＋ばかりか",
+      "gloss_zh": "不僅…而且（甚至）…",
+      "notes_zh": "例：許さないばかりか怒った。後件が前件より程度大"
+    },
+    {
+      "form": "N＋ばかりか",
+      "gloss_zh": "不僅 N，連…",
+      "notes_zh": "例：大人ばかりか子供も"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ばかりか」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "前件",
+          "r": "ぜんけん"
+        },
+        {
+          "t": "text",
+          "v": "だけでなく"
+        },
+        {
+          "t": "ruby",
+          "k": "後件",
+          "r": "こうけん"
+        },
+        {
+          "t": "text",
+          "v": "まで及ぶ"
+        },
+        {
+          "t": "ruby",
+          "k": "累加",
+          "r": "るいか"
+        },
+        {
+          "t": "text",
+          "v": "を表します。\n\n- 謝らないばかりか逆ギレした"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「ばかりか」表示遞進「不僅…甚至…」。後項通常程度更重。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「ばかりか」は、階段をさらに一段上げます。後件まで範囲が広がる累加です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "累加",
+          "reading": "るいか"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "dake-denaku",
+    "dokoroka"
+  ]
+}

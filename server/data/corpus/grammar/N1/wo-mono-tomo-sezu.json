@@ -1,0 +1,53 @@
+{
+  "slug": "wo-mono-tomo-sezu",
+  "title_ja": "をものともせず",
+  "title_zh": "をものともせず（不把…當一回事）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N＋をものともせず（に）",
+      "gloss_zh": "不把困難當一回事；勇敢面對",
+      "notes_zh": "例：嵐をものともせず出航した。賛美寄り"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「をものともせず」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "困難",
+          "r": "こんなん"
+        },
+        {
+          "t": "text",
+          "v": "を意に介さず進むことを表します。\n\n- 痛みをものともせず走り続けた"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「をものともせず」表示不畏困難、不把障礙當回事地前進。多帶讚賞。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「をものともせず」は、障害を小さく見せて突き進む英雄的な線です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "困難",
+          "reading": "こんなん"
+        }
+      ]
+    }
+  }
+}

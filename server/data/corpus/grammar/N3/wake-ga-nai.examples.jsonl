@@ -1,0 +1,4 @@
+{"text_ja": "彼がそんなことをする___がない。", "text_zh": "他不可能做那種事。", "blank": "わけ", "is_correct": 1, "hint": "強い否定", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "この値段で買える___がありません。", "text_zh": "這個價錢不可能買得到。", "blank": "わけ", "is_correct": 1, "hint": "不可能", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "子供だけで分かる___がない。", "text_zh": "小孩子不可能自己懂。", "blank": "わけ", "is_correct": 1, "hint": "推論否定", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "嘘だなんて、そんな___ない。", "text_zh": "說是謊言？沒那回事。", "blank": "わけが", "is_correct": 1, "hint": "一蹴", "source": "curated", "license": "CC-BY-SA-4.0"}

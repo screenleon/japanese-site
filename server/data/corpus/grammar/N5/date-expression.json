@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "〜年＋〜月＋〜日",
+      "gloss_zh": "日期順序：年→月→日",
+      "notes_zh": "例：2026年5月3日。四月・七月・九月讀法要注意"
+    },
+    {
+      "form": "特別な日付の読み方",
+      "gloss_zh": "1–10 日及部分日期有特殊讀法",
+      "notes_zh": "例：一日（ついたち）／二日（ふつか）／二十日（はつか）。十四日・二十四日等亦特殊"
     }
   ],
   "explanation_ja_blocks": [
@@ -142,6 +148,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

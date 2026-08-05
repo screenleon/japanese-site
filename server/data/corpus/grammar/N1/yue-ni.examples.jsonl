@@ -1,0 +1,4 @@
+{"text_ja": "経験不足___ミスが起きた。", "text_zh": "因經驗不足而出錯。", "blank": "ゆえに", "is_correct": 1, "hint": "因果", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "若さ___の失敗だった。", "text_zh": "是因年輕而犯的錯。", "blank": "ゆえ", "is_correct": 1, "hint": "連體", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "___、再検討が必要だ。", "text_zh": "因此需要再檢討。", "blank": "ゆえに", "is_correct": 1, "hint": "結論", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "信頼___任せたのだ。", "text_zh": "正因信任才託付。", "blank": "ゆえに", "is_correct": 1, "hint": "理由", "source": "curated", "license": "CC-BY-SA-4.0"}

@@ -1,0 +1,4 @@
+{"text_ja": "それは十分あり___話です。", "text_zh": "那是完全可能的事。", "blank": "得る", "is_correct": 1, "hint": "可能性", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "最悪の結果も起こり___。", "text_zh": "最壞結果也可能發生。", "blank": "得る", "is_correct": 1, "hint": "リスク", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "そんなことはあり___。", "text_zh": "那種事不可能。", "blank": "得ない", "is_correct": 1, "hint": "否定", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "一瞬で理解し___内容ではない。", "text_zh": "不是一瞬間就能理解的內容。", "blank": "得ない", "is_correct": 1, "hint": "困難", "source": "curated", "license": "CC-BY-SA-4.0"}

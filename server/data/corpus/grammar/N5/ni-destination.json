@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "場所＋に＋行きます／来ます／帰ります",
+      "gloss_zh": "標示移動的到達點",
+      "notes_zh": "例：学校に行きます。強調方向可用「へ」見 e-direction"
+    },
+    {
+      "form": "場所＋に＋あります／います",
+      "gloss_zh": "標示存在的位置",
+      "notes_zh": "例：部屋に猫がいます。動作發生場所用「で」見 de-place，不要混用"
     }
   ],
   "explanation_ja_blocks": [
@@ -195,6 +201,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

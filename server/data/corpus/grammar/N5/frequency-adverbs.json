@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "いつも／よく／たまに＋動詞",
+      "gloss_zh": "表示高到中低的頻率",
+      "notes_zh": "例：いつも歩きます／よく映画を見ます／たまに旅行します"
+    },
+    {
+      "form": "あまり／全然＋否定形",
+      "gloss_zh": "與否定搭配：不太／完全不",
+      "notes_zh": "例：あまり食べません／全然分かりません。肯定句一般不用「全然」（口語另論）"
     }
   ],
   "explanation_ja_blocks": [
@@ -219,6 +225,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

@@ -1,0 +1,4 @@
+{"text_ja": "留守の___宅配が来ました。", "text_zh": "不在家期間快遞來了。", "blank": "あいだに", "is_correct": 1, "hint": "期間内", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "日本にいる___各地を旅行したいです。", "text_zh": "在日本期間想去各地旅行。", "blank": "あいだに", "is_correct": 1, "hint": "期間", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "冷めない___召し上がってください。", "text_zh": "趁還沒涼請用餐。", "blank": "あいだに", "is_correct": 1, "hint": "変化前", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "子供が遊んでいる___掃除しました。", "text_zh": "孩子玩耍時我打掃了。", "blank": "あいだに", "is_correct": 1, "hint": "並行", "source": "curated", "license": "CC-BY-SA-4.0"}

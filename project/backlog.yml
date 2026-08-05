@@ -1468,19 +1468,36 @@ items:
       - Backlog status closed as hygiene during JS-101 N2 full-pack work (2026-08-05).
 
   - id: JS-100c
-    title: N5 grammar v2 content regen slice (40 entries)
-    status: todo
+    title: N5 grammar v2 content regen slice (39 entries)
+    status: done
     priority: P1
     milestone: M3
     theme: content-uplift
     area: content
     source: blocked-on-spike-merge
     blocked_by: [JS-097, JS-098, JS-099]
+    completed_at: "2026-08-05"
     notes:
-      - Regenerate and native-review full N5 grammar v2 content for 40 entries.
-      - Clear `audit_status: "pre-redesign"` entry-by-entry only after each entry passes native review.
+      - Regenerate and pass pedagogical native-perspective review for the full N5 inventory (39 entries; historical “40” was the MVP scaffold estimate, not the verified on-disk count after dedup).
+      - Clear `audit_status: "pre-redesign"` entry-by-entry only after each entry passes the project’s content review bar (main-thread pedagogical native-perspective review with stated non-native-speaker limitation — same convention as closed JS-100a/b and JS-101 packs).
       - Downstream content work, not part of the Phase 2 schema spike.
-      - Still open after JS-101 N2 pack (2026-08-05); 39/39 N5 remain pre-redesign.
+      - 2026-08-05: Full N5 pattern regen — 39/39 entries, 81 pattern rows, 0 pre-redesign / 0 TBD. Audit audits/js-100c-n5-pattern-native-review-2026-08-05.md (pedagogical review; not a certified native-speaker attestation).
+
+  - id: JS-142
+    title: "Asymmetric grammar inventory expand: N3+22 / N2+30 / N1+34"
+    status: done
+    priority: P1
+    milestone: M3
+    theme: content-uplift
+    area: content
+    source: user-request 2026-08-05 (N1/N2 density + N3 gaps)
+    completed_at: "2026-08-05"
+    related: [JS-100c, JS-101]
+    notes:
+      - Grow curated grammar beyond equal ~40/level scaffold so N1/N2 denser than N5/N4; fill high-value N3 foundation gaps.
+      - 2026-08-05: shipped on feat/grammar-inventory-expand — N3 38→60, N2 40→70, N1 40→74 (+86). lint-grammar passed.
+      - Audit audits/grammar-inventory-expand-n1-n2-n3-2026-08-05.md; decision DECISIONS.md 2026-08-05 asymmetric inventory.
+      - Not exhaustive JLPT dump; further thematic batches OK without re-equalizing lower levels.
 
   - id: JS-101
     title: N2/N1 grammar v2 gradual content uplift
@@ -1494,7 +1511,8 @@ items:
       - Gradually uplift N2/N1 v2 entries because advanced register and literary forms need slower native-reviewer handling.
       - Drop `audit_status: "pre-redesign"` per entry as native-reviewer signs it off.
       - 2026-08-05: N2 full pack shipped PR #76; 0 N2 pre-redesign remaining.
-      - 2026-08-05: N1 full pack (40) + N3 pattern-richness uplift (35 thin entries) on feat/js-101-n1-n3-pattern-uplift; 0 N1 pre-redesign remaining. Ticket stays doing until any residual N1/N3 editorial follow-ups are closed; JS-100c N5 still open separately.
+      - 2026-08-05: N1 full pack (40) + N3 pattern-richness uplift (35 thin entries) on feat/js-101-n1-n3-pattern-uplift; 0 N1 pre-redesign remaining.
+      - 2026-08-05: JS-100c N5 closed; JS-142 inventory expand added 34 N1 + 30 N2 new entries (pre-redesign not applicable — authored at v2 bar). Residual editorial polish on new rows can stay under this ticket or follow-up.
 
   - id: JS-102
     title: Drop SQLite legacy shadow columns on grammar_point

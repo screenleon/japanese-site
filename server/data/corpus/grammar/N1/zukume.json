@@ -1,0 +1,53 @@
+{
+  "slug": "zukume",
+  "title_ja": "ずくめ",
+  "title_zh": "ずくめ（全是…）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "N＋ずくめ",
+      "gloss_zh": "全是…；清一色…",
+      "notes_zh": "例：いいことずくめ／黒ずくめ。全体がそれで揃う"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ずくめ」は、全体がそれで"
+        },
+        {
+          "t": "ruby",
+          "k": "揃",
+          "r": "そろ"
+        },
+        {
+          "t": "text",
+          "v": "っていることを表します。\n\n- 結構なことずくめの話"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「ずくめ」表示從頭到尾都是同一類事物「清一色、盡是…」。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「ずくめ」は、要素を一色に染め上げる言い方です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "揃",
+          "reading": "そろ"
+        }
+      ]
+    }
+  }
+}

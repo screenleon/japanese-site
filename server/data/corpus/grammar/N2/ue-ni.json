@@ -1,0 +1,57 @@
+{
+  "slug": "ue-ni",
+  "title_ja": "上に",
+  "title_zh": "上に（不但…而且…）",
+  "jlpt_level": "N2",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "普通形＋上に",
+      "gloss_zh": "不但…而且…（累加）",
+      "notes_zh": "例：安い上に美味しい。プラス・マイナス両方可。上で(N2)と別"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「上に」は、あることに加えてさらに、という"
+        },
+        {
+          "t": "ruby",
+          "k": "累加",
+          "r": "るいか"
+        },
+        {
+          "t": "text",
+          "v": "を表します。\n\n- 給料が安い上に仕事が多い"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「上に」表示累加「不但…而且…」。與「上で」（在…之後／在…方面）不同。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「上に」は、すでに載っているものの上にさらに重ねる累加です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "累加",
+          "reading": "るいか"
+        }
+      ]
+    }
+  },
+  "related_slugs": [
+    "ue-de",
+    "dake-denaku"
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "slug": "koto-nashi-ni",
+  "title_ja": "ことなしに",
+  "title_zh": "ことなしに（若不…就…）",
+  "jlpt_level": "N1",
+  "schema_version": 2,
+  "pattern": [
+    {
+      "form": "Vる＋ことなしに",
+      "gloss_zh": "若不…就（不能）…",
+      "notes_zh": "例：努力することなしに成功はない。書き言葉"
+    }
+  ],
+  "explanation_ja_blocks": [
+    {
+      "kind": "paragraph",
+      "tokens": [
+        {
+          "t": "text",
+          "v": "「ことなしに」は、"
+        },
+        {
+          "t": "ruby",
+          "k": "前提",
+          "r": "ぜんてい"
+        },
+        {
+          "t": "text",
+          "v": "の"
+        },
+        {
+          "t": "ruby",
+          "k": "動作",
+          "r": "どうさ"
+        },
+        {
+          "t": "text",
+          "v": "を省けない"
+        },
+        {
+          "t": "ruby",
+          "k": "書き言葉",
+          "r": "かきことば"
+        },
+        {
+          "t": "text",
+          "v": "です。\n\n- 努力することなしに成功はない\n- 確認することなしに進めない"
+        }
+      ]
+    }
+  ],
+  "explanation_zh": "「ことなしに」書面表示「若不做…就…」，多與否定結果共現。",
+  "_meta": {
+    "source": "curated",
+    "license": "CC-BY-SA-4.0",
+    "validated_by": "curated-inventory-expand-v1",
+    "validator_score": 0.9
+  },
+  "annotations": {
+    "mental_model": "「ことなしに」は、必須の手続きを飛ばせない線です。",
+    "furigana": {
+      "title_ja": [],
+      "vocabulary": [
+        {
+          "kanji": "前提",
+          "reading": "ぜんてい"
+        },
+        {
+          "kanji": "動作",
+          "reading": "どうさ"
+        },
+        {
+          "kanji": "書き言葉",
+          "reading": "かきことば"
+        }
+      ]
+    }
+  }
+}

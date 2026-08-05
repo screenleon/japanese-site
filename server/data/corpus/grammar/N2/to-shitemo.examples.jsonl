@@ -1,0 +1,4 @@
+{"text_ja": "高い___買います。", "text_zh": "即使貴也要買。", "blank": "としても", "is_correct": 1, "hint": "譲歩", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "行く___日帰りです。", "text_zh": "即使去也是當天來回。", "blank": "としても", "is_correct": 1, "hint": "仮定", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "反対された___続けます。", "text_zh": "即使被反對也要繼續。", "blank": "としても", "is_correct": 1, "hint": "決意", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "最悪___命に別状はない。", "text_zh": "即使最壞，生命也無大礙。", "blank": "だとしても", "is_correct": 1, "hint": "下限", "source": "curated", "license": "CC-BY-SA-4.0"}

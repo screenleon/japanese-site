@@ -1,0 +1,4 @@
+{"text_ja": "事実を認め___得ない。", "text_zh": "不得不承認事實。", "blank": "ざるを", "is_correct": 1, "hint": "別無他法", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "会議を延期___得なかった。", "text_zh": "不得不延期會議。", "blank": "せざるを", "is_correct": 1, "hint": "する→せざる", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "謝ら___得ない状況です。", "text_zh": "是不得不道歉的狀況。", "blank": "ざるを", "is_correct": 1, "hint": "外圧", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "計画を変更___得ませんでした。", "text_zh": "不得不變更計畫。", "blank": "せざるを", "is_correct": 1, "hint": "状況", "source": "curated", "license": "CC-BY-SA-4.0"}

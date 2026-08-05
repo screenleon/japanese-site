@@ -1,0 +1,4 @@
+{"text_ja": "毎日、漢字を___なりません。", "text_zh": "每天都得學漢字。", "blank": "勉強しなければ", "is_correct": 1, "hint": "義務", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "明日は早く___なりません。", "text_zh": "明天必須早起。", "blank": "起きなければ", "is_correct": 1, "hint": "必要", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "レポートを今日中に___いけません。", "text_zh": "報告今天之內一定要交。", "blank": "出さなければ", "is_correct": 1, "hint": "期限", "source": "curated", "license": "CC-BY-SA-4.0"}
+{"text_ja": "薬を___なりません。", "text_zh": "必須吃藥。", "blank": "飲まなければ", "is_correct": 1, "hint": "義務", "source": "curated", "license": "CC-BY-SA-4.0"}
