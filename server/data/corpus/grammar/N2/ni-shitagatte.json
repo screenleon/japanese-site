@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋にしたがって（に従って）",
+      "gloss_zh": "隨著 A 變化，B 也同向連動",
+      "notes_zh": "例：年を取るにしたがって体力が落ちる。変化どうしの連動。「につれて」よりやや硬い・説明文向き"
+    },
+    {
+      "form": "N＋にしたがって（に従って）",
+      "gloss_zh": "依照規則／指示去做",
+      "notes_zh": "例：マニュアルに従って操作する。こちらは「遵守」。変化連動とは別用法。→ 自然な漸進変化は ni-tsurete、客観的併発は nitomonatte"
     }
   ],
   "explanation_ja_blocks": [
@@ -125,6 +131,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

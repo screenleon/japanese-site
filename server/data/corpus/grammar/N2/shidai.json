@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vます形＋次第",
+      "gloss_zh": "一…就立刻…（通知・業務）",
+      "notes_zh": "例：分かり次第ご連絡します／準備ができ次第出発します。準備が整った時点で即実行。硬い案内文"
+    },
+    {
+      "form": "N＋次第だ／次第で",
+      "gloss_zh": "取決於 N；視 N 而定",
+      "notes_zh": "例：結果は努力次第だ／天候次第で中止する。上の「一…就」と同形異義。前後で意味が分かれる"
     }
   ],
   "explanation_ja_blocks": [
@@ -138,6 +144,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

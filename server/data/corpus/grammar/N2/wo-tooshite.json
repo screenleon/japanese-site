@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋を通して／を通じて",
+      "gloss_zh": "透過 N（媒介）達成／得知",
+      "notes_zh": "例：友人を通して紹介された。人・手段・活動を媒介にする。どちらも可；文によって好みが分かれる"
+    },
+    {
+      "form": "期間のN＋を通して／を通じて",
+      "gloss_zh": "在整個期間內一直…",
+      "notes_zh": "例：一年を通して温暖だ。期間全体を覆う用法。媒介義と期間義は前の名詞で切り替える"
     }
   ],
   "explanation_ja_blocks": [
@@ -177,6 +183,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

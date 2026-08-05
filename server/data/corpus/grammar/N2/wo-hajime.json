@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋をはじめ（として）",
+      "gloss_zh": "以 N 為首；包括 N 在內",
+      "notes_zh": "例：社長をはじめ全社員が参加した。代表例を先に出し、同類の広がりを示す"
+    },
+    {
+      "form": "N＋をはじめとする＋N",
+      "gloss_zh": "以 N 為首的…",
+      "notes_zh": "例：日本をはじめとするアジア諸国。列挙の代表＋範囲"
     }
   ],
   "explanation_ja_blocks": [
@@ -186,6 +192,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

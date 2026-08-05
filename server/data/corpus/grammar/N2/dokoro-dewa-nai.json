@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N／V辞書形＋どころではない",
+      "gloss_zh": "根本不是做…的時候；哪裡顧得上…",
+      "notes_zh": "例：締切前で休むどころではない。今の状況に余裕がない、という押し返し。口語は「どころじゃない」"
+    },
+    {
+      "form": "普通形＋どころではない",
+      "gloss_zh": "遠非…能概括；實際更嚴重／更誇張",
+      "notes_zh": "例：被害は小さいどころではない。程度が前件では収まらない、という強調。「どころか」は予想の反転・極端化（dokoroka-formal）"
     }
   ],
   "explanation_ja_blocks": [
@@ -175,6 +181,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

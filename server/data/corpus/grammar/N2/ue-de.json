@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vた形＋上で",
+      "gloss_zh": "先完成必要步驟後，再進入下一步",
+      "notes_zh": "例：内容を確認した上で署名してください。確認・手続きを土台にする順序。報告の「たところ」とは役割が違う"
+    },
+    {
+      "form": "N＋の＋上で",
+      "gloss_zh": "在 N 方面／在 N 的範圍內",
+      "notes_zh": "例：仕事の上で大切なこと／法律の上では問題ない。評価や適用の範囲を区切る。Vた形とは意味が別"
     }
   ],
   "explanation_ja_blocks": [
@@ -109,6 +115,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

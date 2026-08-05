@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋をめぐって",
+      "gloss_zh": "圍繞 N 產生議論／對立",
+      "notes_zh": "例：計画をめぐって議論が続く。争点の周辺に複数の立場が集まる感じ。ニュース・説明文"
+    },
+    {
+      "form": "N＋をめぐる＋N",
+      "gloss_zh": "圍繞 N 的…",
+      "notes_zh": "例：予算をめぐる対立。連体は「めぐる」。単なる「について」より対立・議論の含みが出やすい"
     }
   ],
   "explanation_ja_blocks": [
@@ -156,6 +162,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

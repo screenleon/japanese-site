@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋に基づいて",
+      "gloss_zh": "以 N 為依據來判斷／行動",
+      "notes_zh": "例：調査結果に基づいて計画を立てる。根拠・土台を明示する硬い表現。気分や推測ではない"
+    },
+    {
+      "form": "N＋に基づく＋N／に基づいた＋N",
+      "gloss_zh": "以 N 為根據的…",
+      "notes_zh": "例：事実に基づく報道／データに基づいた分析。どちらも連体可。公式文書で頻出"
     }
   ],
   "explanation_ja_blocks": [
@@ -246,6 +252,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

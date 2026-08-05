@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋に先立って／に先立ち",
+      "gloss_zh": "在重要事件之前，先完成準備／說明",
+      "notes_zh": "例：開会に先立って注意事項を説明する。単なる時間の前後より、公式な段取り感。「前に」より硬い"
+    },
+    {
+      "form": "V辞書形＋に先立って",
+      "gloss_zh": "在做某正式動作之前先…",
+      "notes_zh": "例：出発するに先立って荷物を確認した。会・出発・締結など節目の前処理"
     }
   ],
   "explanation_ja_blocks": [
@@ -224,6 +230,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }
