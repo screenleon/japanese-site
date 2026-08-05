@@ -168,6 +168,44 @@ describe("GrammarTab", () => {
     expect(screen.getByRole("heading", { name: "〜さえ" })).toBeVisible();
   });
 
+  /**
+   * Verifies GrammarTab adopts content-first DOM order via ContentFirstLayout.
+   * Steps:
+   * 1. Render GrammarTab with mocked grammar points.
+   * 2. Wait for the active entry heading.
+   * 3. Assert study-directory follows study-content in document order.
+   */
+  it("places study content before the directory in DOM order (content-first)", async () => {
+    render(<GrammarTab />);
+    await screen.findByRole("heading", { name: "〜さえ" });
+
+    const content = screen.getByTestId("study-content");
+    const directory = screen.getByTestId("study-directory");
+    const following = Node.DOCUMENT_POSITION_FOLLOWING;
+    expect(content.compareDocumentPosition(directory) & following).toBe(following);
+  });
+
+  /**
+   * Verifies picking a grammar directory item focuses that entry and closes the mobile directory.
+   * Steps:
+   * 1. Render GrammarTab and wait for the default active heading.
+   * 2. Open the mobile directory and click the ものの entry.
+   * 3. Assert ものの is the active heading and the directory toggle is collapsed.
+   */
+  it("selecting a directory entry activates it and collapses the mobile directory", async () => {
+    render(<GrammarTab />);
+    await screen.findByRole("heading", { name: "〜さえ" });
+
+    fireEvent.click(screen.getByRole("button", { name: /本級目錄/ }));
+    fireEvent.click(screen.getByRole("button", { name: "ものの" }));
+
+    expect(await screen.findByRole("heading", { name: "ものの" })).toBeVisible();
+    expect(screen.getByRole("button", { name: /本級目錄/ })).toHaveAttribute(
+      "aria-expanded",
+      "false"
+    );
+  });
+
   it("disables the draw-random button while a random grammar point is loading", async () => {
     let resolveRandom: (value: (typeof points)[1]) => void = () => {};
     const randomPromise = new Promise<(typeof points)[1]>((resolve) => {

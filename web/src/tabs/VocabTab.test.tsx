@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "../api";
 import { ChineseVisibilityProvider } from "../chineseVisibility";
@@ -63,22 +63,41 @@ describe("VocabTab", () => {
     vi.clearAllMocks();
   });
 
-  it("renders annotations on the random vocab card", async () => {
+  /**
+   * Verifies usage annotations appear only on the focus card, not compact directory rows.
+   * Steps:
+   * 1. Render VocabTab with a mocked vocab row that includes annotations.
+   * 2. Wait for the 使い方 label and collect annotation text nodes.
+   * 3. Assert exactly one annotation instance and that it lives under vocab-focus-card, not the directory list.
+   */
+  it("renders annotations on the focus vocab card only (not compact directory rows)", async () => {
     render(<VocabTab />);
 
     expect(await screen.findAllByText("使い方")).not.toHaveLength(0);
-    expect(
-      screen.getAllByText("「お喋り」は雑談にも、話しすぎる様子にも使う。")[0]
-    ).toBeVisible();
-  });
-
-  it("renders annotations on search result rows", async () => {
-    render(<VocabTab />);
-
-    const notes = await screen.findAllByText(
+    const notes = screen.getAllByText(
       "「お喋り」は雑談にも、話しすぎる様子にも使う。"
     );
-    expect(notes.length).toBeGreaterThanOrEqual(2);
+    // Annotations live on the focus card; directory rows stay compact.
+    expect(notes).toHaveLength(1);
+    expect(screen.getByTestId("vocab-focus-card")).toContainElement(notes[0]);
+    expect(screen.getByTestId("vocab-directory-list")).not.toContainElement(notes[0]);
+  });
+
+  /**
+   * Verifies VocabTab adopts content-first DOM order via ContentFirstLayout.
+   * Steps:
+   * 1. Render VocabTab with mocked vocab results.
+   * 2. Wait for gloss text to confirm load.
+   * 3. Assert study-directory follows study-content in document order.
+   */
+  it("places focus content before the directory in DOM order", async () => {
+    render(<VocabTab />);
+    await screen.findAllByText("よく話すこと。");
+
+    const content = screen.getByTestId("study-content");
+    const directory = screen.getByTestId("study-directory");
+    const following = Node.DOCUMENT_POSITION_FOLLOWING;
+    expect(content.compareDocumentPosition(directory) & following).toBe(following);
   });
 
   it("renders kanji vocabulary readings with ruby", async () => {
@@ -94,7 +113,7 @@ describe("VocabTab", () => {
 
     await screen.findAllByText("よく話すこと。");
 
-    // Assert
+    // Assert — focus card + compact directory row both show headword ruby.
     const ruby = Array.from(container.querySelectorAll("ruby"));
     expect(ruby.length).toBeGreaterThanOrEqual(2);
     expect(ruby[0]).toHaveTextContent("お喋りおしゃべり");
@@ -149,6 +168,42 @@ describe("VocabTab", () => {
     renderWithChinese(true);
 
     expect(await screen.findAllByText("よく話すこと。")).not.toHaveLength(0);
+    // Focus card (full 中文說明) + compact directory row both surface Chinese gloss.
     expect(screen.getAllByText("聊天、多話。").length).toBeGreaterThanOrEqual(2);
   });
+
+  /**
+   * Verifies selecting a directory vocab row focuses that entry and collapses the mobile directory.
+   * Steps:
+   * 1. Mock two list rows and render VocabTab.
+   * 2. Open the mobile directory and click the 勉強 row.
+   * 3. Assert the focus card shows 学ぶこと。 and the directory toggle is collapsed.
+   */
+  it("selecting a directory row moves it into the focus card and collapses the mobile directory", async () => {
+    const second = {
+      ...vocab,
+      id: 99,
+      headword: "勉強",
+      reading: "べんきょう",
+      gloss_ja: "学ぶこと。",
+      gloss_zh: "學習。",
+      annotations: undefined,
+    };
+    searchVocab.mockResolvedValue({ results: [vocab, second], count: 2, total: 2 });
+    randomVocab.mockResolvedValue(vocab);
+
+    render(<VocabTab />);
+    await screen.findByText("学ぶこと。");
+
+    // Open mobile directory, then pick the second row.
+    fireEvent.click(screen.getByRole("button", { name: /本級目錄/ }));
+    fireEvent.click(screen.getByRole("button", { name: /勉強/ }));
+
+    expect(screen.getByTestId("vocab-focus-card")).toHaveTextContent("学ぶこと。");
+    expect(screen.getByRole("button", { name: /本級目錄/ })).toHaveAttribute(
+      "aria-expanded",
+      "false"
+    );
+  });
 });
+

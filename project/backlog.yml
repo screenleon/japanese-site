@@ -1291,10 +1291,12 @@ items:
     theme: kanji
     area: content
     source: planning:2026-05-09
+    related: [JS-144, JS-145, JS-146, JS-148]
     notes:
       - Estimate — 小.
       - Audit current kanji corpus state and learner pain around same-sound or visually similar kanji confusion.
       - Evaluate whether a kanji quiz tab is worth adding or whether existing study surfaces should absorb the support.
+      - 2026-08-05 product direction: prefer vocab↔kanji deep-links (JS-144/145) + optional relations (JS-148) before a new kanji quiz tab.
       - Preserve the backlog boundary: no learner-facing PM surfaces.
 
   - id: JS-090
@@ -1966,6 +1968,108 @@ items:
     related: [JS-018]
     notes:
       - Explicit decision required; not in v1. Only if portfolio static must support long-term study.
+
+  # --- Study IA: mobile content-first + vocab↔kanji links + themed collections (2026-08-05) ---
+
+  - id: JS-143
+    title: "Mobile content-first layout for reference tabs (grammar + vocab)"
+    status: done
+    priority: P1
+    milestone: M3
+    theme: study-ux
+    area: frontend
+    source: "user product discussion 2026-08-05 (vocab/kanji IA + mobile list-before-detail)"
+    completed_at: "2026-08-05"
+    related: [JS-115, JS-144, JS-145]
+    notes:
+      - P0 UX: on small viewports show active study content first; collapsible or secondary list for level browsing.
+      - Shipped ContentFirstLayout (content DOM-first; mobile directory toggle; lg side-by-side).
+      - GrammarTab + VocabTab adopt layout; vocab directory rows compact (no annotations); list click focuses card.
+      - Directory open state owned by tabs (UI-001). No corpus/schema change.
+      - Validated: npm test (ContentFirstLayout, GrammarTab, VocabTab + full web suite).
+
+  - id: JS-144
+    title: "Vocab headword → kanji deep-link (App shell navigation)"
+    status: todo
+    priority: P1
+    milestone: M3
+    theme: study-ux
+    area: frontend
+    source: "user product discussion 2026-08-05 (split kanji; jump from vocab for readings)"
+    related: [JS-143, JS-145, JS-138, JS-089]
+    notes:
+      - Keep kanji as its own study surface; do not merge kanji into vocab cards.
+      - Extract kanji code points from vocab headword; render clickable characters that switch to Kanji tab and load that character (mirror navigateToGrammar).
+      - AppShell: add initialKanji / navigateToKanji state parallel to grammarSlug.
+      - KanjiTab: accept initialCharacter prop; consume once like GrammarTab initialSlug.
+      - Works in static mode via existing getKanji / staticApi paths.
+      - Reuse (2026-08-05 confirmed): App deep-link pattern only — do NOT put nav inside ContentFirstLayout; Kanji focus card stays tab-local.
+      - Out of scope: reverse vocab list on kanji page (JS-145), JLPT kanji browse (JS-146).
+
+  - id: JS-145
+    title: "Kanji detail — example vocab containing the character"
+    status: todo
+    priority: P1
+    milestone: M3
+    theme: study-ux
+    area: backend/frontend
+    source: "user product discussion 2026-08-05 (kanji page value after jump)"
+    blocked_by: [JS-144]
+    related: [JS-089, JS-146]
+    notes:
+      - After landing on a kanji, show curated or search-derived vocab headwords that contain the character (readings in context).
+      - Prefer reusing vocab search (contains character) over a new table for v1; cap results; Japanese-first gloss.
+      - Optional: click example vocab → Vocab tab focus (symmetric deep-link).
+      - API or client-side: if search already supports substring, UI-only is enough; document static bake constraints.
+      - No new top-level tab.
+
+  - id: JS-146
+    title: "Kanji secondary browse by JLPT level (optional axis)"
+    status: todo
+    priority: P2
+    milestone: M3
+    theme: study-ux
+    area: frontend
+    source: "user product discussion 2026-08-05 (kanji harder to level-browse than vocab)"
+    blocked_by: [JS-143, JS-144]
+    related: [JS-145, JS-089]
+    notes:
+      - Primary kanji path remains lookup + deep-link from vocab; JLPT chips are secondary (like vocab list, not the only entry).
+      - Reuse (2026-08-05 confirmed): ContentFirstLayout + LevelPicker + JLPT_LEVELS + formatDirectorySummary; directory rows only, no new layout.
+      - Data: existing corpus/kanji/N*.jsonl + API/static list if missing — add listKanji(level) only if needed.
+      - Out of scope: radical/stroke primary nav; kanji quiz tab (see JS-089).
+
+  - id: JS-147
+    title: "Themed study collections hub (keigo / オノマトペ / …) without new top-level tabs"
+    status: todo
+    priority: P2
+    milestone: M3
+    theme: study-ux
+    area: product
+    source: "user product discussion 2026-08-05 (special blocks for keigo, onomatopoeia, etc.)"
+    related: [JS-073, JS-082, JS-084, JS-085, JS-086, JS-087, JS-088]
+    notes:
+      - Product principle: completeness via curated collections + tags/filters, not one NavCard tab per theme.
+      - Hub UI (Home or compact chips under study): e.g. 敬語入門, オノマトペ, filters into existing grammar/vocab lists.
+      - Content can land first as grammar/vocab seeds (JS-073, JS-082); hub may start with hard-coded slug/headword lists then tags.
+      - Explicitly defers JS-084 independent keigo corpus type until foundation content + hub prove need.
+      - Out of scope: homophone graph (JS-148); new content type without spike decision.
+
+  - id: JS-148
+    title: "Homophone and lookalike kanji relations (curated or derived)"
+    status: todo
+    priority: P3
+    milestone: M3
+    theme: study-ux
+    area: content
+    source: "user product discussion 2026-08-05 (similar-sounding / confusable characters)"
+    blocked_by: [JS-145]
+    related: [JS-089, JS-144]
+    notes:
+      - Show on kanji detail: same-reading confusions and lookalikes as optional related chips.
+      - Prefer small curated L1 edges or annotations over full graph; validate with content-source rules.
+      - Depends on kanji detail having real study value (JS-145) so relations are not dead-end links.
+      - May inform JS-089 quiz decision; does not require a new quiz tab by itself.
 
 
 # done[] is bootstrap-only: legacy entries closed before pm-schema v1 adoption.
