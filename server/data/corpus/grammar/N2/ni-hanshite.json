@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋に反して",
+      "gloss_zh": "與預期／期待／規則相反；或違反 N",
+      "notes_zh": "例：予想に反して試合はあっさり終わった／規則に反して駐車した。前件は予想・期待・意思・規則が多い"
+    },
+    {
+      "form": "N＋に反する＋N／に反した＋N",
+      "gloss_zh": "違背 N 的…（連體修飾）",
+      "notes_zh": "例：意に反する結果／命令に反した行動。単なる「違い」ではなく基準から外れる感覚"
     }
   ],
   "explanation_ja_blocks": [
@@ -246,6 +252,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

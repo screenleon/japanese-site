@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋にとって",
+      "gloss_zh": "對 N（人／立場）來說…",
+      "notes_zh": "例：私にとって家族は大切だ。評価の基準点。後ろは大切・必要・難しいなど判断語が来やすい。「に対して」＝行為・態度の相手、「について」＝話題"
+    },
+    {
+      "form": "N＋にとっての＋N",
+      "gloss_zh": "對 N 而言的…",
+      "notes_zh": "例：子どもにとっての安全。立場から見た意味づけを名詞化する"
     }
   ],
   "explanation_ja_blocks": [
@@ -144,6 +150,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

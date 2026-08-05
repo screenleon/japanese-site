@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋を中心に（して）",
+      "gloss_zh": "以 N 為中心向外展開",
+      "notes_zh": "例：駅を中心に店が集まる／若者を中心に支持を集める。中心点とその周辺の広がり"
+    },
+    {
+      "form": "N＋を中心とした＋N／を中心とする＋N",
+      "gloss_zh": "以 N 為中心的…",
+      "notes_zh": "例：東京を中心とした経済圏。連体で範囲・グループを名詞化"
     }
   ],
   "explanation_ja_blocks": [
@@ -223,6 +229,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

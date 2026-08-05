@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋くせに",
+      "gloss_zh": "明明…卻…（不滿・責備）",
+      "notes_zh": "例：知っているくせに教えない。話者の非難・皮肉が強い。目上や改まった場では避ける"
+    },
+    {
+      "form": "なAdj＋な＋くせに／N＋の＋くせに",
+      "gloss_zh": "明明是…卻（行為與身分不符）",
+      "notes_zh": "例：子どものくせに口が達者だ。名詞は「のくせに」。単なる対比なら「のに」の方が角が立たない"
     }
   ],
   "explanation_ja_blocks": [
@@ -191,6 +197,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

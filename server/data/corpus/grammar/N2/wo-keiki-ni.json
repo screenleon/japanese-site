@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋を契機に（して）",
+      "gloss_zh": "以 N 為契機，之後出現轉折／新行動",
+      "notes_zh": "例：留学を契機に考え方が変わった。流れが切り替わる出発点。硬い"
+    },
+    {
+      "form": "N＋を契機として",
+      "gloss_zh": "以 N 為轉折點（書面）",
+      "notes_zh": "例：事故を契機として安全基準が見直された。口語の「をきっかけに」よりフォーマル"
     }
   ],
   "explanation_ja_blocks": [
@@ -219,6 +225,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

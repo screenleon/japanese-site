@@ -107,9 +107,9 @@
 | JS-098 | 🟡 in_progress | explanation_ja → Block[] engine | schema/frontend | 2026-05-10 | spike:JS-097/098/099 |
 | JS-099 | 🟡 in_progress | classifier_rules editorial expansion + ClassifierContrasts UI | schema/frontend | 2026-05-10 | spike:JS-097/098/099 |
 | JS-100a | ✅ closed 2026-05-16 | N3 grammar v2 content regen slice (40 entries, shipped via PR #56) | content | 2026-05-10 | blocked-on-spike-merge |
-| JS-100b | 🔵 active | N4 grammar v2 content regen slice (40 entries) | content | 2026-05-10 | blocked-on-spike-merge |
+| JS-100b | ✅ closed 2026-05-17 | N4 grammar v2 content regen slice (40 entries) | content | 2026-05-10 | blocked-on-spike-merge |
 | JS-100c | 🔵 active | N5 grammar v2 content regen slice (40 entries) | content | 2026-05-10 | blocked-on-spike-merge |
-| JS-101 | 🔵 active | N2/N1 grammar v2 gradual content uplift | content | 2026-05-10 | blocked-on-spike-merge |
+| JS-101 | 🟡 in_progress | N2/N1 grammar v2 gradual content uplift | content | 2026-05-10 | blocked-on-spike-merge |
 | JS-102 | 🔵 active | Drop SQLite legacy shadow columns | backend/schema | 2026-05-10 | blocked-on JS-100b/JS-100c + JS-101 content cycle + one release window |
 | JS-103 | 🔵 active | Full 150-entry classifier contrast rollout | content | 2026-05-10 | blocked-on JS-100b, JS-100c |
 | JS-104 | 🔵 active | Vocab schema_version=2 + Block engine for gloss fields | schema/content | 2026-05-10 | scope-deferred (grammar-only spike) |
@@ -1161,7 +1161,7 @@ C. **混合**：先 ship `usage_note` free-form 一欄，未來若 narrative 太
 **Refs**: pr:#56
 <!-- 首次記錄: 2026-05-10 -->
 
-## JS-100b — N4 grammar v2 content regen slice (40 entries)
+## JS-100b — N4 grammar v2 content regen slice (40 entries) ✅ 2026-05-17
 
 **Problem**: The Phase 2 spike mechanically migrates most non-PoC entries and leaves many N4 entries with `audit_status: "pre-redesign"`.
 

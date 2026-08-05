@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋につれて",
+      "gloss_zh": "隨著 A 漸漸變化，B 也自然跟著變",
+      "notes_zh": "例：暗くなるにつれて寒くなった。なめらかな自然変化。規則遵守の意味では使わない（それはに従って）"
+    },
+    {
+      "form": "N＋につれて",
+      "gloss_zh": "隨著 N（變化性名詞）連動",
+      "notes_zh": "例：成長につれて考え方が変わる。「に伴って」より口語寄り・渐进感が強い"
     }
   ],
   "explanation_ja_blocks": [
@@ -77,6 +83,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

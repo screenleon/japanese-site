@@ -1454,18 +1454,18 @@ items:
       - Native review by Claude main thread (per native-reviewer-role rule); audit at audits/js-100-n3-pattern-native-review-2026-05-15.md.
 
   - id: JS-100b
-    title: N4 grammar v2 content regen slice (40 entries)
-    status: todo
+    title: N4 grammar v2 content regen slice (40 entries, shipped via PR #68)
+    status: done
     priority: P1
     milestone: M3
     theme: content-uplift
     area: content
     source: blocked-on-spike-merge
-    blocked_by: [JS-097, JS-098, JS-099]
+    completed_at: "2026-05-17"
     notes:
-      - Regenerate and native-review full N4 grammar v2 content for 40 entries.
-      - Clear `audit_status: "pre-redesign"` entry-by-entry only after each entry passes native review.
-      - Downstream content work, not part of the Phase 2 schema spike.
+      - Shipped via PR #68 (97d69a3, 2026-05-17): N4 pattern regen + native review GO.
+      - Corpus verified 2026-08-05: 0/39 N4 entries still carry `audit_status: "pre-redesign"`.
+      - Backlog status closed as hygiene during JS-101 N2 full-pack work (2026-08-05).
 
   - id: JS-100c
     title: N5 grammar v2 content regen slice (40 entries)
@@ -1480,19 +1480,20 @@ items:
       - Regenerate and native-review full N5 grammar v2 content for 40 entries.
       - Clear `audit_status: "pre-redesign"` entry-by-entry only after each entry passes native review.
       - Downstream content work, not part of the Phase 2 schema spike.
+      - Still open after JS-101 N2 pack (2026-08-05); 39/39 N5 remain pre-redesign.
 
   - id: JS-101
     title: N2/N1 grammar v2 gradual content uplift
-    status: todo
+    status: doing
     priority: P2
     milestone: M3
     theme: content-uplift
     area: content
     source: blocked-on-spike-merge
-    blocked_by: [JS-097, JS-098, JS-099]
     notes:
       - Gradually uplift N2/N1 v2 entries because advanced register and literary forms need slower native-reviewer handling.
       - Drop `audit_status: "pre-redesign"` per entry as native-reviewer signs it off.
+      - 2026-08-05: N2 full pack (37 pre-redesign + keep 3 already-clear) authored on feat/js-101-n2-pattern-regen; 0 N2 pre-redesign remaining. N1 (40 pre-redesign) still open.
 
   - id: JS-102
     title: Drop SQLite legacy shadow columns on grammar_point

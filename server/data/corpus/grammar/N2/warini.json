@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋わりに（は）",
+      "gloss_zh": "相對於前件，後項程度與預期不合",
+      "notes_zh": "例：忙しいわりに元気だ。良い方向にも悪い方向にも使える評価のズレ"
+    },
+    {
+      "form": "なAdj＋な＋わりに／N＋の＋わりに",
+      "gloss_zh": "以該性質／基準來說，實際…",
+      "notes_zh": "例：値段のわりに品質がいい。「にしては」＝立場・条件からの意外さ；「わりに」＝程度比較のズレ"
     }
   ],
   "explanation_ja_blocks": [
@@ -226,6 +232,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋に限り",
+      "gloss_zh": "僅限 N（公告・規則的線劃）",
+      "notes_zh": "例：本日に限り半額です／会員に限り入場可。硬い限定。「だけ」より掲示・規則文向き"
+    },
+    {
+      "form": "V辞書形／Vない形＋に限る",
+      "gloss_zh": "最好…；莫過於…（定評）",
+      "notes_zh": "例：疲れたときは寝るに限る。評価の結論で、上の「に限り」とは別用法。混同注意"
     }
   ],
   "explanation_ja_blocks": [
@@ -167,6 +173,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

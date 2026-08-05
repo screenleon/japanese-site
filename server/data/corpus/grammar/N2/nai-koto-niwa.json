@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vない形＋ことには…ない／できない",
+      "gloss_zh": "若不先做到 A，B 就無法成立",
+      "notes_zh": "例：実物を見ないことには判断できない。必要条件。後ろは否定・不可能が自然"
+    },
+    {
+      "form": "Vない形＋ことには始まらない／無理だ",
+      "gloss_zh": "A 不做的話，事情推不動",
+      "notes_zh": "例：資金が集まらないことには計画は始まらない。手続き・前提を強調する硬めの言い方"
     }
   ],
   "explanation_ja_blocks": [
@@ -241,6 +247,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }
