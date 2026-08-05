@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋を皮切りに（して）",
+      "gloss_zh": "以 N 為開端陸續…",
+      "notes_zh": "例：首都公演を皮切りに全国へ広がった。最初の一件のあと同種が続く起点。報道・事業"
+    },
+    {
+      "form": "N＋を皮切りとして",
+      "gloss_zh": "同上（書面）",
+      "notes_zh": "例：合意を皮切りとして協議が加速した。きっかけに より「連鎖の始まり」感"
     }
   ],
   "explanation_ja_blocks": [
@@ -310,6 +316,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

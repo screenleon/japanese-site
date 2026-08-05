@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vます形語幹＋がてら",
+      "gloss_zh": "順便…（利用外出等機會）",
+      "notes_zh": "例：駅まで歩きがてら郵便局へ寄る。主目的の移動を生かして別用件。ついでに より少し改まる"
+    },
+    {
+      "form": "N＋がてら",
+      "gloss_zh": "藉 N 的機會順便…",
+      "notes_zh": "例：散歩がてら買い物をした。がてら は機会利用、かたがた は礼儀的兼務"
     }
   ],
   "explanation_ja_blocks": [
@@ -230,6 +236,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

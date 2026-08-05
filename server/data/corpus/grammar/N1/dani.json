@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋だに＋（しない）",
+      "gloss_zh": "連 N 都（不）…",
+      "notes_zh": "例：反論どころか質問だにしなかった。最低限の動作さえない、と際立たせる。文語寄りで日常は「さえ／すら」"
+    },
+    {
+      "form": "V辞書形＋だに",
+      "gloss_zh": "光是 V 就…",
+      "notes_zh": "例：思い出すだに悔しい／見るだに痛い。想像や知覚しただけで強い反応。「夢にだに思わなかった」は名詞「夢」＋だに"
     }
   ],
   "explanation_ja_blocks": [
@@ -202,6 +208,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

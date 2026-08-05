@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋かたがた",
+      "gloss_zh": "兼作 N（極正式）",
+      "notes_zh": "例：お礼かたがたご報告に伺いました。挨拶・お礼・報告など礼儀の用事を兼ねる。ビジネス文書・訪問。ついでに は軽すぎる"
+    },
+    {
+      "form": "ご挨拶／お礼／ご報告＋かたがた",
+      "gloss_zh": "固定禮貌搭配",
+      "notes_zh": "例：ご挨拶かたがた資料をお届けします。する名詞は「する」を落とす"
     }
   ],
   "explanation_ja_blocks": [
@@ -229,6 +235,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

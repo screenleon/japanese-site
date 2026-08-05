@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋（の）いかんで／いかんによっては",
+      "gloss_zh": "取決於 N",
+      "notes_zh": "例：検査結果のいかんで対応を変える。内容・結果しだい。公式・報告。日常は「次第で」"
+    },
+    {
+      "form": "N＋（の）いかんだ",
+      "gloss_zh": "端看 N 如何",
+      "notes_zh": "例：採否は面接のいかんだ。決定要因を一文で示す"
     }
   ],
   "explanation_ja_blocks": [
@@ -238,6 +244,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

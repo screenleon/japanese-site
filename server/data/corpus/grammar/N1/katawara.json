@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋かたわら",
+      "gloss_zh": "一邊從事主業一邊長期並行…",
+      "notes_zh": "例：教壇に立つかたわら研究も続ける。習慣的・長期の併行。瞬間の同時は「ながら」"
+    },
+    {
+      "form": "N＋の＋かたわら",
+      "gloss_zh": "在 N 之餘還…",
+      "notes_zh": "例：本業のかたわら執筆している。履歴書・紹介文でよく見る"
     }
   ],
   "explanation_ja_blocks": [
@@ -234,6 +240,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

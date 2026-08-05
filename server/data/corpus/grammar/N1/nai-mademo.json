@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vない形＋ないまでも",
+      "gloss_zh": "即使不到 V 的程度，至少…",
+      "notes_zh": "例：賛成できないまでも反対はしない。上の期待を一段下げて譲歩する"
+    },
+    {
+      "form": "N／いAdjく＋ないまでも",
+      "gloss_zh": "即使稱不上…",
+      "notes_zh": "例：専門家ではないまでも基礎は分かる。最低ラインの確保"
     }
   ],
   "explanation_ja_blocks": [
@@ -250,6 +256,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

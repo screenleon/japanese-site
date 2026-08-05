@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋にもかかわらず",
+      "gloss_zh": "儘管…卻…",
+      "notes_zh": "例：雨にもかかわらず試合は決行された。事実を認めた上での逆接。のに より硬く客観的"
+    },
+    {
+      "form": "N＋にもかかわらず",
+      "gloss_zh": "儘管是 N",
+      "notes_zh": "例：多忙にもかかわらず顔を出してくれた。書き言葉・改まった話し言葉"
     }
   ],
   "explanation_ja_blocks": [
@@ -213,6 +219,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

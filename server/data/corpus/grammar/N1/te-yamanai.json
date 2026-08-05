@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vて形＋やまない",
+      "gloss_zh": "衷心持續…（感情不止）",
+      "notes_zh": "例：成功を心より願ってやまない。祈願・愛惜・遺憾を改まって述べる。日常の「すごく願う」には重い"
+    },
+    {
+      "form": "Nを＋Vてやまない",
+      "gloss_zh": "對 N 懷有不止的…",
+      "notes_zh": "例：平和を希求してやまない。式辞・声明の定型に近い"
     }
   ],
   "explanation_ja_blocks": [
@@ -173,6 +179,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

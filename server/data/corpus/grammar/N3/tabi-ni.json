@@ -7,11 +7,13 @@
   "pattern": [
     {
       "form": "V辞書形＋たびに",
-      "gloss_zh": "表示每當前項發生，後項也反覆發生"
+      "gloss_zh": "每當…就…",
+      "notes_zh": "例：会うたびに成長を感じる。反復の対応関係"
     },
     {
       "form": "N＋の＋たびに",
-      "gloss_zh": "表示每次遇到某事件或場合，後項都會發生"
+      "gloss_zh": "每逢 N 就…",
+      "notes_zh": "例：旅行のたびに写真を撮る"
     }
   ],
   "explanation_ja_blocks": [

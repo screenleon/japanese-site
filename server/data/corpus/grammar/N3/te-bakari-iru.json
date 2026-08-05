@@ -7,7 +7,13 @@
   "pattern": [
     {
       "form": "Vて形＋ばかりいる",
-      "gloss_zh": "表示一直只顧著做同一件事，常帶批評或不滿"
+      "gloss_zh": "老是只顧…（批評）",
+      "notes_zh": "例：遊んでばかりいる。過度・偏りへの不満。N ばかり は bakari.json"
+    },
+    {
+      "form": "Vて形＋ばかりで",
+      "gloss_zh": "光是…（沒做別的）",
+      "notes_zh": "例：文句を言ってばかりで動かない"
     }
   ],
   "explanation_ja_blocks": [

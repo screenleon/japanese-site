@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "Vば形／いAdjければ＋こそ",
+      "gloss_zh": "正因為…才…",
+      "notes_zh": "例：心配すればこそ厳しく言う。理由を前面に押し出す。からこそ より硬く論理的"
+    },
+    {
+      "form": "N／なAdj＋であればこそ",
+      "gloss_zh": "正因為是…才…",
+      "notes_zh": "例：信頼関係があればこそ本音が言える。反論を抑える強調"
     }
   ],
   "explanation_ja_blocks": [
@@ -199,6 +205,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋といっても過言ではない",
+      "gloss_zh": "說…也不為過",
+      "notes_zh": "例：業界の常識を変えたといっても過言ではない。強い評価を、誇張ではないと押し上げる"
+    },
+    {
+      "form": "N＋といっても過言ではない",
+      "gloss_zh": "稱之為 N 也不誇張",
+      "notes_zh": "例：革命といっても過言ではない。評論・発表のレトリック"
     }
   ],
   "explanation_ja_blocks": [
@@ -187,6 +193,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

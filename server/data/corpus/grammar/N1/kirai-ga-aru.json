@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形／Vない形＋きらいがある",
+      "gloss_zh": "有…的不好傾向",
+      "notes_zh": "例：結論を急ぐきらいがある。断定を少し和らげつつ好ましくない癖を指摘。褒めには使わない"
+    },
+    {
+      "form": "N＋の＋きらいがある",
+      "gloss_zh": "有 N 之嫌",
+      "notes_zh": "例：独断のきらいがある。評論文でよく見る"
     }
   ],
   "explanation_ja_blocks": [
@@ -217,6 +223,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

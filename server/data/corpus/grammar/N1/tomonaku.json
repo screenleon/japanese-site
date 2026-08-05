@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋ともなく",
+      "gloss_zh": "無意識地 V",
+      "notes_zh": "例：見るともなく窓の外を見ていた。はっきりした目的なしに動作が起こる書面表現"
+    },
+    {
+      "form": "疑問詞＋ともなく",
+      "gloss_zh": "不知從何處／不知是誰",
+      "notes_zh": "例：どこからともなく笑い声がした。出どころや主体がぼやける"
     }
   ],
   "explanation_ja_blocks": [
@@ -259,6 +265,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

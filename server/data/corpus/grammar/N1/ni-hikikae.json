@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋にひきかえ",
+      "gloss_zh": "與 N 相對之下",
+      "notes_zh": "例：兄にひきかえ弟は慎重だ。対比をくっきり出す。一方 より対照が強い"
+    },
+    {
+      "form": "普通形＋の＋にひきかえ",
+      "gloss_zh": "與前項成對照",
+      "notes_zh": "例：昨年好調だったのにひきかえ今年は苦戦だ"
     }
   ],
   "explanation_ja_blocks": [
@@ -286,6 +292,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

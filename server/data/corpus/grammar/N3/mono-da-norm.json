@@ -7,13 +7,13 @@
   "pattern": [
     {
       "form": "普通形＋ものだ",
-      "gloss_zh": "表示一般道理、常識或「本來就是如此」",
-      "notes_zh": "社會規範或一般傾向。な形容詞常用「なものだ」。感嘆／というものだ 見 N2 mono-da-emotion"
+      "gloss_zh": "本來就是…（常理）",
+      "notes_zh": "例：人の話は最後まで聞くものだ。社会の規範・一般論。なAdjは「なものだ」"
     },
     {
       "form": "Vた形＋ものだ",
-      "gloss_zh": "回想過去常常做的事",
-      "notes_zh": "帶懷念語氣的「以前常…」。更強的感嘆用法見 mono-da-emotion"
+      "gloss_zh": "以前常…（懷念）",
+      "notes_zh": "例：子供のころは川で遊んだものだ。過去の反復への感慨。より強い感嘆は N2 mono-da-emotion"
     }
   ],
   "explanation_ja_blocks": [

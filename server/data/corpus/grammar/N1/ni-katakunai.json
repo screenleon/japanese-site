@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋にかたくない",
+      "gloss_zh": "不難 V；可想而知",
+      "notes_zh": "例：彼の落胆は想像するにかたくない。推量が容易だと述べる書き言葉"
+    },
+    {
+      "form": "N＋にかたくない",
+      "gloss_zh": "不難 N",
+      "notes_zh": "例：理解にかたくない。定型に近い"
     }
   ],
   "explanation_ja_blocks": [
@@ -295,6 +301,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

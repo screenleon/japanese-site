@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋か否か",
+      "gloss_zh": "是否…（正式）",
+      "notes_zh": "例：継続するか否かを理事会が決める。二択の判断対象を硬く提示。会話は「かどうか」"
+    },
+    {
+      "form": "N／なAdj＋であるか否か",
+      "gloss_zh": "是否為…",
+      "notes_zh": "例：要件を満たしているか否か確認せよ。である を残す公文書調"
     }
   ],
   "explanation_ja_blocks": [
@@ -272,6 +278,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

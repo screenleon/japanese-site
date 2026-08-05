@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋ともなると／ともなれば",
+      "gloss_zh": "一旦到了 N 的地步就…",
+      "notes_zh": "例：管理職ともなると発言に責任が伴う。立場・規模がそこまで来れば当然、という帰結"
+    },
+    {
+      "form": "V辞書形＋ともなると／ともなれば",
+      "gloss_zh": "一旦到了要 V 的階段",
+      "notes_zh": "例：独立するともなれば資金計画が要る。到達点の重みを前提にする"
     }
   ],
   "explanation_ja_blocks": [
@@ -309,6 +315,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

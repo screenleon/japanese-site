@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋までもない",
+      "gloss_zh": "不必特地 V",
+      "notes_zh": "例：言うまでもないことだが締切は守ること。明白すぎて手間をかける必要がない"
+    },
+    {
+      "form": "V辞書形＋までもなく",
+      "gloss_zh": "不必…就…",
+      "notes_zh": "例：調べるまでもなく答えは資料にある。文中接続"
     }
   ],
   "explanation_ja_blocks": [
@@ -216,6 +222,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

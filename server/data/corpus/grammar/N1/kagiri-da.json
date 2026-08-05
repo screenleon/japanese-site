@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "いAdj＋限りだ",
+      "gloss_zh": "非常…（感慨）",
+      "notes_zh": "例：お会いできてうれしい限りです。感情の上限を改まって述べる。挨拶・礼状"
+    },
+    {
+      "form": "なAdj＋な＋限りだ",
+      "gloss_zh": "無比…",
+      "notes_zh": "例：光栄な限りです／残念な限りだ。とても を格式に置き換えた語感"
     }
   ],
   "explanation_ja_blocks": [
@@ -223,6 +229,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

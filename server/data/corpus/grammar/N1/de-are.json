@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N／疑問詞＋であれ",
+      "gloss_zh": "即使／無論…也不例外",
+      "notes_zh": "例：理由が何であれ無断欠席は認めない。例外を認めない原則の言い方。でも より改まる"
+    },
+    {
+      "form": "なAdj語幹＋であれ",
+      "gloss_zh": "即使…也…",
+      "notes_zh": "例：些細であれ報告せよ。制度・規律の文脈で効く"
     }
   ],
   "explanation_ja_blocks": [
@@ -216,6 +222,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

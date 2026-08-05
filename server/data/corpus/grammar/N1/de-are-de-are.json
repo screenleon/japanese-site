@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋であれ＋N＋であれ",
+      "gloss_zh": "無論 A 還是 B…",
+      "notes_zh": "例：国内であれ海外であれ基準は同じだ。条件の違いを問題にせず原則を通す。規程・論説"
+    },
+    {
+      "form": "なAdj語幹＋であれ＋なAdj語幹＋であれ",
+      "gloss_zh": "無論是…還是…（な形）",
+      "notes_zh": "例：簡単であれ複雑であれ手順を守れ。にしろ〜にしろ より硬い"
     }
   ],
   "explanation_ja_blocks": [
@@ -217,6 +223,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

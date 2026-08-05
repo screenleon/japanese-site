@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋あっての＋N",
+      "gloss_zh": "有 A 才有 B",
+      "notes_zh": "例：読者あっての雑誌だ。支えがあるから成り立つ、という前提と感謝。おかげで＝原因、あっての＝存在の土台"
+    },
+    {
+      "form": "N＋が＋あっての＋N",
+      "gloss_zh": "同上（が入り）",
+      "notes_zh": "例：現場の協力があっての成功だ。どちらも自然。改まった語感"
     }
   ],
   "explanation_ja_blocks": [
@@ -256,6 +262,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

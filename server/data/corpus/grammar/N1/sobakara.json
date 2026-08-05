@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋そばから",
+      "gloss_zh": "剛 V 就（又）…",
+      "notes_zh": "例：教わるそばから忘れていく。終わった直後に同種のことが続き、追いつかない焦り・呆れが出やすい"
+    },
+    {
+      "form": "Vた形＋そばから",
+      "gloss_zh": "剛做完就…",
+      "notes_zh": "例：片付けたそばから子どもが散らかす。辞書形もた形も可。ただの「すぐ」より反復の徒労感"
     }
   ],
   "explanation_ja_blocks": [
@@ -300,6 +306,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

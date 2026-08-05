@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "普通形＋とはいえ",
+      "gloss_zh": "雖說…但是…",
+      "notes_zh": "例：安いとはいえ品質は落とさない。いったん認めてから制限を足す。けれども より硬い"
+    },
+    {
+      "form": "N＋とはいえ",
+      "gloss_zh": "雖說是 N",
+      "notes_zh": "例：専門家とはいえ万能ではない。過度な一般化を抑える"
     }
   ],
   "explanation_ja_blocks": [
@@ -209,6 +215,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }
