@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋や否や",
+      "gloss_zh": "一 V 立刻就…",
+      "notes_zh": "例：店を出すや否や行列ができた。勢いとドラマ性。新聞・小説的。口語は「〜とすぐ／〜た途端」"
+    },
+    {
+      "form": "V辞書形＋やいなや",
+      "gloss_zh": "同上（かな）",
+      "notes_zh": "例：顔を見るやいなや泣き出した。表記ゆれ。が早いか と同層の即時性"
     }
   ],
   "explanation_ja_blocks": [
@@ -292,6 +298,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

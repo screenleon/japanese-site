@@ -7,13 +7,13 @@
   "pattern": [
     {
       "form": "N＋ばかり",
-      "gloss_zh": "表示主觀地認為前項偏多或過度，常含說話者的批判或不滿",
-      "notes_zh": "Vて系統的「Vて＋ばかりいる」見 te-bakari-iru.json"
+      "gloss_zh": "淨是 N；盡是 N（不滿）",
+      "notes_zh": "例：文句ばかり言う。主観的に「多すぎる」と感じる。Vて系統は te-bakari-iru"
     },
     {
       "form": "Vた形＋ばかり",
-      "gloss_zh": "表示動作剛剛完成不久",
-      "notes_zh": "「たばかり」的時間感可依說話者主觀判斷，不一定是幾分鐘內"
+      "gloss_zh": "才剛…不久",
+      "notes_zh": "例：食べたばかりでまだお腹いっぱい。話者の感覚上の「ついさっき」。時計の数分とは限らない"
     }
   ],
   "explanation_ja_blocks": [

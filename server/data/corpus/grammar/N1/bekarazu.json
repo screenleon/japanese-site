@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "V辞書形＋べからず",
+      "gloss_zh": "禁止…（告示體）",
+      "notes_zh": "例：関係者以外立ち入るべからず。掲示・規則の型。口に出すと時代劇めく。会話は「入ってはいけません」"
+    },
+    {
+      "form": "V辞書形＋べからざる＋N",
+      "gloss_zh": "不可…的 N",
+      "notes_zh": "例：許すべからざる行為。するは「すべからざる」。断罪の響きが強い"
     }
   ],
   "explanation_ja_blocks": [
@@ -239,6 +245,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

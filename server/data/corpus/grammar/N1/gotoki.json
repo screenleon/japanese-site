@@ -6,8 +6,19 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋の＋ごとき＋N／N＋ごとき＋N",
+      "gloss_zh": "如同 N 的…（文語連體）",
+      "notes_zh": "例：夢のごとき時間。ような の硬い言い方。軽蔑では「君ごときが」と相手を下に見る用法もある"
+    },
+    {
+      "form": "N＋の＋ごとく",
+      "gloss_zh": "如同 N 地…（連用）",
+      "notes_zh": "例：風のごとく走り去った。ように の文語。動詞は「〜するがごとく」も文語に見られる"
+    },
+    {
+      "form": "N＋の＋ごとし",
+      "gloss_zh": "如同 N（文末）",
+      "notes_zh": "例：光陰矢のごとし。格言・文語。日常は「〜のようだ」"
     }
   ],
   "explanation_ja_blocks": [
@@ -163,6 +174,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

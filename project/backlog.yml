@@ -1493,7 +1493,8 @@ items:
     notes:
       - Gradually uplift N2/N1 v2 entries because advanced register and literary forms need slower native-reviewer handling.
       - Drop `audit_status: "pre-redesign"` per entry as native-reviewer signs it off.
-      - 2026-08-05: N2 full pack (37 pre-redesign + keep 3 already-clear) authored on feat/js-101-n2-pattern-regen; 0 N2 pre-redesign remaining. N1 (40 pre-redesign) still open.
+      - 2026-08-05: N2 full pack shipped PR #76; 0 N2 pre-redesign remaining.
+      - 2026-08-05: N1 full pack (40) + N3 pattern-richness uplift (35 thin entries) on feat/js-101-n1-n3-pattern-uplift; 0 N1 pre-redesign remaining. Ticket stays doing until any residual N1/N3 editorial follow-ups are closed; JS-100c N5 still open separately.
 
   - id: JS-102
     title: Drop SQLite legacy shadow columns on grammar_point

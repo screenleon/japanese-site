@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋たるもの",
+      "gloss_zh": "身爲 N 理應…",
+      "notes_zh": "例：指導者たるもの、率先垂範すべきだ。役割への戒め・あるべき姿。説教調になりやすい"
+    },
+    {
+      "form": "N＋たるに＋ふさわしい／恥じない",
+      "gloss_zh": "不愧為 N 的…",
+      "notes_zh": "例：プロたるにふさわしい仕事。たる の派生で資格・水準を見る"
     }
   ],
   "explanation_ja_blocks": [
@@ -181,6 +187,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

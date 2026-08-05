@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋にもまして",
+      "gloss_zh": "比 N 更加…",
+      "notes_zh": "例：以前にもまして忙しい。比較を一段強くする。より より改まった強調"
+    },
+    {
+      "form": "普通形＋にもまして",
+      "gloss_zh": "比預想更…",
+      "notes_zh": "例：心配していたにもまして深刻だった"
     }
   ],
   "explanation_ja_blocks": [
@@ -295,6 +301,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

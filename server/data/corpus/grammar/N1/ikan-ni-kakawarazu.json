@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋（の）いかんにかかわらず",
+      "gloss_zh": "不論 N 如何",
+      "notes_zh": "例：理由のいかんにかかわらず受理しない。制度が例外を認めない線引き"
+    },
+    {
+      "form": "N＋（の）いかんによらず／を問わず",
+      "gloss_zh": "同上",
+      "notes_zh": "例：国籍のいかんを問わず応募可。にかかわらず と同趣旨"
     }
   ],
   "explanation_ja_blocks": [
@@ -216,6 +222,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }

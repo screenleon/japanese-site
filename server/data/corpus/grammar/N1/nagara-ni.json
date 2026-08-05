@@ -6,8 +6,14 @@
   "schema_version": 2,
   "pattern": [
     {
-      "form": "_TBD",
-      "gloss_zh": "待補"
+      "form": "N＋ながらに（して）",
+      "gloss_zh": "保持 N 的狀態而…；生來…",
+      "notes_zh": "例：涙ながらに訴えた／生まれながらにして才能がある。状態や属性を保ったまま、という文学的・書き言葉の響き"
+    },
+    {
+      "form": "Vます形語幹＋ながらに",
+      "gloss_zh": "一邊保持…一邊…（文語）",
+      "notes_zh": "例：生きながらに伝説となる。日常の同時進行は N4「ながら」。ここは格調を上げた叙述"
     }
   ],
   "explanation_ja_blocks": [
@@ -269,6 +275,5 @@
         }
       ]
     }
-  },
-  "audit_status": "pre-redesign"
+  }
 }
