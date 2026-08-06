@@ -9,7 +9,7 @@ import { LevelPicker } from "../components/LevelPicker";
 import { useChineseVisibility } from "../chineseVisibility";
 import { useReadTracking } from "../hooks/useReadTracking";
 
-export function VocabTab() {
+export function VocabTab({ onNavigateKanji }: { onNavigateKanji?: (character: string) => void }) {
   const [query, setQuery] = useState("");
   const [selectedLevel, setSelectedLevel] = useState("N5");
   const [rows, setRows] = useState<VocabRow[]>([]);
@@ -96,13 +96,32 @@ export function VocabTab() {
     const textClass = size === "card" ? "text-3xl font-semibold" : "text-lg font-medium";
     const rtClass = size === "card" ? "text-base text-slate-500" : "text-sm text-slate-500";
 
+    const headwordContent =
+      size !== "card" || !onNavigateKanji
+        ? row.headword
+        : Array.from(row.headword).map((character, index) =>
+            /\p{Script=Han}/u.test(character) ? (
+              <button
+                key={`${character}-${index}`}
+                type="button"
+                onClick={() => onNavigateKanji(character)}
+                className="rounded text-blue-700 underline decoration-blue-300 underline-offset-4 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label={`漢字「${character}」を調べる`}
+              >
+                {character}
+              </button>
+            ) : (
+              <span key={`${character}-${index}`}>{character}</span>
+            )
+          );
+
     if (!reading || headword === reading) {
-      return <div className={textClass}>{row.headword}</div>;
+      return <div className={textClass}>{headwordContent}</div>;
     }
 
     return (
       <ruby className={textClass}>
-        {row.headword}
+        {headwordContent}
         <rt className={rtClass}>{row.reading}</rt>
       </ruby>
     );

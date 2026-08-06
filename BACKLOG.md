@@ -143,7 +143,7 @@
 | JS-141 | 🔵 active | （可選）重訪 JS-018 靜態進度 | architecture | 2026-08-02 | docs/adr/0005-kokugo-track.md |
 | JS-142 | ✅ closed 2026-08-05 | Asymmetric grammar inventory expand: N3+22 / N2+30 / N1+34 | content | 2026-08-05 | user-request 2026-08-05 (N1/N2 density + N3 gaps) |
 | JS-143 | ✅ closed 2026-08-05 | 手機參考 Tab：先內容後清單（文法 + 單字） | frontend | 2026-08-05 | user product discussion 2026-08-05 (vocab/kanji IA + mobile list-before-detail) |
-| JS-144 | 🔵 active | 單字 headword → 漢字 deep-link（App 導覽） | frontend | 2026-08-05 | user product discussion 2026-08-05 (split kanji; jump from vocab for readings) |
+| JS-144 | ✅ closed 2026-08-06 | 單字 headword → 漢字 deep-link（App 導覽） | frontend | 2026-08-05 | user product discussion 2026-08-05 (split kanji; jump from vocab for readings) |
 | JS-145 | 🔵 active | 漢字詳情：含此字的例詞 | backend/frontend | 2026-08-05 | user product discussion 2026-08-05 (kanji page value after jump) |
 | JS-146 | 🔵 active | 漢字次要軸：依 JLPT 瀏覽字表 | frontend | 2026-08-05 | user product discussion 2026-08-05 (kanji harder to level-browse than vocab) |
 | JS-147 | 🔵 active | 學習專題集合（敬語／オノマトペ等）— 不加新頂層 Tab | product | 2026-08-05 | user product discussion 2026-08-05 (special blocks for keigo, onomatopoeia, etc.) |
@@ -1713,7 +1713,7 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 **Related**: JS-115, JS-144, JS-145
 <!-- 首次記錄: 2026-08-05 -->
 
-## JS-144 — 單字 headword → 漢字 deep-link（App 導覽）
+## JS-144 — 單字 headword → 漢字 deep-link（App 導覽） ✅ 2026-08-06
 
 **Problem**: 漢字 Tab 僅手動查一字；單字含漢字時無法跳到字卡看音訓等讀音資訊。詞與字混在同一卡也不利維護。
 
@@ -1727,6 +1727,8 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 5. 範圍外：漢字頁例詞（JS-145）、JLPT 字表瀏覽（JS-146）。
 
 **Tags**: P1, frontend, study-ux, 估計 — 中
+**Status**: done
+**Outcome**: 焦點單字卡中的每個漢字可切換到漢字 Tab 並自動查詢；導覽狀態只消費一次，API 與 static `getKanji` 路徑共用。
 **Source**: user product discussion 2026-08-05
 **Related**: JS-143, JS-145, JS-138, JS-089
 <!-- 首次記錄: 2026-08-05 -->
@@ -1802,4 +1804,3 @@ JS-100b worked around this by authoring N4 as the "basic / canonical register" o
 **Blocked by**: JS-145
 **Related**: JS-089, JS-144
 <!-- 首次記錄: 2026-08-05 -->
-
