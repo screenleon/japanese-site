@@ -1990,12 +1990,13 @@ items:
 
   - id: JS-144
     title: "Vocab headword → kanji deep-link (App shell navigation)"
-    status: todo
+    status: done
     priority: P1
     milestone: M3
     theme: study-ux
     area: frontend
     source: "user product discussion 2026-08-05 (split kanji; jump from vocab for readings)"
+    completed_at: "2026-08-06"
     related: [JS-143, JS-145, JS-138, JS-089]
     notes:
       - Keep kanji as its own study surface; do not merge kanji into vocab cards.
@@ -2004,6 +2005,7 @@ items:
       - KanjiTab: accept initialCharacter prop; consume once like GrammarTab initialSlug.
       - Works in static mode via existing getKanji / staticApi paths.
       - Reuse (2026-08-05 confirmed): App deep-link pattern only — do NOT put nav inside ContentFirstLayout; Kanji focus card stays tab-local.
+      - Shipped: each kanji in the focused vocab headword navigates to the Kanji tab and loads once; existing API/static getKanji parity is preserved.
       - Out of scope: reverse vocab list on kanji page (JS-145), JLPT kanji browse (JS-146).
 
   - id: JS-145

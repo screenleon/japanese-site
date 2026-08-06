@@ -1,31 +1,56 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api, type Kanji } from "../api";
 import { useChineseVisibility } from "../chineseVisibility";
 import { useReadTracking } from "../hooks/useReadTracking";
 
-export function KanjiTab() {
+export function KanjiTab({
+  initialCharacter,
+  onInitialCharacterConsumed,
+}: {
+  initialCharacter?: string;
+  onInitialCharacterConsumed?: () => void;
+}) {
   const [ch, setCh] = useState("");
   const [data, setData] = useState<Kanji | null>(null);
   const [err, setErr] = useState("");
+  const consumedInitialCharacter = useRef<string | undefined>(undefined);
   const { visible: chineseVisible } = useChineseVisibility();
 
   useReadTracking(
     data?.character ? { type: "kanji", character: data.character } : null
   );
 
-  async function lookup(e: React.FormEvent) {
-    e.preventDefault();
-    const q = ch.trim();
-    if (!q) return;
+  async function lookupCharacter(character: string) {
     setErr("");
     try {
-      const r = await api.getKanji(q[0]);
+      const r = await api.getKanji(character);
       setData(r);
     } catch (e) {
       setErr(String(e));
       setData(null);
     }
   }
+
+  async function lookup(e: React.FormEvent) {
+    e.preventDefault();
+    const character = ch.trim()[0];
+    if (!character) return;
+    await lookupCharacter(character);
+  }
+
+  useEffect(() => {
+    const character = initialCharacter?.trim()[0];
+    if (!character) {
+      consumedInitialCharacter.current = undefined;
+      return;
+    }
+    if (consumedInitialCharacter.current === character) return;
+
+    consumedInitialCharacter.current = character;
+    setCh(character);
+    onInitialCharacterConsumed?.();
+    void lookupCharacter(character);
+  }, [initialCharacter, onInitialCharacterConsumed]);
 
   return (
     <section>

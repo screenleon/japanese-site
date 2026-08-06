@@ -9,11 +9,21 @@ vi.mock("./tabs/QuizTab", () => ({
 }));
 
 vi.mock("./tabs/VocabTab", () => ({
-  VocabTab: () => <section aria-label="vocab panel">vocab panel</section>,
+  VocabTab: ({ onNavigateKanji }: { onNavigateKanji?: (character: string) => void }) => (
+    <section aria-label="vocab panel">
+      <button type="button" onClick={() => onNavigateKanji?.("食")}>
+        漢字へ
+      </button>
+    </section>
+  ),
 }));
 
 vi.mock("./tabs/KanjiTab", () => ({
-  KanjiTab: () => <section aria-label="kanji panel">kanji panel</section>,
+  KanjiTab: ({ initialCharacter }: { initialCharacter?: string }) => (
+    <section aria-label="kanji panel" data-character={initialCharacter}>
+      kanji panel
+    </section>
+  ),
 }));
 
 vi.mock("./tabs/SentenceTab", () => ({
@@ -179,6 +189,32 @@ describe("App tab filtering", () => {
       expect(screen.queryByRole("button", { name: "練習題" })).not.toBeInTheDocument();
       expect(screen.getByRole("heading", { name: "〜さえ" })).toBeVisible();
     });
+  });
+
+  /**
+   * Verifies a vocab-selected kanji opens KanjiTab with that exact character.
+   * Steps:
+   * 1. Arrange an App with reference tabs available.
+   * 2. Act by opening vocab and invoking its kanji navigation action.
+   * 3. Assert KanjiTab is active and receives the selected character.
+   */
+  it("passes a vocab-selected kanji to KanjiTab and opens that tab", async () => {
+    mockCapabilities({
+      progress: false,
+      history: false,
+      quiz: false,
+      sentence: false,
+      kokugo: false,
+    });
+
+    render(<App />);
+    fireEvent.click(await screen.findByRole("button", { name: /^單字/ }));
+    fireEvent.click(screen.getByRole("button", { name: "漢字へ" }));
+
+    expect(await screen.findByLabelText("kanji panel")).toHaveAttribute(
+      "data-character",
+      "食"
+    );
   });
 });
 

@@ -42,6 +42,18 @@ const kanaOnlyVocab = {
   license: "CC-BY-SA-4.0",
 };
 
+const multiKanjiVocab = {
+  id: 3,
+  headword: "食べ物",
+  reading: "たべもの",
+  pos: "名詞",
+  gloss_ja: "食べるもの。",
+  gloss_zh: "食物。",
+  jlpt_level: "N5",
+  source: "curated",
+  license: "CC-BY-SA-4.0",
+};
+
 const searchVocab = vi.mocked(api.searchVocab);
 const randomVocab = vi.mocked(api.randomVocab);
 
@@ -142,6 +154,44 @@ describe("VocabTab", () => {
   });
 
   /**
+   * Verifies a focused single-kanji headword emits its selected character.
+   * Steps:
+   * 1. Arrange a vocab focus card with お喋り and a navigation spy.
+   * 2. Act by clicking the accessible 喋 lookup button.
+   * 3. Assert the callback receives 喋.
+   */
+  it("navigates to the selected kanji from the focus headword", async () => {
+    const onNavigateKanji = vi.fn();
+    render(<VocabTab onNavigateKanji={onNavigateKanji} />);
+
+    await screen.findAllByText("よく話すこと。");
+    fireEvent.click(screen.getAllByRole("button", { name: "漢字「喋」を調べる" })[0]);
+
+    expect(onNavigateKanji).toHaveBeenCalledWith("喋");
+  });
+
+  /**
+   * Verifies every kanji in a multi-kanji headword has an independent lookup action.
+   * Steps:
+   * 1. Arrange a focus card with 食べ物 and a navigation spy.
+   * 2. Act by clicking the 食 and 物 lookup buttons independently.
+   * 3. Assert the callback receives 食 then 物.
+   */
+  it("navigates each kanji in a multi-kanji focus headword independently", async () => {
+    searchVocab.mockResolvedValue({ results: [multiKanjiVocab], count: 1, total: 1 });
+    randomVocab.mockResolvedValue(multiKanjiVocab);
+    const onNavigateKanji = vi.fn();
+    render(<VocabTab onNavigateKanji={onNavigateKanji} />);
+
+    await screen.findAllByText("食べるもの。");
+    fireEvent.click(screen.getByRole("button", { name: "漢字「食」を調べる" }));
+    fireEvent.click(screen.getByRole("button", { name: "漢字「物」を調べる" }));
+
+    expect(onNavigateKanji).toHaveBeenNthCalledWith(1, "食");
+    expect(onNavigateKanji).toHaveBeenNthCalledWith(2, "物");
+  });
+
+  /**
    * Verifies Chinese vocab glosses stay hidden under the default provider state.
    * Steps:
    * 1. Arrange: mock vocab API responses with Japanese and Chinese gloss text.
@@ -206,4 +256,3 @@ describe("VocabTab", () => {
     );
   });
 });
-

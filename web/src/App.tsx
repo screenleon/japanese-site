@@ -77,6 +77,7 @@ function AppShell({
   );
   const [active, setActive] = useState<Tab>(initialTab ?? "quiz");
   const [grammarSlug, setGrammarSlug] = useState<string | undefined>();
+  const [kanjiCharacter, setKanjiCharacter] = useState<string | undefined>();
 
   useEffect(() => {
     if (!visibleTabs.some((tab) => tab.id === active)) {
@@ -87,6 +88,11 @@ function AppShell({
   function navigateToGrammar(slug: string) {
     setGrammarSlug(slug);
     setActive("grammar");
+  }
+
+  function navigateToKanji(character: string) {
+    setKanjiCharacter(character);
+    setActive("kanji");
   }
 
   return (
@@ -131,8 +137,13 @@ function AppShell({
         {active === "grammar" && (
           <GrammarTab initialSlug={grammarSlug} onSlugConsumed={() => setGrammarSlug(undefined)} />
         )}
-        {active === "vocab" && <VocabTab />}
-        {active === "kanji" && <KanjiTab />}
+        {active === "vocab" && <VocabTab onNavigateKanji={navigateToKanji} />}
+        {active === "kanji" && (
+          <KanjiTab
+            initialCharacter={kanjiCharacter}
+            onInitialCharacterConsumed={() => setKanjiCharacter(undefined)}
+          />
+        )}
         {active === "sentence" && sentence && <SentenceTab />}
         {active === "kokugo" && kokugo && <KokugoTab />}
       </main>
